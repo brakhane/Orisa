@@ -1,6 +1,12 @@
+import logging
+
 GUILD_ID = 42
+CHANNEL_ID = 42
 
 DATABASE_URI = 'sqlite:///foo'
-ECHO_SQL = True
 
 BOT_TOKEN = ''
+
+LOG_LEVEL = logging.INFO
+ORISA_LOG_LEVEL = logging.DEBUG
+ECHO_SQL = False

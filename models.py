@@ -20,10 +20,12 @@ class User(Base):
     last_update = Column(DateTime)
     error_count = Column(Integer, nullable=False, default=0)
     format = Column(String, nullable=False)
+    highest_rank = Column(Integer, nullable=False)
 
     def __repr__(self):
         return (f'User(id={self.id}, discord_id={self.discord_id}, battle_tag={self.battle_tag}, sr={self.sr}, '
-                f'format={self.format}, last_update={self.last_update}, error_count={self.error_count})')
+                f'format={self.format}, last_update={self.last_update}, error_count={self.error_count}, '
+                f'highest_rank={self.highest_rank}')
 
 
 class Database:

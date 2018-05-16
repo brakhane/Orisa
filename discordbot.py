@@ -20,12 +20,14 @@ from curious.dataclasses.presence import Game
 from fuzzywuzzy import process
 from lxml import html
 
-from config import BOT_TOKEN, GUILD_ID
+from config import BOT_TOKEN, GUILD_ID, CHANNEL_ID, LOG_LEVEL
 from models import Database, User
 
 logging.basicConfig()
-logging.getLogger().setLevel(logging.DEBUG)
+logging.getLogger().setLevel(LOG_LEVEL)
 
+logger = logging.getLogger("orisa")
+logger.setLevel(ORISA_LOG_LEVEL)
 
 class InvalidBattleTag(Exception):
     def __init__(self, message):
@@ -35,14 +37,14 @@ RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
 RANKS = ('Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grand Master')
 
 def get_rank(sr):
-    return RANKS[bisect(RANK_CUTOFF, sr)]
+    return bisect(RANK_CUTOFF, sr)
 
 async def get_sr_rank(battletag):
     if not re.match(r'\w+#[0-9]+', battletag):
         raise InvalidBattleTag('Malformed BattleTag')
 
     url = f'https://playoverwatch.com/en-us/career/pc/{battletag.replace("#", "-")}'
-    logging.info(f'requesting {url}')
+    logger.info(f'requesting {url}')
     result = await asks.get(url)
     if result.status_code != 200:
         raise RuntimeError(f'got status code {result.status_code} from Blizz')
@@ -71,32 +73,11 @@ class Orisa(Plugin):
         super().__init__(client)
         self.database = database
 
+    async def load(self):
+        await self.spawn(self._sync_all_users_task)
 
     @command()
-    async def get(self, ctx, bt: str):
-        await ctx.channel.messages.send(f"requesting {bt}...")
-        try:
-            sr, rank, image = await get_sr_rank(bt)
-        except InvalidBattleTag as e:
-            await ctx.channel.messages.send(f'Invalid battle tag: {e.message}')
-        except RuntimeError as e:
-            await ctx.channel.messages.send(f'Sorry, something went wrong: {e.args[0]}')
-        else:
-            await ctx.channel.messages.send(f"{bt} has {sr} SR, that's {rank}. {image} {type(image)}")
-
-            member = list(ctx.bot.guilds.values())[0].search_for_member(name='testxxyyzz')
-            nnstr = str(member.nickname)
-            if not nnstr:
-                nnstr = member.name
-
-            if re.search(r'\[.*\]', nnstr):
-                new_name = re.sub(r'\[.*?\]', f'[{rank}]', nnstr)
-            else:
-                new_name = nnstr + f' [{rank}]'
-            await member.nickname.set(new_name)
-
-    @command()
-    async def bt(self, ctx, member: Member = None):
+    async def bt(self, ctx, *, member: Member = None):
         if member is None:
             member = ctx.author
 
@@ -113,6 +94,11 @@ class Orisa(Plugin):
         await ctx.channel.messages.send(msg)
 
     @bt.subcommand()
+    async def get(self, ctx, *, member: Member = None):
+        r = await self.bt(ctx, member=member)
+        return r
+
+    @bt.subcommand()
     async def register(self, ctx, battle_tag: str = None):
         if battle_tag is None:
             await ctx.channel.messages.send(f"{ctx.author.mention} missing battletag")
@@ -124,9 +110,10 @@ class Orisa(Plugin):
             resp = None
             if user is None:
                 user = User(discord_id=member_id)
+                session.add(user)
                 resp = "I will now regularly update your nick."
             else:
-                resp = "I've updated your battle tag"
+                resp = "I've updated your battle tag."
             try:
                 sr, rank, image = await get_sr_rank(battle_tag)
             except InvalidBattleTag as e:
@@ -136,9 +123,15 @@ class Orisa(Plugin):
                 user.battle_tag = battle_tag
                 user.last_update = datetime.now()
                 user.sr = sr
-                user.format = "%s" 
-                resp = f"${ctx.author.mention} {resp}"
+                user.format = "%s"
+                user.highest_rank = get_rank(sr) 
 
+                try:
+                    await self._update_nick(user)
+                except Exception as e:
+                    logger.error(f"unable to update nick for user {user}: {e}")
+                    resp += (" However, I couldn't update your nickname. I will try that again later. If you are an admin, "
+                             "I cannot update your nickname, period. People will still be able to ask for you battle tag, though.")
         finally: 
             session.commit() # we always want to commit, because we have error_count
             session.close()
@@ -160,7 +153,7 @@ class Orisa(Plugin):
         session = self.database.Session()
         
         try:
-            user = self.database.by_discord_id(session, 0)#ctx.author.id)
+            user = self.database.by_discord_id(session, ctx.author.id)
             if not user:
                 await ctx.channel.messages.send(f"{ctx.author.mention}: you must register first")
                 return
@@ -171,18 +164,34 @@ class Orisa(Plugin):
         finally:
             session.close()
             
-
     @bt.subcommand()
-    async def rank(self, ctx, rank: int):
-        embed = Embed(
-            title=f"For your own safety, get behind the barrier!",
-            description=f"{ctx.author.mention} just advanced to {RANKS[rank-1]}. Congratulations!"
-
-        )
-
-        embed.set_thumbnail(url=f"https://d1u1mce87gyfbn.cloudfront.net/game/rank-icons/season-2/rank-{rank}.png")
-
-        await ctx.channel.messages.send(embed=embed)
+    async def forceupdate(self, ctx):
+        session = self.database.Session()
+        try:
+            logger.info(f"{ctx.author.id}")
+            user = self.database.by_discord_id(session, ctx.author.id)
+            if not user:
+                await ctx.channel.messages.send("you are not registered")
+            else:
+                await ctx.channel.messages.send("ok")
+            await self._sync_user(user)
+        except Exception as e:
+            logger.error(f'exception {e} while syncing {user}')
+        finally:
+            session.commit()
+            session.close()            
+        
+    @bt.subcommand()
+    async def forgetme(self, ctx):
+        session = self.database.Session()
+        try:
+            user = self.database.by_discord_id(session, ctx.author.id)
+            if user:
+                session.delete(user)
+                await ctx.channel.messages.send(f"deleted {ctx.author.name} from database")
+                session.commit()
+        finally:
+            session.close()
 
     @bt.subcommand()
     async def help(self, ctx):
@@ -233,27 +242,30 @@ class Orisa(Plugin):
                   '*Default: `%s`*'
         )
         embed.add_field(
-            name='!bt force update', 
+            name='!bt forceupdate', 
             value='Immediately checks your account data and updates your nick accordingly.\n'
                   '*Checks and updates are done automatically, use this command only if '
                   'you want your nick to be up to date immediately!*'
         )
         embed.add_field(
-            name='!bt forget me', 
+            name='!bt forgetme', 
             value='Your BattleTag will be removed from the database and your nick '
                   'will not be updated anymore. You can re-register at any time.'
         )
         await ctx.author.send(content=None, embed=embed)
-        if not ctx.channel.private:
+        if False and not ctx.channel.private:
             await ctx.channel.messages.send(f"{ctx.author.mention} I sent you a DM with instructions.")
 
 
     def _format_nick(self, format, sr):
-        rank = get_rank(sr)
+        rank = RANKS[get_rank(sr)]
         return format.replace('%s', str(sr)).replace('%r', rank)
 
     async def _update_nick(self, user):
-        nn = self.client.guilds[GUILD_ID].members[user.discord_id].name
+        user_id = user.discord_id
+        #user_id = 0
+
+        nn = str(self.client.guilds[GUILD_ID].members[user_id].name)
         formatted = self._format_nick(user.format, user.sr)
         if re.search(r'\[.*?\]', str(nn)):
             new_nn = re.sub(r'\[.*?\]', f'[{formatted}]', nn)
@@ -261,8 +273,18 @@ class Orisa(Plugin):
             new_nn = f'{nn} [{formatted}]'
         
         if str(nn) != new_nn:
-            await self.client.guilds[GUILD_ID].members[user.discord_id].nickname.set(new_nn)
+            await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
 
+
+    async def _send_congrats(self, user, rank, image):
+        embed = Embed(
+            title=f"For your own safety, get behind the barrier!",
+            description=f"<@{user.discord_id}> just advanced to **{RANKS[rank]}**. Congratulations!"
+        )
+
+        embed.set_thumbnail(url=image)
+
+        await self.client.find_channel(CHANNEL_ID).messages.send(embed=embed)
 
     async def _sync_user(self, user):
         user.last_update = datetime.now()
@@ -270,19 +292,22 @@ class Orisa(Plugin):
             sr, rank, image = await get_sr_rank(user.battle_tag)
         except Exception as e:
             user.error_count += 1
-            logging.error(f"Got exception while requesting {user.battle_tag}")
+            logger.error(f"Got exception while requesting {user.battle_tag}")
             raise
         else:
             user.error_count = 0
             user.sr = sr
             await self._update_nick(user)
+            if rank > user.highest_rank:
+                await self._send_congrats(user, rank, image)
+                user.highest_rank = rank
 
     async def _sync_user_task(self, queue):
         first = True
         while not queue.empty():
             if not first:
                 delay = random.random() * 5.
-                logging.debug(f"rate limiting: sleeping for {delay}s")
+                logger.debug(f"rate limiting: sleeping for {delay}s")
                 await curio.sleep(delay)
             else:
                 first = False
@@ -291,8 +316,8 @@ class Orisa(Plugin):
             try:
                 user = self.database.by_id(session, user_id)
                 await self._sync_user(user)
-            except Exception:
-                logging.error(f'exception while syncing {user.discord_id} {user.battle_tag}')
+            except Exception as e:
+                logger.error(f'exception {e} while syncing {user.discord_id} {user.battle_tag}')
             finally:
                 session.commit()
                 session.close()            
@@ -300,26 +325,32 @@ class Orisa(Plugin):
             await queue.task_done()
 
     
-    @command()
-    async def task(self, ctx):
+    async def _sync_check(self):
         queue = curio.Queue()
         session = self.database.Session()
         try:
             ids_to_sync = self.database.get_to_be_synced(session)
         finally:
             session.close()
-        logging.info(f"{len(ids_to_sync)} users need to be synced")
+        logger.info(f"{len(ids_to_sync)} users need to be synced")
         for user_id in ids_to_sync:
             await queue.put(user_id)
-        async with curio.TaskGroup() as g:
+        async with curio.TaskGroup(name='sync users') as g:
             for _ in range(5):
                 await g.spawn(self._sync_user_task, queue)
 
+    async def _sync_all_users_task(self):
+        await curio.sleep(10)
+        while True:
+            try:
+                await self._sync_check()
+            except Exception as e:
+                logger.error("something went wrong {e}")
+            await curio.sleep(60)
 
 
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):
-    print(ctx, name)
     member = member_id = None
     if name.startswith("<@") and name.endswith(">"):
         id = name[2:-1]
@@ -350,15 +381,17 @@ multio.init('curio')
 
 client = Client(BOT_TOKEN)
 
+database = Database()
+
 async def check_guild(guild):
     if guild.id != GUILD_ID:
-        print(f"Unknown guild! leaving")
+        logger.info("Unknown guild! leaving")
         if guild.system_channel:
             await guild.system_channel.messages.send(f"I'm not configured for this guild! Bye!")
         try:
             await guild.leave()
         except:
-            logging.fatal("unknown guild, but cannot leave it...")
+            logger.fatal("unknown guild, but cannot leave it...")
             raise SystemExit(1)
 
 @client.event('guild_join')
@@ -370,13 +403,22 @@ async def ready(ctx):
     for guild in ctx.bot.guilds.copy().values():
         await check_guild(guild)
 
-    await manager.load_plugin(Orisa, Database())
+    await manager.load_plugin(Orisa, database)
     await ctx.bot.change_status(game=Game(name='"!bt help" for help'))
-    print("ready")
+    logger.info("Ready")
 
 @client.event('guild_member_remove')
 async def remove_member(ctx: Context, member: Member):
-    logging.debug(f"das war's dann wohl für {member.name} {member.id}")
+    logger.debug(f"Member {member.name}({member.id}) left the guild")
+    session = database.Session()
+    try:
+        user = database.by_discord_id(session, member.id)
+        if user:
+            logger.info(f"deleting {user} from database")
+            session.delete(user)
+            session.commit()
+    finally:
+        session.close()
 
 
 
