@@ -25,7 +25,9 @@ from lxml import html
 from config import BOT_TOKEN, GUILD_ID, CHANNEL_ID
 from models import Database, User
 
-logging.config.fileConfig('logging.ini')
+#logging.config.fileConfig('logging.ini')
+logging.basicConfig()
+logging.getLogger().setLevel(logging.DEBUG)
 
 logger = logging.getLogger("orisa")
 
@@ -33,11 +35,14 @@ class InvalidBattleTag(Exception):
     def __init__(self, message):
         self.message = message
 
+class UnableToFindSR(Exception):
+    pass
+
 RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
 RANKS = ('Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grand Master')
 
 def get_rank(sr):
-    return bisect(RANK_CUTOFF, sr)
+    return bisect(RANK_CUTOFF, sr) if sr is not None else None
 
 async def get_sr_rank(battletag):
     if not re.match(r'\w+#[0-9]+', battletag):
@@ -55,7 +60,7 @@ async def get_sr_rank(battletag):
     if not srs:
         if 'Profile Not Found' in result.text:
             raise InvalidBattleTag(f"No profile with BattleTag {battletag} found. Battle tags are case-sensitive!")
-        raise RuntimeError('Unable to find SR')
+        raise UnableToFindSR()
     sr = int(srs[0])
     if rank_image_elems:
         rank_image = str(rank_image_elems[0])
@@ -111,27 +116,30 @@ class Orisa(Plugin):
             if user is None:
                 user = User(discord_id=member_id)
                 session.add(user)
-                resp = "I will now regularly update your nick."
+                resp = "OK. People can now ask me for your battle tag, and I will regularly update your nick whenever I notice that your SR changed."
             else:
-                resp = "I've updated your battle tag."
+                resp = "OK. I've updated your battle tag."
             try:
                 sr, rank, image = await get_sr_rank(battle_tag)
             except InvalidBattleTag as e:
                 await ctx.channel.messages.send(f"{ctx.author.mention} Invalid battletag: {e.message}")
                 raise
-            else:
-                user.battle_tag = battle_tag
-                user.last_update = datetime.now()
-                user.sr = sr
-                user.format = "%s"
-                user.highest_rank = get_rank(sr) 
+            except UnableToFindSR:
+                resp += " You don't have an SR though, you probably need to finish your placement matches... I still saved your battle tag."
+                sr = None
 
-                try:
-                    await self._update_nick(user)
-                except Exception as e:
-                    logger.error(f"unable to update nick for user {user}: {e}")
-                    resp += (" However, I couldn't update your nickname. I will try that again later. If you are an admin, "
-                             "I cannot update your nickname, period. People will still be able to ask for you battle tag, though.")
+            user.battle_tag = battle_tag
+            user.last_update = datetime.now()
+            user.sr = sr
+            user.format = "%s"
+            user.highest_rank = get_rank(sr) 
+
+            try:
+                await self._update_nick(user)
+            except Exception as e:
+                logger.error(f"unable to update nick for user {user}: {e}")
+                resp += (" However, I couldn't update your nickname. I will try that again later. If you are an admin, "
+                            "I cannot update your nickname, period. People will still be able to ask for your battle tag, though.")
         finally: 
             session.commit() # we always want to commit, because we have error_count
             session.close()
@@ -258,8 +266,11 @@ class Orisa(Plugin):
 
 
     def _format_nick(self, format, sr):
-        rank = RANKS[get_rank(sr)]
-        return format.replace('%s', str(sr)).replace('%r', rank)
+        rankno = get_rank(sr)
+        rank = RANKS[rankno] if rankno is not None else "?"
+        srstr = str(sr) if sr is not None else "?"
+
+        return format.replace('%s', srstr).replace('%r', rank)
 
     async def _update_nick(self, user):
         user_id = user.discord_id
@@ -298,9 +309,12 @@ class Orisa(Plugin):
             user.error_count = 0
             user.sr = sr
             await self._update_nick(user)
-            if rank > user.highest_rank:
-                await self._send_congrats(user, rank, image)
-                user.highest_rank = rank
+            if rank is not None:
+                if user.highest_rank is None:
+                    user.highest_rank = rank
+                elif rank > user.highest_rank:
+                    await self._send_congrats(user, rank, image)
+                    user.highest_rank = rank
 
     async def _sync_user_task(self, queue):
         first = True
@@ -341,6 +355,7 @@ class Orisa(Plugin):
 
     async def _sync_all_users_task(self):
         await curio.sleep(10)
+        logger.info("started waiting...")
         while True:
             try:
                 await self._sync_check()
@@ -404,8 +419,8 @@ async def ready(ctx):
         await check_guild(guild)
 
     await manager.load_plugin(Orisa, database)
-#    await ctx.bot.change_status(game=Game(name='"!bt help" for help'))
-    await ctx.bot.change_status(game=Game(name='"*TEST MODE*'))
+    await ctx.bot.change_status(game=Game(name='"!bt help" for help'))
+#    await ctx.bot.change_status(game=Game(name='"*TEST MODE*'))
     logger.info("Ready")
 
 @client.event('guild_member_remove')

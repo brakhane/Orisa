@@ -13,14 +13,14 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = 'users'
 
-    id = Column(Integer, primary_key=True)
-    discord_id = Column(Integer, unique=True, nullable=False)
+    id = Column(Integer, primary_key=True, index=True)
+    discord_id = Column(Integer, unique=True, nullable=False, index=True)
     battle_tag = Column(String, nullable=False)
     sr = Column(Integer)
     last_update = Column(DateTime)
     error_count = Column(Integer, nullable=False, default=0)
     format = Column(String, nullable=False)
-    highest_rank = Column(Integer, nullable=False)
+    highest_rank = Column(Integer)
 
     def __repr__(self):
         return (f'User(id={self.id}, discord_id={self.discord_id}, battle_tag={self.battle_tag}, sr={self.sr}, '
@@ -43,12 +43,12 @@ class Database:
 
     def _sync_delay(self, error_count):
         if 0 <= error_count < 2:
-            return timedelta(minutes=10)
+            return timedelta(minutes=60)
         elif 2 <= error_count < 5:
-            return timedelta(minutes=30)
+            return timedelta(minutes=90)
         elif 5 <= error_count < 10:
             # exponential backoff
-            return timedelta(minutes=60+10*(error_count-5)**2)
+            return timedelta(minutes=100+20*(error_count-5)**2)
         else:
             return timedelta(days=1)
 
