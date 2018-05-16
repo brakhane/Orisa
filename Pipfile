@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+discord-curious = ">=0.7.7, <0.8"
+curio = "*"
+dataclasses = "*"
+"html5lib" = "*"
+lxml = "*"
+sqlalchemy = "*"
+fuzzywuzzy = {extras = ["speedup"]}
+
+[dev-packages]
+pylint = "*"
+ipython = "*"
+
+[requires]
+python_version = "3.6"
