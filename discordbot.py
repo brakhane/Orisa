@@ -1,4 +1,6 @@
 import logging
+import logging.config
+
 import re
 import random
 from bisect import bisect
@@ -20,14 +22,12 @@ from curious.dataclasses.presence import Game
 from fuzzywuzzy import process
 from lxml import html
 
-from config import BOT_TOKEN, GUILD_ID, CHANNEL_ID, LOG_LEVEL
+from config import BOT_TOKEN, GUILD_ID, CHANNEL_ID
 from models import Database, User
 
-logging.basicConfig()
-logging.getLogger().setLevel(LOG_LEVEL)
+logging.config.fileConfig('logging.ini')
 
 logger = logging.getLogger("orisa")
-logger.setLevel(ORISA_LOG_LEVEL)
 
 class InvalidBattleTag(Exception):
     def __init__(self, message):
@@ -404,7 +404,8 @@ async def ready(ctx):
         await check_guild(guild)
 
     await manager.load_plugin(Orisa, database)
-    await ctx.bot.change_status(game=Game(name='"!bt help" for help'))
+#    await ctx.bot.change_status(game=Game(name='"!bt help" for help'))
+    await ctx.bot.change_status(game=Game(name='"*TEST MODE*'))
     logger.info("Ready")
 
 @client.event('guild_member_remove')
