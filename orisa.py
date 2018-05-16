@@ -360,7 +360,7 @@ class Orisa(Plugin):
             try:
                 await self._sync_check()
             except Exception as e:
-                logger.error("something went wrong {e}")
+                logger.error(f"something went wrong {e}")
             await curio.sleep(60)
 
 
