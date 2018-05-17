@@ -101,7 +101,7 @@ class Orisa(Plugin):
                 if user.sr:
                     embed.add_field(name="SR", value=f"{user.sr} ({RANKS[get_rank(user.sr)]})")
                 if member == ctx.author and member_given:
-                    embed.set_footer(text="BTW, you do not need to specify your nickname if you want your own battle tag; just !bt is enough")
+                    embed.set_footer(text="BTW, you do not need to specify your nickname if you want your own BattleTag; just !bt is enough")
             else:
                 content = f"{member.name} not found in database! *Do you need a hug?*"
         finally:
@@ -127,16 +127,16 @@ class Orisa(Plugin):
             if user is None:
                 user = User(discord_id=member_id)
                 session.add(user)
-                resp = "OK. People can now ask me for your battle tag, and I will regularly update your nick whenever I notice that your SR changed."
+                resp = "OK. People can now ask me for your BattleTag, and I will regularly update your nick whenever I notice that your SR changed."
             else:
-                resp = "OK. I've updated your battle tag."
+                resp = "OK. I've updated your BattleTag."
             try:
                 sr, rank, image = await get_sr_rank(battle_tag)
             except InvalidBattleTag as e:
                 await ctx.channel.messages.send(f"{ctx.author.mention} Invalid battletag: {e.message}")
                 raise
             except UnableToFindSR:
-                resp += "\nYou don't have an SR though, you probably need to finish your placement matches... I still saved your battle tag."
+                resp += "\nYou don't have an SR though, you probably need to finish your placement matches... I still saved your BattleTag."
                 sr = None
 
             user.battle_tag = battle_tag
@@ -150,7 +150,7 @@ class Orisa(Plugin):
             except Exception as e:
                 logger.error(f"unable to update nick for user {user}: {e}")
                 resp += ("\nHowever, right now I couldn't update your nickname, will try that again later. If you are a clan admin, "
-                         "I simply cannot update your nickname ever, period. People will still be able to ask for your battle tag, though.")
+                         "I simply cannot update your nickname ever, period. People will still be able to ask for your BattleTag, though.")
         finally: 
             session.commit() # we always want to commit, because we have error_count
             session.close()
@@ -218,11 +218,11 @@ class Orisa(Plugin):
     async def help(self, ctx):
         embed = Embed(
             title="Orisa's purpose",
-            description=("When joining a QP or Comp channel, you need to know a battle tag of a channel member, or they need "
+            description=("When joining a QP or Comp channel, you need to know a BattleTag of a channel member, or they need "
                          "yours to add you. In competitive channels it also helps to know which SR the channel members are. "
                          "To avoid having to ask this information again and again when joining a channel, this bot was created. "
-                         "When you register with your battle tag, your nick will automatically be updated to show your "
-                         "current SR and it will be kept up to date. You can also ask for other member's battle tag, or request "
+                         "When you register with your BattleTag, your nick will automatically be updated to show your "
+                         "current SR and it will be kept up to date. You can also ask for other member's BattleTag, or request "
                          "your own so others can easily add you in OW.\n"
                          "It will also send a short message to the chat when you ranked up.\n"
                          "*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to Joghurt*"),
