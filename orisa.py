@@ -83,16 +83,23 @@ class Orisa(Plugin):
 
     @command()
     async def bt(self, ctx, *, member: Member = None):
-        if member is None:
+        member_given = member is not None
+        if not member_given:
             member = ctx.author
 
         session = self.database.Session()
         try:
             user = self.database.by_discord_id(session, member.id)
             if user:
-                msg = f"{member.name}'s BattleTag is **{user.battle_tag}**"
+                msg = f"{member.name}'s BattleTag is **{user.battle_tag}**, "
+                if user.sr:
+                    msg += f"{user.sr} SR ({RANKS[get_rank(user.sr)]})"
+                else:
+                    msg += "no SR"
             else:
                 msg = f"{member.name} not found in database! *Do you need a hug?*"
+            if member == ctx.author and member_given:
+                msg += "\n*(BTW, you do not need to specify your nickname if you want your own battle tag; just `!bt` is enough)*"
         finally:
             session.close()
 
@@ -385,13 +392,14 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
         except ValueError:
             raise ConversionFailedError(ctx, name, Member, "Invalid member ID")
     else:
+        guild = ctx.bot.guilds[GUILD_ID]
         try:
-            member, score, member_id = process.extractOne(name, {id: str(mem.name) for id, mem in ctx.guild.members.items()}, score_cutoff=50)
+            member, score, member_id = process.extractOne(name, {id: str(mem.name) for id, mem in guild.members.items()}, score_cutoff=50)
         except TypeError: # extractOne returns None when nothing found
             pass
 
     if member_id is not None:
-        member = ctx.guild.members.get(member_id)
+        member = guild.members.get(member_id)
 
     if member is None:
         raise ConversionFailedError(ctx, name, Member, 'Cannot find member with that name')
