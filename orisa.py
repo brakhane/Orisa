@@ -5,6 +5,8 @@ import re
 import random
 from bisect import bisect
 from datetime import datetime, timedelta
+from itertools import groupby
+from operator import itemgetter
 
 import asks
 import curio
@@ -407,10 +409,12 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
             raise ConversionFailedError(ctx, name, Member, "Invalid member ID")
     else:
         guild = ctx.bot.guilds[GUILD_ID]
-        try:
-            member, score, member_id = process.extractOne(name, {id: str(mem.name) for id, mem in guild.members.items()}, score_cutoff=50)
-        except TypeError: # extractOne returns None when nothing found
-            pass
+        candidates = process.extract(name, {id: str(mem.name) for id, mem in guild.members.items()})
+        if candidates:
+            highest_score, group = next(groupby(candidates, key=itemgetter(1)))
+            if highest_score >= 50:
+                group = sorted(group, key=lambda e: len(e[0]))
+                member, score, member_id = group[0]
 
     if member_id is not None:
         member = guild.members.get(member_id)
