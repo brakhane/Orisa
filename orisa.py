@@ -136,7 +136,7 @@ class Orisa(Plugin):
                 await ctx.channel.messages.send(f"{ctx.author.mention} Invalid battletag: {e.message}")
                 raise
             except UnableToFindSR:
-                resp += " You don't have an SR though, you probably need to finish your placement matches... I still saved your battle tag."
+                resp += "\nYou don't have an SR though, you probably need to finish your placement matches... I still saved your battle tag."
                 sr = None
 
             user.battle_tag = battle_tag
@@ -149,7 +149,7 @@ class Orisa(Plugin):
                 await self._update_nick(user)
             except Exception as e:
                 logger.error(f"unable to update nick for user {user}: {e}")
-                resp += (" However, right now I couldn't update your nickname, will try that again later. If you are a clan admin, "
+                resp += ("\nHowever, right now I couldn't update your nickname, will try that again later. If you are a clan admin, "
                          "I simply cannot update your nickname ever, period. People will still be able to ask for your battle tag, though.")
         finally: 
             session.commit() # we always want to commit, because we have error_count
