@@ -88,22 +88,24 @@ class Orisa(Plugin):
             member = ctx.author
 
         session = self.database.Session()
+
+        content = embed = None
         try:
             user = self.database.by_discord_id(session, member.id)
             if user:
-                msg = f"{member.name}'s BattleTag is **{user.battle_tag}**, "
+                embed = Embed(colour=0x659dbd)
+                embed.add_field(name="Nick", value=member.name)
+                embed.add_field(name="BattleTag", value=f"**{user.battle_tag}**")
                 if user.sr:
-                    msg += f"{user.sr} SR ({RANKS[get_rank(user.sr)]})"
-                else:
-                    msg += "no SR"
+                    embed.add_field(name="SR", value=f"{user.sr} ({RANKS[get_rank(user.sr)]})")
+                if member == ctx.author and member_given:
+                    embed.set_footer(text="BTW, you do not need to specify your nickname if you want your own battle tag; just `!bt` is enough")
             else:
-                msg = f"{member.name} not found in database! *Do you need a hug?*"
-            if member == ctx.author and member_given:
-                msg += "\n*(BTW, you do not need to specify your nickname if you want your own battle tag; just `!bt` is enough)*"
+                content = f"{member.name} not found in database! *Do you need a hug?*"
         finally:
             session.close()
 
-        await ctx.channel.messages.send(msg)
+        await ctx.channel.messages.send(content=content, embed=embed)
 
     @bt.subcommand()
     async def get(self, ctx, *, member: Member = None):
