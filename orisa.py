@@ -149,7 +149,7 @@ class Orisa(Plugin):
                 await self._update_nick(user)
             except Exception as e:
                 logger.error(f"unable to update nick for user {user}: {e}")
-                resp += (" However, right now I couldn't update your nickname, will try that again later. If you are an admin, "
+                resp += (" However, right now I couldn't update your nickname, will try that again later. If you are a clan admin, "
                          "I simply cannot update your nickname ever, period. People will still be able to ask for your battle tag, though.")
         finally: 
             session.commit() # we always want to commit, because we have error_count
