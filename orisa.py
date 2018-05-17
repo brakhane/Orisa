@@ -302,6 +302,10 @@ class Orisa(Plugin):
         user.last_update = datetime.now()
         try:
             sr, rank, image = await get_sr_rank(user.battle_tag)
+        except UnableToFindSr:
+            logger.debug(f"No SR for {user.battle_tag}, oh well...")
+            # it is successful, after all
+            user.error_count = 0
         except Exception as e:
             user.error_count += 1
             logger.error(f"Got exception while requesting {user.battle_tag}")
@@ -349,9 +353,11 @@ class Orisa(Plugin):
         if ids_to_sync:
             for user_id in ids_to_sync:
                 await queue.put(user_id)
-            for _ in range(5):
-                await curio.spawn(self._sync_user_task, queue)
-            await queue.join()
+            async with curio.TaskGroup(name='sync users') as g:
+                for _ in range(5):
+                    await g.spawn(self._sync_user_task, queue)
+                await queue.join()
+                await g.cancel_remaining()
             logger.info("done syncing")
 
     async def _sync_all_users_task(self):
