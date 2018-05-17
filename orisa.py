@@ -284,6 +284,7 @@ class Orisa(Plugin):
 
         return format.replace('%s', srstr).replace('%r', rank)
 
+
     async def _update_nick(self, user):
         user_id = user.discord_id
         #user_id = 0
@@ -298,11 +299,22 @@ class Orisa(Plugin):
         if str(nn) != new_nn:
             await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
 
-
+    
     async def _send_congrats(self, user, rank, image):
+        COLORS = (
+                0xcd7e32, # Bronze (not used)
+                0xc0c0c0, # Silver
+                0xffd700, # Gold
+                0xe5e4e2, # Platinum
+                0xa2bfd3, # Diamond
+                0xf9ca61, # Master
+                0xf1d592, # Grand Master
+        )
+
         embed = Embed(
             title=f"For your own safety, get behind the barrier!",
-            description=f"<@{user.discord_id}> just advanced to **{RANKS[rank]}**. Congratulations!"
+            description=f"<@{user.discord_id}> just advanced to **{RANKS[rank]}**. Congratulations!",
+            colour=COLORS[rank],
         )
 
         embed.set_thumbnail(url=image)
