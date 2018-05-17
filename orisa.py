@@ -4,7 +4,7 @@ import logging.config
 import re
 import random
 from bisect import bisect
-from datetime import datetime, timedelta
+from datetime import datetime
 from itertools import groupby
 from operator import itemgetter
 

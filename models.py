@@ -42,10 +42,12 @@ class Database:
         return session.query(User).filter_by(discord_id=discord_id).one_or_none()
 
     def _sync_delay(self, error_count):
-        if 0 <= error_count < 2:
+        if error_count == 0:
             return timedelta(minutes=60)
+        elif 0 < error_count < 3:
+            return timedelta(minutes=5) # we actually want to try again fast, in case it was a temporary problem
         elif 2 <= error_count < 5:
-            return timedelta(minutes=90)
+            return timedelta(minutes=90) # ok, the error's not going away, so wait longer
         elif 5 <= error_count < 10:
             # exponential backoff
             return timedelta(minutes=100+20*(error_count-5)**2)
