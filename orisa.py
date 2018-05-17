@@ -99,7 +99,7 @@ class Orisa(Plugin):
                 if user.sr:
                     embed.add_field(name="SR", value=f"{user.sr} ({RANKS[get_rank(user.sr)]})")
                 if member == ctx.author and member_given:
-                    embed.set_footer(text="BTW, you do not need to specify your nickname if you want your own battle tag; just `!bt` is enough")
+                    embed.set_footer(text="BTW, you do not need to specify your nickname if you want your own battle tag; just !bt is enough")
             else:
                 content = f"{member.name} not found in database! *Do you need a hug?*"
         finally:
