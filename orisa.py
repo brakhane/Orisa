@@ -327,7 +327,7 @@ class Orisa(Plugin):
         user.last_update = datetime.now()
         try:
             sr, rank, image = await get_sr_rank(user.battle_tag)
-        except UnableToFindSr:
+        except UnableToFindSR:
             logger.debug(f"No SR for {user.battle_tag}, oh well...")
             # it is successful, after all
             user.error_count = 0

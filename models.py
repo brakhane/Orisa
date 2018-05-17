@@ -17,7 +17,7 @@ class User(Base):
     discord_id = Column(Integer, unique=True, nullable=False, index=True)
     battle_tag = Column(String, nullable=False)
     sr = Column(Integer)
-    last_update = Column(DateTime)
+    last_update = Column(DateTime, index=True)
     error_count = Column(Integer, nullable=False, default=0)
     format = Column(String, nullable=False)
     highest_rank = Column(Integer)
