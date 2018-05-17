@@ -46,7 +46,7 @@ class Database:
             return timedelta(minutes=60)
         elif 0 < error_count < 3:
             return timedelta(minutes=5) # we actually want to try again fast, in case it was a temporary problem
-        elif 2 <= error_count < 5:
+        elif 3 <= error_count < 5:
             return timedelta(minutes=90) # ok, the error's not going away, so wait longer
         elif 5 <= error_count < 10:
             # exponential backoff
