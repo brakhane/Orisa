@@ -261,6 +261,7 @@ class Orisa(Plugin):
                   'will not be updated anymore. You can re-register at any time.'
         )
         await ctx.author.send(content=None, embed=embed)
+        #await ctx.channel.messages.send(content=None, embed=embed)
         if False and not ctx.channel.private:
             await ctx.channel.messages.send(f"{ctx.author.mention} I sent you a DM with instructions.")
 
@@ -318,14 +319,13 @@ class Orisa(Plugin):
 
     async def _sync_user_task(self, queue):
         first = True
-        while not queue.empty():
+        async for user_id in queue:
             if not first:
                 delay = random.random() * 5.
                 logger.debug(f"rate limiting: sleeping for {delay}s")
                 await curio.sleep(delay)
             else:
                 first = False
-            user_id = await queue.get()
             session = self.database.Session()
             try:
                 user = self.database.by_id(session, user_id)
@@ -333,10 +333,9 @@ class Orisa(Plugin):
             except Exception as e:
                 logger.error(f'exception {e} while syncing {user.discord_id} {user.battle_tag}')
             finally:
+                await queue.task_done()
                 session.commit()
                 session.close()            
-            
-            await queue.task_done()
 
     
     async def _sync_check(self):
@@ -347,15 +346,17 @@ class Orisa(Plugin):
         finally:
             session.close()
         logger.info(f"{len(ids_to_sync)} users need to be synced")
-        for user_id in ids_to_sync:
-            await queue.put(user_id)
-        async with curio.TaskGroup(name='sync users') as g:
+        if ids_to_sync:
+            for user_id in ids_to_sync:
+                await queue.put(user_id)
             for _ in range(5):
-                await g.spawn(self._sync_user_task, queue)
+                await curio.spawn(self._sync_user_task, queue)
+            await queue.join()
+            logger.info("done syncing")
 
     async def _sync_all_users_task(self):
         await curio.sleep(10)
-        logger.info("started waiting...")
+        logger.debug("started waiting...")
         while True:
             try:
                 await self._sync_check()
@@ -440,4 +441,4 @@ async def remove_member(ctx: Context, member: Member):
 
 manager = CommandsManager.with_client(client, command_prefix="!")
 
-client.run()
+client.run(with_monitor=True)
