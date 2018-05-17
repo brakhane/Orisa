@@ -29,7 +29,7 @@ from models import Database, User
 
 #logging.config.fileConfig('logging.ini')
 logging.basicConfig()
-logging.getLogger().setLevel(logging.DEBUG)
+logging.getLogger().setLevel(logging.INFO)
 
 logger = logging.getLogger("orisa")
 
@@ -301,6 +301,28 @@ class Orisa(Plugin):
         if str(nn) != new_nn:
             await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
 
+    #@command()
+    async def QQQQQ(self, ctx):
+        for rank in range(7):
+         COLORS = (
+                0xcd7e32, # Bronze (not used)
+                0xc0c0c0, # Silver
+                0xffd700, # Gold
+                0xe5e4e2, # Platinum
+                0xa2bfd3, # Diamond
+                0xf9ca61, # Master
+                0xf1d592, # Grand Master
+         )
+
+         embed = Embed(
+            title=f"For your own safety, get behind the barrier!",
+            description=f"<@user.discord_id> just advanced to **{RANKS[rank]}**!\nCongratulations!",
+            colour=COLORS[rank],
+         )
+
+         embed.set_thumbnail(url=f"https://d1u1mce87gyfbn.cloudfront.net/game/rank-icons/season-2/rank-{rank+1}.png")
+
+         await ctx.channel.messages.send(embed=embed)
     
     async def _send_congrats(self, user, rank, image):
         COLORS = (
@@ -434,6 +456,7 @@ client = Client(BOT_TOKEN)
 database = Database()
 
 async def check_guild(guild):
+    return # disable 
     if guild.id != GUILD_ID:
         logger.info("Unknown guild! leaving")
         if guild.system_channel:

@@ -55,6 +55,6 @@ class Database:
             return timedelta(days=1)
 
     def get_to_be_synced(self, session):
-        min_time = datetime.now() - self._sync_delay(0)
+        min_time = datetime.now() - self._sync_delay(1) # Minimun is actually 1 error
         results = session.query(User).filter(User.last_update <= min_time).all()
         return [result.id for result in results if result.last_update <= datetime.now() - self._sync_delay(result.error_count)]
