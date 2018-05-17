@@ -219,7 +219,7 @@ class Orisa(Plugin):
         embed = Embed(
             title="Orisa's purpose",
             description=("When joining a QP or Comp channel, you need to know a battle tag of a channel member, or they need "
-                         "yours to add it. In competitive channels it also helps to know which SR the channel members are. "
+                         "yours to add you. In competitive channels it also helps to know which SR the channel members are. "
                          "To avoid having to ask this information again and again when joining a channel, this bot was created. "
                          "When you register with your battle tag, your nick will automatically be updated to show your "
                          "current SR and it will be kept up to date. You can also ask for other member's battle tag, or request "
@@ -253,7 +253,7 @@ class Orisa(Plugin):
         )
         embed.add_field(
             name='!bt format *format*',
-            value="Let's you specify how your SR or rank is displayed. It will always "
+            value="Lets you specify how your SR or rank is displayed. It will always "
                   "be shown in [square\u00a0brackets] appended to your name. "
                   "In the *format*, `%s` will be replaced with your SR, and `%r` "
                   "will be replaced with your rank.\n"
