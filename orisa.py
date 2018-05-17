@@ -138,8 +138,8 @@ class Orisa(Plugin):
                 await self._update_nick(user)
             except Exception as e:
                 logger.error(f"unable to update nick for user {user}: {e}")
-                resp += (" However, I couldn't update your nickname. I will try that again later. If you are an admin, "
-                            "I cannot update your nickname, period. People will still be able to ask for your battle tag, though.")
+                resp += (" However, right now I couldn't update your nickname, will try that again later. If you are an admin, "
+                         "I simply cannot update your nickname ever, period. People will still be able to ask for your battle tag, though.")
         finally: 
             session.commit() # we always want to commit, because we have error_count
             session.close()
@@ -179,10 +179,10 @@ class Orisa(Plugin):
             logger.info(f"{ctx.author.id}")
             user = self.database.by_discord_id(session, ctx.author.id)
             if not user:
-                await ctx.channel.messages.send("you are not registered")
+                await ctx.channel.messages.send(f"{ctx.author.mention} you are not registered")
             else:
-                await ctx.channel.messages.send("ok")
-            await self._sync_user(user)
+                await ctx.channel.messages.send(f"{ctx.author.mention} OK, I will update your data immediately. If your SR is not up to date, you need to log out of Overwatch once and try again.")
+                await self._sync_user(user)
         except Exception as e:
             logger.error(f'exception {e} while syncing {user}')
         finally:
@@ -196,8 +196,10 @@ class Orisa(Plugin):
             user = self.database.by_discord_id(session, ctx.author.id)
             if user:
                 session.delete(user)
-                await ctx.channel.messages.send(f"deleted {ctx.author.name} from database")
+                await ctx.channel.messages.send(f"OK, deleted {ctx.author.name} from database")
                 session.commit()
+            else:
+                await ctx.channel.messages.send(f"{ctx.author.mention} you are not registered anyway, so there's nothing for me to forget...")
         finally:
             session.close()
 
@@ -262,7 +264,7 @@ class Orisa(Plugin):
         )
         await ctx.author.send(content=None, embed=embed)
         #await ctx.channel.messages.send(content=None, embed=embed)
-        if False and not ctx.channel.private:
+        if not ctx.channel.private:
             await ctx.channel.messages.send(f"{ctx.author.mention} I sent you a DM with instructions.")
 
 
