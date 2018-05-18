@@ -6,7 +6,7 @@ from sqlalchemy import (Boolean, Column, DateTime, Integer, String,
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from config import DATABASE_URI, ECHO_SQL
+from config import DATABASE_URI
 
 Base = declarative_base()
 
@@ -31,7 +31,7 @@ class User(Base):
 class Database:
 
     def __init__(self):
-        engine = create_engine(DATABASE_URI, echo=ECHO_SQL)
+        engine = create_engine(DATABASE_URI)
         self.Session = sessionmaker(bind=engine)
         Base.metadata.create_all(engine)
 
@@ -55,6 +55,6 @@ class Database:
             return timedelta(days=1)
 
     def get_to_be_synced(self, session):
-        min_time = datetime.now() - self._sync_delay(1) # Minimun is actually 1 error
+        min_time = datetime.now() - min(self._sync_delay(x) for x in range(10))
         results = session.query(User).filter(User.last_update <= min_time).all()
         return [result.id for result in results if result.last_update <= datetime.now() - self._sync_delay(result.error_count)]

@@ -1,0 +1,44 @@
+version: 1
+
+# lomond configures a logger before we initialize
+disable_existing_loggers: false
+
+root:
+  level: DEBUG
+  handlers: [console_all, file]
+
+loggers:
+  orisa:
+    level: DEBUG
+
+  sqlalchemy.engine:
+    # INFO for SQL statement dump
+    level: WARN
+
+handlers:
+  console_all:
+    class: logging.StreamHandler
+    formatter: console
+    stream: ext://sys.stderr
+
+  console_info:
+    class: logging.StreamHandler
+    formatter: console
+    level: INFO
+    stream: ext://sys.stderr
+
+  file:
+    class: logging.handlers.RotatingFileHandler
+    formatter: file
+    filename: orisa.log
+    maxBytes: 1024000
+    backupCount: 5
+
+formatters:
+  file:
+    format: "{asctime} {levelname:<5s} {name:<15s} {message}"
+    style: "{"
+
+  console:
+    format: "\x1b[36m{levelname:<5s} {name:<20.20s} \x1b[m{message}"
+    style: "{"

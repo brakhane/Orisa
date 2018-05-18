@@ -12,6 +12,7 @@ import asks
 import curio
 import html5lib
 import multio
+import yaml
 from curious.commands.context import Context
 from curious.commands.decorators import command, condition
 from curious.commands.exc import ConversionFailedError
@@ -24,12 +25,12 @@ from curious.dataclasses.presence import Game
 from fuzzywuzzy import process
 from lxml import html
 
+
 from config import BOT_TOKEN, GUILD_ID, CHANNEL_ID, OWNER_ID
 from models import Database, User
 
-#logging.config.fileConfig('logging.ini')
-logging.basicConfig()
-logging.getLogger().setLevel(logging.INFO)
+with open('logging.yaml') as logfile:
+    logging.config.dictConfig(yaml.safe_load(logfile))
 
 logger = logging.getLogger("orisa")
 
@@ -165,7 +166,7 @@ class Orisa(Plugin):
             try:
                 await self._update_nick(user)
             except Exception as e:
-                logger.error(f"unable to update nick for user {user}: {e}")
+                logger.exception(f"unable to update nick for user {user}")
                 resp += ("\nHowever, right now I couldn't update your nickname, will try that again later. If you are a clan admin, "
                          "I simply cannot update your nickname ever, period. People will still be able to ask for your BattleTag, though.")
         finally: 
@@ -212,7 +213,7 @@ class Orisa(Plugin):
                 await ctx.channel.messages.send(f"{ctx.author.mention} OK, I will update your data immediately. If your SR is not up to date, you need to log out of Overwatch once and try again.")
                 await self._sync_user(user)
         except Exception as e:
-            logger.error(f'exception {e} while syncing {user}')
+            logger.exception(f'exception while syncing {user}')
         finally:
             session.commit()
             session.close()            
@@ -324,7 +325,7 @@ class Orisa(Plugin):
         for rank in range(7):
          embed = Embed(
             title=f"For your own safety, get behind the barrier!",
-            description=f"<@user.discord_id> just advanced to **{RANKS[rank]}**!\nCongratulations!",
+            description=f"<@!{ctx.author.id}> just advanced to **{RANKS[rank]}**!\nCongratulations!",
             colour=COLORS[rank],
          )
 
@@ -353,7 +354,7 @@ class Orisa(Plugin):
             user.error_count = 0
         except Exception as e:
             user.error_count += 1
-            logger.error(f"Got exception while requesting {user.battle_tag}")
+            logger.exception(f"Got exception while requesting {user.battle_tag}")
             raise
         else:
             user.error_count = 0
@@ -386,7 +387,7 @@ class Orisa(Plugin):
                 user = self.database.by_id(session, user_id)
                 await self._sync_user(user)
             except Exception as e:
-                logger.error(f'exception {e} while syncing {user.discord_id} {user.battle_tag}')
+                logger.exception(f'exception {e} while syncing {user.discord_id} {user.battle_tag}')
             finally:
                 await queue.task_done()
                 session.commit()
@@ -418,7 +419,7 @@ class Orisa(Plugin):
             try:
                 await self._sync_check()
             except Exception as e:
-                logger.error(f"something went wrong {e}")
+                logger.exception(f"something went wrong during _sync_check")
             await curio.sleep(60)
 
 
