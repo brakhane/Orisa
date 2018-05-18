@@ -419,6 +419,7 @@ class Orisa(Plugin):
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):
     member = member_id = None
+    guild = ctx.bot.guilds[GUILD_ID]
     if name.startswith("<@") and name.endswith(">"):
         id = name[2:-1]
         if id[0] == "!":  # strip nicknames
@@ -428,7 +429,6 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
         except ValueError:
             raise ConversionFailedError(ctx, name, Member, "Invalid member ID")
     else:
-        guild = ctx.bot.guilds[GUILD_ID]
         candidates = process.extract(name, {id: str(mem.name) for id, mem in guild.members.items()})
         if candidates:
             highest_score, group = next(groupby(candidates, key=itemgetter(1)))
