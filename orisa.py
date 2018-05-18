@@ -24,7 +24,7 @@ from curious.dataclasses.presence import Game
 from fuzzywuzzy import process
 from lxml import html
 
-from config import BOT_TOKEN, GUILD_ID, CHANNEL_ID
+from config import BOT_TOKEN, GUILD_ID, CHANNEL_ID, OWNER_ID
 from models import Database, User
 
 #logging.config.fileConfig('logging.ini')
@@ -83,6 +83,9 @@ async def get_sr_rank(battletag):
 
 def correct_guild(ctx):
     return ctx.guild.id == GUILD_ID
+
+def only_owner(ctx):
+    return ctx.author.id == OWNER_ID
 
 class Orisa(Plugin):
 
@@ -315,7 +318,8 @@ class Orisa(Plugin):
         if str(nn) != new_nn:
             await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
 
-    #@command()
+    @command()
+    @condition(only_owner)
     async def QQQQQ(self, ctx):
         for rank in range(7):
          embed = Embed(
