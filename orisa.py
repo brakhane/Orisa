@@ -127,7 +127,7 @@ class Orisa(Plugin):
             if user is None:
                 user = User(discord_id=member_id)
                 session.add(user)
-                resp = "OK. People can now ask me for your BattleTag, and I will regularly update your nick whenever I notice that your SR changed."
+                resp = "OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed."
             else:
                 resp = "OK. I've updated your BattleTag."
             try:
