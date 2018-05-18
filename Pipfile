@@ -14,7 +14,7 @@ fuzzywuzzy = {extras = ["speedup"]}
 
 [dev-packages]
 pylint = "*"
-ipython = "*"
+"flake8" = "*"
 
 [requires]
 python_version = "3.6"
