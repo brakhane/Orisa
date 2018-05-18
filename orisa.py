@@ -362,6 +362,12 @@ class Orisa(Plugin):
             if rank is not None:
                 if user.highest_rank is None:
                     user.highest_rank = rank
+
+                elif rank < user.highest_rank and sr % 500 <= 350:
+                    # user has fallen at least 150 below threshold,
+                    # so congratulate him when he ranks up again
+                    user.highest_rank = rank
+
                 elif rank > user.highest_rank:
                     await self._send_congrats(user, rank, image)
                     user.highest_rank = rank
