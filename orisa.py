@@ -42,6 +42,16 @@ class UnableToFindSR(Exception):
 
 RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
 RANKS = ('Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grand Master')
+COLORS = (
+    0xcd7e32, # Bronze
+    0xc0c0c0, # Silver
+    0xffd700, # Gold
+    0xe5e4e2, # Platinum
+    0xa2bfd3, # Diamond
+    0xf9ca61, # Master
+    0xf1d592, # Grand Master
+)
+
 
 def get_rank(sr):
     return bisect(RANK_CUTOFF, sr) if sr is not None else None
@@ -95,15 +105,19 @@ class Orisa(Plugin):
         try:
             user = self.database.by_discord_id(session, member.id)
             if user:
-                embed = Embed(colour=0x659dbd)
+                embed = Embed(colour=0x659dbd) # will be overwritten later if SR is set
                 embed.add_field(name="Nick", value=member.name)
                 embed.add_field(name="BattleTag", value=f"**{user.battle_tag}**")
                 if user.sr:
-                    embed.add_field(name="SR", value=f"{user.sr} ({RANKS[get_rank(user.sr)]})")
+                    rank = get_rank(user.sr)
+                    embed.add_field(name="SR", value=f"{user.sr} ({RANKS[rank]})")
+                    embed.colour = COLORS[rank]
                 if member == ctx.author and member_given:
                     embed.set_footer(text="BTW, you do not need to specify your nickname if you want your own BattleTag; just !bt is enough")
             else:
                 content = f"{member.name} not found in database! *Do you need a hug?*"
+                if member == ctx.author:
+                    content += "\n*Hint: use `!bt register BattleTag#1234` to register, or `!bt help` for more info*"
         finally:
             session.close()
 
@@ -304,16 +318,6 @@ class Orisa(Plugin):
     #@command()
     async def QQQQQ(self, ctx):
         for rank in range(7):
-         COLORS = (
-                0xcd7e32, # Bronze (not used)
-                0xc0c0c0, # Silver
-                0xffd700, # Gold
-                0xe5e4e2, # Platinum
-                0xa2bfd3, # Diamond
-                0xf9ca61, # Master
-                0xf1d592, # Grand Master
-         )
-
          embed = Embed(
             title=f"For your own safety, get behind the barrier!",
             description=f"<@user.discord_id> just advanced to **{RANKS[rank]}**!\nCongratulations!",
@@ -325,16 +329,6 @@ class Orisa(Plugin):
          await ctx.channel.messages.send(embed=embed)
     
     async def _send_congrats(self, user, rank, image):
-        COLORS = (
-                0xcd7e32, # Bronze (not used)
-                0xc0c0c0, # Silver
-                0xffd700, # Gold
-                0xe5e4e2, # Platinum
-                0xa2bfd3, # Diamond
-                0xf9ca61, # Master
-                0xf1d592, # Grand Master
-        )
-
         embed = Embed(
             title=f"For your own safety, get behind the barrier!",
             description=f"<@{user.discord_id}> just advanced to **{RANKS[rank]}**. Congratulations!",
