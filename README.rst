@@ -42,6 +42,15 @@ the current 0.7.7 available on PyPI has a few bugs that make this bot crash.
 
 After that, you're set, just run `python orisa.py` in the pipenv environment.
 
+You need to use Discords developer pages to create a link you can use to allow
+Orisa on your site. Orisa needs the following permissions: "Manage Nicknames", "Send Messages",
+"Embed Links".
+
+Once Orisa has joined, you will need to move the newly created Orisa role as high as possible;
+the reason is that Discord only allows nickname changes to be done to people whose highest
+role is lower than the one attempting the modification. So Orisa needs to be at least higher than the
+group you use for your regular members.
+
 License
 -------
 Orisa is licensed under the GNU AGPL version 3.
