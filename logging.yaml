@@ -4,8 +4,8 @@ version: 1
 disable_existing_loggers: false
 
 root:
-  level: INFO
-  handlers: [console_all, file]
+  level: DEBUG
+  handlers: [console_info, file]
 
 loggers:
   orisa:
@@ -36,9 +36,9 @@ handlers:
 
 formatters:
   file:
-    format: "{asctime} {levelname:<5s} {name:<15s} {message}"
+    format: "{asctime} {levelname:<5.5s} {name} {message}"
     style: "{"
 
   console:
-    format: "\x1b[36m{levelname:<5s} {name:<20.20s} \x1b[m{message}"
+    format: "\x1b[36m{levelname:<5.5s} {name:<6.6s} \x1b[m{message}"
     style: "{"
