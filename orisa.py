@@ -86,7 +86,7 @@ async def get_sr_rank(battletag):
     rank_image_elems = document.xpath('//div[@class="competitive-rank"]/img/@src')
     if not srs:
         if 'Profile Not Found' in result.text:
-            raise InvalidBattleTag(f"No profile with BattleTag {battletag} found. Battle tags are case-sensitive!")
+            raise InvalidBattleTag(f"No profile with BattleTag {battletag} found. BattleTags are case-sensitive!")
         raise UnableToFindSR()
     sr = int(srs[0])
     if rank_image_elems:
@@ -149,7 +149,7 @@ class Orisa(Plugin):
     @bt.subcommand()
     async def register(self, ctx, battle_tag: str = None):
         if battle_tag is None:
-            await ctx.channel.messages.send(f"{ctx.author.mention} missing battletag")
+            await ctx.channel.messages.send(f"{ctx.author.mention} missing BattleTag")
             return
         member_id = ctx.message.author_id
         session = self.database.Session()
@@ -165,7 +165,7 @@ class Orisa(Plugin):
             try:
                 sr, rank, image = await get_sr_rank(battle_tag)
             except InvalidBattleTag as e:
-                await ctx.channel.messages.send(f"{ctx.author.mention} Invalid battletag: {e.message}")
+                await ctx.channel.messages.send(f"{ctx.author.mention} Invalid BattleTag: {e.message}")
                 raise
             except UnableToFindSR:
                 resp += "\nYou don't have an SR though, you probably need to finish your placement matches... I still saved your BattleTag."
