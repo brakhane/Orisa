@@ -336,7 +336,7 @@ class Orisa(Plugin):
     async def _send_congrats(self, user, rank, image):
         embed = Embed(
             title=f"For your own safety, get behind the barrier!",
-            description=f"<@{user.discord_id}> just advanced to **{RANKS[rank]}**. Congratulations!",
+            description=f"<@!{user.discord_id}> just advanced to **{RANKS[rank]}**. Congratulations!",
             colour=COLORS[rank],
         )
 
