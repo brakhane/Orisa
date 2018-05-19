@@ -333,20 +333,6 @@ class Orisa(Plugin):
         if str(nn) != new_nn:
             await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
 
-    @command()
-    @condition(only_owner)
-    async def QQQQQ(self, ctx):
-        for rank in range(7):
-         embed = Embed(
-            title=f"For your own safety, get behind the barrier!",
-            description=f"<@!{ctx.author.id}> just advanced to **{RANKS[rank]}**!\nCongratulations!",
-            colour=COLORS[rank],
-         )
-
-         embed.set_thumbnail(url=f"https://d1u1mce87gyfbn.cloudfront.net/game/rank-icons/season-2/rank-{rank+1}.png")
-
-         await ctx.channel.messages.send(embed=embed)
-    
     async def _send_congrats(self, user, rank, image):
         embed = Embed(
             title=f"For your own safety, get behind the barrier!",
