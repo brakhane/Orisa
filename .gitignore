@@ -1,3 +1,5 @@
 config.py
 logging.yaml
 orisa.log*
+database.sqlite
+
