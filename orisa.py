@@ -461,7 +461,6 @@ client = Client(BOT_TOKEN)
 database = Database()
 
 async def check_guild(guild):
-    return # disable 
     if guild.id != GUILD_ID:
         logger.info("Unknown guild! leaving")
         if guild.system_channel:
@@ -483,7 +482,6 @@ async def ready(ctx):
 
     await manager.load_plugin(Orisa, database)
     await ctx.bot.change_status(game=Game(name='"!bt help" for help'))
-#    await ctx.bot.change_status(game=Game(name='"*TEST MODE*'))
     logger.info("Ready")
 
 @client.event('guild_member_remove')

@@ -1,5 +1,10 @@
-#GUILD_ID = 42
-#CHANNEL_ID = 42
+# Copy this file to config.py and fill in the missing parameters
+# you can get the IDs by turning on developer mode in the Discord
+# settings and then right clicking on a user, server/guild or channel
+# to copy the ID.
+
+# The bot token can be found in "My apps" in discord after you
+# register the bot
 
 # The guild this bot is a member of. It currently only supports
 # a single guild.
