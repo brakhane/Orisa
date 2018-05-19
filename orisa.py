@@ -162,6 +162,7 @@ class Orisa(Plugin):
                 resp = "OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed."
             else:
                 resp = "OK. I've updated your BattleTag."
+            await ctx.channel.send_typing() # show that we're working
             try:
                 sr, rank, image = await get_sr_rank(battle_tag)
             except InvalidBattleTag as e:
