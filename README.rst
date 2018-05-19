@@ -3,13 +3,16 @@ Orisa
 
 Orisa is a simple Discord bot that solves a problem an Overwatch community
 I'm a member of had: people who want to play as a team in a Quickplay or
-competitive match always had to ask for each others BattleTags and - in
+competitive match always had to ask for each other's BattleTags and - in
 case of competitive - rank.
 
 Orisa solves this problem: people can message her to register their BattleTag,
 and other players can now ask her for each others BattleTags, Orisa also
-regularly checks Blizzards playoverwatch.com site to update the member's
+regularly checks Blizzard's playoverwatch.com site to update the member's
 nicknames to include their current SR (or rank).
+
+As an added bonus, it tries to motivate people by publically congratulating
+them if they manage to increase their competitive rank (Silver -> Gold etc.)
 
 Why is it called Orisa?
 -----------------------
