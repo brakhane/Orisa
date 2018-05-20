@@ -12,10 +12,9 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import curio
 from datetime import datetime, timedelta
 
-from sqlalchemy import (Boolean, Column, DateTime, Integer, String,
+from sqlalchemy import (Column, DateTime, Integer, String,
                         create_engine)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -71,4 +70,4 @@ class Database:
     def get_to_be_synced(self, session):
         min_time = datetime.now() - min(self._sync_delay(x) for x in range(10))
         results = session.query(User).filter(User.last_update <= min_time).all()
-        return [result.id for result in results if result.last_update <= datetime.now() - self._sync_delay(result.error_count)]
+        return [result for result in results if result.last_update <= datetime.now() - self._sync_delay(result.error_count)]
