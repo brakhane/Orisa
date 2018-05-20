@@ -39,7 +39,7 @@ class User(Base):
     def __repr__(self):
         return (f'User(id={self.id}, discord_id={self.discord_id}, battle_tag={self.battle_tag}, sr={self.sr}, '
                 f'format={self.format}, last_update={self.last_update}, error_count={self.error_count}, '
-                f'highest_rank={self.highest_rank}')
+                f'highest_rank={self.highest_rank})')
 
 
 class Database:
