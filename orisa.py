@@ -166,7 +166,9 @@ class Orisa(Plugin):
             if user is None:
                 user = User(discord_id=member_id)
                 session.add(user)
-                resp = "OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed."
+                resp = ("OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed.\n"
+                        "If you want, you can also join the Overwatch role by typing `.iam Overwatch` (mind the leading dot) in the overwatch-chat "
+                        "channel, this way, you can get notified by shoutouts to @Overwatch\n")
             else:
                 resp = "OK. I've updated your BattleTag."
             await ctx.channel.send_typing() # show that we're working
