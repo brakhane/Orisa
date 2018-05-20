@@ -309,7 +309,6 @@ class Orisa(Plugin):
                   'will not be updated anymore. You can re-register at any time.'
         )
         await ctx.author.send(content=None, embed=embed)
-        #await ctx.channel.messages.send(content=None, embed=embed)
         if not ctx.channel.private:
             await ctx.channel.messages.send(f"{ctx.author.mention} I sent you a DM with instructions.")
 
