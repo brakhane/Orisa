@@ -53,7 +53,8 @@ class UnableToFindSR(Exception):
     pass
 
 class NicknameTooLong(Exception):
-    pass
+    def __init__(self, nickname):
+        self.nickname = nickname
 
 RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
 RANKS = ('Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grand Master')
@@ -184,8 +185,8 @@ class Orisa(Plugin):
 
             try:
                 await self._update_nick(user)
-            except NicknameTooLong:
-                resp += ("\n**Adding your SR to your nickname will make it longer than 32 characters, which Discord doesn't allow.** Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.") 
+            except NicknameTooLong as e:
+                resp += (f"\n**Adding your SR to your nickname would result in '{e.nickname}' and with {len(e.nickname)} characters, be longer than Discord's maximum of 32.** Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.") 
 
             except Exception as e:
                 logger.exception(f"unable to update nick for user {user}")
@@ -220,11 +221,13 @@ class Orisa(Plugin):
                 user.format = format
                 try:
                     await self._update_nick(user)
-                except NicknameTooLong:
+                except NicknameTooLong as e:
                     await ctx.channel.messages.send(
-                            f"{ctx.author.mention} Sorry, using this format would make your nickname be longer than 32 characters.\n"
+                            f"{ctx.author.mention} Sorry, using this format would make your nickname be longer than 32 characters ({len(e.nickname)} to be exact).\n"
                             f"Please choose a shorter format or shorten your nickname")
                     session.rollback()
+                else:
+                    await ctx.channel.messages.send(f"{ctx.author.mention} Done.")
         finally:
             session.commit()
             session.close()
@@ -335,7 +338,6 @@ class Orisa(Plugin):
 
     async def _update_nick(self, user):
         user_id = user.discord_id
-        #user_id = 0
 
         nn = str(self.client.guilds[GUILD_ID].members[user_id].name)
         formatted = self._format_nick(user.format, user.sr)
@@ -345,7 +347,7 @@ class Orisa(Plugin):
             new_nn = f'{nn} [{formatted}]'
        
         if len(new_nn) > 32:
-            raise NicknameTooLong()
+            raise NicknameTooLong(new_nn)
 
         if str(nn) != new_nn:
             await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
@@ -376,7 +378,20 @@ class Orisa(Plugin):
         else:
             user.error_count = 0
             user.sr = sr
-            await self._update_nick(user)
+            try:
+                await self._update_nick(user)
+            except NicknameTooLong as e:
+                discord_user = await self.client.get_user(user.discord_id)
+                channel = await discord_user.open_private_channel()
+                msg = f"Hi! I just tried to update your nickname, but the result '{e.nickname}' would be longer than 32 characters."
+                if user.format == "%s":
+                    msg += "\nPlease shorten your nickname."
+                else:
+                    msg += "\nTry to use the %s format (you can type `!bt format %s` into this DM channel, or shorten your nickname."
+                msg += "\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience."
+                await channel.messages.send(msg)
+
+                # we can still do the rest, no need to return here
             if rank is not None:
                 if user.highest_rank is None:
                     user.highest_rank = rank
