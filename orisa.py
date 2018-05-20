@@ -135,7 +135,10 @@ class Orisa(Plugin):
             else:
                 content = f"{member.name} not found in database! *Do you need a hug?*"
                 if member == ctx.author:
-                    content += "\n*Hint: use `!bt register BattleTag#1234` to register, or `!bt help` for more info*"
+                    embed = Embed(
+                                title="Hint",
+                                description="use `!bt register BattleTag#1234` to register, or `!bt help` for more info"
+                            )
         finally:
             session.close()
 
