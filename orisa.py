@@ -444,8 +444,20 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
         candidates = process.extract(name, {id: str(mem.name) for id, mem in guild.members.items()})
         if candidates:
             highest_score, group = next(groupby(candidates, key=itemgetter(1)))
+            def sortkey(item):
+                nick = re.sub(r'^(.*?\|)?([^[]*)(\[.*)?', r'\2', item[0]).strip()
+                if name.lower() == nick.lower():
+                    return -101
+                elif len(name) == len(nick):
+                    return -100
+                elif len(nick) < len(name):
+                    return 100
+                else:
+                    return len(nick)
+                print(nick, res, name)
+                return res
             if highest_score >= 50:
-                group = sorted(group, key=lambda e: len(e[0]))
+                group = sorted(group, key=sortkey)
                 member, score, member_id = group[0]
 
     if member_id is not None:
