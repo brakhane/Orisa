@@ -52,6 +52,9 @@ class InvalidBattleTag(Exception):
 class UnableToFindSR(Exception):
     pass
 
+class NicknameTooLong(Exception):
+    pass
+
 RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
 RANKS = ('Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grand Master')
 COLORS = (
@@ -181,6 +184,9 @@ class Orisa(Plugin):
 
             try:
                 await self._update_nick(user)
+            except NicknameTooLong:
+                resp += ("\n**Adding your SR to your nickname will make it longer than 32 characters, which Discord doesn't allow.** Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.") 
+
             except Exception as e:
                 logger.exception(f"unable to update nick for user {user}")
                 resp += ("\nHowever, right now I couldn't update your nickname, will try that again later. If you are a clan admin, "
@@ -212,9 +218,15 @@ class Orisa(Plugin):
                 return
             else:
                 user.format = format
-                session.commit()
-                await self._update_nick(user)
+                try:
+                    await self._update_nick(user)
+                except NicknameTooLong:
+                    await ctx.channel.messages.send(
+                            f"{ctx.author.mention} Sorry, using this format would make your nickname be longer than 32 characters.\n"
+                            f"Please choose a shorter format or shorten your nickname")
+                    session.rollback()
         finally:
+            session.commit()
             session.close()
             
     @bt.subcommand()
@@ -331,7 +343,10 @@ class Orisa(Plugin):
             new_nn = re.sub(r'\[.*?\]', f'[{formatted}]', nn)
         else:
             new_nn = f'{nn} [{formatted}]'
-        
+       
+        if len(new_nn) > 32:
+            raise NicknameTooLong()
+
         if str(nn) != new_nn:
             await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
 
