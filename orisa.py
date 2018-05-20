@@ -454,7 +454,6 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
                     return 100
                 else:
                     return len(nick)
-                print(nick, res, name)
                 return res
             if highest_score >= 50:
                 group = sorted(group, key=sortkey)
