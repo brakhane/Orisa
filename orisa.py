@@ -430,6 +430,9 @@ class Orisa(Plugin):
 
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):
+    def strip_tags(name):
+        return re.sub(r'^(.*?\|)?([^[]*)(\[.*)?', r'\2', str(name)).strip()
+
     member = member_id = None
     guild = ctx.bot.guilds[GUILD_ID]
     if name.startswith("<@") and name.endswith(">"):
@@ -441,11 +444,11 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
         except ValueError:
             raise ConversionFailedError(ctx, name, Member, "Invalid member ID")
     else:
-        candidates = process.extract(name, {id: str(mem.name) for id, mem in guild.members.items()})
+        candidates = process.extract(name, {id: strip_tags(mem.name) for id, mem in guild.members.items()})
         if candidates:
             highest_score, group = next(groupby(candidates, key=itemgetter(1)))
             def sortkey(item):
-                nick = re.sub(r'^(.*?\|)?([^[]*)(\[.*)?', r'\2', item[0]).strip()
+                nick = item[0]
                 if name.lower() == nick.lower():
                     return -101
                 elif len(name) == len(nick):
@@ -458,6 +461,13 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
             if highest_score >= 50:
                 group = sorted(group, key=sortkey)
                 member, score, member_id = group[0]
+                logger.debug(f"{member}, {score}")
+
+    # allow two extra letters for fat fingering, but otherwise
+    # if the nick is shorter then what we searched for,
+    # it probably is not it
+    if len(member) + 2 < len(name):
+        raise ConversionFailedError(ctx, name, Member, 'Cannot find member with that name')
 
     if member_id is not None:
         member = guild.members.get(member_id)
