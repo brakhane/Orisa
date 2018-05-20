@@ -23,8 +23,8 @@ but wants to make people's life easier; it wants to be the hero the discord user
 Installation
 ------------
 
-If you think Orisa can be useful for your community, instead of installing
-your own instance, try contacting me first. There are no technical reasons
+**If you think Orisa can be useful for your community, instead of installing
+your own instance, try contacting me first.** There are no technical reasons
 my instance cannot handle more than one guild (the current restrictions
 on a single guild are simply shortcuts taken to keep the complexity as low
 as possible); if there is interest, it can be added quickly.
