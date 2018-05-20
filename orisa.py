@@ -12,10 +12,11 @@
 # 
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
 import logging
 import logging.config
+
 import re
+import random
 from bisect import bisect
 from datetime import datetime
 from itertools import groupby
@@ -23,6 +24,7 @@ from operator import itemgetter
 
 import asks
 import curio
+import html5lib
 import multio
 import yaml
 from curious.commands.context import Context
@@ -36,6 +38,7 @@ from curious.dataclasses.member import Member
 from curious.dataclasses.presence import Game
 from fuzzywuzzy import process
 from lxml import html
+
 
 from config import BOT_TOKEN, GUILD_ID, CHANNEL_ID, OWNER_ID
 from models import Database, User
@@ -72,13 +75,13 @@ COLORS = (
 def get_rank(sr):
     return bisect(RANK_CUTOFF, sr) if sr is not None else None
 
-async def get_sr_rank(asks_session, battletag):
+async def get_sr_rank(battletag):
     if not re.match(r'\w+#[0-9]+', battletag):
         raise InvalidBattleTag('Malformed BattleTag')
 
     url = f'https://playoverwatch.com/en-us/career/pc/{battletag.replace("#", "-")}'
     logger.info(f'requesting {url}')
-    result = await asks_session.get(url)
+    result = await asks.get(url)
     if result.status_code != 200:
         raise RuntimeError(f'got status code {result.status_code} from Blizz')
 
@@ -108,7 +111,6 @@ class Orisa(Plugin):
     def __init__(self, client, database):
         super().__init__(client)
         self.database = database
-        self.asks_session = asks.Session(connections=5)
 
     async def load(self):
         await self.spawn(self._sync_all_users_task)
@@ -169,7 +171,7 @@ class Orisa(Plugin):
                 resp = "OK. I've updated your BattleTag."
             await ctx.channel.send_typing() # show that we're working
             try:
-                sr, rank, image = await get_sr_rank(self.asks_session, battle_tag)
+                sr, rank, image = await get_sr_rank(battle_tag)
             except InvalidBattleTag as e:
                 await ctx.channel.messages.send(f"{ctx.author.mention} Invalid BattleTag: {e.message}")
                 raise
@@ -366,7 +368,7 @@ class Orisa(Plugin):
     async def _sync_user(self, user):
         user.last_update = datetime.now()
         try:
-            sr, rank, image = await get_sr_rank(self.asks_session, user.battle_tag)
+            sr, rank, image = await get_sr_rank(user.battle_tag)
         except UnableToFindSR:
             logger.debug(f"No SR for {user.battle_tag}, oh well...")
             # it is successful, after all
@@ -405,27 +407,44 @@ class Orisa(Plugin):
                     await self._send_congrats(user, rank, image)
                     user.highest_rank = rank
 
-    async def _sync_user_task(self, user):
-        try:
-            await self._sync_user(user)
-        except Exception as e:
-            logger.exception(f'exception {e} while syncing {user.discord_id} {user.battle_tag}')
-        finally:
-            logger.info(f'syncing {user.battle_tag} done')
+    async def _sync_user_task(self, queue):
+        first = True
+        async for user_id in queue:
+            if not first:
+                delay = random.random() * 5.
+                logger.debug(f"rate limiting: sleeping for {delay}s")
+                await curio.sleep(delay)
+            else:
+                first = False
+            session = self.database.Session()
+            try:
+                user = self.database.by_id(session, user_id)
+                await self._sync_user(user)
+            except Exception as e:
+                logger.exception(f'exception {e} while syncing {user.discord_id} {user.battle_tag}')
+            finally:
+                await queue.task_done()
+                session.commit()
+                session.close()            
+
     
     async def _sync_check(self):
+        queue = curio.Queue()
         session = self.database.Session()
         try:
-            users_to_sync = self.database.get_to_be_synced(session)
-            logger.info(f"{len(users_to_sync)} users need to be synced")
-            if users_to_sync:
-                async with curio.TaskGroup(name='sync users') as g:
-                    for user in users_to_sync:
-                        await g.spawn(self._sync_user_task, user)
-                logger.info("done syncing")
+            ids_to_sync = self.database.get_to_be_synced(session)
         finally:
-            session.commit()
             session.close()
+        logger.info(f"{len(ids_to_sync)} users need to be synced")
+        if ids_to_sync:
+            for user_id in ids_to_sync:
+                await queue.put(user_id)
+            async with curio.TaskGroup(name='sync users') as g:
+                for _ in range(5):
+                    await g.spawn(self._sync_user_task, queue)
+                await queue.join()
+                await g.cancel_remaining()
+            logger.info("done syncing")
 
     async def _sync_all_users_task(self):
         await curio.sleep(10)
