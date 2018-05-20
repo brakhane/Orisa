@@ -240,7 +240,7 @@ class Orisa(Plugin):
         try:
             user = self.database.by_discord_id(session, ctx.author.id)
             if user:
-                logger.info(f"{ctx.author.name} ({user}) requested removal")
+                logger.info(f"{ctx.author.name} ({ctx.author.id}) requested removal")
                 session.delete(user)
                 await ctx.channel.messages.send(f"OK, deleted {ctx.author.name} from database")
                 session.commit()
