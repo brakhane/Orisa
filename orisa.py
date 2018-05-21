@@ -167,7 +167,7 @@ class Orisa(Plugin):
                 user = User(discord_id=member_id)
                 session.add(user)
                 resp = ("OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed.\n"
-                        "If you want, you can also join the Overwatch role by typing `.iam Overwatch` (mind the leading dot) in the overwatch-chat "
+                        "If you want, you can also join the Overwatch role by typing `.iam Overwatch` (mind the leading dot) in the overwatch-stats "
                         "channel, this way, you can get notified by shoutouts to @Overwatch\n")
             else:
                 logger.info(f"{ctx.author.id} requested to change his BattleTag from {user.battle_tag} to {battle_tag}")
