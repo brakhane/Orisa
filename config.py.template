@@ -11,7 +11,10 @@
 GUILD_ID =
 
 # The channel congratulatory messages should be posted to
-CHANNEL_ID =
+CONGRATS_CHANNEL_ID =
+
+# The channel Orisa listens on (besides DM)
+CHANNEL_ID = 
 
 # The ID of the owner, only this user is allowed
 # priviledged commands (mostly used for testing stuff)

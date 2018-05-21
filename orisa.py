@@ -40,7 +40,7 @@ from fuzzywuzzy import process
 from lxml import html
 
 
-from config import BOT_TOKEN, GUILD_ID, CHANNEL_ID, OWNER_ID
+from config import BOT_TOKEN, GUILD_ID, CHANNEL_ID, CONGRATS_CHANNEL_ID, OWNER_ID
 from models import Database, User
 
 with open('logging.yaml') as logfile:
@@ -103,6 +103,9 @@ async def get_sr_rank(battletag):
 def correct_guild(ctx):
     return ctx.guild.id == GUILD_ID
 
+def correct_channel(ctx):
+    return ctx.channel.id == CHANNEL_ID or ctx.channel.private
+
 def only_owner(ctx):
     return ctx.author.id == OWNER_ID
 
@@ -116,7 +119,9 @@ class Orisa(Plugin):
         await self.spawn(self._sync_all_users_task)
 
     @command()
+    @condition(correct_channel)
     async def bt(self, ctx, *, member: Member = None):
+
         member_given = member is not None
         if not member_given:
             member = ctx.author
@@ -149,11 +154,13 @@ class Orisa(Plugin):
         await ctx.channel.messages.send(content=content, embed=embed)
 
     @bt.subcommand()
+    @condition(correct_channel)
     async def get(self, ctx, *, member: Member = None):
         r = await self.bt(ctx, member=member)
         return r
 
     @bt.subcommand()
+    @condition(correct_channel)
     async def register(self, ctx, battle_tag: str = None):
         if battle_tag is None:
             await ctx.channel.messages.send(f"{ctx.author.mention} missing BattleTag")
@@ -172,7 +179,7 @@ class Orisa(Plugin):
             else:
                 logger.info(f"{ctx.author.id} requested to change his BattleTag from {user.battle_tag} to {battle_tag}")
                 if user.battle_tag == battle_tag:
-                    await ctx.channel.messages.send(f"{ctx.author.mention} You already registered with that same Battle Tag, so there's nothing for me to do. *Sleep mode reactivated.*")
+                    await ctx.channel.messages.send(f"{ctx.author.mention} You already registered with that same BattleTag, so there's nothing for me to do. *Sleep mode reactivated.*")
                     return
                 resp = "OK. I've updated your BattleTag."
             await ctx.channel.send_typing() # show that we're working
@@ -207,6 +214,7 @@ class Orisa(Plugin):
         await ctx.channel.messages.send(f"{ctx.author.mention} {resp}")
 
     @bt.subcommand()
+    @condition(correct_channel)
     async def format(self, ctx, *, format: str):
         if ']' in format:
             await ctx.channel.messages.send(f"{ctx.author.mention}: format string may not contain square brackets")
@@ -241,10 +249,11 @@ class Orisa(Plugin):
             session.close()
             
     @bt.subcommand()
+    @condition(correct_channel)
     async def forceupdate(self, ctx):
         session = self.database.Session()
         try:
-            logger.info(f"{ctx.author.id}")
+            logger.info(f"{ctx.author.id} used forceupdate")
             user = self.database.by_discord_id(session, ctx.author.id)
             if not user:
                 await ctx.channel.messages.send(f"{ctx.author.mention} you are not registered")
@@ -276,14 +285,16 @@ class Orisa(Plugin):
     async def help(self, ctx):
         embed = Embed(
             title="Orisa's purpose",
-            description=("When joining a QP or Comp channel, you need to know a BattleTag of a channel member, or they need "
-                         "yours to add you. In competitive channels it also helps to know which SR the channel members are. "
-                         "To avoid having to ask this information again and again when joining a channel, this bot was created. "
-                         "When you register with your BattleTag, your nick will automatically be updated to show your "
-                         "current SR and it will be kept up to date. You can also ask for other member's BattleTag, or request "
-                         "your own so others can easily add you in OW.\n"
-                         "It will also send a short message to the chat when you ranked up.\n"
-                         "*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to Joghurt*"),
+            description=(
+                "When joining a QP or Comp channel, you need to know a BattleTag of a channel member, or they need "
+                "yours to add you. In competitive channels it also helps to know which SR the channel members are. "
+                "To avoid having to ask this information again and again when joining a channel, this bot was created. "
+                "When you register with your BattleTag, your nick will automatically be updated to show your "
+                "current SR and it will be kept up to date. You can also ask for other member's BattleTag, or request "
+                "your own so others can easily add you in OW.\n"
+                "It will also send a short message to the chat when you ranked up.\n"
+                f"*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{OWNER_ID}>*\n"
+                f"\n**The commands only work in the <#{CHANNEL_ID}> channel or by sending me a DM**"),
         )
         embed.add_field(
             name='!bt [nick]', 
@@ -369,7 +380,7 @@ class Orisa(Plugin):
 
         embed.set_thumbnail(url=image)
 
-        await self.client.find_channel(CHANNEL_ID).messages.send(embed=embed)
+        await self.client.find_channel(CONGRATS_CHANNEL_ID).messages.send(embed=embed)
 
     async def _sync_user(self, user):
         user.last_update = datetime.now()
@@ -410,6 +421,7 @@ class Orisa(Plugin):
                     user.highest_rank = rank
 
                 elif rank > user.highest_rank:
+                    logger.debug(f"user {user} old rank {user.highest_rank}, new rank {rank}, sending congrats...")
                     await self._send_congrats(user, rank, image)
                     user.highest_rank = rank
 

@@ -36,7 +36,7 @@ handlers:
 
 formatters:
   file:
-    format: "{asctime} {levelname:<5.5s} {name} {message}"
+    format: "{asctime} {levelname:<5.5s} {name}: {message}"
     style: "{"
 
   console:
