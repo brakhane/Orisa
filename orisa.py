@@ -171,6 +171,9 @@ class Orisa(Plugin):
                         "channel, this way, you can get notified by shoutouts to @Overwatch\n")
             else:
                 logger.info(f"{ctx.author.id} requested to change his BattleTag from {user.battle_tag} to {battle_tag}")
+                if user.battle_tag == battle_tag:
+                    await ctx.channel.messages.send(f"{ctx.author.mention} You already registered with that same Battle Tag, so there's nothing for me to do. *Sleep mode reactivated.*")
+                    return
                 resp = "OK. I've updated your BattleTag."
             await ctx.channel.send_typing() # show that we're working
             try:
