@@ -170,6 +170,7 @@ class Orisa(Plugin):
                         "If you want, you can also join the Overwatch role by typing `.iam Overwatch` (mind the leading dot) in the overwatch-chat "
                         "channel, this way, you can get notified by shoutouts to @Overwatch\n")
             else:
+                logger.info(f"{ctx.author.id} requested to change his BattleTag from {user.battle_tag} to {battle_tag}")
                 resp = "OK. I've updated your BattleTag."
             await ctx.channel.send_typing() # show that we're working
             try:
