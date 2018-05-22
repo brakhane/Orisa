@@ -33,6 +33,7 @@ from curious.commands.exc import ConversionFailedError
 from curious.commands.manager import CommandsManager
 from curious.commands.plugin import Plugin
 from curious.core.client import Client
+from curious.exc import HierarchyError
 from curious.dataclasses.embed import Embed
 from curious.dataclasses.member import Member
 from curious.dataclasses.presence import Game
@@ -399,6 +400,9 @@ class Orisa(Plugin):
             user.sr = sr
             try:
                 await self._update_nick(user)
+            except HierarchyError:
+                # not much we can do, just ignore
+                pass
             except NicknameTooLong as e:
                 discord_user = await self.client.get_user(user.discord_id)
                 channel = await discord_user.open_private_channel()
