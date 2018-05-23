@@ -287,9 +287,9 @@ class Orisa(Plugin):
         embed = Embed(
             title="Orisa's purpose",
             description=(
-                "When joining a QP or Comp channel, you need to know a BattleTag of a channel member, or they need "
-                "yours to add you. In competitive channels it also helps to know which SR the channel members are. "
-                "To avoid having to ask this information again and again when joining a channel, this bot was created. "
+                "When joining a QP or Comp channel, you need to know the BattleTag of a channel member, or they need "
+                "yours to add you. In competitive channels it also helps to know which SR the channel members have. "
+                "To avoid having to ask for this information again and again when joining a channel, this bot was created. "
                 "When you register with your BattleTag, your nick will automatically be updated to show your "
                 "current SR and it will be kept up to date. You can also ask for other member's BattleTag, or request "
                 "your own so others can easily add you in OW.\n"
