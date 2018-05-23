@@ -391,7 +391,7 @@ class Orisa(Plugin):
             logger.debug(f"No SR for {user.battle_tag}, oh well...")
             # it is successful, after all
             user.error_count = 0
-        except Exception as e:
+        except Exception:
             user.error_count += 1
             logger.exception(f"Got exception while requesting {user.battle_tag}")
             raise
@@ -442,8 +442,8 @@ class Orisa(Plugin):
             try:
                 user = self.database.by_id(session, user_id)
                 await self._sync_user(user)
-            except Exception as e:
-                logger.exception(f'exception {e} while syncing {user.discord_id} {user.battle_tag}')
+            except Exception:
+                logger.exception(f'exception while syncing {user.discord_id} {user.battle_tag}')
             finally:
                 await queue.task_done()
                 session.commit()
