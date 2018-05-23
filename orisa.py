@@ -78,7 +78,7 @@ def get_rank(sr):
 
 async def get_sr_rank(battletag):
     if not re.match(r'\w+#[0-9]+', battletag):
-        raise InvalidBattleTag('Malformed BattleTag')
+        raise InvalidBattleTag('Malformed BattleTag. BattleTags look like SomeName#1234: a name and a # sign followed by a number and contain no spaces. They are case-sensitive, too!')
 
     url = f'https://playoverwatch.com/en-us/career/pc/{battletag.replace("#", "-")}'
     logger.info(f'requesting {url}')
