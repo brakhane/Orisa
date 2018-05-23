@@ -351,7 +351,7 @@ class Orisa(Plugin):
     def _format_nick(self, format, sr):
         rankno = get_rank(sr)
         rank = RANKS[rankno] if rankno is not None else "Unranked"
-        srstr = str(sr) if sr is not None else "\u2205"
+        srstr = str(sr) if sr is not None else "noSR"
 
         return format.replace('%s', srstr).replace('%r', rank)
 
