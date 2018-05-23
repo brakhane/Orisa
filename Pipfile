@@ -10,8 +10,8 @@ dataclasses = "*"
 lxml = "*"
 sqlalchemy = "*"
 fuzzywuzzy = {extras = ["speedup"]}
-"bd7baa4" = {path = "./../curious", editable = true}
 pyyaml = "*"
+discord-curious = ">=0.7.8,<0.8"
 
 [dev-packages]
 pylint = "*"

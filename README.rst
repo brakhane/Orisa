@@ -29,18 +29,13 @@ my instance cannot handle more than one guild (the current restrictions
 on a single guild are simply shortcuts taken to keep the complexity as low
 as possible); if there is interest, it can be added quickly.
 
-If you still want to run your own instance, be advised that it currently
-requires the current git branch 0.7 of `discord-curious <https://github.com/Fuyukai/curious>`_,
-the current 0.7.7 available on PyPI has a few bugs that make this bot crash.
-
 .. code-block:: bash
 
-    $ pipenv install # Keep in mind you need the discord-curios 0.7 branch checked out at ../curious
-    $ pipenv shell
+    $ pipenv install
     $ cp config.py.template config.py
     $ $EDITOR config.py # use your favorite editor to fill in the necessary values
 
-After that, you're set, just run `python orisa.py` in the pipenv environment.
+After that, you're set, just run ``pipenv python orisa.py``.
 
 You need to use Discords developer pages to create a link you can use to allow
 Orisa on your site. Orisa needs the following permissions: "Manage Nicknames", "Send Messages",
