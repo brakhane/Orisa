@@ -108,7 +108,7 @@ def correct_channel(ctx):
     return ctx.channel.id == CHANNEL_ID or ctx.channel.private
 
 def only_owner(ctx):
-    return ctx.author.id == OWNER_ID
+    return ctx.author.id == OWNER_ID and ctx.channel.private
 
 class Orisa(Plugin):
 
@@ -118,6 +118,24 @@ class Orisa(Plugin):
 
     async def load(self):
         await self.spawn(self._sync_all_users_task)
+
+
+    @command()
+    @condition(only_owner)
+    async def messageall(self, ctx, *, message: str):
+        s = self.database.Session()
+        try:
+            users = s.query(User).all()
+            for user in users:
+                try:
+                    logger.debug(f"Sending message to {user.discord_id}")
+                    chan = await self.client.guilds[GUILD_ID].members[user.discord_id].user.open_private_channel()
+                    await chan.messages.send(message)
+                except:
+                    logger.exception(f"Error while sending to {user.discord_id}")
+            logger.debug("Done sending")
+        finally:
+            s.close()
 
     @command()
     @condition(correct_channel)
