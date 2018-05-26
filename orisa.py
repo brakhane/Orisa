@@ -308,6 +308,63 @@ class Orisa(Plugin):
             session.close()
 
     @bt.subcommand()
+    @condition(correct_channel)
+    async def findplayers(self, ctx, *, sr_diff: int = None, base_sr: int = None):
+
+        if sr_diff is not None:
+            if sr_diff <= 0:
+                await ctx.channel.messages.send("SR difference must be positive")
+                return
+
+            if sr_diff > 5000:
+                await ctx.channel.messages.send("You just had to try ridiculous values, didn't you?")
+                return
+
+        session = self.database.Session()
+        try:
+            asker = self.database.by_discord_id(session, ctx.author.id)
+            if not asker:
+                await ctx.channel.messages.send(f"{ctx.author.mention} you are not registered")
+                return
+
+            if not base_sr:
+                base_sr = asker.sr
+            if not sr_diff:
+                sr_diff = 1000 if asker.sr < 3500 else 500
+
+            candidates = session.query(User).filter(User.sr.between(asker.sr - sr_diff, base_sr + sr_diff)).all()
+    
+            cmap = {c.discord_id: c for c in candidates}
+
+            guild = self.client.guilds[GUILD_ID]
+            online = [m for m in guild.online_members 
+                      if m.user.id in cmap and m.user.id != ctx.author.id]
+            offline = [m for m in guild.offline_members
+                      if m.user.id in cmap]
+
+            msg = ""
+            if not online:
+                msg += f"There are no players online within {sr_diff} SR.\n"
+            else:
+                msg += f"**The following players are online and within {sr_diff} SR of {base_sr}:**\n"
+                msg += '\n'.join(f"{m.mention} ({cmap[m.user.id].sr})" for m in sorted(online, key=lambda m:cmap[m.user.id].sr))
+                msg += "\n"
+
+            if not offline:
+                if not online:
+                    msg += "There are also no offline players within that range. :("
+            else:
+                msg += "**The following players are within that range, but currently offline:**\n"
+                msg += '\n'.join(f"{m.mention} ({cmap[m.user.id].sr})" for m in sorted(offline, key=lambda m:cmap[m.user.id].sr))
+            
+            await ctx.author.send(msg)
+            if not ctx.channel.private:
+                await ctx.channel.messages.send(f"{ctx.author.mention} I sent you a DM with the results.")
+
+        finally:
+            session.close()
+
+    @bt.subcommand()
     async def help(self, ctx):
         embed = Embed(
             title="Orisa's purpose",
@@ -367,6 +424,19 @@ class Orisa(Plugin):
             name='!bt forgetme', 
             value='Your BattleTag will be removed from the database and your nick '
                   'will not be updated anymore. You can re-register at any time.'
+        )
+        embed.add_field(
+            name='!bt findplayers [max diff] [sr to compare]',
+            value='*This command is still in beta and may change at any time!*\n'
+                  'This command is intended to find partners for your Competitive team and shows you all registered users within the specified range.\n'
+                  'If `max diff` is not given, the maximum range that allows you to queue with them is used, so 1000 below 3500 SR, and 500 otherwise. '
+                  'If `sr to compare` is given, your SR is used. You should only need to specify this when you currently have no rank.\n'
+                  '*Examples:*\n'
+                  '`!bt findplayers`: finds all players that you could start a competitive queue with\n'
+                  '`!bt findplayers 123`: finds all players that are within 123 SR of your SR\n'
+                  '`!bt findplayers 1000 2000`: finds all players between 1000 and 3000 SR. To be used when Orisa doesn\'t know your previous SR was around 2000.\n'
+
+
         )
         await ctx.author.send(content=None, embed=embed)
         if not ctx.channel.private:
