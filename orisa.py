@@ -122,6 +122,13 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
+    async def shutdown(self, ctx):
+        logger.critical("GOT EMERGENCY SHUTDOWN COMMAND FROM OWNER")
+        await self.client.kill()
+        raise SystemExit(42)
+
+    @command()
+    @condition(only_owner)
     async def messageall(self, ctx, *, message: str):
         s = self.database.Session()
         try:
