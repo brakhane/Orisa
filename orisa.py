@@ -373,9 +373,10 @@ class Orisa(Plugin):
             await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
 
     async def _send_congrats(self, user, rank, image):
+
         embed = Embed(
             title=f"For your own safety, get behind the barrier!",
-            description=f"<@!{user.discord_id}> just advanced to **{RANKS[rank]}**. Congratulations!",
+            description=f"**{str(self.client.guilds[GUILD_ID].members[user.discord_id].name)}** just advanced to **{RANKS[rank]}**. Congratulations!",
             colour=COLORS[rank],
         )
 
