@@ -309,7 +309,8 @@ class Orisa(Plugin):
 
     @bt.subcommand()
     @condition(correct_channel)
-    async def findplayers(self, ctx, *, sr_diff: int = None, base_sr: int = None):
+    async def findplayers(self, ctx, sr_diff: int = None, base_sr: int = None):
+        logger.info(f"{ctx.author.id} issued findplayers {sr_diff} {base_sr}")
 
         if sr_diff is not None:
             if sr_diff <= 0:
@@ -332,7 +333,7 @@ class Orisa(Plugin):
             if not sr_diff:
                 sr_diff = 1000 if asker.sr < 3500 else 500
 
-            candidates = session.query(User).filter(User.sr.between(asker.sr - sr_diff, base_sr + sr_diff)).all()
+            candidates = session.query(User).filter(User.sr.between(base_sr - sr_diff, base_sr + sr_diff)).all()
     
             cmap = {c.discord_id: c for c in candidates}
 
@@ -344,9 +345,9 @@ class Orisa(Plugin):
 
             msg = ""
             if not online:
-                msg += f"There are no players online within {sr_diff} SR.\n"
+                msg += f"There are no players currently online within {sr_diff} of {base_sr} SR.\n"
             else:
-                msg += f"**The following players are online and within {sr_diff} SR of {base_sr}:**\n"
+                msg += f"**The following players are currently online and within {sr_diff} SR of {base_sr}:**\n"
                 msg += '\n'.join(f"{m.mention} ({cmap[m.user.id].sr})" for m in sorted(online, key=lambda m:cmap[m.user.id].sr))
                 msg += "\n"
 
@@ -430,7 +431,7 @@ class Orisa(Plugin):
             value='*This command is still in beta and may change at any time!*\n'
                   'This command is intended to find partners for your Competitive team and shows you all registered users within the specified range.\n'
                   'If `max diff` is not given, the maximum range that allows you to queue with them is used, so 1000 below 3500 SR, and 500 otherwise. '
-                  'If `sr to compare` is given, your SR is used. You should only need to specify this when you currently have no rank.\n'
+                  'If `sr to compare` is not given, your SR is used, otherwise that given SR is compared against. You should only need to specify this when you currently have no rank.\n'
                   '*Examples:*\n'
                   '`!bt findplayers`: finds all players that you could start a competitive queue with\n'
                   '`!bt findplayers 123`: finds all players that are within 123 SR of your SR\n'
