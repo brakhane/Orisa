@@ -330,7 +330,15 @@ class Orisa(Plugin):
     @bt.subcommand()
     @condition(correct_channel)
     async def findplayers(self, ctx, sr_diff: int = None, base_sr: int = None):
-        logger.info(f"{ctx.author.id} issued findplayers {sr_diff} {base_sr}")
+        await self._findplayers(ctx, sr_diff, base_sr, findall=False)
+
+    @bt.subcommand()
+    @condition(correct_channel)
+    async def findallplayers(self, ctx, sr_diff: int = None, base_sr: int = None):
+        await self._findplayers(ctx, sr_diff, base_sr, findall=True)
+
+    async def _findplayers(self, ctx, sr_diff: int = None, base_sr: int = None, *, findall):
+        logger.info(f"{ctx.author.id} issued findplayers {sr_diff} {base_sr} {findall}")
 
         if sr_diff is not None:
             if sr_diff <= 0:
@@ -396,13 +404,21 @@ class Orisa(Plugin):
                 msg += "\n".join(format_member(m) for m in sorted(online, key=lambda m:cmap[m.user.id].sr))
                 msg += "\n"
 
-            
-            if not offline:
-                if not online:
-                    msg += "There are also no offline players within that range. :("
+            if findall:
+
+                if not offline:
+                    if online:
+                        msg += "There are no offline players within that range."
+                    else:
+                        msg += "There are also no offline players within that range. :("
+                else:
+                    msg += "**The following players are within that range, but currently offline:**\n"
+                    msg += "\n".join(format_member(m) for m in sorted(offline, key=lambda m:cmap[m.user.id].sr))
+
             else:
-                msg += "**The following players are within that range, but currently offline:**\n"
-                msg += "\n".join(format_member(m) for m in sorted(offline, key=lambda m:cmap[m.user.id].sr))
+                if offline:
+                    msg += f"\nThere are also {len(offline)} offline players within that range. Use the `findallplayers` "
+                    msg += "command to show them as well."
         
             await send_long(ctx.author.send, msg)
             if not ctx.channel.private:
@@ -451,6 +467,21 @@ class Orisa(Plugin):
                   '`register` will fail if the BattleTag is invalid. *BattleTags are case-sensitive!*'
         )
         embed.add_field(
+            name='!bt findplayers [max diff] [sr to compare]',
+            value='*This command is still in beta and may change at any time!*\n'
+                  'This command is intended to find partners for your Competitive team and shows you all registered and online users within the specified range.\n'
+                  'If `max diff` is not given, the maximum range that allows you to queue with them is used, so 1000 below 3500 SR, and 500 otherwise. '
+                  'If `sr to compare` is not given, your SR is used, otherwise that given SR is compared against. You should only need to specify this when you currently have no rank.\n'
+                  '*Examples:*\n'
+                  '`!bt findplayers`: finds all players that you could start a competitive queue with\n'
+                  '`!bt findplayers 123`: finds all players that are within 123 SR of your SR\n'
+                  '`!bt findplayers 1000 2000`: finds all players between 1000 and 3000 SR. To be used when Orisa doesn\'t know your previous SR was around 2000.\n'
+        )
+        embed.add_field(
+            name='!bt findallplayers [max diff] [sr to compare]',
+            value='Same as `findplayers`, but also includes offline players'
+        )
+        embed.add_field(
             name='!bt format *format*',
             value="Lets you specify how your SR or rank is displayed. It will always "
                   "be shown in [square\u00a0brackets] appended to your name. "
@@ -471,19 +502,6 @@ class Orisa(Plugin):
             name='!bt forgetme', 
             value='Your BattleTag will be removed from the database and your nick '
                   'will not be updated anymore. You can re-register at any time.'
-        )
-        embed.add_field(
-            name='!bt findplayers [max diff] [sr to compare]',
-            value='*This command is still in beta and may change at any time!*\n'
-                  'This command is intended to find partners for your Competitive team and shows you all registered users within the specified range.\n'
-                  'If `max diff` is not given, the maximum range that allows you to queue with them is used, so 1000 below 3500 SR, and 500 otherwise. '
-                  'If `sr to compare` is not given, your SR is used, otherwise that given SR is compared against. You should only need to specify this when you currently have no rank.\n'
-                  '*Examples:*\n'
-                  '`!bt findplayers`: finds all players that you could start a competitive queue with\n'
-                  '`!bt findplayers 123`: finds all players that are within 123 SR of your SR\n'
-                  '`!bt findplayers 1000 2000`: finds all players between 1000 and 3000 SR. To be used when Orisa doesn\'t know your previous SR was around 2000.\n'
-
-
         )
         await ctx.author.send(content=None, embed=embed)
         if not ctx.channel.private:
