@@ -36,7 +36,7 @@ from curious.core.client import Client
 from curious.exc import HierarchyError
 from curious.dataclasses.embed import Embed
 from curious.dataclasses.member import Member
-from curious.dataclasses.presence import Game
+from curious.dataclasses.presence import Game, Status
 from fuzzywuzzy import process
 from lxml import html
 
@@ -109,6 +109,26 @@ def correct_channel(ctx):
 
 def only_owner(ctx):
     return ctx.author.id == OWNER_ID and ctx.channel.private
+
+
+async def send_long(send_func, msg):
+    "Splits a long message >2000 into smaller chunks"
+
+    if len(msg) <= 2000:
+        await send_func(msg)
+        return
+    else:
+        lines = msg.split("\n")
+
+        part = ""
+        for line in lines:
+            if len(part) + len(line) > 2000:
+                await send_func(part)
+                part = ""
+            part += line + "\n"
+
+        if part:
+            await send_func(part)
 
 class Orisa(Plugin):
 
@@ -334,31 +354,48 @@ class Orisa(Plugin):
                 sr_diff = 1000 if asker.sr < 3500 else 500
 
             candidates = session.query(User).filter(User.sr.between(base_sr - sr_diff, base_sr + sr_diff)).all()
+            logger.info(candidates)
     
             cmap = {c.discord_id: c for c in candidates}
 
             guild = self.client.guilds[GUILD_ID]
-            online = [m for m in guild.online_members 
-                      if m.user.id in cmap and m.user.id != ctx.author.id]
-            offline = [m for m in guild.offline_members
-                      if m.user.id in cmap]
+            
+
+            online = []
+            offline = []
+
+            for member in guild.members.values():
+                if member.user.id == ctx.author.id or member.user.id not in cmap:
+                    continue
+                if member.status == Status.OFFLINE:
+                    offline.append(member)
+                else:
+                    online.append(member)
+
+
+            def format_users(users):
+                nonlocal cmap
+                #return '\n'.join(f"{str(m.name)} {m.mention} ({cmap[m.user.id].sr})" for m in users)
+                return '\n'.join(f"{str(m.name)} {m.mention}" for m in users)
+
 
             msg = ""
             if not online:
                 msg += f"There are no players currently online within {sr_diff} of {base_sr} SR.\n"
             else:
                 msg += f"**The following players are currently online and within {sr_diff} SR of {base_sr}:**\n"
-                msg += '\n'.join(f"{m.mention} ({cmap[m.user.id].sr})" for m in sorted(online, key=lambda m:cmap[m.user.id].sr))
+                msg += format_users(sorted(online, key=lambda m:cmap[m.user.id].sr))
                 msg += "\n"
 
+            
             if not offline:
                 if not online:
                     msg += "There are also no offline players within that range. :("
             else:
                 msg += "**The following players are within that range, but currently offline:**\n"
-                msg += '\n'.join(f"{m.mention} ({cmap[m.user.id].sr})" for m in sorted(offline, key=lambda m:cmap[m.user.id].sr))
-            
-            await ctx.author.send(msg)
+                msg += format_users(sorted(offline, key=lambda m:cmap[m.user.id].sr))
+        
+            await send_long(ctx.author.send, msg)
             if not ctx.channel.private:
                 await ctx.channel.messages.send(f"{ctx.author.mention} I sent you a DM with the results.")
 
