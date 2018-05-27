@@ -373,10 +373,19 @@ class Orisa(Plugin):
                     online.append(member)
 
 
-            def format_users(users):
+            def format_member(member):
                 nonlocal cmap
-                #return '\n'.join(f"{str(m.name)} {m.mention} ({cmap[m.user.id].sr})" for m in users)
-                return '\n'.join(f"{str(m.name)} {m.mention}" for m in users)
+                markup = "~~" if member.status == Status.DND else ""
+
+                if member.status == Status.IDLE:
+                    hint = "(idle)"
+                elif member.status == Status.DND:
+                    hint = "(Do Not Disturb)"
+                else:
+                    hint = ""
+
+                #return f"{str(m.name)} {m.mention} ({cmap[m.user.id].sr})"
+                return f"{markup}{str(member.name)} {member.mention}{markup} {hint}"
 
 
             msg = ""
@@ -384,7 +393,7 @@ class Orisa(Plugin):
                 msg += f"There are no players currently online within {sr_diff} of {base_sr} SR.\n"
             else:
                 msg += f"**The following players are currently online and within {sr_diff} SR of {base_sr}:**\n"
-                msg += format_users(sorted(online, key=lambda m:cmap[m.user.id].sr))
+                msg += "\n".join(format_member(m) for m in sorted(online, key=lambda m:cmap[m.user.id].sr))
                 msg += "\n"
 
             
@@ -393,7 +402,7 @@ class Orisa(Plugin):
                     msg += "There are also no offline players within that range. :("
             else:
                 msg += "**The following players are within that range, but currently offline:**\n"
-                msg += format_users(sorted(offline, key=lambda m:cmap[m.user.id].sr))
+                msg += "\n".join(format_member(m) for m in sorted(offline, key=lambda m:cmap[m.user.id].sr))
         
             await send_long(ctx.author.send, msg)
             if not ctx.channel.private:
