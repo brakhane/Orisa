@@ -140,6 +140,8 @@ class Orisa(Plugin):
         await self.spawn(self._sync_all_users_task)
 
 
+    # admin commands
+
     @command()
     @condition(only_owner)
     async def shutdown(self, ctx):
@@ -163,6 +165,23 @@ class Orisa(Plugin):
             logger.debug("Done sending")
         finally:
             s.close()
+
+    @command()
+    @condition(only_owner)
+    async def post(self, ctx, channel_id: int, *, message:str):
+        channel = self.client.find_channel(channel_id)
+        msg = await channel.messages.send(message)
+        await ctx.channel.messages.send(f"created {msg.id}")
+
+    @command()
+    @condition(only_owner)
+    async def delete(self, ctx, channel_id: int, message_id: int):
+        # low level access, because getting a message requires MESSAGE_HISTORY permission
+        await self.client.http.delete_message(channel_id, message_id)
+        await ctx.channel.messages.send("deleted")
+
+
+    # bt commands
 
     @command()
     @condition(correct_channel)
@@ -361,6 +380,11 @@ class Orisa(Plugin):
             if not sr_diff:
                 sr_diff = 1000 if asker.sr < 3500 else 500
 
+
+            if not (500 <= base_sr <= 5000):
+                await ctx.channel.messages.send(f"The lowest possible SR is 500, and the highest is 5000, and you say your SR is {base_sr}? *Suuuure.*")
+                return
+
             candidates = session.query(User).filter(User.sr.between(base_sr - sr_diff, base_sr + sr_diff)).all()
     
             cmap = {c.discord_id: c for c in candidates}
@@ -387,19 +411,20 @@ class Orisa(Plugin):
                 if member.status == Status.IDLE:
                     hint = "(idle)"
                 elif member.status == Status.DND:
-                    hint = "(Do Not Disturb)"
+                    hint = "(DND)"
                 else:
                     hint = ""
 
                 #return f"{str(m.name)} {m.mention} ({cmap[m.user.id].sr})"
-                return f"{markup}{str(member.name)} {member.mention}{markup} {hint}"
+                return f"{markup}{str(member.name)}\u00a0{member.mention}{markup}\u00a0{hint}\n"
 
 
             msg = ""
+           
             if not online:
-                msg += f"There are no players currently online within {sr_diff} of {base_sr} SR.\n"
+                msg += f"There are no players currently online within {sr_diff} of {base_sr} SR.\n\n"
             else:
-                msg += f"**The following players are currently online and within {sr_diff} SR of {base_sr}:**\n"
+                msg += f"**The following players are currently online and within {sr_diff} SR of {base_sr}:**\n\n"
                 msg += "\n".join(format_member(m) for m in sorted(online, key=lambda m:cmap[m.user.id].sr))
                 msg += "\n"
 
@@ -411,7 +436,7 @@ class Orisa(Plugin):
                     else:
                         msg += "There are also no offline players within that range. :("
                 else:
-                    msg += "**The following players are within that range, but currently offline:**\n"
+                    msg += "**The following players are within that range, but currently offline:**\n\n"
                     msg += "\n".join(format_member(m) for m in sorted(offline, key=lambda m:cmap[m.user.id].sr))
 
             else:
