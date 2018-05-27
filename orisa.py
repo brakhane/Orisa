@@ -475,7 +475,7 @@ class Orisa(Plugin):
                   '*Examples:*\n'
                   '`!bt findplayers`: finds all players that you could start a competitive queue with\n'
                   '`!bt findplayers 123`: finds all players that are within 123 SR of your SR\n'
-                  '`!bt findplayers 1000 2000`: finds all players between 1000 and 3000 SR. To be used when Orisa doesn\'t know your previous SR was around 2000.\n'
+                  '`!bt findplayers 1000 2150`: finds all players between 1150 and 3150 SR. To be used when Orisa doesn\'t know your previous SR was around 2150.\n'
         )
         embed.add_field(
             name='!bt findallplayers [max diff] [sr to compare]',
