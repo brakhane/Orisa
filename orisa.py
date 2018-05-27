@@ -362,7 +362,6 @@ class Orisa(Plugin):
                 sr_diff = 1000 if asker.sr < 3500 else 500
 
             candidates = session.query(User).filter(User.sr.between(base_sr - sr_diff, base_sr + sr_diff)).all()
-            logger.info(candidates)
     
             cmap = {c.discord_id: c for c in candidates}
 
