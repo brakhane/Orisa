@@ -11,7 +11,7 @@ lxml = "*"
 sqlalchemy = "*"
 fuzzywuzzy = {extras = ["speedup"]}
 pyyaml = "*"
-discord-curious = ">=0.7.8,<0.8"
+"bd7baa4" = {editable = true, path = "./../curious"}
 
 [dev-packages]
 pylint = "*"

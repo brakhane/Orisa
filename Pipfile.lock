@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "abcc0e5213f86854dbb94f727c9b6b28c1f2a163870110befcc9ef7344f5920f"
+            "sha256": "5b35bb9100ecaefac66798a431919e276f18ac3918098cf3f8b54addd83ec39e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -29,6 +29,10 @@
             ],
             "version": "==1.9"
         },
+        "bd7baa4": {
+            "editable": true,
+            "path": "./../curious"
+        },
         "curio": {
             "hashes": [
                 "sha256:51d1a7b49b4f8dd1486ac785c72d522962e93ccfdcfc1f818f5c7553a307b5ef"
@@ -43,15 +47,6 @@
             ],
             "index": "pypi",
             "version": "==0.6"
-        },
-        "discord-curious": {
-            "hashes": [
-                "sha256:159736aac6dc7a1c19bf99ec9f137f77ff49f0d69fbacda38a683b89f22c2843",
-                "sha256:c2cc46949ec751a572ab57b0515589c6a15b074005aa2ce6f08f75a55e674d68",
-                "sha256:d6e227bd1407558f7bd1fd5445a80bbdd3d39ed47c493544021755dab5eb5b01"
-            ],
-            "index": "pypi",
-            "version": "==0.7.8"
         },
         "fuzzywuzzy": {
             "hashes": [
