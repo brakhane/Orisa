@@ -180,6 +180,12 @@ class Orisa(Plugin):
         await self.client.http.delete_message(channel_id, message_id)
         await ctx.channel.messages.send("deleted")
 
+    @command()
+    @condition(only_owner)
+    async def updatehelp(self, ctx, channel_id: int, message_id: int):
+        await self.client.http.edit_message(channel_id, message_id, embed=self._create_help().to_dict())
+        await ctx.channel.messages.send("done")
+
 
     # bt commands
 
@@ -453,6 +459,12 @@ class Orisa(Plugin):
 
     @bt.subcommand()
     async def help(self, ctx):
+        await ctx.author.send(content=None, embed=self._create_help())
+        if not ctx.channel.private:
+            await ctx.channel.messages.send(f"{ctx.author.mention} I sent you a DM with instructions.")
+
+
+    def _create_help(self):
         embed = Embed(
             title="Orisa's purpose",
             description=(
@@ -527,10 +539,8 @@ class Orisa(Plugin):
             value='Your BattleTag will be removed from the database and your nick '
                   'will not be updated anymore. You can re-register at any time.'
         )
-        await ctx.author.send(content=None, embed=embed)
-        if not ctx.channel.private:
-            await ctx.channel.messages.send(f"{ctx.author.mention} I sent you a DM with instructions.")
 
+        return embed
 
     def _format_nick(self, format, sr):
         rankno = get_rank(sr)
