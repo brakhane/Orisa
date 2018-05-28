@@ -307,14 +307,23 @@ class Orisa(Plugin):
             else:
                 user.format = format
                 try:
-                    await self._update_nick(user)
+                    new_nick = await self._update_nick(user)
                 except NicknameTooLong as e:
                     await ctx.channel.messages.send(
                             f"{ctx.author.mention} Sorry, using this format would make your nickname be longer than 32 characters ({len(e.nickname)} to be exact).\n"
                             f"Please choose a shorter format or shorten your nickname")
                     session.rollback()
                 else:
-                    await ctx.channel.messages.send(f"{ctx.author.mention} Done.")
+                    titles = [
+                            "Smarties Expert",
+                            "Bread Scientist",
+                            "Eternal Bosom of Hot Love",
+                            "Sith Lord of Security",
+                            "Namer of Clouds",
+                            "Scourge of Beer Cans",
+                            ]
+
+                    await ctx.channel.messages.send(f'{ctx.author.mention} Done. Henceforth, ye shall be knownst as "{new_nick}, {random.choice(titles)}."')
         finally:
             session.commit()
             session.close()
@@ -565,6 +574,8 @@ class Orisa(Plugin):
 
         if str(nn) != new_nn:
             await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
+
+        return new_nn
 
     async def _send_congrats(self, user, rank, image):
 
