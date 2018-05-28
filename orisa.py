@@ -187,6 +187,20 @@ class Orisa(Plugin):
         await ctx.channel.messages.send("done")
 
 
+    @command()
+    @condition(only_owner)
+    async def cleanup(self, ctx, *, doit: str = None):
+        member_ids = self.client.guilds[GUILD_ID].members.keys()
+        session = self.database.Session()
+        try:
+            registered_ids = [x[0] for x in session.query(User.discord_id).all()]
+            stale_ids = set(registered_ids) - set(member_ids)
+            ids = ', '.join(f"<@{id}>" for id in stale_ids)
+            await ctx.channel.messages.send(f"there are {len(stale_ids)} stale entries: {ids}")
+
+        finally:
+            session.close()
+
     # bt commands
 
     @command()
@@ -321,6 +335,7 @@ class Orisa(Plugin):
                             "Sith Lord of Security",
                             "Namer of Clouds",
                             "Scourge of Beer Cans",
+                            "Jeff Kaplan's Muse",
                             ]
 
                     await ctx.channel.messages.send(f'{ctx.author.mention} Done. Henceforth, ye shall be knownst as "{new_nick}, {random.choice(titles)}."')
