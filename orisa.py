@@ -37,7 +37,7 @@ from curious.exc import HierarchyError
 from curious.dataclasses.embed import Embed
 from curious.dataclasses.member import Member
 from curious.dataclasses.presence import Game, Status
-from fuzzywuzzy import process
+from fuzzywuzzy import process, fuzz
 from lxml import html
 
 
@@ -716,30 +716,20 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
         except ValueError:
             raise ConversionFailedError(ctx, name, Member, "Invalid member ID")
     else:
-        candidates = process.extract(name, {id: strip_tags(mem.name) for id, mem in guild.members.items()})
-        if candidates:
-            highest_score, group = next(groupby(candidates, key=itemgetter(1)))
-            def sortkey(item):
-                nick = item[0]
-                if name.lower() == nick.lower():
-                    return -101
-                elif len(name) == len(nick):
-                    return -100
-                elif len(nick) < len(name):
-                    return 100
-                else:
-                    return len(nick)
-            
-            if highest_score >= 50:
-                group = sorted(group, key=sortkey)
-                member, score, member_id = group[0]
-                logger.debug(f"{member}, {score}")
+        def scorer(s1, s2, force_ascii=True, full_process=True):
+            if s1.lower() == s2.lower():
+                return 200
+            else:
+                score = fuzz.WRatio(s1, s2, force_ascii, full_process)
+                if s2.startswith(s1):
+                    score *= 2
+                return score
 
-    # allow two extra letters for fat fingering, but otherwise
-    # if the nick is shorter then what we searched for,
-    # it probably is not it
-    if len(member) + 2 < len(name):
-        raise ConversionFailedError(ctx, name, Member, 'Cannot find member with that name')
+        candidates = process.extractBests(name, {id: strip_tags(mem.name) for id, mem in guild.members.items()}, scorer=scorer)
+        logger.debug(f"candidates are {candidates}")
+        if candidates:
+            member_name, score, member_id = candidates[0]
+
 
     if member_id is not None:
         member = guild.members.get(member_id)
