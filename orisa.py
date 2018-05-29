@@ -335,7 +335,18 @@ class Orisa(Plugin):
                             "Sith Lord of Security",
                             "Namer of Clouds",
                             "Scourge of Beer Cans",
-                            "Jeff Kaplan's Muse",
+                            "Muse of Jeff Kaplan",
+                            "Shredded Cheese Authority",
+                            "MILF Commander",
+                            "Cunning Linguist",
+                            "Pork Rind Expert",
+                            "Dinosaur Supervisor",
+                            "Galactic Viceroy of C9",
+                            "Earl of Bacon",
+                            "Dean of Pizza",
+                            "Duke of Tacos",
+                            "Retail Jedi",
+                            "Pornography Historian",
                             ]
 
                     await ctx.channel.messages.send(f'{ctx.author.mention} Done. Henceforth, ye shall be knownst as "{new_nick}, {random.choice(titles)}."')
