@@ -701,13 +701,6 @@ class Orisa(Plugin):
                    '`!bt oirsa` and `!bt ori` will probably also show the BattleTag of "Orisa"')
         )
         embed.add_field(
-            name='!bt get nick', 
-            value=('Same as `!bt [nick]`, (only) useful when the nick is the same as a command.\n'
-                   '*Example:*\n'
-                   '`!bt get register foo` will search for the nick "register foo"')
-        )
-
-        embed.add_field(
             name='!bt findplayers [max diff] *or* !bt findplayers min max',
             value='*This command is still in beta and may change at any time!*\n'
                   'This command is intended to find partners for your Competitive team and shows you all registered and online users within the specified range.\n'
@@ -773,7 +766,13 @@ class Orisa(Plugin):
         embeds = [embed]
         embed = Embed(title="help cont'd")
         embeds.append(embed)
-
+        
+        embed.add_field(
+            name='!bt get nick', 
+            value=('Same as `!bt [nick]`, (only) useful when the nick is the same as a command.\n'
+                   '*Example:*\n'
+                   '`!bt get register foo` will search for the nick "register foo"')
+        )
         embed.add_field(
             name='!bt register BattleTag#1234', 
             value='Registers your account with the given BattleTag, or adds a secondary BattleTag to your account. '
