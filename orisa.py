@@ -182,11 +182,11 @@ class Orisa(Plugin):
         lock = self.user_locks[user_id]
         await lock.release()
         logger.debug("lock released for %i", user_id)
-        if not lock.locked():
+        if lock.locked():
             logger.debug("lock for %i is still used, keeping it", user_id)
-            del self.user_locks[user_id]
         else:
-            logger.debug("lock for %i is not used anymore, removing")
+            logger.debug("lock for %i is not used anymore, removing", user_id)
+            del self.user_locks[user_id]
 
     async def load(self):
         await self.spawn(self._sync_all_tags_task)
