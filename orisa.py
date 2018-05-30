@@ -168,18 +168,25 @@ class Orisa(Plugin):
         self.user_locks = {}
 
     async def acquire_user_lock(self, user_id: int):
+        logger.debug("trying to acquire lock for %i", user_id)
         if user_id in self.user_locks:
             lock = self.user_locks[user_id]
         else:
             lock = curio.Lock()
             self.user_locks[user_id] = lock
         await lock.acquire()
+        logger.debug("lock for %i acquired", user_id)
 
     async def release_user_lock(self, user_id: int):
+        logger.debug("trying to release lock for %i", user_id)
         lock = self.user_locks[user_id]
         await lock.release()
+        logger.debug("lock released for %i", user_id)
         if not lock.locked():
+            logger.debug("lock for %i is still used, keeping it", user_id)
             del self.user_locks[user_id]
+        else:
+            logger.debug("lock for %i is not used anymore, removing")
 
     async def load(self):
         await self.spawn(self._sync_all_tags_task)
