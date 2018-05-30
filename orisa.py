@@ -138,12 +138,12 @@ def resolve_tag_or_index(user, tag_or_index):
     except ValueError:
         try:
             tag, score, index = process.extractOne(tag_or_index, {t.position: t.tag for t in user.battle_tags}, score_cutoff=50)
-        except ValueError:
+        except (ValueError, TypeError):
             raise ValueError(f'The BattleTag "{tag_or_index}" is not registered for your account '
-                              '(I even did a fuzzy search), there\'s nothing for me to do')
+                              '(I even did a fuzzy search), use `!bt register` first.')
     else:
         if index >= len(user.battle_tags):
-            raise ValueError("You don't even that many secondary BattleTags")
+            raise ValueError("You don't even have that many secondary BattleTags")
     return index
 
 
