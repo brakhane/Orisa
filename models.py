@@ -16,9 +16,10 @@ import curio
 from datetime import datetime, timedelta
 
 from sqlalchemy import (Boolean, Column, DateTime, Integer, String,
-                        create_engine)
+                        ForeignKey, create_engine)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.orderinglist import ordering_list
+from sqlalchemy.orm import raiseload, relationship, sessionmaker
 
 from config import DATABASE_URI
 
@@ -29,17 +30,36 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     discord_id = Column(Integer, unique=True, nullable=False, index=True)
-    battle_tag = Column(String, nullable=False)
-    sr = Column(Integer)
-    last_update = Column(DateTime, index=True)
-    error_count = Column(Integer, nullable=False, default=0)
     format = Column(String, nullable=False)
     highest_rank = Column(Integer)
+    battle_tags = relationship(
+        "BattleTag", back_populates="user", order_by="BattleTag.position", collection_class=ordering_list('position'),
+        lazy="joined", cascade="all, delete-orphan")
 
     def __repr__(self):
-        return (f'User(id={self.id}, discord_id={self.discord_id}, battle_tag={self.battle_tag}, sr={self.sr}, '
-                f'format={self.format}, last_update={self.last_update}, error_count={self.error_count}, '
-                f'highest_rank={self.highest_rank})')
+        return (f'User(id={self.id}, discord_id={self.discord_id}, battle_tags={repr(self.battle_tags)}, '
+                f'format={self.format}, highest_rank={self.highest_rank})')
+
+class BattleTag(Base):
+    __tablename__ = 'battle_tags'
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    position = Column(Integer, nullable=False)
+
+    user = relationship("User", back_populates="battle_tags")
+    tag = Column(String, nullable=False)
+    sr = Column(Integer)
+    error_count = Column(Integer, nullable=False, default=0)
+    last_update = Column(DateTime, index=True)
+
+
+    def __str__(self):
+        return f'{self.tag} ({self.sr} SR)' if self.sr else f'{self.tag} (Unranked)'
+
+    def __repr__(self):
+        return (f'<BattleTag(id={self.id}, tag={repr(self.tag)}, user_id={self.user_id}, position={self.position}, sr={self.sr}, last_update={self.last_update}, error_count={self.error_count})>')
+
 
 
 class Database:
@@ -49,10 +69,13 @@ class Database:
         self.Session = sessionmaker(bind=engine)
         Base.metadata.create_all(engine)
 
-    def by_id(self, session, id):
+    def user_by_id(self, session, id):
         return session.query(User).filter_by(id=id).one_or_none()
 
-    def by_discord_id(self, session, discord_id):
+    def tag_by_id(self, session, id):
+        return session.query(BattleTag).filter_by(id=id).one_or_none()
+
+    def user_by_discord_id(self, session, discord_id):
         return session.query(User).filter_by(discord_id=discord_id).one_or_none()
 
     def _sync_delay(self, error_count):
@@ -68,7 +91,7 @@ class Database:
         else:
             return timedelta(days=1)
 
-    def get_to_be_synced(self, session):
+    def get_tags_to_be_synced(self, session):
         min_time = datetime.now() - min(self._sync_delay(x) for x in range(10))
-        results = session.query(User).filter(User.last_update <= min_time).all()
+        results = session.query(BattleTag).filter(BattleTag.last_update <= min_time).all()
         return [result.id for result in results if result.last_update <= datetime.now() - self._sync_delay(result.error_count)]

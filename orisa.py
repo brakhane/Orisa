@@ -20,7 +20,8 @@ import random
 from bisect import bisect
 from datetime import datetime
 from itertools import groupby
-from operator import itemgetter
+from operator import attrgetter, itemgetter
+from string import Template
 
 import asks
 import curio
@@ -42,7 +43,7 @@ from lxml import html
 
 
 from config import BOT_TOKEN, GUILD_ID, CHANNEL_ID, CONGRATS_CHANNEL_ID, OWNER_ID
-from models import Database, User
+from models import Database, User, BattleTag
 
 with open('logging.yaml') as logfile:
     logging.config.dictConfig(yaml.safe_load(logfile))
@@ -60,6 +61,10 @@ class NicknameTooLong(Exception):
     def __init__(self, nickname):
         self.nickname = nickname
 
+class InvalidFormat(Exception):
+    def __init__(self, key):
+        self.key = key
+
 RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
 RANKS = ('Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grand Master')
 COLORS = (
@@ -72,6 +77,7 @@ COLORS = (
     0xf1d592, # Grand Master
 )
 
+# Utilities
 
 def get_rank(sr):
     return bisect(RANK_CUTOFF, sr) if sr is not None else None
@@ -100,16 +106,9 @@ async def get_sr_rank(battletag):
         rank_image = None
     return (sr, get_rank(sr), rank_image)
 
-
-def correct_guild(ctx):
-    return ctx.guild.id == GUILD_ID
-
-def correct_channel(ctx):
-    return ctx.channel.id == CHANNEL_ID or ctx.channel.private
-
-def only_owner(ctx):
-    return ctx.author.id == OWNER_ID and ctx.channel.private
-
+def sort_secondaries(user):
+    user.battle_tags[1:] = list(sorted(user.battle_tags[1:], key=attrgetter("tag")))
+    user.battle_tags.reorder()
 
 async def send_long(send_func, msg):
     "Splits a long message >2000 into smaller chunks"
@@ -130,14 +129,60 @@ async def send_long(send_func, msg):
         if part:
             await send_func(part)
 
+async def reply(ctx, msg):
+    return await ctx.channel.messages.send(f"{ctx.author.mention} {msg}")
+
+def resolve_tag_or_index(user, tag_or_index):
+    try:
+        index = int(tag_or_index)
+    except ValueError:
+        try:
+            tag, score, index = process.extractOne(tag_or_index, {t.position: t.tag for t in user.battle_tags}, score_cutoff=50)
+        except ValueError:
+            raise ValueError(f'The BattleTag "{tag_or_index}" is not registered for your account '
+                              '(I even did a fuzzy search), there\'s nothing for me to do')
+    else:
+        if index >= len(user.battle_tags):
+            raise ValueError("You don't even that many secondary BattleTags")
+    return index
+
+
+# Conditions
+
+def correct_guild(ctx):
+    return ctx.guild.id == GUILD_ID
+
+def correct_channel(ctx):
+    return ctx.channel.id == CHANNEL_ID or ctx.channel.private
+
+def only_owner(ctx):
+    return ctx.author.id == OWNER_ID and ctx.channel.private
+
+# Main Orisa code
+
 class Orisa(Plugin):
 
     def __init__(self, client, database):
         super().__init__(client)
         self.database = database
+        self.user_locks = {}
+
+    async def acquire_user_lock(self, user_id: int):
+        if user_id in self.user_locks:
+            lock = self.user_locks[user_id]
+        else:
+            lock = curio.Lock()
+            self.user_locks[user_id] = lock
+        await lock.acquire()
+
+    async def release_user_lock(self, user_id: int):
+        lock = self.user_locks[user_id]
+        await lock.release()
+        if not lock.locked():
+            del self.user_locks[user_id]
 
     async def load(self):
-        await self.spawn(self._sync_all_users_task)
+        await self.spawn(self._sync_all_tags_task)
 
 
     # admin commands
@@ -180,11 +225,11 @@ class Orisa(Plugin):
         await self.client.http.delete_message(channel_id, message_id)
         await ctx.channel.messages.send("deleted")
 
-    @command()
-    @condition(only_owner)
-    async def updatehelp(self, ctx, channel_id: int, message_id: int):
-        await self.client.http.edit_message(channel_id, message_id, embed=self._create_help().to_dict())
-        await ctx.channel.messages.send("done")
+#    @command()
+#    @condition(only_owner)
+#    async def updatehelp(self, ctx, channel_id: int, message_id: int):
+#        await self.client.http.edit_message(channel_id, message_id, embed=self._create_help().to_dict())
+#        await ctx.channel.messages.send("done")
 
 
     @command()
@@ -207,6 +252,12 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def bt(self, ctx, *, member: Member = None):
 
+        def format_sr(sr):
+            if not sr:
+                return "—"
+            return f"{sr} ({RANKS[get_rank(sr)]})"
+
+
         member_given = member is not None
         if not member_given:
             member = ctx.author
@@ -215,15 +266,25 @@ class Orisa(Plugin):
 
         content = embed = None
         try:
-            user = self.database.by_discord_id(session, member.id)
+            user = self.database.user_by_discord_id(session, member.id)
             if user:
                 embed = Embed(colour=0x659dbd) # will be overwritten later if SR is set
                 embed.add_field(name="Nick", value=member.name)
-                embed.add_field(name="BattleTag", value=f"**{user.battle_tag}**")
-                if user.sr:
-                    rank = get_rank(user.sr)
-                    embed.add_field(name="SR", value=f"{user.sr} ({RANKS[rank]})")
-                    embed.colour = COLORS[rank]
+
+                primary, *secondary = user.battle_tags
+                tag_value = f"**{primary.tag}**\n"
+                tag_value += "\n".join(tag.tag for tag in secondary)
+
+                sr_value = f"**{format_sr(primary.sr)}**\n"
+                sr_value += "\n".join(format_sr(tag.sr) for tag in secondary)
+
+                multiple_tags = len(user.battle_tags) > 1
+
+                embed.add_field(name="BattleTags" if multiple_tags else "BattleTag", value=tag_value)
+                if any(tag.sr for tag in user.battle_tags):
+                    embed.add_field(name="SRs" if multiple_tags else "SR", value=sr_value)
+                    if primary.sr:
+                        embed.colour = COLORS[get_rank(primary.sr)]
                 if member == ctx.author and member_given:
                     embed.set_footer(text="BTW, you do not need to specify your nickname if you want your own BattleTag; just !bt is enough")
             else:
@@ -248,40 +309,50 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def register(self, ctx, battle_tag: str = None):
         if battle_tag is None:
-            await ctx.channel.messages.send(f"{ctx.author.mention} missing BattleTag")
+            await reply(ctx, "missing BattleTag")
             return
         member_id = ctx.message.author_id
         session = self.database.Session()
         try:
-            user = self.database.by_discord_id(session, member_id)
+            user = self.database.user_by_discord_id(session, member_id)
             resp = None
             if user is None:
-                user = User(discord_id=member_id)
+                tag = BattleTag(tag=battle_tag)
+                user = User(discord_id=member_id, battle_tags=[tag], format="$sr")
                 session.add(user)
                 resp = ("OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed.\n"
                         "If you want, you can also join the Overwatch role by typing `.iam Overwatch` (mind the leading dot) in the overwatch-stats "
                         "channel, this way, you can get notified by shoutouts to @Overwatch\n")
             else:
-                logger.info(f"{ctx.author.id} requested to change his BattleTag from {user.battle_tag} to {battle_tag}")
-                if user.battle_tag == battle_tag:
-                    await ctx.channel.messages.send(f"{ctx.author.mention} You already registered with that same BattleTag, so there's nothing for me to do. *Sleep mode reactivated.*")
+                if any(tag.tag == battle_tag for tag in user.battle_tags):
+                    await reply(ctx, "You already registered that BattleTag, so there's nothing for me to do. *Sleep mode reactivated.*")
                     return
-                resp = "OK. I've updated your BattleTag."
+
+                tag = BattleTag(tag=battle_tag)
+                user.battle_tags.append(tag)
+                resp = (f"OK. I've added {battle_tag} to the list of your BattleTags. Your primary BattleTag remains **{user.battle_tags[0].tag}**. "
+                        f"To change your primary tag, use `!bt setprimary yourbattletag`, see help for more details.")
             await ctx.channel.send_typing() # show that we're working
             try:
                 sr, rank, image = await get_sr_rank(battle_tag)
             except InvalidBattleTag as e:
-                await ctx.channel.messages.send(f"{ctx.author.mention} Invalid BattleTag: {e.message}")
+                await reply(ctx, f"Invalid BattleTag: {e.message}")
                 raise
             except UnableToFindSR:
                 resp += "\nYou don't have an SR though, you probably need to finish your placement matches... I still saved your BattleTag."
                 sr = None
 
-            user.battle_tag = battle_tag
-            user.last_update = datetime.now()
-            user.sr = sr
-            user.format = "%s"
-            user.highest_rank = get_rank(sr) 
+            tag.last_update = datetime.now()
+            tag.sr = sr
+            rank = get_rank(sr)
+            if user.highest_rank is None:
+                user.highest_rank = rank
+            else:
+                user.highest_rank = max([user.highest_rank, rank or 0])
+
+            sort_secondaries(user)
+
+            session.commit()
 
             try:
                 await self._update_nick(user)
@@ -293,39 +364,120 @@ class Orisa(Plugin):
                 resp += ("\nHowever, right now I couldn't update your nickname, will try that again later. If you are a clan admin, "
                          "I simply cannot update your nickname ever, period. People will still be able to ask for your BattleTag, though.")
         finally: 
-            session.commit() # we always want to commit, because we have error_count
             session.close()
         
-        await ctx.channel.messages.send(f"{ctx.author.mention} {resp}")
+        await reply(ctx, resp)
+
+
+
+    @bt.subcommand()
+    @condition(correct_channel)
+    async def unregister(self, ctx, tag_or_index: str):
+        session = self.database.Session()
+        try:
+            user = self.database.user_by_discord_id(session, ctx.author.id)
+            if not user:
+                await reply(ctx, "You are not registered, there's nothing for me to do.")
+                return
+
+            try:
+                index = resolve_tag_or_index(user, tag_or_index)
+            except ValueError as e:
+                await reply(ctx, e.args[0])
+                return
+            if index == 0:
+                await reply(ctx,
+                    "You cannot unregister your primary BattleTag. Use `!bt setprimary` to set a different primary first, or "
+                    "use `!bt forgetme` to delete all your data.")
+                return
+
+            removed = user.battle_tags.pop(index)
+            if removed.sr:
+                if user.highest_rank == get_rank(removed.sr):
+                    user.highest_rank = max(filter(lambda x: x is not None, (get_rank(tag.sr) for tag in user.battle_tags)), default=None)
+            session.commit()
+            await reply(ctx, f'Removed **{removed.tag}**')
+            await self._update_nick_after_secondary_change(ctx, user)
+
+        finally:
+            session.close()
+
+    async def _update_nick_after_secondary_change(self, ctx, user):
+            try:
+                await self._update_nick(user)
+            except HierarchyError:
+                pass
+            except NicknameTooLong as e:
+                await reply(ctx, 
+                f'However, your new nickname "{e.nickname}" is now longer than 32 characters, which Discord doesn\'t allow. '
+                 'Please choose a different format or shorten your nickname and do a `!bt forceupdate` afterwards.')
+            except:
+                await reply(ctx, "However, there was an error updating your nickname. I will try that again later.")
+
+
+    @bt.subcommand()
+    @condition(correct_channel)
+    async def setprimary(self, ctx, tag_or_index: str):
+        session = self.database.Session()
+        try:
+            user = self.database.user_by_discord_id(session, ctx.author.id)
+            if not user:
+                await reply(ctx, "You are not registered.")
+            try:
+                index = resolve_tag_or_index(user, tag_or_index)
+            except ValueError as e:
+                await reply(ctx, e.args[0])
+                return
+            if index == 0:
+                await reply(ctx, f'"{user.battle_tags[0].tag}" already is your primary BattleTag. *Going back to sleep*')
+                return
+            
+            p, s = user.battle_tags[0], user.battle_tags[index]
+            p.position = index
+            s.position = 0
+            session.commit()
+
+            for i, t in enumerate(sorted(user.battle_tags[1:], key=attrgetter("tag"))):
+                t.position = i+1
+
+            session.commit()
+
+            await reply(ctx, f'Done. Your primary BattleTag is now **{user.battle_tags[0].tag}**.')
+            await self._update_nick_after_secondary_change(ctx, user)
+
+        finally:
+            session.close()
 
     @bt.subcommand()
     @condition(correct_channel)
     async def format(self, ctx, *, format: str):
         if ']' in format:
-            await ctx.channel.messages.send(f"{ctx.author.mention}: format string may not contain square brackets")
+            await reply(ctx, "format string may not contain square brackets")
             return
-        if ('%s' not in format) and ('%r' not in format):
-            await ctx.channel.messages.send(f"{ctx.author.mention}: format string must contain at least a %s or %r")
+        if not re.search(r'\$((sr|rank)(?!\w))|(\{(sr|rank)(?!\w)})', format):
+            await reply(ctx, "format string must contain at least a $sr or $rank")
             return
         if not format:
-            await ctx.channel.messages.send(f"{ctx.author.mention}: format string missing")
+            await reply(ctx, "format string missing")
             return
         
         session = self.database.Session()
         
         try:
-            user = self.database.by_discord_id(session, ctx.author.id)
+            user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await ctx.channel.messages.send(f"{ctx.author.mention}: you must register first")
+                await reply(ctx, "you must register first")
                 return
             else:
                 user.format = format
                 try:
                     new_nick = await self._update_nick(user)
+                except InvalidFormat as e:
+                    await reply(ctx, f'Invalid format string: unknown placeholder "{e.key}"')
+                    session.rollback()
                 except NicknameTooLong as e:
-                    await ctx.channel.messages.send(
-                            f"{ctx.author.mention} Sorry, using this format would make your nickname be longer than 32 characters ({len(e.nickname)} to be exact).\n"
-                            f"Please choose a shorter format or shorten your nickname")
+                    await reply(ctx, f"Sorry, using this format would make your nickname be longer than 32 characters ({len(e.nickname)} to be exact).\n"
+                                f"Please choose a shorter format or shorten your nickname")
                     session.rollback()
                 else:
                     titles = [
@@ -349,7 +501,7 @@ class Orisa(Plugin):
                             "Pornography Historian",
                             ]
 
-                    await ctx.channel.messages.send(f'{ctx.author.mention} Done. Henceforth, ye shall be knownst as "{new_nick}, {random.choice(titles)}."')
+                    await reply(ctx, f'Done. Henceforth, ye shall be knownst as "{new_nick}, {random.choice(titles)}."')
         finally:
             session.commit()
             session.close()
@@ -360,14 +512,16 @@ class Orisa(Plugin):
         session = self.database.Session()
         try:
             logger.info(f"{ctx.author.id} used forceupdate")
-            user = self.database.by_discord_id(session, ctx.author.id)
+            user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await ctx.channel.messages.send(f"{ctx.author.mention} you are not registered")
+                await reply(ctx, "you are not registered")
             else:
-                await ctx.channel.messages.send(f"{ctx.author.mention} OK, I will update your data immediately. If your SR is not up to date, you need to log out of Overwatch once and try again.")
-                await self._sync_user(user)
-        except Exception as e:
-            logger.exception(f'exception while syncing {user}')
+                await reply(ctx, "OK, I will update your data immediately. If your SR is not up to date, you need to log out of Overwatch once and try again.")
+                for tag in user.battle_tags:
+                    try:
+                        await self._sync_tag(tag)
+                    except Exception as e:
+                        logger.exception(f'exception while syncing {tag}')
         finally:
             session.commit()
             session.close()            
@@ -376,63 +530,79 @@ class Orisa(Plugin):
     async def forgetme(self, ctx):
         session = self.database.Session()
         try:
-            user = self.database.by_discord_id(session, ctx.author.id)
+            user = self.database.user_by_discord_id(session, ctx.author.id)
             if user:
                 logger.info(f"{ctx.author.name} ({ctx.author.id}) requested removal")
                 session.delete(user)
-                await ctx.channel.messages.send(f"OK, deleted {ctx.author.name} from database")
+                await reply(ctx, f"OK, deleted {ctx.author.name} from database")
                 session.commit()
             else:
-                await ctx.channel.messages.send(f"{ctx.author.mention} you are not registered anyway, so there's nothing for me to forget...")
+                await reply(ctx, "you are not registered anyway, so there's nothing for me to forget...")
         finally:
             session.close()
 
     @bt.subcommand()
     @condition(correct_channel)
-    async def findplayers(self, ctx, sr_diff: int = None, base_sr: int = None):
-        await self._findplayers(ctx, sr_diff, base_sr, findall=False)
+    async def findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
+        await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=False)
 
     @bt.subcommand()
     @condition(correct_channel)
-    async def findallplayers(self, ctx, sr_diff: int = None, base_sr: int = None):
-        await self._findplayers(ctx, sr_diff, base_sr, findall=True)
+    async def findallplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
+        await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=True)
 
-    async def _findplayers(self, ctx, sr_diff: int = None, base_sr: int = None, *, findall):
-        logger.info(f"{ctx.author.id} issued findplayers {sr_diff} {base_sr} {findall}")
 
-        if sr_diff is not None:
-            if sr_diff <= 0:
-                await ctx.channel.messages.send("SR difference must be positive")
-                return
+    async def _findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None, *, findall):
+        logger.info(f"{ctx.author.id} issued findplayers {diff_or_min_sr} {max_sr} {findall}")
 
-            if sr_diff > 5000:
-                await ctx.channel.messages.send("You just had to try ridiculous values, didn't you?")
-                return
 
         session = self.database.Session()
         try:
-            asker = self.database.by_discord_id(session, ctx.author.id)
+            asker = self.database.user_by_discord_id(session, ctx.author.id)
             if not asker:
-                await ctx.channel.messages.send(f"{ctx.author.mention} you are not registered")
+                await reply(ctx, "you are not registered")
                 return
 
-            if not base_sr:
-                base_sr = asker.sr
-            if not sr_diff:
-                sr_diff = 1000 if asker.sr < 3500 else 500
+            if max_sr is None:
+                # we are looking around the askers SR
+                sr_diff = diff_or_min_sr
+                
+                if sr_diff is not None:
+                    if sr_diff <= 0:
+                        await reply(ctx, "SR difference must be positive")
+                        return
 
+                    if sr_diff > 5000:
+                        await reply(ctx, "You just had to try ridiculous values, didn't you?")
+                        return
 
-            if not (500 <= base_sr <= 5000):
-                await ctx.channel.messages.send(f"The lowest possible SR is 500, and the highest is 5000, and you say your SR is {base_sr}? *Suuuure.*")
-                return
+                base_sr = asker.battle_tags[0].sr
+                if not base_sr:
+                    await reply(ctx, "You primary BattleTag has no SR, please give a SR range you want to search for instead")
+                    return
+                sr_diff = 1000 if base_sr < 3500 else 500
+                min_sr, max_sr = base_sr - sr_diff, base_sr + sr_diff
 
-            candidates = session.query(User).filter(User.sr.between(base_sr - sr_diff, base_sr + sr_diff)).all()
+                type_msg = f"within {sr_diff} of {base_sr} SR"
+
+            else:
+                # we are looking at a range
+                min_sr = diff_or_min_sr
+
+                if not ((500 <= min_sr <= 5000) and (500 <= max_sr <= 5000) and (min_sr <= max_sr)):
+                    await reply(ctx, "min and max must be between 500 and 5000, and min must not be larger than max.")
+                    return
+
+                type_msg = f"between {min_sr} and {max_sr} SR"
+
+            candidates = session.query(BattleTag).filter(BattleTag.sr.between(min_sr, max_sr)).all()
+
+            users = set(c.user for c in candidates)
     
-            cmap = {c.discord_id: c for c in candidates}
+            cmap = {u.discord_id: u for u in users}
 
             guild = self.client.guilds[GUILD_ID]
             
-
             online = []
             offline = []
 
@@ -456,17 +626,16 @@ class Orisa(Plugin):
                 else:
                     hint = ""
 
-                #return f"{str(m.name)} {m.mention} ({cmap[m.user.id].sr})"
                 return f"{markup}{str(member.name)}\u00a0{member.mention}{markup}\u00a0{hint}\n"
 
 
             msg = ""
            
             if not online:
-                msg += f"There are no players currently online within {sr_diff} of {base_sr} SR.\n\n"
+                msg += f"There are no players currently online {type_msg}\n\n"
             else:
-                msg += f"**The following players are currently online and within {sr_diff} SR of {base_sr}:**\n\n"
-                msg += "\n".join(format_member(m) for m in sorted(online, key=lambda m:cmap[m.user.id].sr))
+                msg += f"**The following players are currently online and {type_msg}:**\n\n"
+                msg += "\n".join(format_member(m) for m in online)
                 msg += "\n"
 
             if findall:
@@ -478,7 +647,7 @@ class Orisa(Plugin):
                         msg += "There are also no offline players within that range. :("
                 else:
                     msg += "**The following players are within that range, but currently offline:**\n\n"
-                    msg += "\n".join(format_member(m) for m in sorted(offline, key=lambda m:cmap[m.user.id].sr))
+                    msg += "\n".join(format_member(m) for m in offline)
 
             else:
                 if offline:
@@ -487,16 +656,17 @@ class Orisa(Plugin):
         
             await send_long(ctx.author.send, msg)
             if not ctx.channel.private:
-                await ctx.channel.messages.send(f"{ctx.author.mention} I sent you a DM with the results.")
+                await reply(ctx, "I sent you a DM with the results.")
 
         finally:
             session.close()
 
     @bt.subcommand()
     async def help(self, ctx):
-        await ctx.author.send(content=None, embed=self._create_help())
+        for embed in self._create_help():
+            await ctx.author.send(content=None, embed=embed)
         if not ctx.channel.private:
-            await ctx.channel.messages.send(f"{ctx.author.mention} I sent you a DM with instructions.")
+            await reply(ctx, "I sent you a DM with instructions.")
 
 
     def _create_help(self):
@@ -531,37 +701,22 @@ class Orisa(Plugin):
         )
 
         embed.add_field(
-            name='!bt register BattleTag#1234', 
-            value='Registers or updates your account with the given BattleTag. '
-                  'Your OW account will be checked periodically and your nick will be '
-                  'automatically updated to show your SR or rank (see the *format* command for more info). '
-                  '`register` will fail if the BattleTag is invalid. *BattleTags are case-sensitive!*'
-        )
-        embed.add_field(
-            name='!bt findplayers [max diff] [sr to compare]',
+            name='!bt findplayers [max diff] *or* !bt findplayers min max',
             value='*This command is still in beta and may change at any time!*\n'
                   'This command is intended to find partners for your Competitive team and shows you all registered and online users within the specified range.\n'
                   'If `max diff` is not given, the maximum range that allows you to queue with them is used, so 1000 below 3500 SR, and 500 otherwise. '
-                  'If `sr to compare` is not given, your SR is used, otherwise that given SR is compared against. You should only need to specify this when you currently have no rank.\n'
+                  'If `max diff` is given, it is used instead. `findplayers` then search for all online players that around that range of your own SR.\n'
+                  'Alternatively, you can give two parameters, `!bt findplayers min max`. In this mode, `findplayers` will search for all online players that are between '
+                  'min and max.\n'
+                  'Note that `findplayers` will take all registered BattleTags of players into account, not just their primary.\n'
                   '*Examples:*\n'
                   '`!bt findplayers`: finds all players that you could start a competitive queue with\n'
                   '`!bt findplayers 123`: finds all players that are within 123 SR of your SR\n'
-                  '`!bt findplayers 1000 2150`: finds all players between 1150 and 3150 SR. To be used when Orisa doesn\'t know your previous SR was around 2150.\n'
+                  '`!bt findplayers 1500 2300`: finds all players between 1500 and 2300 SR\n'
         )
         embed.add_field(
-            name='!bt findallplayers [max diff] [sr to compare]',
+            name='!bt findallplayers [max diff] *or* !bt findplayers min max',
             value='Same as `findplayers`, but also includes offline players'
-        )
-        embed.add_field(
-            name='!bt format *format*',
-            value="Lets you specify how your SR or rank is displayed. It will always "
-                  "be shown in [square\u00a0brackets] appended to your name. "
-                  "In the *format*, `%s` will be replaced with your SR, and `%r` "
-                  "will be replaced with your rank.\n"
-                  '*Examples:*\n'
-                  '`!bt format test %s SR` will result in [test 2345 SR]\n'
-                  '`!bt format Potato/%r` in [Potato/Gold].\n'
-                  '*Default: `%s`*'
         )
         embed.add_field(
             name='!bt forceupdate', 
@@ -571,25 +726,144 @@ class Orisa(Plugin):
         )
         embed.add_field(
             name='!bt forgetme', 
-            value='Your BattleTag will be removed from the database and your nick '
+            value='All your BattleTags will be removed from the database and your nick '
                   'will not be updated anymore. You can re-register at any time.'
         )
 
-        return embed
+        embed.add_field(
+            name='!bt format *format*',
+            value="Lets you specify how your SR or rank is displayed. It will always be shown in [square\u00a0brackets] appended to your name.\n"
+                "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`. The second form is useful when there are no spaces "
+                "between the placeholder name and the text. For example, to get `[2000 SR]`, you *can* use just `$sr SR`, however, to get `[2000SR]`, you need "
+                "to use `${sr}SR`, because `$srSR` would refer to a nonexistant placeholder `srSR`.\n"
+                "Your format string needs to use at least either `$sr` or `$rank`.\n"
+        )
+        embed.add_field(
+            name="\N{BLACK STAR} *bt format placeholders*",
+            value=
+                "*The following placeholders are defined:*\n"
+                "`sr`\nyour SR; if you have secondary accounts, an asterisk (\*) is added at the end.\n\n"
+                "`rank`\nyour Rank; if you have secondary accounts, an asterisk (\*) is added at the end.\n\n"
+                "`secondary_sr`\nThe SR of your secondary account, if you have registered one. If you have more than one secondary account (you really like to "
+                "give Blizzard money, don't you), the first secondary account (sorted alphabetically) will be used.\n\n"
+                "`secondary_rank`\nLike `secondary_sr`, but shows the rank instead.\n\n"
+                "`lowest_sr`, `highest_sr`\nthe lowest/highest SR of all your accounts, including your primary. Only useful if you have more than one secondary.\n\n"
+                "`lowest_rank`, `highest_rank`\nthe same, just for rank.\n\n"
+                "`sr_range`\nThe same as `${lowest_sr}–${highest_sr}`.\n\n"
+                "`rank_range`\nDito, but for rank.\n"
+        )
+        embed.add_field(
+            name="\N{BLACK STAR} *bt format examples*",
+            value=
+                '`!bt format test $sr SR` will result in [test 2345 SR]\n'
+                '`!bt format Potato/$rank` in [Potato/Gold].\n'
+                '`!bt format $sr (alt: $secondary_sr)` in [1234* (alt: 2345)]\n'
+                '`!bt format $sr ($sr_range)` in [1234* (600-4200)]\n'
+                '`!bt format $sr ($rank_range)` in [1234* (Bronze-Grand Master)]\n\n'
+                '*By default, the format is `$sr`*'
+        )
+    
+        embeds = [embed]
+        embed = Embed(title="help cont'd")
+        embeds.append(embed)
 
-    def _format_nick(self, format, sr):
-        rankno = get_rank(sr)
+        embed.add_field(
+            name='!bt register BattleTag#1234', 
+            value='Registers your account with the given BattleTag, or adds a secondary BattleTag to your account. '
+                'Your OW account will be checked periodically and your nick will be '
+                'automatically updated to show your SR or rank (see the *format* command for more info). '
+                '`register` will fail if the BattleTag is invalid. *BattleTags are case-sensitive!*'
+        )
+        embed.add_field(
+            name='!bt unregister *battletag*',
+            value='If you have secondary BattleTags, you can remove the given BattleTag from the list. Unlike register, the search is performed fuzzy, so '
+                'you normally only have to specify the first few letters of the BattleTag to remove.\n'
+                'You cannot remove your primary BattleTag, you have to choose a different primary BattleTag first.\n'
+                '*Example:*\n'
+                '`!bt unregister foo`'
+        )
+        embed.add_field(
+            name='!bt unregister *index*',
+            value='Like `unregister battletag`, but removes the battletag by number. Your first secondary is 1, your second 2, etc.\n'
+                "The order is shown by the `!bt` command (it's alphabetical).\n"
+                "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
+                '*Example:*\n'
+                '`!bt unregister 1`'
+        )
+        embed.add_field(
+            name='!bt setprimary *battletag*',
+            value="Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using, the its SR is shown in your nick\n"
+                'Unlike `register`, the search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n'
+                'The given BattleTag must already be registered as one of your BattleTags.\n'
+                '*Example:*\n'
+                '`!bt setprimary jjonak`'
+        )
+        embed.add_field(
+            name='!bt setprimary *index*',
+            value="Like `!bt setprimary battletag`, but uses numbers, 1 is your first secondary, 2 your seconds etc. The order is shown by `!bt` (alphabetical)\n"
+                "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
+                '*Example:*\n'
+                '`!bt setprimary 1`'
+        )
+
+        return embeds
+
+    def _format_nick(self, user):
+        primary = user.battle_tags[0]
+
+        rankno = get_rank(primary.sr)
         rank = RANKS[rankno] if rankno is not None else "Unranked"
-        srstr = str(sr) if sr is not None else "noSR"
+        sr = primary.sr or "noSR"
 
-        return format.replace('%s', srstr).replace('%r', rank)
+        try:
+            secondary_sr = user.battle_tags[1].sr
+        except IndexError:
+            # no secondary accounts
+            secondary_sr = None
+        else:
+            # secondary accounts, mark SR
+            sr = f"{sr}*"
+            rank = f"{rank}*"
+
+        if secondary_sr is None:
+            secondary_sr = "noSR"
+            secondary_rank = "Unranked"
+        else:
+            secondary_rank = RANKS[get_rank(secondary_sr)]
+
+        srs = list(sorted(t.sr or -1 for t in user.battle_tags))
+
+        while srs and srs[0] == -1:
+            srs.pop(0)
+
+        if srs:
+            lowest_sr, highest_sr = srs[0], srs[-1]
+            lowest_rank, highest_rank = (RANKS[get_rank(sr)] for sr in (srs[0], srs[-1]))
+        else:
+            lowest_sr = highest_sr = "noSR"
+            lowest_rank = highest_rank = "Unranked"
+
+        t = Template(user.format)
+        try:
+            return t.substitute(
+                sr=sr,
+                rank=rank,
+                lowest_sr=lowest_sr,
+                highest_sr=highest_sr,
+                sr_range=f"{lowest_sr}–{highest_sr}",
+                rank_range=f"{lowest_rank}–{highest_rank}",
+                secondary_sr=secondary_sr,
+                secondary_rank=secondary_rank,
+            )
+        except KeyError as e:
+            raise InvalidFormat(e.args[0]) from e
 
 
     async def _update_nick(self, user):
         user_id = user.discord_id
 
         nn = str(self.client.guilds[GUILD_ID].members[user_id].name)
-        formatted = self._format_nick(user.format, user.sr)
+        formatted = self._format_nick(user)
         if re.search(r'\[.*?\]', str(nn)):
             new_nn = re.sub(r'\[.*?\]', f'[{formatted}]', nn)
         else:
@@ -615,55 +889,55 @@ class Orisa(Plugin):
 
         await self.client.find_channel(CONGRATS_CHANNEL_ID).messages.send(embed=embed)
 
-    async def _sync_user(self, user):
-        user.last_update = datetime.now()
+    async def _sync_tag(self, tag):
+        tag.last_update = datetime.now()
+        await self.acquire_user_lock(tag.user_id)
+
         try:
-            sr, rank, image = await get_sr_rank(user.battle_tag)
+            sr, rank, image = await get_sr_rank(tag.tag)
         except UnableToFindSR:
-            logger.debug(f"No SR for {user.battle_tag}, oh well...")
+            logger.debug(f"No SR for {tag.tag}, oh well...")
             # it is successful, after all
-            user.error_count = 0
+            tag.error_count = 0
         except Exception:
-            user.error_count += 1
-            logger.exception(f"Got exception while requesting {user.battle_tag}")
+            tag.error_count += 1
+            logger.exception(f"Got exception while requesting {tag.tag}")
             raise
         else:
-            user.error_count = 0
-            user.sr = sr
+            tag.error_count = 0
+            tag.sr = sr
             try:
-                await self._update_nick(user)
+                await self._update_nick(tag.user)
             except HierarchyError:
                 # not much we can do, just ignore
                 pass
             except NicknameTooLong as e:
-                discord_user = await self.client.get_user(user.discord_id)
-                channel = await discord_user.open_private_channel()
                 msg = f"Hi! I just tried to update your nickname, but the result '{e.nickname}' would be longer than 32 characters."
-                if user.format == "%s":
+                if tag.user.format == "%s":
                     msg += "\nPlease shorten your nickname."
                 else:
                     msg += "\nTry to use the %s format (you can type `!bt format %s` into this DM channel, or shorten your nickname."
                 msg += "\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience."
-                await channel.messages.send(msg)
+                discord_user = await self.client.get_user(tag.user.discord_id)
+                await discord_user.send(msg)
 
                 # we can still do the rest, no need to return here
             if rank is not None:
+                user = tag.user
                 if user.highest_rank is None:
-                    user.highest_rank = rank
-
-                elif rank < user.highest_rank and sr % 500 <= 350:
-                    # user has fallen at least 150 below threshold,
-                    # so congratulate him when he ranks up again
                     user.highest_rank = rank
 
                 elif rank > user.highest_rank:
                     logger.debug(f"user {user} old rank {user.highest_rank}, new rank {rank}, sending congrats...")
                     await self._send_congrats(user, rank, image)
                     user.highest_rank = rank
+        finally:
+            await self.release_user_lock(tag.user_id)
 
-    async def _sync_user_task(self, queue):
+
+    async def _sync_tags_task(self, queue):
         first = True
-        async for user_id in queue:
+        async for tag_id in queue:
             if not first:
                 delay = random.random() * 5.
                 logger.debug(f"rate limiting: sleeping for {delay}s")
@@ -672,10 +946,10 @@ class Orisa(Plugin):
                 first = False
             session = self.database.Session()
             try:
-                user = self.database.by_id(session, user_id)
-                await self._sync_user(user)
+                tag = self.database.tag_by_id(session, tag_id)
+                await self._sync_tag(tag)
             except Exception:
-                logger.exception(f'exception while syncing {user.discord_id} {user.battle_tag}')
+                logger.exception(f'exception while syncing {tag.tag} for {tag.user.discord_id}')
             finally:
                 await queue.task_done()
                 session.commit()
@@ -686,21 +960,21 @@ class Orisa(Plugin):
         queue = curio.Queue()
         session = self.database.Session()
         try:
-            ids_to_sync = self.database.get_to_be_synced(session)
+            ids_to_sync = self.database.get_tags_to_be_synced(session)
         finally:
             session.close()
-        logger.info(f"{len(ids_to_sync)} users need to be synced")
+        logger.info(f"{len(ids_to_sync)} tags need to be synced")
         if ids_to_sync:
-            for user_id in ids_to_sync:
-                await queue.put(user_id)
-            async with curio.TaskGroup(name='sync users') as g:
+            for tag_id in ids_to_sync:
+                await queue.put(tag_id)
+            async with curio.TaskGroup(name='sync tags') as g:
                 for _ in range(5):
-                    await g.spawn(self._sync_user_task, queue)
+                    await g.spawn(self._sync_tags_task, queue)
                 await queue.join()
                 await g.cancel_remaining()
             logger.info("done syncing")
 
-    async def _sync_all_users_task(self):
+    async def _sync_all_tags_task(self):
         await curio.sleep(10)
         logger.debug("started waiting...")
         while True:
@@ -788,7 +1062,7 @@ async def remove_member(ctx: Context, member: Member):
     logger.debug(f"Member {member.name}({member.id}) left the guild")
     session = database.Session()
     try:
-        user = database.by_discord_id(session, member.id)
+        user = database.user_by_discord_id(session, member.id)
         if user:
             logger.info(f"deleting {user} from database")
             session.delete(user)
