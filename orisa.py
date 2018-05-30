@@ -896,8 +896,9 @@ class Orisa(Plugin):
         await self.client.find_channel(CONGRATS_CHANNEL_ID).messages.send(embed=embed)
 
     async def _sync_tag(self, tag):
-        tag.last_update = datetime.now()
         await self.acquire_user_lock(tag.user_id)
+        
+        tag.last_update = datetime.now()
 
         try:
             sr, rank, image = await get_sr_rank(tag.tag)
