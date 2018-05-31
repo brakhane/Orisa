@@ -880,40 +880,39 @@ class Orisa(Plugin):
             tag.last_update = datetime.now()
         except UnableToFindSR:
             logger.debug(f"No SR for {tag.tag}, oh well...")
-            # it is successful, after all
-            tag.error_count = 0
+            sr = rank = image = None
         except Exception:
             tag.error_count += 1
             logger.exception(f"Got exception while requesting {tag.tag}")
             raise
-        else:
-            tag.error_count = 0
-            tag.sr = sr
-            try:
-                await self._update_nick(tag.user)
-            except HierarchyError:
-                # not much we can do, just ignore
-                pass
-            except NicknameTooLong as e:
-                msg = f"Hi! I just tried to update your nickname, but the result '{e.nickname}' would be longer than 32 characters."
-                if tag.user.format == "%s":
-                    msg += "\nPlease shorten your nickname."
-                else:
-                    msg += "\nTry to use the %s format (you can type `!bt format %s` into this DM channel, or shorten your nickname."
-                msg += "\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience."
-                discord_user = await self.client.get_user(tag.user.discord_id)
-                await discord_user.send(msg)
 
-                # we can still do the rest, no need to return here
-            if rank is not None:
-                user = tag.user
-                if user.highest_rank is None:
-                    user.highest_rank = rank
-
-                elif rank > user.highest_rank:
-                    logger.debug(f"user {user} old rank {user.highest_rank}, new rank {rank}, sending congrats...")
-                    await self._send_congrats(user, rank, image)
-                    user.highest_rank = rank
+        tag.error_count = 0
+        tag.sr = sr
+        try:
+            await self._update_nick(tag.user)
+        except HierarchyError:
+            # not much we can do, just ignore
+            pass
+        except NicknameTooLong as e:
+            msg = f"Hi! I just tried to update your nickname, but the result '{e.nickname}' would be longer than 32 characters."
+            if tag.user.format == "%s":
+                msg += "\nPlease shorten your nickname."
+            else:
+                msg += "\nTry to use the %s format (you can type `!bt format %s` into this DM channel, or shorten your nickname."
+            msg += "\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience."
+            discord_user = await self.client.get_user(tag.user.discord_id)
+            await discord_user.send(msg)
+ 
+            # we can still do the rest, no need to return here
+        if rank is not None:
+            user = tag.user
+            if user.highest_rank is None:
+                user.highest_rank = rank
+ 
+            elif rank > user.highest_rank:
+                logger.debug(f"user {user} old rank {user.highest_rank}, new rank {rank}, sending congrats...")
+                await self._send_congrats(user, rank, image)
+                user.highest_rank = rank
 
 
     async def _sync_tags_task(self, queue):
