@@ -666,7 +666,10 @@ class Orisa(Plugin):
                 "your own so others can easily add you in OW.\n"
                 "It will also send a short message to the chat when you ranked up.\n"
                 f"*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{OWNER_ID}>*\n"
-                f"\n**The commands only work in the <#{CHANNEL_ID}> channel or by sending me a DM**"),
+                f"\n**The commands only work in the <#{CHANNEL_ID}> channel or by sending me a DM**\n"
+                "If you are new to Orisa, you are probably looking for `!bt register`\n"
+                
+                ),
         )
         embed.add_field(
             name='!bt [nick]', 
@@ -877,7 +880,6 @@ class Orisa(Plugin):
 
         try:
             sr, rank, image = await get_sr_rank(tag.tag)
-            tag.last_update = datetime.now()
         except UnableToFindSR:
             logger.debug(f"No SR for {tag.tag}, oh well...")
             sr = rank = image = None
@@ -886,6 +888,7 @@ class Orisa(Plugin):
             logger.exception(f"Got exception while requesting {tag.tag}")
             raise
 
+        tag.last_update = datetime.now()
         tag.error_count = 0
         tag.sr = sr
         try:
