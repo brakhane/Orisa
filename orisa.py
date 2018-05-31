@@ -565,7 +565,10 @@ class Orisa(Plugin):
                 if not base_sr:
                     await reply(ctx, "You primary BattleTag has no SR, please give a SR range you want to search for instead")
                     return
-                sr_diff = 1000 if base_sr < 3500 else 500
+
+                if sr_diff is None:
+                    sr_diff = 1000 if base_sr < 3500 else 500
+
                 min_sr, max_sr = base_sr - sr_diff, base_sr + sr_diff
 
                 type_msg = f"within {sr_diff} of {base_sr} SR"
@@ -874,7 +877,7 @@ class Orisa(Plugin):
 
         embed.set_thumbnail(url=image)
 
-        await self.client.find_channel(CONGRATS_CHANNEL_ID).messages.send(embed=embed)
+        await self.client.find_channel(CONGRATS_CHANNEL_ID).messages.send(content=f"Let's hear it for <@!{user.discord_id}>!", embed=embed)
 
     async def _sync_tag(self, tag):
 
