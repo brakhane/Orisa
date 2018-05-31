@@ -165,28 +165,6 @@ class Orisa(Plugin):
     def __init__(self, client, database):
         super().__init__(client)
         self.database = database
-        self.user_locks = {}
-
-    async def acquire_user_lock(self, user_id: int):
-        logger.debug("trying to acquire lock for %i", user_id)
-        if user_id in self.user_locks:
-            lock = self.user_locks[user_id]
-        else:
-            lock = curio.Lock()
-            self.user_locks[user_id] = lock
-        await lock.acquire()
-        logger.debug("lock for %i acquired", user_id)
-
-    async def release_user_lock(self, user_id: int):
-        logger.debug("trying to release lock for %i", user_id)
-        lock = self.user_locks[user_id]
-        await lock.release()
-        logger.debug("lock released for %i", user_id)
-        if lock.locked():
-            logger.debug("lock for %i is still used, keeping it", user_id)
-        else:
-            logger.debug("lock for %i is not used anymore, removing", user_id)
-            del self.user_locks[user_id]
 
     async def load(self):
         await self.spawn(self._sync_all_tags_task)
@@ -896,12 +874,10 @@ class Orisa(Plugin):
         await self.client.find_channel(CONGRATS_CHANNEL_ID).messages.send(embed=embed)
 
     async def _sync_tag(self, tag):
-        await self.acquire_user_lock(tag.user_id)
-        
-        tag.last_update = datetime.now()
 
         try:
             sr, rank, image = await get_sr_rank(tag.tag)
+            tag.last_update = datetime.now()
         except UnableToFindSR:
             logger.debug(f"No SR for {tag.tag}, oh well...")
             # it is successful, after all
@@ -938,8 +914,6 @@ class Orisa(Plugin):
                     logger.debug(f"user {user} old rank {user.highest_rank}, new rank {rank}, sending congrats...")
                     await self._send_congrats(user, rank, image)
                     user.highest_rank = rank
-        finally:
-            await self.release_user_lock(tag.user_id)
 
 
     async def _sync_tags_task(self, queue):

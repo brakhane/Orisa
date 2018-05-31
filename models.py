@@ -66,7 +66,7 @@ class Database:
 
     def __init__(self):
         engine = create_engine(DATABASE_URI)
-        self.Session = sessionmaker(bind=engine)
+        self.Session = sessionmaker(bind=engine, autoflush=False)
         Base.metadata.create_all(engine)
 
     def user_by_id(self, session, id):
