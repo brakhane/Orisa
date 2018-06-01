@@ -4,7 +4,7 @@ version: 1
 disable_existing_loggers: false
 
 root:
-  level: DEBUG
+  level: INFO
   handlers: [console_info, file]
 
 loggers:

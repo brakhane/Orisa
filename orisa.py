@@ -18,7 +18,7 @@ import logging.config
 import re
 import random
 from bisect import bisect
-from datetime import datetime
+from datetime import datetime, timedelta
 from itertools import groupby
 from operator import attrgetter, itemgetter
 from string import Template
@@ -28,6 +28,8 @@ import curio
 import html5lib
 import multio
 import yaml
+
+from curious import event
 from curious.commands.context import Context
 from curious.commands.decorators import command, condition
 from curious.commands.exc import ConversionFailedError
@@ -159,8 +161,12 @@ def only_owner(ctx):
     return ctx.author.id == OWNER_ID and ctx.channel.private
 
 # Main Orisa code
-
 class Orisa(Plugin):
+
+    SYMBOL_DPS = '\N{PISTOL}'
+    SYMBOL_TANK = '\N{SHIELD}' #\N{VARIATION SELECTOR-16}'
+    SYMBOL_SUPPORT = '\N{HEAVY PLUS SIGN}'   #\N{VERY HEAVY GREEK CROSS}'
+    SYMBOL_FLEX = '\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}' # '\N{FLEXED BICEPS}'   #'\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}'
 
     def __init__(self, client, database):
         super().__init__(client)
@@ -726,6 +732,7 @@ class Orisa(Plugin):
             name="\N{BLACK STAR} *bt format placeholders*",
             value=
                 "*The following placeholders are defined:*\n"
+                f"`dps`, `tank`, `support`, `flex`\nSymbols for the respective roles: `{self.SYMBOL_DPS}`, `{self.SYMBOL_TANK}`, `{self.SYMBOL_SUPPORT}`, `{self.SYMBOL_FLEX}`\n\n"
                 "`sr`\nyour SR; if you have secondary accounts, an asterisk (\*) is added at the end.\n\n"
                 "`rank`\nyour Rank; if you have secondary accounts, an asterisk (\*) is added at the end.\n\n"
                 "`secondary_sr`\nThe SR of your secondary account, if you have registered one. If you have more than one secondary account (you really like to "
@@ -798,6 +805,40 @@ class Orisa(Plugin):
 
         return embeds
 
+
+    # Events
+    @event('member_update')
+    async def _member_update(self, ctx, old_member: Member, new_member: Member):
+
+        def plays_overwatch(m):
+            return m.game and m.game.name == "Overwatch"
+
+        async def wait_and_fire(ids_to_sync):
+            logger.debug(f"sleeping for 30s before syncing after OW close of {new_member.name}")
+            await curio.sleep(30)
+            await self._sync_tags(ids_to_sync)
+            logger.debug(f"done syncing tags for {new_member.name} after OW close")
+
+        if plays_overwatch(old_member) and (not plays_overwatch(new_member)):
+            logger.debug(f"{new_member.name} stopped playing OW")
+
+            session = self.database.Session()
+            try:
+                user = self.database.user_by_discord_id(session, new_member.user.id)
+                if not user:
+                    logger.debug(f"{new_member.name} is not registered, nothing to do.")
+                    return
+    
+                ids_to_sync = [t.id for t in user.battle_tags]
+                logger.info(f"{new_member.name} stopped playing OW and has {len(ids_to_sync)} BattleTags that need to be checked")
+            finally:
+                session.close()
+
+            await self.spawn(wait_and_fire, ids_to_sync)
+
+
+    # Util
+
     def _format_nick(self, user):
         primary = user.battle_tags[0]
 
@@ -844,6 +885,11 @@ class Orisa(Plugin):
                 rank_range=f"{lowest_rank}–{highest_rank}",
                 secondary_sr=secondary_sr,
                 secondary_rank=secondary_rank,
+                dps=self.SYMBOL_DPS,
+                tank=self.SYMBOL_TANK,
+                support=self.SYMBOL_SUPPORT,
+                flex=self.SYMBOL_FLEX,
+
             )
         except KeyError as e:
             raise InvalidFormat(e.args[0]) from e
@@ -900,14 +946,17 @@ class Orisa(Plugin):
             # not much we can do, just ignore
             pass
         except NicknameTooLong as e:
-            msg = f"Hi! I just tried to update your nickname, but the result '{e.nickname}' would be longer than 32 characters."
-            if tag.user.format == "%s":
-                msg += "\nPlease shorten your nickname."
-            else:
-                msg += "\nTry to use the %s format (you can type `!bt format %s` into this DM channel, or shorten your nickname."
-            msg += "\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience."
-            discord_user = await self.client.get_user(tag.user.discord_id)
-            await discord_user.send(msg)
+            if tag.user.last_problematic_nickname_warning is None or tag.user.last_problematic_nickname_warning < datetime.now() - timedelta(days=7):
+                tag.user.last_problematic_nickname_warning = datetime.now()
+                msg = "*To avoid spamming you, I will only send out this warning once per week*\n"
+                msg += f"Hi! I just tried to update your nickname, but the result '{e.nickname}' would be longer than 32 characters."
+                if tag.user.format == "%s":
+                    msg += "\nPlease shorten your nickname."
+                else:
+                    msg += "\nTry to use the %s format (you can type `!bt format %s` into this DM channel, or shorten your nickname."
+                msg += "\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience."
+                discord_user = await self.client.get_user(tag.user.discord_id)
+                await discord_user.send(msg)
  
             # we can still do the rest, no need to return here
         if rank is not None:
@@ -921,7 +970,7 @@ class Orisa(Plugin):
                 user.highest_rank = rank
 
 
-    async def _sync_tags_task(self, queue):
+    async def _sync_tags_from_queue(self, queue):
         first = True
         async for tag_id in queue:
             if not first:
@@ -943,7 +992,6 @@ class Orisa(Plugin):
 
     
     async def _sync_check(self):
-        queue = curio.Queue()
         session = self.database.Session()
         try:
             ids_to_sync = self.database.get_tags_to_be_synced(session)
@@ -951,14 +999,19 @@ class Orisa(Plugin):
             session.close()
         logger.info(f"{len(ids_to_sync)} tags need to be synced")
         if ids_to_sync:
-            for tag_id in ids_to_sync:
-                await queue.put(tag_id)
-            async with curio.TaskGroup(name='sync tags') as g:
-                for _ in range(5):
-                    await g.spawn(self._sync_tags_task, queue)
-                await queue.join()
-                await g.cancel_remaining()
-            logger.info("done syncing")
+            await self._sync_tags(ids_to_sync)
+
+    async def _sync_tags(self, ids_to_sync):
+        queue = curio.Queue()
+        for tag_id in ids_to_sync:
+            await queue.put(tag_id)
+        
+        async with curio.TaskGroup(name='sync tags') as g:
+            for _ in range(5):
+                await g.spawn(self._sync_tags_from_queue, queue)
+            await queue.join()
+            await g.cancel_remaining()
+        logger.info("done syncing")
 
     async def _sync_all_tags_task(self):
         await curio.sleep(10)
@@ -1055,8 +1108,6 @@ async def remove_member(ctx: Context, member: Member):
             session.commit()
     finally:
         session.close()
-
-
 
 manager = CommandsManager.with_client(client, command_prefix="!")
 

@@ -35,6 +35,7 @@ class User(Base):
     battle_tags = relationship(
         "BattleTag", back_populates="user", order_by="BattleTag.position", collection_class=ordering_list('position'),
         lazy="joined", cascade="all, delete-orphan")
+    last_problematic_nickname_warning = Column(DateTime)
 
     def __repr__(self):
         return (f'User(id={self.id}, discord_id={self.discord_id}, battle_tags={repr(self.battle_tags)}, '
