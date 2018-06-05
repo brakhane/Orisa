@@ -163,9 +163,9 @@ def only_owner(ctx):
 # Main Orisa code
 class Orisa(Plugin):
 
-    SYMBOL_DPS = '\N{PISTOL}'
+    SYMBOL_DPS = '\N{CROSSED SWORDS}'
     SYMBOL_TANK = '\N{SHIELD}' #\N{VARIATION SELECTOR-16}'
-    SYMBOL_SUPPORT = '\N{HEAVY PLUS SIGN}'   #\N{VERY HEAVY GREEK CROSS}'
+    SYMBOL_SUPPORT = '\N{VERY HEAVY GREEK CROSS}' #'\N{HEAVY PLUS SIGN}'   #\N{VERY HEAVY GREEK CROSS}'
     SYMBOL_FLEX = '\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}' # '\N{FLEXED BICEPS}'   #'\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}'
 
     def __init__(self, client, database):
@@ -524,7 +524,11 @@ class Orisa(Plugin):
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if user:
                 logger.info(f"{ctx.author.name} ({ctx.author.id}) requested removal")
+                user_id = user.discord_id
+                nn = str(self.client.guilds[GUILD_ID].members[user_id].name)
+                new_nn = re.sub(r'\s*\[.*?\]', '', nn, count=1).strip()
                 session.delete(user)
+                await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
                 await reply(ctx, f"OK, deleted {ctx.author.name} from database")
                 session.commit()
             else:
@@ -695,7 +699,7 @@ class Orisa(Plugin):
             value='*This command is still in beta and may change at any time!*\n'
                   'This command is intended to find partners for your Competitive team and shows you all registered and online users within the specified range.\n'
                   'If `max diff` is not given, the maximum range that allows you to queue with them is used, so 1000 below 3500 SR, and 500 otherwise. '
-                  'If `max diff` is given, it is used instead. `findplayers` then search for all online players that around that range of your own SR.\n'
+                  'If `max diff` is given, it is used instead. `findplayers` then searches for all online players that around that range of your own SR.\n'
                   'Alternatively, you can give two parameters, `!bt findplayers min max`. In this mode, `findplayers` will search for all online players that are between '
                   'min and max.\n'
                   'Note that `findplayers` will take all registered BattleTags of players into account, not just their primary.\n'
@@ -729,14 +733,14 @@ class Orisa(Plugin):
                 "Your format string needs to use at least either `$sr` or `$rank`.\n"
         )
         embed.add_field(
-            name="\N{BLACK STAR} *bt format placeholders*",
+            name="\N{BLACK STAR} *bt format placeholders (prepend a $)*",
             value=
                 "*The following placeholders are defined:*\n"
                 f"`dps`, `tank`, `support`, `flex`\nSymbols for the respective roles: `{self.SYMBOL_DPS}`, `{self.SYMBOL_TANK}`, `{self.SYMBOL_SUPPORT}`, `{self.SYMBOL_FLEX}`\n\n"
                 "`sr`\nyour SR; if you have secondary accounts, an asterisk (\*) is added at the end.\n\n"
                 "`rank`\nyour Rank; if you have secondary accounts, an asterisk (\*) is added at the end.\n\n"
-                "`secondary_sr`\nThe SR of your secondary account, if you have registered one. If you have more than one secondary account (you really like to "
-                "give Blizzard money, don't you), the first secondary account (sorted alphabetically) will be used.\n\n"
+                "`secondary_sr`\nThe SR of your secondary account, if you have registered one.\nIf you have more than one secondary account (you really like to "
+                "give Blizzard money, don't you), the first secondary account (sorted alphabetically) will be used; in that case, consider using `$sr_range` instead.\n\n"
                 "`secondary_rank`\nLike `secondary_sr`, but shows the rank instead.\n\n"
                 "`lowest_sr`, `highest_sr`\nthe lowest/highest SR of all your accounts, including your primary. Only useful if you have more than one secondary.\n\n"
                 "`lowest_rank`, `highest_rank`\nthe same, just for rank.\n\n"
@@ -811,7 +815,10 @@ class Orisa(Plugin):
     async def _member_update(self, ctx, old_member: Member, new_member: Member):
 
         def plays_overwatch(m):
-            return m.game and m.game.name == "Overwatch"
+            try:
+                return m.game.name == "Overwatch"
+            except AttributeError:
+                return False
 
         async def wait_and_fire(ids_to_sync):
             logger.debug(f"sleeping for 30s before syncing after OW close of {new_member.name}")
