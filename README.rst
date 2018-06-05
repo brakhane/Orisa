@@ -1,7 +1,7 @@
 Orisa
 =====
 
-Orisa is a simple Discord bot that solves a problem an Overwatch community
+Orisa is a Discord bot that solves a problem an Overwatch community
 I'm a member of had: people who want to play as a team in a Quickplay or
 competitive match always had to ask for each other's BattleTags and - in
 case of competitive - rank.
@@ -19,6 +19,20 @@ Why is it called Orisa?
 
 Like Orisa, this bot is still quite young, "new at this", a bit clumsy at times,
 but wants to make people's life easier; it wants to be the hero the discord users need.
+
+Features
+--------
+
+* Shows the current SR and/or rank in nicknames, e.g. ``somenick [2345]``. Users can configure what it shown by using flexible format strings
+* SR is automatically updated whenever a player stops playing Overwatch while being in Discord, and also every hour
+* Supports multiple BattleTags per user
+* Finds (registered) players in a given SR range
+* Congratulates every player when he/she reached a new personal best rank
+* Tries to be as user friendly as possible: has an extensive help and gives suggestions.
+* Uses fuzzy search whenever possible, ``!bt oirsa`` will still find and display the BattleTags of the user named "Orisa"
+* Has been called "the best Overwatch Discord bot I've seen" by at least 2 people
+* Might have been called "a stupid Omnic I do not trust" by Zarya
+* Is not evil; it won't even try to eat your cat
 
 Installation
 ------------
