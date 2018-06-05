@@ -401,7 +401,7 @@ class Orisa(Plugin):
             except NicknameTooLong as e:
                 await reply(ctx, 
                 f'However, your new nickname "{e.nickname}" is now longer than 32 characters, which Discord doesn\'t allow. '
-                 'Please choose a different format or shorten your nickname and do a `!bt forceupdate` afterwards.')
+                 'Please choose a different format, or shorten your nickname and do a `!bt forceupdate` afterwards.')
             except:
                 await reply(ctx, "However, there was an error updating your nickname. I will try that again later.")
 
@@ -414,6 +414,7 @@ class Orisa(Plugin):
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, "You are not registered.")
+                return
             try:
                 index = resolve_tag_or_index(user, tag_or_index)
             except ValueError as e:
