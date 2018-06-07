@@ -285,15 +285,16 @@ class Orisa(Plugin):
                 embed.add_field(name="BattleTags" if multiple_tags else "BattleTag", value=tag_value)
                 if any(tag.sr for tag in user.battle_tags):
                     embed.add_field(name="SRs" if multiple_tags else "SR", value=sr_value)
-                    if primary.sr:
-                        embed.colour = COLORS[get_rank(primary.sr)]
+                
+                if primary.sr:
+                    embed.colour = COLORS[get_rank(primary.sr)]
 
                 if multiple_tags:
-                    footer_text = "The SR of the primary BattleTag was last updated "
+                    footer_text = f"The SR of the BattleTags were last updated "
+                    footer_text += ", ".join(pendulum.instance(tag.last_update).diff_for_humans() for tag in user.battle_tags)
+                    footer_text += " respectively."
                 else:
-                    footer_text = "The SR was last updated "
-
-                footer_text += pendulum.instance(primary.last_update).diff_for_humans() + "."
+                    footer_text = f"The SR was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
 
                 if member == ctx.author and member_given:
                     footer_text += "\nBTW, you do not need to specify your nickname if you want your own BattleTag; just !bt is enough"
