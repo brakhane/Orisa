@@ -44,7 +44,10 @@ from fuzzywuzzy import process, fuzz
 from lxml import html
 
 
-from config import BOT_TOKEN, GUILD_ID, CHANNEL_ID, CONGRATS_CHANNEL_ID, OWNER_ID
+from config import (
+        BOT_TOKEN, GUILD_ID, CHANNEL_ID, CONGRATS_CHANNEL_ID, OWNER_ID,
+        CHANNEL_NAMES
+    )
 from models import Database, User, BattleTag
 
 with open('logging.yaml') as logfile:
@@ -204,14 +207,22 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
-    async def post(self, ctx, channel_id: int, *, message:str):
+    async def post(self, ctx, channel_id: str, *, message:str):
+        try:
+            channel_id = CHANNEL_NAMES[channel_id]
+        except KeyError:
+            channel_id = int(channel_id)
         channel = self.client.find_channel(channel_id)
         msg = await channel.messages.send(message)
         await ctx.channel.messages.send(f"created {msg.id}")
 
     @command()
     @condition(only_owner)
-    async def delete(self, ctx, channel_id: int, message_id: int):
+    async def delete(self, ctx, channel_id: str, message_id: int):
+        try:
+            channel_id = CHANNEL_NAMES[channel_id]
+        except KeyError:
+            channel_id = int(channel_id)
         # low level access, because getting a message requires MESSAGE_HISTORY permission
         await self.client.http.delete_message(channel_id, message_id)
         await ctx.channel.messages.send("deleted")

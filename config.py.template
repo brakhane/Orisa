@@ -16,6 +16,11 @@ CONGRATS_CHANNEL_ID =
 # The channel Orisa listens on (besides DM)
 CHANNEL_ID = 
 
+# Aliases for channels, used by admin commands
+# key is alias, value is discord id
+# like {"main": 1234}
+CHANNEL_NAMES = {}
+
 # The ID of the owner, only this user is allowed
 # priviledged commands (mostly used for testing stuff)
 OWNER_ID =
