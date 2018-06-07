@@ -42,7 +42,7 @@ from curious.dataclasses.member import Member
 from curious.dataclasses.presence import Game, Status
 from fuzzywuzzy import process, fuzz
 from lxml import html
-
+import pendulum
 
 from config import (
         BOT_TOKEN, GUILD_ID, CHANNEL_ID, CONGRATS_CHANNEL_ID, OWNER_ID,
@@ -287,8 +287,17 @@ class Orisa(Plugin):
                     embed.add_field(name="SRs" if multiple_tags else "SR", value=sr_value)
                     if primary.sr:
                         embed.colour = COLORS[get_rank(primary.sr)]
+
+                if multiple_tags:
+                    footer_text = "The SR of the primary BattleTag was last updated "
+                else:
+                    footer_text = "The SR was last updated "
+
+                footer_text += pendulum.instance(primary.last_update).diff_for_humans() + "."
+
                 if member == ctx.author and member_given:
-                    embed.set_footer(text="BTW, you do not need to specify your nickname if you want your own BattleTag; just !bt is enough")
+                    footer_text += "\nBTW, you do not need to specify your nickname if you want your own BattleTag; just !bt is enough"
+                embed.set_footer(text=footer_text)
             else:
                 content = f"{member.name} not found in database! *Do you need a hug?*"
                 if member == ctx.author:

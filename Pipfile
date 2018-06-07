@@ -12,6 +12,7 @@ sqlalchemy = "*"
 fuzzywuzzy = {extras = ["speedup"]}
 pyyaml = "*"
 "bd7baa4" = {editable = true, path = "./../curious"}
+pendulum = "*"
 
 [dev-packages]
 pylint = "*"
