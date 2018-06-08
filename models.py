@@ -14,16 +14,38 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import curio
 from datetime import datetime, timedelta
+from enum import Flag, auto
 
 from sqlalchemy import (Boolean, Column, DateTime, Integer, String,
                         ForeignKey, create_engine)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.orderinglist import ordering_list
 from sqlalchemy.orm import raiseload, relationship, sessionmaker
+import sqlalchemy.types as types
 
 from config import DATABASE_URI
 
 Base = declarative_base()
+
+class Role(Flag):
+    DPS = auto()
+    MAIN_TANK = auto()
+    OFF_TANK = auto()
+    SUPPORT = auto()
+
+class RoleType(types.TypeDecorator):
+
+    impl = Integer
+
+    def process_bind_param(self, value, dialect):
+        return None if value is None else value.value
+
+    def process_result_value(self, value, dialect):
+        return None if value is None else Role(value) 
+
+    class comparator_factory(Integer.Comparator):
+        def contains(self, other, **kwargs):
+            return (self.op("&", return_type=types.Integer)(other)).bool_op("=")(other.value)
 
 class User(Base):
     __tablename__ = 'users'
@@ -32,14 +54,18 @@ class User(Base):
     discord_id = Column(Integer, unique=True, nullable=False, index=True)
     format = Column(String, nullable=False)
     highest_rank = Column(Integer)
+
     battle_tags = relationship(
         "BattleTag", back_populates="user", order_by="BattleTag.position", collection_class=ordering_list('position'),
         lazy="joined", cascade="all, delete-orphan")
     last_problematic_nickname_warning = Column(DateTime)
 
+    roles = Column(RoleType)
+
     def __repr__(self):
-        return (f'User(id={self.id}, discord_id={self.discord_id}, battle_tags={repr(self.battle_tags)}, '
-                f'format={self.format}, highest_rank={self.highest_rank})')
+        return (f'<User(id={self.id}, discord_id={self.discord_id}, battle_tags={repr(self.battle_tags)}, '
+                f'format={self.format}, highest_rank={self.highest_rank})>')
+
 
 class BattleTag(Base):
     __tablename__ = 'battle_tags'

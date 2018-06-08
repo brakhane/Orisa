@@ -21,6 +21,11 @@ CHANNEL_ID =
 # like {"main": 1234}
 CHANNEL_NAMES = {}
 
+# A list of voice channels that Orisa should track
+# and adjust the channel suffix when people with
+# specific roles join
+VOICE_CHANNELS = []
+
 # The ID of the owner, only this user is allowed
 # priviledged commands (mostly used for testing stuff)
 OWNER_ID =

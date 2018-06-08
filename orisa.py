@@ -18,6 +18,7 @@ import logging.config
 import re
 import random
 from bisect import bisect
+from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from itertools import groupby
 from operator import attrgetter, itemgetter
@@ -46,9 +47,10 @@ import pendulum
 
 from config import (
         BOT_TOKEN, GUILD_ID, CHANNEL_ID, CONGRATS_CHANNEL_ID, OWNER_ID,
-        CHANNEL_NAMES
+        CHANNEL_NAMES, VOICE_CHANNELS
     )
-from models import Database, User, BattleTag
+
+from models import Database, User, BattleTag, Role
 
 with open('logging.yaml') as logfile:
     logging.config.dictConfig(yaml.safe_load(logfile))
@@ -151,6 +153,22 @@ def resolve_tag_or_index(user, tag_or_index):
             raise ValueError("You don't even have that many secondary BattleTags")
     return index
 
+async def set_channel_suffix(chan, suffix: str):
+    name = chan.name
+
+    if ':' in name:
+        if suffix:
+            new_name = re.sub(r':.*', f':{suffix}', name)
+        else:
+            new_name = re.sub(r':.*', '', name)
+    else:
+        if suffix:
+            new_name = f'{name}: {suffix}'
+        else:
+            new_name = name
+
+    if name != new_name:
+        await chan.edit(name=new_name)
 
 # Conditions
 
@@ -163,6 +181,19 @@ def correct_channel(ctx):
 def only_owner(ctx):
     return ctx.author.id == OWNER_ID and ctx.channel.private
 
+def only_owner_all_channels(ctx):
+    return ctx.author.id == OWNER_ID
+
+
+# Dataclasses
+
+@dataclass
+class Dialogue:
+    min_timestamp: datetime
+    last_message_id: int = None
+    queue:curio.Queue = field(default_factory=lambda:curio.Queue(maxsize=1))
+
+
 # Main Orisa code
 class Orisa(Plugin):
 
@@ -174,10 +205,12 @@ class Orisa(Plugin):
     def __init__(self, client, database):
         super().__init__(client)
         self.database = database
+        self.dialogues = {}
 
     async def load(self):
         await self.spawn(self._sync_all_tags_task)
-
+        for chan_id in VOICE_CHANNELS:
+            await self._update_voice_channel(chan_id)
 
     # admin commands
 
@@ -233,6 +266,19 @@ class Orisa(Plugin):
 #        await self.client.http.edit_message(channel_id, message_id, embed=self._create_help().to_dict())
 #        await ctx.channel.messages.send("done")
 
+    @command()
+    async def d(self, ctx):
+        """testing123"""
+        rec = ctx.author.id
+        chan = ctx.channel
+        try:
+            name = await self._prompt(chan, rec, "What is your name?")
+            quest = await self._prompt(chan, rec, f"So {name}, what is your quest?")
+            ans = await self._prompt(chan, rec, f"As someone whose quest is {quest}, you should know this: What is the capital of Assyria?")
+            await ctx.channel.messages.send(f"{ans}...")
+        except curio.TaskTimeout as e:
+            logger.exception("got timeout")
+            await chan.messages.send("TIMEOUT!")
 
     @command()
     @condition(only_owner)
@@ -344,9 +390,10 @@ class Orisa(Plugin):
                 user.battle_tags.append(tag)
                 resp = (f"OK. I've added {battle_tag} to the list of your BattleTags. Your primary BattleTag remains **{user.battle_tags[0].tag}**. "
                         f"To change your primary tag, use `!bt setprimary yourbattletag`, see help for more details.")
-            await ctx.channel.send_typing() # show that we're working
+
             try:
-                sr, rank, image = await get_sr_rank(battle_tag)
+                async with ctx.channel.typing:
+                    sr, rank, image = await get_sr_rank(battle_tag)
             except InvalidBattleTag as e:
                 await reply(ctx, f"Invalid BattleTag: {e.message}")
                 raise
@@ -354,7 +401,7 @@ class Orisa(Plugin):
                 resp += "\nYou don't have an SR though, you probably need to finish your placement matches... I still saved your BattleTag."
                 sr = None
 
-            tag.last_update = datetime.now()
+            tag.last_update = datetime.utcnow()
             tag.sr = sr
             rank = get_rank(sr)
             if user.highest_rank is None:
@@ -550,9 +597,12 @@ class Orisa(Plugin):
                 nn = str(self.client.guilds[GUILD_ID].members[user_id].name)
                 new_nn = re.sub(r'\s*\[.*?\]', '', nn, count=1).strip()
                 session.delete(user)
-                await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
                 await reply(ctx, f"OK, deleted {ctx.author.name} from database")
                 session.commit()
+                try:
+                    await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
+                except HierarchyError:
+                    pass
             else:
                 await reply(ctx, "you are not registered anyway, so there's nothing for me to forget...")
         finally:
@@ -567,6 +617,12 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def findallplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
         await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=True)
+
+
+#    @bt.subcommand()
+#    @condition(correct_channel)
+#    async def setsr(self, ctx, *args):
+#        pass
 
 
     async def _findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None, *, findall):
@@ -680,6 +736,8 @@ class Orisa(Plugin):
 
         finally:
             session.close()
+
+    
 
     @bt.subcommand()
     async def help(self, ctx):
@@ -865,8 +923,73 @@ class Orisa(Plugin):
 
             await self.spawn(wait_and_fire, ids_to_sync)
 
+    @event('voice_state_update')
+    async def _voice_state_update(self, ctx, member, old_voice_state, new_voice_state):
+        if old_voice_state:
+            await self._update_voice_channel(old_voice_state.channel_id)
+
+        if new_voice_state:
+            await self._update_voice_channel(new_voice_state.channel_id)
+
+
+    @event('message_create')
+    async def _message_create(self, ctx, msg):
+        logger.info(f"got message {msg.author} {msg.channel} {msg.content} {msg.snowflake_timestamp}")
+        if msg.content.startswith("!"):
+            return
+        try:
+            dialog = self.dialogues[(msg.channel.id, msg.author.id)]
+            if msg.snowflake_timestamp >= dialog.min_timestamp:
+                await dialog.queue.put(msg)
+            else:
+                logger.info(f"too young! {dialog.min_timestamp}")
+        except KeyError:
+            pass
+
 
     # Util
+
+    async def _prompt(self, channel, recipient_id, msg, timeout=3):
+        dialog = Dialogue(datetime.utcnow(), None)
+        key = (channel.id, recipient_id)
+        if key in self.dialogues:
+            raise ValueError("a dialog is already in progress")
+        self.dialogues[key] = dialog
+        await channel.messages.send(msg)
+        try:
+            result = await curio.timeout_after(timeout, dialog.queue.get)
+            return result
+        finally:
+            del self.dialogues[key]
+
+
+    async def _update_voice_channel(self, channel_id):
+        if channel_id in VOICE_CHANNELS:
+            chan = self.client.find_channel(channel_id)
+
+            if not chan.voice_members:
+                await set_channel_suffix(chan, '')
+                return
+
+            session = self.database.Session()
+            try:
+                found_members = session.query(User).filter(User.discord_id.in_(m.id for m in chan.voice_members)).all()
+                dps = main = off = supp = 0
+
+                for member in found_members:
+                    if member.roles:
+                        dps += Role.DPS in member.roles
+                        main += Role.MAIN_TANK in member.roles
+                        off += Role.OFF_TANK in member.roles
+                        supp += Role.SUPPORT in member.roles
+                
+                suffix = f"{dps}d {main}m {off}o {supp}s/{len(chan.voice_members)}"
+                await set_channel_suffix(chan, suffix)
+                
+
+            finally:
+                session.close()
+
 
     def _format_nick(self, user):
         primary = user.battle_tags[0]
@@ -966,7 +1089,7 @@ class Orisa(Plugin):
             logger.exception(f"Got exception while requesting {tag.tag}")
             raise
 
-        tag.last_update = datetime.now()
+        tag.last_update = datetime.utcnow()
         tag.error_count = 0
         tag.sr = sr
         try:
@@ -975,8 +1098,8 @@ class Orisa(Plugin):
             # not much we can do, just ignore
             pass
         except NicknameTooLong as e:
-            if tag.user.last_problematic_nickname_warning is None or tag.user.last_problematic_nickname_warning < datetime.now() - timedelta(days=7):
-                tag.user.last_problematic_nickname_warning = datetime.now()
+            if tag.user.last_problematic_nickname_warning is None or tag.user.last_problematic_nickname_warning < datetime.utcnow() - timedelta(days=7):
+                tag.user.last_problematic_nickname_warning = datetime.utcnow()
                 msg = "*To avoid spamming you, I will only send out this warning once per week*\n"
                 msg += f"Hi! I just tried to update your nickname, but the result '{e.nickname}' would be longer than 32 characters."
                 if tag.user.format == "%s":
@@ -1051,8 +1174,6 @@ class Orisa(Plugin):
             except Exception as e:
                 logger.exception(f"something went wrong during _sync_check")
             await curio.sleep(60)
-
-
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):
     def strip_tags(name):
@@ -1132,7 +1253,7 @@ async def remove_member(ctx: Context, member: Member):
     try:
         user = database.user_by_discord_id(session, member.id)
         if user:
-            logger.info(f"deleting {user} from database")
+            logger.info(f"deleting {user} from database because {member.name} left the guild")
             session.delete(user)
             session.commit()
     finally:
