@@ -28,6 +28,7 @@ from config import DATABASE_URI
 Base = declarative_base()
 
 class Role(Flag):
+    NONE = 0
     DPS = auto()
     MAIN_TANK = auto()
     OFF_TANK = auto()
@@ -60,7 +61,7 @@ class User(Base):
         lazy="joined", cascade="all, delete-orphan")
     last_problematic_nickname_warning = Column(DateTime)
 
-    roles = Column(RoleType)
+    roles = Column(RoleType, nullable=False)
 
     def __repr__(self):
         return (f'<User(id={self.id}, discord_id={self.discord_id}, battle_tags={repr(self.battle_tags)}, '

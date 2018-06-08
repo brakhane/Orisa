@@ -170,6 +170,15 @@ async def set_channel_suffix(chan, suffix: str):
     if name != new_name:
         await chan.edit(name=new_name)
 
+def format_roles(roles):
+    names = {
+        Role.DPS: "DPS",
+        Role.MAIN_TANK: "Main Tank",
+        Role.OFF_TANK: "Off Tank",
+        Role.SUPPORT: "Support",
+    }
+    return ", ".join(names[r] for r in Role if r in roles)
+
 # Conditions
 
 def correct_guild(ctx):
@@ -334,6 +343,9 @@ class Orisa(Plugin):
                 
                 if primary.sr:
                     embed.colour = COLORS[get_rank(primary.sr)]
+
+                if user.roles:
+                    embed.add_field("Roles", format_roles(user.roles))
 
                 if multiple_tags:
                     footer_text = f"The SR of the BattleTags were last updated "
@@ -623,6 +635,39 @@ class Orisa(Plugin):
 #    @condition(correct_channel)
 #    async def setsr(self, ctx, *args):
 #        pass
+
+    @bt.subcommand()
+    @condition(correct_channel)
+    async def setroles(self, ctx, roles_str: str):
+        names = {
+            'D': Role.DPS,
+            'M': Role.MAIN_TANK,
+            'O': Role.OFF_TANK,
+            'S': Role.SUPPORT,
+        }
+
+        roles = Role.NONE
+
+        for role in roles_str.upper():
+            try:
+                roles &= names[role]
+            except KeyError:
+                await reply(ctx, f"Unknown role '${role}'. Valid role identifiers are: `D` (DPS), `M` (Main Tank), `O` (Off Tank), `S` (Support). They can be combined, eg. `DS` would mean DPS + Support.")
+        
+        session = self.database.Session()
+        try:
+            user = self.database.user_by_discord_id(ctx.author.id)
+            if not user:
+                await reply(ctx, "You are not registered!")
+                return
+            user.roles = roles
+            session.commit()
+            await reply(ctx, "Done. Your roles are now {format_roles(roles)}.")
+        finally:
+            session.close()
+
+
+
 
 
     async def _findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None, *, findall):
