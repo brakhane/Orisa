@@ -934,7 +934,7 @@ class Orisa(Plugin):
 
     @event('message_create')
     async def _message_create(self, ctx, msg):
-        logger.info(f"got message {msg.author} {msg.channel} {msg.content} {msg.snowflake_timestamp}")
+        #logger.debug(f"got message {msg.author} {msg.channel} {msg.content} {msg.snowflake_timestamp}")
         if msg.content.startswith("!"):
             return
         try:
@@ -983,7 +983,8 @@ class Orisa(Plugin):
                         off += Role.OFF_TANK in member.roles
                         supp += Role.SUPPORT in member.roles
                 
-                suffix = f"{dps}d {main}m {off}o {supp}s/{len(chan.voice_members)}"
+                suffix = f"{dps}-{main}-{off}-{supp}"
+                suffix = ""
                 await set_channel_suffix(chan, suffix)
                 
 
