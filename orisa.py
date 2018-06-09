@@ -158,7 +158,7 @@ async def set_channel_suffix(chan, suffix: str):
 
     if ':' in name:
         if suffix:
-            new_name = re.sub(r':.*', f':{suffix}', name)
+            new_name = re.sub(r':.*', f': {suffix}', name)
         else:
             new_name = re.sub(r':.*', '', name)
     else:
@@ -177,7 +177,7 @@ def format_roles(roles):
         Role.OFF_TANK: "Off Tank",
         Role.SUPPORT: "Support",
     }
-    return ", ".join(names[r] for r in Role if r in roles)
+    return ", ".join(names[r] for r in Role if r and r in roles)
 
 # Conditions
 
@@ -345,12 +345,13 @@ class Orisa(Plugin):
                     embed.colour = COLORS[get_rank(primary.sr)]
 
                 if user.roles:
-                    embed.add_field("Roles", format_roles(user.roles))
+                    embed.add_field(name="Roles", value=format_roles(user.roles))
 
                 if multiple_tags:
-                    footer_text = f"The SR of the BattleTags were last updated "
-                    footer_text += ", ".join(pendulum.instance(tag.last_update).diff_for_humans() for tag in user.battle_tags)
-                    footer_text += " respectively."
+                    #footer_text = f"The SR of the BattleTags were last updated "
+                    #footer_text += ", ".join(pendulum.instance(tag.last_update).diff_for_humans() for tag in user.battle_tags)
+                    #footer_text += " respectively."
+                    footer_text = f"The SR of the primary BattleTag was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
                 else:
                     footer_text = f"The SR was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
 
@@ -640,29 +641,30 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def setroles(self, ctx, roles_str: str):
         names = {
-            'D': Role.DPS,
-            'M': Role.MAIN_TANK,
-            'O': Role.OFF_TANK,
-            'S': Role.SUPPORT,
+            'd': Role.DPS,
+            'm': Role.MAIN_TANK,
+            'o': Role.OFF_TANK,
+            's': Role.SUPPORT,
         }
 
         roles = Role.NONE
 
-        for role in roles_str.upper():
+        for role in roles_str.lower():
             try:
-                roles &= names[role]
+                roles |= names[role]
             except KeyError:
-                await reply(ctx, f"Unknown role '${role}'. Valid role identifiers are: `D` (DPS), `M` (Main Tank), `O` (Off Tank), `S` (Support). They can be combined, eg. `DS` would mean DPS + Support.")
+                await reply(ctx, f"Unknown role identifier '{role}'. Valid role identifiers are: `d` (DPS), `m` (Main Tank), `o` (Off Tank), `s` (Support). They can be combined, eg. `ds` would mean DPS + Support.")
+                return
         
         session = self.database.Session()
         try:
-            user = self.database.user_by_discord_id(ctx.author.id)
+            user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, "You are not registered!")
                 return
             user.roles = roles
             session.commit()
-            await reply(ctx, "Done. Your roles are now {format_roles(roles)}.")
+            await reply(ctx, f"Done. Your roles are now **{format_roles(roles)}**.")
         finally:
             session.close()
 
@@ -931,6 +933,18 @@ class Orisa(Plugin):
                 '*Example:*\n'
                 '`!bt setprimary 1`'
         )
+        embed.add_field(
+            name='!bt setroles *roles*',
+            value="Sets the role you can/want to play. It will be shown in `!bt` and will also be used to update the number of roles "
+                  "in voice channels you join.\n"
+                  '*roles* is a single "word" consisting of one or more of the following identifiers (both upper and lower case work):\n'
+                  '`d` for DPS, `m` for Main Tank, `o` for Off Tank, `s` for Support\n'
+                  '*Examples:*\n'
+                  "`!bt setroles d`: you only play DPS\n"
+                  "`!bt setroles so`: you play Support and Off Tanks\n"
+                  "`!bt setroles dmos`: you are a true Flex and play everything."
+        )
+
 
         return embeds
 
@@ -1021,15 +1035,20 @@ class Orisa(Plugin):
                 found_members = session.query(User).filter(User.discord_id.in_(m.id for m in chan.voice_members)).all()
                 dps = main = off = supp = 0
 
+                unknown = len(chan.voice_members) - len(found_members)
+                
                 for member in found_members:
                     if member.roles:
                         dps += Role.DPS in member.roles
                         main += Role.MAIN_TANK in member.roles
                         off += Role.OFF_TANK in member.roles
                         supp += Role.SUPPORT in member.roles
+                    else:
+                        unknown += 1
                 
                 suffix = f"{dps}-{main}-{off}-{supp}"
-                suffix = ""
+                if unknown:
+                    suffix += f" {unknown}?"
                 await set_channel_suffix(chan, suffix)
                 
 
