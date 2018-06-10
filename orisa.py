@@ -1,15 +1,15 @@
-# Orisa, a simple Discord bot with good intentions 
+# Orisa, a simple Discord bot with good intentions
 # Copyright (C) 2018 Dennis Brakhane
-# 
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, version 3 only
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import logging
@@ -352,7 +352,7 @@ class Orisa(Plugin):
                 embed.add_field(name="BattleTags" if multiple_tags else "BattleTag", value=tag_value)
                 if any(tag.sr for tag in user.battle_tags):
                     embed.add_field(name="SRs" if multiple_tags else "SR", value=sr_value)
-                
+
                 if primary.sr:
                     embed.colour = COLORS[get_rank(primary.sr)]
 
@@ -441,15 +441,15 @@ class Orisa(Plugin):
             try:
                 await self._update_nick(user)
             except NicknameTooLong as e:
-                resp += (f"\n**Adding your SR to your nickname would result in '{e.nickname}' and with {len(e.nickname)} characters, be longer than Discord's maximum of 32.** Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.") 
+                resp += (f"\n**Adding your SR to your nickname would result in '{e.nickname}' and with {len(e.nickname)} characters, be longer than Discord's maximum of 32.** Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.")
 
             except Exception as e:
                 logger.exception(f"unable to update nick for user {user}")
                 resp += ("\nHowever, right now I couldn't update your nickname, will try that again later. If you are a clan admin, "
                          "I simply cannot update your nickname ever, period. People will still be able to ask for your BattleTag, though.")
-        finally: 
+        finally:
             session.close()
-        
+
         await reply(ctx, resp)
 
 
@@ -492,7 +492,7 @@ class Orisa(Plugin):
             except HierarchyError:
                 pass
             except NicknameTooLong as e:
-                await reply(ctx, 
+                await reply(ctx,
                 f'However, your new nickname "{e.nickname}" is now longer than 32 characters, which Discord doesn\'t allow. '
                  'Please choose a different format, or shorten your nickname and do a `!bt forceupdate` afterwards.')
             except:
@@ -516,7 +516,7 @@ class Orisa(Plugin):
             if index == 0:
                 await reply(ctx, f'"{user.battle_tags[0].tag}" already is your primary BattleTag. *Going back to sleep*')
                 return
-            
+
             p, s = user.battle_tags[0], user.battle_tags[index]
             p.position = index
             s.position = 0
@@ -545,9 +545,9 @@ class Orisa(Plugin):
         if not format:
             await reply(ctx, "format string missing")
             return
-        
+
         session = self.database.Session()
-        
+
         try:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
@@ -590,7 +590,7 @@ class Orisa(Plugin):
         finally:
             session.commit()
             session.close()
-            
+
     @bt.subcommand()
     @condition(correct_channel)
     async def forceupdate(self, ctx):
@@ -609,8 +609,8 @@ class Orisa(Plugin):
                         logger.exception(f'exception while syncing {tag}')
         finally:
             session.commit()
-            session.close()            
-        
+            session.close()
+
     @bt.subcommand()
     async def forgetme(self, ctx):
         session = self.database.Session()
@@ -722,7 +722,7 @@ class Orisa(Plugin):
             except KeyError:
                 await reply(ctx, f"Unknown role identifier '{role}'. Valid role identifiers are: `d` (DPS), `m` (Main Tank), `o` (Off Tank), `s` (Support). They can be combined, eg. `ds` would mean DPS + Support.")
                 return
-        
+
         session = self.database.Session()
         try:
             user = self.database.user_by_discord_id(session, ctx.author.id)
@@ -753,7 +753,7 @@ class Orisa(Plugin):
             if max_sr is None:
                 # we are looking around the askers SR
                 sr_diff = diff_or_min_sr
-                
+
                 if sr_diff is not None:
                     if sr_diff <= 0:
                         await reply(ctx, "SR difference must be positive")
@@ -788,11 +788,11 @@ class Orisa(Plugin):
             candidates = session.query(BattleTag).filter(BattleTag.sr.between(min_sr, max_sr)).all()
 
             users = set(c.user for c in candidates)
-    
+
             cmap = {u.discord_id: u for u in users}
 
             guild = self.client.guilds[GUILD_ID]
-            
+
             online = []
             offline = []
 
@@ -820,7 +820,7 @@ class Orisa(Plugin):
 
 
             msg = ""
-           
+
             if not online:
                 msg += f"There are no players currently online {type_msg}\n\n"
             else:
@@ -843,7 +843,7 @@ class Orisa(Plugin):
                 if offline:
                     msg += f"\nThere are also {len(offline)} offline players within that range. Use the `findallplayers` "
                     msg += "command to show them as well."
-        
+
             await send_long(ctx.author.send, msg)
             if not ctx.channel.private:
                 await reply(ctx, "I sent you a DM with the results.")
@@ -851,7 +851,7 @@ class Orisa(Plugin):
         finally:
             session.close()
 
-    
+
 
     @bt.subcommand()
     async def help(self, ctx):
@@ -875,11 +875,11 @@ class Orisa(Plugin):
                 f"*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{OWNER_ID}>*\n"
                 f"\n**The commands only work in the <#{CHANNEL_ID}> channel or by sending me a DM**\n"
                 "If you are new to Orisa, you are probably looking for `!bt register`\n"
-                
+
                 ),
         )
         embed.add_field(
-            name='!bt [nick]', 
+            name='!bt [nick]',
             value=('Shows the BattleTag for the given nickname, or your BattleTag '
                    'if no nickname is given. `nick` can contain spaces. A fuzzy search for the nickname is performed.\n'
                    '*Examples:*\n'
@@ -907,13 +907,13 @@ class Orisa(Plugin):
             value='Same as `findplayers`, but also includes offline players'
         )
         embed.add_field(
-            name='!bt forceupdate', 
+            name='!bt forceupdate',
             value='Immediately checks your account data and updates your nick accordingly.\n'
                   '*Checks and updates are done automatically, use this command only if '
                   'you want your nick to be up to date immediately!*'
         )
         embed.add_field(
-            name='!bt forgetme', 
+            name='!bt forgetme',
             value='All your BattleTags will be removed from the database and your nick '
                   'will not be updated anymore. You can re-register at any time.'
         )
@@ -951,19 +951,19 @@ class Orisa(Plugin):
                 '`!bt format $sr ($rank_range)` in [1234* (Bronze-Grand Master)]\n\n'
                 '*By default, the format is `$sr`*'
         )
-    
+
         embeds = [embed]
         embed = Embed(title="help cont'd")
         embeds.append(embed)
-        
+
         embed.add_field(
-            name='!bt get nick', 
+            name='!bt get nick',
             value=('Same as `!bt [nick]`, (only) useful when the nick is the same as a command.\n'
                    '*Example:*\n'
                    '`!bt get register foo` will search for the nick "register foo"')
         )
         embed.add_field(
-            name='!bt register BattleTag#1234', 
+            name='!bt register BattleTag#1234',
             value='Registers your account with the given BattleTag, or adds a secondary BattleTag to your account. '
                 'Your OW account will be checked periodically and your nick will be '
                 'automatically updated to show your SR or rank (see the *format* command for more info). '
@@ -1041,7 +1041,7 @@ class Orisa(Plugin):
                 if not user:
                     logger.debug(f"{new_member.name} is not registered, nothing to do.")
                     return
-    
+
                 ids_to_sync = [t.id for t in user.battle_tags]
                 logger.info(f"{new_member.name} stopped playing OW and has {len(ids_to_sync)} BattleTags that need to be checked")
             finally:
@@ -1103,7 +1103,7 @@ class Orisa(Plugin):
                 dps = main = off = supp = 0
 
                 unknown = len(chan.voice_members) - len(found_members)
-                
+
                 for member in found_members:
                     if member.roles:
                         dps += Role.DPS in member.roles
@@ -1112,13 +1112,13 @@ class Orisa(Plugin):
                         supp += Role.SUPPORT in member.roles
                     else:
                         unknown += 1
-                
+
                 suffix = f"{dps}-{main}-{off}-{supp}"
                 if unknown:
                     suffix += f" {unknown}?"
                 suffix = ""
                 await set_channel_suffix(chan, suffix)
-                
+
 
             finally:
                 session.close()
@@ -1189,7 +1189,7 @@ class Orisa(Plugin):
             new_nn = re.sub(r'\[.*?\]', f'[{formatted}]', nn)
         else:
             new_nn = f'{nn} [{formatted}]'
-       
+
         if len(new_nn) > 32:
             raise NicknameTooLong(new_nn)
 
@@ -1244,13 +1244,13 @@ class Orisa(Plugin):
                 msg += "\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience."
                 discord_user = await self.client.get_user(tag.user.discord_id)
                 await discord_user.send(msg)
- 
+
             # we can still do the rest, no need to return here
         if rank is not None:
             user = tag.user
             if user.highest_rank is None:
                 user.highest_rank = rank
- 
+
             elif rank > user.highest_rank:
                 logger.debug(f"user {user} old rank {user.highest_rank}, new rank {rank}, sending congrats...")
                 await self._send_congrats(user, rank, image)
@@ -1275,9 +1275,9 @@ class Orisa(Plugin):
             finally:
                 await queue.task_done()
                 session.commit()
-                session.close()            
+                session.close()
 
-    
+
     async def _sync_check(self):
         session = self.database.Session()
         try:
@@ -1292,7 +1292,7 @@ class Orisa(Plugin):
         queue = curio.Queue()
         for tag_id in ids_to_sync:
             await queue.put(tag_id)
-        
+
         async with curio.TaskGroup(name='sync tags') as g:
             for _ in range(5):
                 await g.spawn(self._sync_tags_from_queue, queue)
@@ -1347,7 +1347,7 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
         raise ConversionFailedError(ctx, name, Member, 'Cannot find member with that name')
     else:
         return member
-      
+
 Context.add_converter(Member, fuzzy_nick_match)
 
 
