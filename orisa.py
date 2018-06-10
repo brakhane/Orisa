@@ -646,31 +646,27 @@ class Orisa(Plugin):
 
     @bt.subcommand()
     @condition(correct_channel)
-    async def newsr(self, ctx, *args):
+    async def newsr(self, ctx, arg1, arg2 = None):
         with self.database.session() as session:
-            user = self.database.user_by_discord_id(ctx.author_id)
+            user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 raise reply(ctx, "You are not registered.")
                 return
 
-            if len(args) == 1:
-                sr_str = args[0]
+            if arg2 is None:
+                sr_str = arg1
                 tag = user.battle_tags[0]
-            elif len(args) == 2:
-                tag_str, sr_str = args
+            else:
+                tag_str, sr_str = arg1, arg2
 
                 try:
-                    tag, score, index = process.extractOne(tag, {t.position: t.tag for t in user.battle_tags}, score_cutoff=50)
+                    tag, score, index = process.extractOne(tag_str, {t.position: t.tag for t in user.battle_tags}, score_cutoff=50)
                 except (ValueError, TypeError):
                     tag = None
 
                 if not tag:
-                    raise reply(ctx, f"I have no idea what of your BattleTags you mean by '{tag_str}'")
+                    await reply(ctx, f"I have no idea which of your BattleTags you mean by '{tag_str}'")
                     return
-            else:
-                await reply(ctx, "Too many parameters")
-                return
-
             # check for fat fingering
             force = False
             if sr_str.strip().endswith("!"):
@@ -680,14 +676,15 @@ class Orisa(Plugin):
                 if sr_str.strip().lower() == "none":
                     sr = None
                 else:
-                    sr = int(sr)
+                    sr = int(sr_str)
             except ValueError:
                 await reply(ctx, "I don't know about you, but '{sr_str}' doesn't look like a number to me")
                 return
-            
+
             if sr is not None:
                 if not (500 <= sr <= 5000):
                     await reply(ctx, "SR must be between 500 and 5000")
+                    return
 
                 # check for fat finger
                 if abs(tag.sr - sr) > 200 and not force:
@@ -696,12 +693,12 @@ class Orisa(Plugin):
                     return
 
             tag.sr = sr
-            session.commit()
 
             rank = get_rank(sr)
             image = f"https://d1u1mce87gyfbn.cloudfront.net/game/rank-icons/season-2/rank-{rank+1}.png"
 
             await self._handle_new_sr(tag, sr, rank, image)
+            session.commit()
             await reply(ctx, f"Done. The SR for *{tag.tag}* is now *{sr}*")
 
     @bt.subcommand()
@@ -1071,6 +1068,9 @@ class Orisa(Plugin):
                 logger.info(f"too young! {dialog.min_timestamp}")
         except KeyError:
             pass
+        if msg.channel.private and re.match(r"^[0-9]{3,4}!?$", msg.content.strip()):
+            # single number, special case for newsr
+            await self.newsr(Context(msg, ctx), msg.content.strip())
 
 
     # Util
@@ -1221,7 +1221,7 @@ class Orisa(Plugin):
             tag.error_count += 1
             logger.exception(f"Got exception while requesting {tag.tag}")
             raise
-        self._handle_new_sr(tag, sr, rank, image)
+        await self._handle_new_sr(tag, sr, rank, image)
 
     async def _handle_new_sr(self, tag, sr, rank, image):
         tag.last_update = datetime.utcnow()
