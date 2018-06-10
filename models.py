@@ -24,6 +24,7 @@ from sqlalchemy.orm import raiseload, relationship, sessionmaker
 import sqlalchemy.types as types
 
 from config import DATABASE_URI
+from contextlib import contextmanager
 
 Base = declarative_base()
 
@@ -96,6 +97,14 @@ class Database:
         engine = create_engine(DATABASE_URI)
         self.Session = sessionmaker(bind=engine, autoflush=False)
         Base.metadata.create_all(engine)
+
+    @contextmanager
+    def session(self):
+        session = self.Session()
+        try:
+            yield session
+        finally:
+            session.close()
 
     def user_by_id(self, session, id):
         return session.query(User).filter_by(id=id).one_or_none()
