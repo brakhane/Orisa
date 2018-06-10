@@ -291,6 +291,18 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
+    async def updatenicks(self, ctx):
+        session = self.database.Session()
+        for user in session.query(User).all():
+            try:
+                await self._update_nick(user)
+            except Exception:
+                logger.exception("something went wrong during updatenicks")
+        await ctx.channel.messages.send("Done")
+
+
+    @command()
+    @condition(only_owner)
     async def cleanup(self, ctx, *, doit: str = None):
         member_ids = self.client.guilds[GUILD_ID].members.keys()
         session = self.database.Session()
@@ -1049,6 +1061,7 @@ class Orisa(Plugin):
                 suffix = f"{dps}-{main}-{off}-{supp}"
                 if unknown:
                     suffix += f" {unknown}?"
+                suffix = ""
                 await set_channel_suffix(chan, suffix)
                 
 
