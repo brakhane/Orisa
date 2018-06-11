@@ -610,12 +610,14 @@ class Orisa(Plugin):
             if not user:
                 await reply(ctx, "you are not registered")
             else:
-                await reply(ctx, "OK, I will update your data immediately. If your SR is not up to date, you need to log out of Overwatch once and try again.")
-                for tag in user.battle_tags:
-                    try:
-                        await self._sync_tag(tag)
-                    except Exception as e:
-                        logger.exception(f'exception while syncing {tag}')
+                async with ctx.channel.typing:
+                    for tag in user.battle_tags:
+                        try:
+                            await self._sync_tag(tag)
+                        except Exception as e:
+                            logger.exception(f'exception while syncing {tag}')
+                await reply(ctx, f"OK, I have updated your data. Your (primary) SR is now {user.battle_tags[0].sr}. "
+                                 "If that is not correct, you need to log out of Overwatch once and try again.")
         finally:
             session.commit()
             session.close()
@@ -645,12 +647,14 @@ class Orisa(Plugin):
     @bt.subcommand()
     @condition(correct_channel)
     async def findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
-        await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=False)
+        async with ctx.channel.typing:
+            await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=False)
 
     @bt.subcommand()
     @condition(correct_channel)
     async def findallplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
-        await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=True)
+        async with ctx.channel.typing:
+            await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=True)
 
 
     @bt.subcommand()
