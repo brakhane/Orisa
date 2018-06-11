@@ -1300,9 +1300,11 @@ class Orisa(Plugin):
             ids_to_sync = self.database.get_tags_to_be_synced(session)
         finally:
             session.close()
-        logger.info(f"{len(ids_to_sync)} tags need to be synced")
         if ids_to_sync:
+            logger.info(f"{len(ids_to_sync)} tags need to be synced")
             await self._sync_tags(ids_to_sync)
+        else:
+            logger.debug("No tags need to be synced")
 
     async def _sync_tags(self, ids_to_sync):
         queue = trio.Queue(len(ids_to_sync))
