@@ -137,7 +137,7 @@ async def send_long(send_func, msg):
             await send_func(part)
 
 async def reply(ctx, msg):
-    return await ctx.channel.messages.send(f"{ctx.author.mention} {msg}")
+    return await ctx.channel.messages.send(f"<@!{ctx.author.id}> {msg}")
 
 def resolve_tag_or_index(user, tag_or_index):
     try:
@@ -276,6 +276,7 @@ class Orisa(Plugin):
 #        await ctx.channel.messages.send("done")
 
     @command()
+    @condition(only_owner)
     async def d(self, ctx):
         """testing123"""
         rec = ctx.author.id
