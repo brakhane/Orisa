@@ -46,7 +46,7 @@ from fuzzywuzzy import process, fuzz
 from lxml import html
 
 from config import (
-        BOT_TOKEN, GUILD_ID, CHANNEL_ID, CONGRATS_CHANNEL_ID, OWNER_ID,
+        BOT_TOKEN, GUILD_ID, CHANNEL_ID, CONGRATS_CHANNEL_ID,
         CHANNEL_NAMES, VOICE_CHANNELS
     )
 
@@ -188,10 +188,18 @@ def correct_channel(ctx):
     return ctx.channel.id == CHANNEL_ID or ctx.channel.private
 
 def only_owner(ctx):
-    return ctx.author.id == OWNER_ID and ctx.channel.private
+    try:
+        return ctx.author.id == ctx.application_info.owner.id and ctx.channel.private
+    except AttributeError:
+        # application_info is None
+        return False
 
 def only_owner_all_channels(ctx):
-    return ctx.author.id == OWNER_ID
+    try:
+        return ctx.author.id == ctx.application_info.owner.id
+    except AttributeError:
+        # application_info is None
+        return False
 
 
 # Dataclasses
@@ -870,7 +878,7 @@ class Orisa(Plugin):
                 "current SR and it will be kept up to date. You can also ask for other member's BattleTag, or request "
                 "your own so others can easily add you in OW.\n"
                 "It will also send a short message to the chat when you ranked up.\n"
-                f"*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{OWNER_ID}>*\n"
+                f"*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{self.client.application_info.owner.id}>*\n"
                 f"\n**The commands only work in the <#{CHANNEL_ID}> channel or by sending me a DM**\n"
                 "If you are new to Orisa, you are probably looking for `!bt register`\n"
 

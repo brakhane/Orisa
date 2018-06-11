@@ -26,10 +26,6 @@ CHANNEL_NAMES = {}
 # specific roles join
 VOICE_CHANNELS = []
 
-# The ID of the owner, only this user is allowed
-# priviledged commands (mostly used for testing stuff)
-OWNER_ID =
-
 # Database URI for SQLAlchemy
 DATABASE_URI = 'sqlite:///database.sqlite'
 
