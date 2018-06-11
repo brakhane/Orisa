@@ -4,19 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-curio = "*"
 dataclasses = "*"
 "html5lib" = "*"
 lxml = "*"
 sqlalchemy = "*"
+trio = "*"
 fuzzywuzzy = {extras = ["speedup"]}
 pyyaml = "*"
-"bd7baa4" = {editable = true, path = "./../curious"}
 pendulum = "*"
+"discord-curious" = {path = "../curious", editable = true}
 
 [dev-packages]
-pylint = "*"
-"flake8" = "*"
+# pylint = "*"
+# "flake8" = "*"
 
 [requires]
 python_version = "3.6"

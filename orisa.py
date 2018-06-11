@@ -25,9 +25,10 @@ from operator import attrgetter, itemgetter
 from string import Template
 
 import asks
-import curio
 import html5lib
 import multio
+import pendulum
+import trio
 import yaml
 
 from curious import event
@@ -43,7 +44,6 @@ from curious.dataclasses.member import Member
 from curious.dataclasses.presence import Game, Status
 from fuzzywuzzy import process, fuzz
 from lxml import html
-import pendulum
 
 from config import (
         BOT_TOKEN, GUILD_ID, CHANNEL_ID, CONGRATS_CHANNEL_ID, OWNER_ID,
@@ -200,7 +200,7 @@ def only_owner_all_channels(ctx):
 class Dialogue:
     min_timestamp: datetime
     last_message_id: int = None
-    queue:curio.Queue = field(default_factory=lambda:curio.Queue(maxsize=1))
+    queue:trio.Queue = field(default_factory=lambda:trio.Queue(1))
 
 
 # Main Orisa code
@@ -285,7 +285,7 @@ class Orisa(Plugin):
             quest = await self._prompt(chan, rec, f"So {name}, what is your quest?")
             ans = await self._prompt(chan, rec, f"As someone whose quest is {quest}, you should know this: What is the capital of Assyria?")
             await ctx.channel.messages.send(f"{ans}...")
-        except curio.TaskTimeout as e:
+        except trio.TooSlowError as e:
             logger.exception("got timeout")
             await chan.messages.send("TIMEOUT!")
 
@@ -1025,7 +1025,7 @@ class Orisa(Plugin):
 
         async def wait_and_fire(ids_to_sync):
             logger.debug(f"sleeping for 30s before syncing after OW close of {new_member.name}")
-            await curio.sleep(30)
+            await trio.sleep(30)
             await self._sync_tags(ids_to_sync)
             logger.debug(f"done syncing tags for {new_member.name} after OW close")
 
@@ -1083,8 +1083,9 @@ class Orisa(Plugin):
         self.dialogues[key] = dialog
         await channel.messages.send(msg)
         try:
-            result = await curio.timeout_after(timeout, dialog.queue.get)
-            return result
+            with trio.fail_after(timeout):
+                result = await dialog.queue.get()
+                return result
         finally:
             del self.dialogues[key]
 
@@ -1259,13 +1260,17 @@ class Orisa(Plugin):
 
     async def _sync_tags_from_queue(self, queue):
         first = True
-        async for tag_id in queue:
+        while True:
             if not first:
                 delay = random.random() * 5.
                 logger.debug(f"rate limiting: sleeping for {delay}s")
-                await curio.sleep(delay)
+                await trio.sleep(delay)
             else:
                 first = False
+            try:
+                tag_id = queue.get_nowait()
+            except trio.WouldBlock:
+                return
             session = self.database.Session()
             try:
                 tag = self.database.tag_by_id(session, tag_id)
@@ -1273,7 +1278,6 @@ class Orisa(Plugin):
             except Exception:
                 logger.exception(f'exception while syncing {tag.tag} for {tag.user.discord_id}')
             finally:
-                await queue.task_done()
                 session.commit()
                 session.close()
 
@@ -1289,26 +1293,24 @@ class Orisa(Plugin):
             await self._sync_tags(ids_to_sync)
 
     async def _sync_tags(self, ids_to_sync):
-        queue = curio.Queue()
+        queue = trio.Queue(len(ids_to_sync))
         for tag_id in ids_to_sync:
             await queue.put(tag_id)
 
-        async with curio.TaskGroup(name='sync tags') as g:
+        async with trio.open_nursery() as nursery:
             for _ in range(5):
-                await g.spawn(self._sync_tags_from_queue, queue)
-            await queue.join()
-            await g.cancel_remaining()
+                nursery.start_soon(self._sync_tags_from_queue, queue)
         logger.info("done syncing")
 
     async def _sync_all_tags_task(self):
-        await curio.sleep(10)
+        await trio.sleep(10)
         logger.debug("started waiting...")
         while True:
             try:
                 await self._sync_check()
             except Exception as e:
                 logger.exception(f"something went wrong during _sync_check")
-            await curio.sleep(60)
+            await trio.sleep(60)
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):
     def strip_tags(name):
@@ -1351,7 +1353,7 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
 Context.add_converter(Member, fuzzy_nick_match)
 
 
-multio.init('curio')
+multio.init('trio')
 
 client = Client(BOT_TOKEN)
 
@@ -1396,4 +1398,4 @@ async def remove_member(ctx: Context, member: Member):
 
 manager = CommandsManager.with_client(client, command_prefix="!")
 
-client.run(with_monitor=True)
+client.run()
