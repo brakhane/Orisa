@@ -234,7 +234,7 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner)
     async def shutdown(self, ctx):
-        logger.critical("GOT EMERGENCY SHUTDOWN COMMAND FROM OWNER")
+        logger.critical("***** GOT EMERGENCY SHUTDOWN COMMAND FROM OWNER *****")
         await self.client.kill()
         raise SystemExit(42)
 
@@ -747,7 +747,6 @@ class Orisa(Plugin):
 
     async def _findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None, *, findall):
         logger.info(f"{ctx.author.id} issued findplayers {diff_or_min_sr} {max_sr} {findall}")
-
 
         session = self.database.Session()
         try:
