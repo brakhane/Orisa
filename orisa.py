@@ -388,7 +388,6 @@ class Orisa(Plugin):
                             )
         finally:
             session.close()
-
         await ctx.channel.messages.send(content=content, embed=embed)
 
     @bt.subcommand()
@@ -415,8 +414,8 @@ class Orisa(Plugin):
                 resp = ("OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed.\n"
                         "Please also tell us the roles you play by using `!bt setroles xxx`, where xxx is one or more of the following letters: "
                         "`d`amage/DPS, `m`ain tank, `o`ff tank, `s`upport. So `!bt setroles ds` for exampel would say you play both DPS and support.\n"
-                        "If you want, you can also join the Overwatch role by typing `.iam Overwatch` (mind the leading dot) in the overwatch-stats "
-                        "channel, this way, you can get notified by shoutouts to @Overwatch\n")
+                        f"If you want, you can also join the Overwatch role by typing `.iam Overwatch` (mind the leading dot) in <#{CHANNEL_ID}>, "
+                        "this way, you can get notified by shoutouts to @Overwatch\n")
             else:
                 if any(tag.tag == battle_tag for tag in user.battle_tags):
                     await reply(ctx, "You already registered that BattleTag, so there's nothing for me to do. *Sleep mode reactivated.*")
@@ -649,14 +648,12 @@ class Orisa(Plugin):
     @bt.subcommand()
     @condition(correct_channel)
     async def findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
-        async with ctx.channel.typing:
-            await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=False)
+        await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=False)
 
     @bt.subcommand()
     @condition(correct_channel)
     async def findallplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
-        async with ctx.channel.typing:
-            await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=True)
+        await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=True)
 
 
     @bt.subcommand()
@@ -715,6 +712,12 @@ class Orisa(Plugin):
             await self._handle_new_sr(tag, sr, rank, image)
             session.commit()
             await reply(ctx, f"Done. The SR for *{tag.tag}* is now *{sr}*")
+
+    @bt.subcommand()
+    @condition(correct_channel)
+    async def setrole(self, ctx, roles_str: str):
+        "Alias for setroles"
+        return await self.setroles(ctx, roles_str)
 
     @bt.subcommand()
     @condition(correct_channel)
