@@ -285,6 +285,17 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
+    async def randomize(self, ctx):
+        with self.database.session() as s:
+            for tag in s.query(BattleTag).all():
+                tag.last_update += timedelta(minutes=random.randint(0, 50))
+            s.commit()
+        await reply(ctx, "randomized last updates")
+
+
+
+    @command()
+    @condition(only_owner)
     async def d(self, ctx):
         """testing123"""
         rec = ctx.author.id
@@ -323,6 +334,12 @@ class Orisa(Plugin):
 
         finally:
             session.close()
+
+
+    @command()
+    @condition(correct_channel)
+    async def ping(self, ctx):
+        await reply(ctx, "pong")
 
     # bt commands
 
