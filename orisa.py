@@ -51,7 +51,7 @@ from models import Database, User, BattleTag, Role
 
 
 CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
-VOICE_CHANNEL_IDS = (guild.voice_channel for guild in GUILD_INFOS.values())
+VOICE_CHANNEL_IDS = (id for guild in GUILD_INFOS.values() for id in guild.voice_channel_ids)
 
 
 with open('logging.yaml') as logfile:
@@ -225,7 +225,7 @@ class Orisa(Plugin):
 
     async def load(self):
         await self.spawn(self._sync_all_tags_task)
-        for chan_id in (id for id in guild.voice_channels for guild in GUILD_INFOS.values()):
+        for chan_id in (id for guild in GUILD_INFOS.values() for id in guild.voice_channel_ids):
             await self._update_voice_channel(chan_id)
 
     # admin commands
@@ -1238,7 +1238,10 @@ class Orisa(Plugin):
         user_id = user.discord_id
 
         for guild in self.client.guilds.values():
-            nn = str(guild.members[user_id].name)
+            try:
+                nn = str(guild.members[user_id].name)
+            except KeyError:
+                continue
             formatted = self._format_nick(user)
             if re.search(r'\[.*?\]', str(nn)):
                 new_nn = re.sub(r'\[.*?\]', f'[{formatted}]', nn)
