@@ -45,12 +45,14 @@ from curious.dataclasses.presence import Game, Status
 from fuzzywuzzy import process, fuzz
 from lxml import html
 
-from config import (
-        BOT_TOKEN, GUILD_ID, CHANNEL_ID, CONGRATS_CHANNEL_ID,
-        CHANNEL_NAMES, VOICE_CHANNELS
-    )
+from config import BOT_TOKEN, CHANNEL_NAMES, GUILD_INFOS
 
 from models import Database, User, BattleTag, Role
+
+
+CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
+VOICE_CHANNEL_IDS = (guild.voice_channel for guild in GUILD_INFOS.values())
+
 
 with open('logging.yaml') as logfile:
     logging.config.dictConfig(yaml.safe_load(logfile))
@@ -181,11 +183,8 @@ def format_roles(roles):
 
 # Conditions
 
-def correct_guild(ctx):
-    return ctx.guild.id == GUILD_ID
-
 def correct_channel(ctx):
-    return ctx.channel.id == CHANNEL_ID or ctx.channel.private
+    return ctx.channel.id in CHANNEL_IDS or ctx.channel.private
 
 def only_owner(ctx):
     try:
@@ -226,7 +225,7 @@ class Orisa(Plugin):
 
     async def load(self):
         await self.spawn(self._sync_all_tags_task)
-        for chan_id in VOICE_CHANNELS:
+        for chan_id in (id for id in guild.voice_channels for guild in GUILD_INFOS.values()):
             await self._update_voice_channel(chan_id)
 
     # admin commands
@@ -247,8 +246,7 @@ class Orisa(Plugin):
             for user in users:
                 try:
                     logger.debug(f"Sending message to {user.discord_id}")
-                    chan = await self.client.guilds[GUILD_ID].members[user.discord_id].user.open_private_channel()
-                    await chan.messages.send(message)
+                    await self.client.get_user(user.discord_id).send(message)
                 except:
                     logger.exception(f"Error while sending to {user.discord_id}")
             logger.debug("Done sending")
@@ -324,7 +322,7 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner)
     async def cleanup(self, ctx, *, doit: str = None):
-        member_ids = self.client.guilds[GUILD_ID].members.keys()
+        member_ids = [id for guild in self.client.guilds for id in guild.members.keys()]
         session = self.database.Session()
         try:
             registered_ids = [x[0] for x in session.query(User.discord_id).all()]
@@ -428,10 +426,17 @@ class Orisa(Plugin):
                 tag = BattleTag(tag=battle_tag)
                 user = User(discord_id=member_id, battle_tags=[tag], format="$sr")
                 session.add(user)
+
+                channel_id = None
+                for guild in self.client.guilds.values():
+                    if member_id in guild.members:
+                        channel_id = GUILD_INFOS[guild.id].listen_channel_id
+                        break
+
                 resp = ("OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed.\n"
                         "Please also tell us the roles you play by using `!bt setroles xxx`, where xxx is one or more of the following letters: "
                         "`d`amage/DPS, `m`ain tank, `o`ff tank, `s`upport. So `!bt setroles ds` for example would say you play both DPS and support.\n"
-                        f"If you want, you can also join the Overwatch role by typing `.iam Overwatch` (mind the leading dot) in <#{CHANNEL_ID}>, "
+                        f"If you want, you can also join the Overwatch role by typing `.iam Overwatch` (mind the leading dot) in <#{channel_id}>, "
                         "this way, you can get notified by shoutouts to @Overwatch\n")
             else:
                 if any(tag.tag == battle_tag for tag in user.battle_tags):
@@ -648,15 +653,19 @@ class Orisa(Plugin):
             if user:
                 logger.info(f"{ctx.author.name} ({ctx.author.id}) requested removal")
                 user_id = user.discord_id
-                nn = str(self.client.guilds[GUILD_ID].members[user_id].name)
-                new_nn = re.sub(r'\s*\[.*?\]', '', nn, count=1).strip()
+                try:
+                    for guild in self.client.guilds.values():
+                        nn = str(guild.members[user_id].name)
+                        new_nn = re.sub(r'\s*\[.*?\]', '', nn, count=1).strip()
+                        try:
+                            await guild.members[user_id].nickname.set(new_nn)
+                        except HierarchyError:
+                            pass
+                except Exception:
+                    logger.exception("Some problems while resetting nicks")
                 session.delete(user)
                 await reply(ctx, f"OK, deleted {ctx.author.name} from database")
                 session.commit()
-                try:
-                    await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
-                except HierarchyError:
-                    pass
             else:
                 await reply(ctx, "you are not registered anyway, so there's nothing for me to forget...")
         finally:
@@ -822,18 +831,21 @@ class Orisa(Plugin):
 
             cmap = {u.discord_id: u for u in users}
 
-            guild = self.client.guilds[GUILD_ID]
-
             online = []
             offline = []
 
-            for member in guild.members.values():
-                if member.user.id == ctx.author.id or member.user.id not in cmap:
+            for guild in self.client.guilds.values():
+
+                if ctx.author.id not in guild.members:
                     continue
-                if member.status == Status.OFFLINE:
-                    offline.append(member)
-                else:
-                    online.append(member)
+
+                for member in guild.members.values():
+                    if member.user.id == ctx.author.id or member.user.id not in cmap:
+                        continue
+                    if member.status == Status.OFFLINE:
+                        offline.append(member)
+                    else:
+                        online.append(member)
 
 
             def format_member(member):
@@ -886,13 +898,20 @@ class Orisa(Plugin):
 
     @bt.subcommand()
     async def help(self, ctx):
-        for embed in self._create_help():
+        for embed in self._create_help(ctx):
             await ctx.author.send(content=None, embed=embed)
         if not ctx.channel.private:
             await reply(ctx, "I sent you a DM with instructions.")
 
 
-    def _create_help(self):
+    def _create_help(self, ctx):
+        channel_id = None
+
+        for guild in self.client.guilds.values():
+            if ctx.author.id in guild.members:
+                channel_id = GUILD_INFOS[guild.id].listen_channel_id
+                break
+
         embed = Embed(
             title="Orisa's purpose",
             description=(
@@ -904,7 +923,7 @@ class Orisa(Plugin):
                 "your own so others can easily add you in OW.\n"
                 "It will also send a short message to the chat when you ranked up.\n"
                 f"*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{self.client.application_info.owner.id}>*\n"
-                f"\n**The commands only work in the <#{CHANNEL_ID}> channel or by sending me a DM**\n"
+                f"\n**The commands only work in the <#{channel_id}> channel or by sending me a DM**\n"
                 "If you are new to Orisa, you are probably looking for `!bt register`\n"
 
                 ),
@@ -1125,7 +1144,7 @@ class Orisa(Plugin):
 
 
     async def _update_voice_channel(self, channel_id):
-        if channel_id in VOICE_CHANNELS:
+        if channel_id in VOICE_CHANNEL_IDS:
             chan = self.client.find_channel(channel_id)
 
             if not chan.voice_members:
@@ -1218,32 +1237,38 @@ class Orisa(Plugin):
     async def _update_nick(self, user):
         user_id = user.discord_id
 
-        nn = str(self.client.guilds[GUILD_ID].members[user_id].name)
-        formatted = self._format_nick(user)
-        if re.search(r'\[.*?\]', str(nn)):
-            new_nn = re.sub(r'\[.*?\]', f'[{formatted}]', nn)
-        else:
-            new_nn = f'{nn} [{formatted}]'
+        for guild in self.client.guilds.values():
+            nn = str(guild.members[user_id].name)
+            formatted = self._format_nick(user)
+            if re.search(r'\[.*?\]', str(nn)):
+                new_nn = re.sub(r'\[.*?\]', f'[{formatted}]', nn)
+            else:
+                new_nn = f'{nn} [{formatted}]'
 
-        if len(new_nn) > 32:
-            raise NicknameTooLong(new_nn)
+            if len(new_nn) > 32:
+                raise NicknameTooLong(new_nn)
 
-        if str(nn) != new_nn:
-            await self.client.guilds[GUILD_ID].members[user_id].nickname.set(new_nn)
+            if str(nn) != new_nn:
+                await guild.members[user_id].nickname.set(new_nn)
 
         return new_nn
 
     async def _send_congrats(self, user, rank, image):
+        for guild in self.client.guilds.values():
+            try:
+                if user.discord_id not in guild.members:
+                    continue
+                embed = Embed(
+                    title=f"For your own safety, get behind the barrier!",
+                    description=f"**{str(guild.members[user.discord_id].name)}** just advanced to **{RANKS[rank]}**. Congratulations!",
+                    colour=COLORS[rank],
+                )
 
-        embed = Embed(
-            title=f"For your own safety, get behind the barrier!",
-            description=f"**{str(self.client.guilds[GUILD_ID].members[user.discord_id].name)}** just advanced to **{RANKS[rank]}**. Congratulations!",
-            colour=COLORS[rank],
-        )
+                embed.set_thumbnail(url=image)
 
-        embed.set_thumbnail(url=image)
-
-        await self.client.find_channel(CONGRATS_CHANNEL_ID).messages.send(content=f"Let's hear it for <@!{user.discord_id}>!", embed=embed)
+                await self.client.find_channel(GUILD_INFOS[guild.id].congrats_channel_id).messages.send(content=f"Let's hear it for <@!{user.discord_id}>!", embed=embed)
+            except Exception:
+                logger.exception(f"Cannot send congrats for guild {guild}")
 
     async def _sync_tag(self, tag):
 
@@ -1353,7 +1378,11 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
         return re.sub(r'^(.*?\|)?([^[]*)(\[.*)?', r'\2', str(name)).strip()
 
     member = member_id = None
-    guild = ctx.bot.guilds[GUILD_ID]
+    if ctx.guild:
+        guilds = [ctx.guild]
+    else:
+        guilds = [guild for guild in ctx.bot.guilds.values() if ctx.author.id in guild.members]
+
     if name.startswith("<@") and name.endswith(">"):
         id = name[2:-1]
         if id[0] == "!":  # strip nicknames
@@ -1372,14 +1401,17 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
                     score *= 2
                 return score
 
-        candidates = process.extractBests(name, {id: strip_tags(mem.name) for id, mem in guild.members.items()}, scorer=scorer)
+        candidates = process.extractBests(name, {id: strip_tags(mem.name) for guild in guilds for id, mem in guild.members.items()}, scorer=scorer)
         logger.debug(f"candidates are {candidates}")
         if candidates:
             member_name, score, member_id = candidates[0]
 
 
     if member_id is not None:
-        member = guild.members.get(member_id)
+        for guild in guilds:
+            member = guild.members.get(member_id)
+            if member:
+                break
 
     if member is None:
         raise ConversionFailedError(ctx, name, Member, 'Cannot find member with that name')
@@ -1395,26 +1427,15 @@ client = Client(BOT_TOKEN)
 
 database = Database()
 
-async def check_guild(guild):
-    if guild.id != GUILD_ID:
-        logger.info("Unknown guild! leaving")
-        if guild.system_channel:
-            await guild.system_channel.messages.send(f"I'm not configured for this guild! Bye!")
-        try:
-            await guild.leave()
-        except:
-            logger.fatal("unknown guild, but cannot leave it...")
-            raise SystemExit(1)
+#@client.event('guild_join')
+#async def guild_join(ctx, guild):
+#    await check_guild(guild)
 
-@client.event('guild_join')
-async def guild_join(ctx, guild):
-    await check_guild(guild)
+
+manager = CommandsManager.with_client(client, command_prefix="!")
 
 @client.event('ready')
 async def ready(ctx):
-    for guild in ctx.bot.guilds.copy().values():
-        await check_guild(guild)
-
     await manager.load_plugin(Orisa, database)
     await ctx.bot.change_status(game=Game(name='"!bt help" for help'))
     logger.info("Ready")
@@ -1426,12 +1447,17 @@ async def remove_member(ctx: Context, member: Member):
     try:
         user = database.user_by_discord_id(session, member.id)
         if user:
-            logger.info(f"deleting {user} from database because {member.name} left the guild")
-            session.delete(user)
-            session.commit()
+            in_other_guild = False
+            for guild in client.guilds.values():
+                if guild.id != member.guild.id and member.id in guild.members:
+                    in_other_guild = True
+                    break
+            if not in_other_guild:
+                logger.info(f"deleting {user} from database because {member.name} left the guild and has no other guilds")
+                session.delete(user)
+                session.commit()
     finally:
         session.close()
 
-manager = CommandsManager.with_client(client, command_prefix="!")
 
 client.run()
