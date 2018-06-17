@@ -12,6 +12,8 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+import random
+
 from datetime import datetime, timedelta
 from enum import Flag, auto
 
@@ -42,7 +44,7 @@ class RoleType(types.TypeDecorator):
         return None if value is None else value.value
 
     def process_result_value(self, value, dialect):
-        return None if value is None else Role(value) 
+        return None if value is None else Role(value)
 
     class comparator_factory(Integer.Comparator):
         def contains(self, other, **kwargs):
@@ -116,7 +118,10 @@ class Database:
 
     def _sync_delay(self, error_count):
         if error_count == 0:
-            return timedelta(minutes=60)
+            # slight randomization to avoid having all
+            # battletags update at the same time if Orisa didn't run
+            # for a while
+            return timedelta(minutes=random.randint(55, 65))
         elif 0 < error_count < 3:
             return timedelta(minutes=5) # we actually want to try again fast, in case it was a temporary problem
         elif 3 <= error_count < 5:
