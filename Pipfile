@@ -13,6 +13,7 @@ fuzzywuzzy = {extras = ["speedup"]}
 pyyaml = "*"
 pendulum = "*"
 "discord-curious" = {path = "../curious", editable = true}
+cachetools = "*"
 
 [dev-packages]
 # pylint = "*"

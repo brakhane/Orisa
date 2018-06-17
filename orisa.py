@@ -31,6 +31,7 @@ import pendulum
 import trio
 import yaml
 
+from cachetools.func import TTLCache
 from curious import event
 from curious.commands.context import Context
 from curious.commands.decorators import command, condition
@@ -91,29 +92,51 @@ COLORS = (
 def get_rank(sr):
     return bisect(RANK_CUTOFF, sr) if sr is not None else None
 
+SR_CACHE = TTLCache(maxsize=1000, ttl=30)
+SR_LOCKS = TTLCache(maxsize=1000, ttl=60) # if a request should be hanging for 60s, just try another
+
 async def get_sr_rank(battletag):
-    if not re.match(r'\w+#[0-9]+', battletag):
-        raise InvalidBattleTag('Malformed BattleTag. BattleTags look like SomeName#1234: a name and a # sign followed by a number and contain no spaces. They are case-sensitive, too!')
+    try:
+        lock = SR_LOCKS[battletag]
+    except KeyError:
+        lock = trio.Lock()
+        SR_LOCKS[battletag] = lock
 
-    url = f'https://playoverwatch.com/en-us/career/pc/{battletag.replace("#", "-")}'
-    logger.info(f'requesting {url}')
-    result = await asks.get(url)
-    if result.status_code != 200:
-        raise RuntimeError(f'got status code {result.status_code} from Blizz')
+    await lock.acquire()
+    try:
+        if not re.match(r'\w+#[0-9]+', battletag):
+            raise InvalidBattleTag('Malformed BattleTag. BattleTags look like SomeName#1234: a name and a # sign followed by a number and contain no spaces. They are case-sensitive, too!')
 
-    document = html.fromstring(result.content)
-    srs = document.xpath('//div[@class="competitive-rank"]/div/text()')
-    rank_image_elems = document.xpath('//div[@class="competitive-rank"]/img/@src')
-    if not srs:
-        if 'Profile Not Found' in result.text:
-            raise InvalidBattleTag(f"No profile with BattleTag {battletag} found. BattleTags are case-sensitive!")
-        raise UnableToFindSR()
-    sr = int(srs[0])
-    if rank_image_elems:
-        rank_image = str(rank_image_elems[0])
-    else:
-        rank_image = None
-    return (sr, get_rank(sr), rank_image)
+        try:
+            res = SR_CACHE[battletag]
+            logger.info(f'got SR for {battletag} from cache')
+            return res
+        except KeyError:
+            pass
+
+        url = f'https://playoverwatch.com/en-us/career/pc/{battletag.replace("#", "-")}'
+        logger.info(f'requesting {url}')
+        result = await asks.get(url)
+        if result.status_code != 200:
+            raise RuntimeError(f'got status code {result.status_code} from Blizz')
+
+        document = html.fromstring(result.content)
+        srs = document.xpath('//div[@class="competitive-rank"]/div/text()')
+        rank_image_elems = document.xpath('//div[@class="competitive-rank"]/img/@src')
+        if not srs:
+            if 'Profile Not Found' in result.text:
+                raise InvalidBattleTag(f"No profile with BattleTag {battletag} found. BattleTags are case-sensitive!")
+            raise UnableToFindSR()
+        sr = int(srs[0])
+        if rank_image_elems:
+            rank_image = str(rank_image_elems[0])
+        else:
+            rank_image = None
+
+        res = SR_CACHE[battletag] = (sr, get_rank(sr), rank_image)
+        return res
+    finally:
+        lock.release()
 
 def sort_secondaries(user):
     user.battle_tags[1:] = list(sorted(user.battle_tags[1:], key=attrgetter("tag")))
@@ -245,8 +268,9 @@ class Orisa(Plugin):
             users = s.query(User).all()
             for user in users:
                 try:
-                    logger.debug(f"Sending message to {user.discord_id}")
-                    await self.client.get_user(user.discord_id).send(message)
+                    logger.debug(f"Sending messsage to {user.discord_id}")
+                    u = await self.client.get_user(user.discord_id)
+                    await u.send(message)
                 except:
                     logger.exception(f"Error while sending to {user.discord_id}")
             logger.debug("Done sending")
@@ -1111,6 +1135,8 @@ class Orisa(Plugin):
     @event('message_create')
     async def _message_create(self, ctx, msg):
         #logger.debug(f"got message {msg.author} {msg.channel} {msg.content} {msg.snowflake_timestamp}")
+        if msg.content.startswith("!bt"):
+            logger.info(f"{msg.author.name} in {msg.channel.type.name} issued {msg.content}")
         if msg.content.startswith("!"):
             return
         try:
@@ -1325,7 +1351,7 @@ class Orisa(Plugin):
         while True:
             if not first:
                 delay = random.random() * 5.
-                logger.debug(f"rate limiting: sleeping for {delay}s")
+                logger.debug(f"rate limiting: sleeping for {delay:.02}s")
                 await trio.sleep(delay)
             else:
                 first = False
