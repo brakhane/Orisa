@@ -1349,16 +1349,16 @@ class Orisa(Plugin):
     async def _sync_tags_from_queue(self, queue):
         first = True
         while True:
+            try:
+                tag_id = queue.get_nowait()
+            except trio.WouldBlock:
+                return
             if not first:
                 delay = random.random() * 5.
                 logger.debug(f"rate limiting: sleeping for {delay:.02}s")
                 await trio.sleep(delay)
             else:
                 first = False
-            try:
-                tag_id = queue.get_nowait()
-            except trio.WouldBlock:
-                return
             session = self.database.Session()
             try:
                 tag = self.database.tag_by_id(session, tag_id)
