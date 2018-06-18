@@ -1278,7 +1278,10 @@ class Orisa(Plugin):
                 raise NicknameTooLong(new_nn)
 
             if str(nn) != new_nn:
-                await guild.members[user_id].nickname.set(new_nn)
+                try:
+                    await guild.members[user_id].nickname.set(new_nn)
+                except Exception:
+                    logger.exception("error while setting nick")
 
         return new_nn
 
