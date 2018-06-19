@@ -346,7 +346,7 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner)
     async def cleanup(self, ctx, *, doit: str = None):
-        member_ids = [id for guild in self.client.guilds for id in guild.members.keys()]
+        member_ids = [id for guild in self.client.guilds.values() for id in guild.members.keys()]
         session = self.database.Session()
         try:
             registered_ids = [x[0] for x in session.query(User.discord_id).all()]
