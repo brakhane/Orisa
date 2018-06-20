@@ -467,8 +467,8 @@ class Orisa(Plugin):
                 resp = ("OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed.\n"
                         "Please also tell us the roles you play by using `!bt setroles xxx`, where xxx is one or more of the following letters: "
                         "`d`amage/DPS, `m`ain tank, `o`ff tank, `s`upport. So `!bt setroles ds` for example would say you play both DPS and support.\n"
-                        f"If you want, you can also join the Overwatch role by typing `.iam Overwatch` (mind the leading dot) in <#{channel_id}>, "
-                        "this way, you can get notified by shoutouts to @Overwatch\n")
+                        f"If you want, you can also join the Overwatch role by visiting <#458669204048969748>, this way, you will get "
+                         "notified of shoutouts to @Overwatch")
             else:
                 if any(tag.tag == battle_tag for tag in user.battle_tags):
                     await reply(ctx, "You already registered that BattleTag, so there's nothing for me to do. *Sleep mode reactivated.*")
