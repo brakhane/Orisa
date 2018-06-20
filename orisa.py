@@ -55,6 +55,7 @@ from models import Database, User, BattleTag, Role, WowUser, WowRole
 
 
 CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
+WOW_CHANNEL_IDS = frozenset(guild.wow_listen_channel_id for guild in GUILD_INFOS.values())
 VOICE_CHANNEL_IDS = (id for guild in GUILD_INFOS.values() for id in guild.voice_channel_ids)
 
 
@@ -211,6 +212,9 @@ def format_roles(roles):
 
 def correct_channel(ctx):
     return ctx.channel.id in CHANNEL_IDS or ctx.channel.private
+
+def correct_wow_channel(ctx):
+    return ctx.channel.id in WOW_CHANNEL_IDS or ctx.channel.private
 
 def only_owner(ctx):
     try:
@@ -1503,10 +1507,12 @@ class Wow(Plugin):
                 await self._set_gms_and_officers(guild_id)
 
     @command()
+    @condition(correct_wow_channel)
     async def wow(self, ctx, *, cmd: str):
         await reply(ctx, f"unknown command **{cmd}**, see `!wow help`")
 
     @wow.subcommand()
+    @condition(correct_wow_channel)
     async def main(self, ctx, name: str, realm: Optional[str] = None):
         guild = ctx.guild
         if not guild:
@@ -1550,6 +1556,7 @@ class Wow(Plugin):
         await reply(ctx, msg)
 
     @wow.subcommand()
+    @condition(correct_wow_channel)
     async def roles(self, ctx, roles: str):
         ROLE_MAP = {
             't': WowRole.TANK,
@@ -1582,6 +1589,7 @@ class Wow(Plugin):
 
 
     @wow.subcommand()
+    @condition(correct_wow_channel)
     async def forceupdate(self, ctx):
         guild = ctx.guild
         if not guild:
@@ -1603,6 +1611,7 @@ class Wow(Plugin):
         await reply(ctx, f"Done. Your Item Level is now {ilvl}, and your RBG is {rbg}")
 
     @wow.subcommand()
+    @condition(correct_wow_channel)
     async def forgetme(self, ctx):
         with self.database.session() as session:
             discord_id = ctx.author_id
@@ -1620,6 +1629,7 @@ class Wow(Plugin):
 
 
     @wow.subcommand()
+    @condition(correct_wow_channel)
     async def updateall(self, ctx):
         guild = ctx.guild
 
@@ -1741,7 +1751,8 @@ manager = CommandsManager.with_client(client, command_prefix="!")
 @client.event('ready')
 async def ready(ctx):
     await manager.load_plugin(Orisa, database)
-    await manager.load_plugin(Wow, database)
+    if MASHERY_API_KEY:
+        await manager.load_plugin(Wow, database)
     await ctx.bot.change_status(game=Game(name='"!bt help" for help'))
     logger.info("Ready")
 

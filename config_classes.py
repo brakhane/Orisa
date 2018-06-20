@@ -13,3 +13,4 @@ class GuildInfo:
     wow_guild_name: Optional[str]
     wow_gm_ranks: Set[int]
     wow_officer_ranks: Set[int]
+    wow_listen_channel_id: int
