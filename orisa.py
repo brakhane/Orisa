@@ -686,7 +686,10 @@ class Orisa(Plugin):
                 user_id = user.discord_id
                 try:
                     for guild in self.client.guilds.values():
-                        nn = str(guild.members[user_id].name)
+                        try:
+                            nn = str(guild.members[user_id].name)
+                        except KeyError:
+                            continue
                         new_nn = re.sub(r'\s*\[.*?\]', '', nn, count=1).strip()
                         try:
                             await guild.members[user_id].nickname.set(new_nn)
@@ -1487,6 +1490,8 @@ class Wow(Plugin):
     SYMBOL_GM = '\N{CROWN}'
     SYMBOL_OFFICER = '\U0001F530'
 
+    SYMBOL_PVP = '\N{CROSSED SWORDS}'
+
     SYMBOL_ROLES = {
         WowRole.TANK: '\N{SHIELD}',
         WowRole.HEALER: '\N{HELMET WITH WHITE CROSS}',
@@ -1519,6 +1524,9 @@ class Wow(Plugin):
             await reply(ctx, "This command cannot be issued in DM")
             return
 
+        if '-' in name and not realm:
+            name, realm = name.strip().split('-')
+
         async with ctx.channel.typing:
             if not realm:
                 realm = GUILD_INFOS[guild.id].wow_guild_realm
@@ -1529,7 +1537,7 @@ class Wow(Plugin):
                 await reply(ctx, f"No character **{name}** exists in realm **{realm}**")
                 return
 
-            discord_id = ctx.author_id
+            discord_id = ctx.author.id
 
             with self.database.session() as session:
                 async with ctx.channel.typing:
@@ -1539,7 +1547,8 @@ class Wow(Plugin):
                     if not user:
                         user = WowUser(discord_id=discord_id, character_name=name, realm=realm)
                         msg = (f"OK, I've registered the character **{name}** (ILvl {ilvl}, RBG {pvp}, realm {realm}) to your account. Next, please tell us what roles you play by issuing `!wow roles xxx`, where `xxx` "
-                                "is one or more of: `t`ank, `m`elee, `r`anged, `h`ealer")
+                                "is one or more of: `t`ank, `m`elee, `r`anged, `h`ealer.\n"
+                                "You can also use `!wow pvp` to switch to PvP mode.")
                         session.add(user)
                     else:
                         if (user.character_name, user.realm) == (name, realm):
@@ -1565,7 +1574,7 @@ class Wow(Plugin):
             'h': WowRole.HEALER,
         }
 
-        discord_id = ctx.author_id
+        discord_id = ctx.author.id
 
         with self.database.session() as session:
             user = self.database.wow_user_by_discord_id(session, discord_id)
@@ -1587,6 +1596,48 @@ class Wow(Plugin):
 
         await reply(ctx, "done")
 
+    @wow.subcommand()
+    @condition(correct_wow_channel)
+    async def pvp(self, ctx):
+        await self._pvp(ctx, True)
+
+
+    @wow.subcommand()
+    @condition(correct_wow_channel)
+    async def nopvp(self, ctx):
+        await self._pvp(ctx, False)
+
+    @wow.subcommand()
+    @condition(correct_wow_channel)
+    async def pve(self, ctx):
+        await self._pvp(ctx, False)
+
+
+    async def _pvp(self, ctx, pvp):
+        guild = ctx.guild
+        if not guild:
+            await reply(ctx, "This command cannot be issued in DM")
+            return
+
+        with self.database.session() as session:
+
+            async with ctx.channel.typing:
+                discord_id = ctx.author.id
+
+                user = self.database.wow_user_by_discord_id(session, discord_id)
+                if not user:
+                    await reply(ctx, "You are not registered.")
+                    return
+                user.pvp = pvp
+                session.commit()
+                await self._format_nick(user)
+
+        if pvp:
+            msg = "Done. You can turn PvP off again with `!wow pve`"
+        else:
+            msg = "Done. You can turn PvP on again with `!wow pvp`"
+
+        await reply(ctx, msg)
 
     @wow.subcommand()
     @condition(correct_wow_channel)
@@ -1598,7 +1649,7 @@ class Wow(Plugin):
 
         with self.database.session() as session:
 
-            discord_id = ctx.author_id
+            discord_id = ctx.author.id
 
             async with ctx.channel.typing:
                 user = self.database.wow_user_by_discord_id(session, discord_id)
@@ -1614,12 +1665,27 @@ class Wow(Plugin):
     @condition(correct_wow_channel)
     async def forgetme(self, ctx):
         with self.database.session() as session:
-            discord_id = ctx.author_id
+            discord_id = ctx.author.id
 
             user = self.database.wow_user_by_discord_id(session, discord_id)
             if not user:
                 await reply(ctx, "You are not registered anyway. *Sleep mode reactivated*")
                 return
+
+            user_id = user.discord_id
+            try:
+                for guild in self.client.guilds.values():
+                    try:
+                        nn = str(guild.members[user_id].name)
+                    except KeyError:
+                        continue
+                    new_nn = re.sub(r'\s*\{.*?\}', '', nn, count=1).strip()
+                    try:
+                        await guild.members[user_id].nickname.set(new_nn)
+                    except HierarchyError:
+                        pass
+            except Exception:
+                logger.exception("Some problems while resetting nicks")
 
             session.delete(user)
 
@@ -1638,8 +1704,8 @@ class Wow(Plugin):
             return
 
         needed_role = GUILD_INFOS[guild.id].wow_admin_role_name
-        if not any(role.name.lower() == needed_role.lower() for role in ctx.author.roles):
-            await reply(ctx, f"You need the **{needed_role}** to issue this command")
+        if not (ctx.author.id == ctx.bot.application_info.owner.id or any(role.name.lower() == needed_role.lower() for role in ctx.author.roles)):
+            await reply(ctx, f"You need the **{needed_role}** role to issue this command")
             return
 
         async with ctx.channel.typing:
@@ -1700,11 +1766,15 @@ class Wow(Plugin):
         else:
             ilvl, rbg = await self._get_profile_data(user.realm, user.character_name)
 
-        format = f"{ilvl}"
 
-        for role, sym in self.SYMBOL_ROLES.items():
-            if role in user.roles:
-                format += sym
+        if user.pvp:
+            format = f"{rbg}{self.SYMBOL_PVP}"
+        else:
+            format = f"{ilvl}"
+
+            for role, sym in self.SYMBOL_ROLES.items():
+                if role in user.roles:
+                    format += sym
 
         for gid, guild in self.client.guilds.items():
             if user.discord_id in guild.members:

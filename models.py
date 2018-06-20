@@ -60,7 +60,7 @@ class RoleType(types.TypeDecorator):
 
 class WowRoleType(RoleType):
     pytype = WowRole
-    
+
 
 class User(Base):
     __tablename__ = 'users'
@@ -112,6 +112,7 @@ class WowUser(Base):
     character_name = Column(String, nullable=False)
     realm = Column(String, nullable=False)
     roles = Column(WowRoleType, nullable=False, default=WowRole.NONE)
+    pvp = Column(Boolean, nullable=False, default=False)
 
 
 class Database:
