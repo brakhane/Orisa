@@ -36,19 +36,31 @@ class Role(Flag):
     OFF_TANK = auto()
     SUPPORT = auto()
 
+class WowRole(Flag):
+    NONE = 0
+    MELEE = auto()
+    RANGED = auto()
+    TANK = auto()
+    HEALER = auto()
+
 class RoleType(types.TypeDecorator):
 
+    pytype = Role
     impl = Integer
 
     def process_bind_param(self, value, dialect):
         return None if value is None else value.value
 
     def process_result_value(self, value, dialect):
-        return None if value is None else Role(value)
+        return None if value is None else self.pytype(value)
 
     class comparator_factory(Integer.Comparator):
         def contains(self, other, **kwargs):
             return (self.op("&", return_type=types.Integer)(other)).bool_op("=")(other.value)
+
+class WowRoleType(RoleType):
+    pytype = WowRole
+    
 
 class User(Base):
     __tablename__ = 'users'
@@ -92,6 +104,16 @@ class BattleTag(Base):
 
 
 
+class WowUser(Base):
+    __tablename__ = 'wow_users'
+
+    id = Column(Integer, primary_key=True, index=True)
+    discord_id = Column(Integer, index=True, nullable=False)
+    character_name = Column(String, nullable=False)
+    realm = Column(String, nullable=False)
+    roles = Column(WowRoleType, nullable=False, default=WowRole.NONE)
+
+
 class Database:
 
     def __init__(self):
@@ -115,6 +137,9 @@ class Database:
 
     def user_by_discord_id(self, session, discord_id):
         return session.query(User).filter_by(discord_id=discord_id).one_or_none()
+
+    def wow_user_by_discord_id(self, session, discord_id):
+        return session.query(WowUser).filter_by(discord_id=discord_id).one_or_none()
 
     def _sync_delay(self, error_count):
         if error_count == 0:

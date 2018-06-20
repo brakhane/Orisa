@@ -18,11 +18,13 @@ import logging.config
 import re
 import random
 from bisect import bisect
+from contextlib import suppress
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from itertools import groupby
 from operator import attrgetter, itemgetter
 from string import Template
+from typing import Optional
 
 import asks
 import html5lib
@@ -41,14 +43,15 @@ from curious.commands.plugin import Plugin
 from curious.core.client import Client
 from curious.exc import HierarchyError
 from curious.dataclasses.embed import Embed
+from curious.dataclasses.guild import Guild
 from curious.dataclasses.member import Member
 from curious.dataclasses.presence import Game, Status
 from fuzzywuzzy import process, fuzz
 from lxml import html
 
-from config import BOT_TOKEN, CHANNEL_NAMES, GUILD_INFOS
+from config import BOT_TOKEN, CHANNEL_NAMES, GUILD_INFOS, MASHERY_API_KEY
 
-from models import Database, User, BattleTag, Role
+from models import Database, User, BattleTag, Role, WowUser, WowRole
 
 
 CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
@@ -1151,6 +1154,21 @@ class Orisa(Plugin):
             # single number, special case for newsr
             await self.newsr(Context(msg, ctx), msg.content.strip())
 
+    @event('guild_member_remove')
+    async def _guild_member_remove(self, ctx: Context, member: Member):
+        logger.debug(f"Member {member.name}({member.id}) left the guild ({member.guild})")
+        with self.database.session() as session:
+            user = database.user_by_discord_id(session, member.id)
+            if user:
+                in_other_guild = False
+                for guild in client.guilds.values():
+                    if guild.id != member.guild.id and member.id in guild.members:
+                        in_other_guild = True
+                        break
+                if not in_other_guild:
+                    logger.info(f"deleting {user} from database because {member.name} left the guild and has no other guilds")
+                    session.delete(user)
+                    session.commit()
 
     # Util
 
@@ -1450,8 +1468,262 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
     else:
         return member
 
-Context.add_converter(Member, fuzzy_nick_match)
 
+class InvalidCharacterName(RuntimeError):
+    def __init__(self, realm: str, name: str):
+        self.realm = realm
+        self.name = name
+
+
+class Wow(Plugin):
+    """WoW specific functionality"""
+
+    MASHERY_BASE = 'https://eu.api.battle.net/wow'
+
+    SYMBOL_GM = '\N{CROWN}'
+    SYMBOL_OFFICER = '\U0001F530'
+
+    SYMBOL_ROLES = {
+        WowRole.TANK: '\N{SHIELD}',
+        WowRole.HEALER: '\N{HELMET WITH WHITE CROSS}',
+        WowRole.RANGED: '\N{BOW AND ARROW}',
+        WowRole.MELEE: '\N{DAGGER KNIFE}',
+    }
+
+    def __init__(self, client, database):
+        super().__init__(client)
+        self.database = database
+        self.gms = {}
+        self.officers = {}
+
+
+    async def load(self):
+        for guild_id in self.client.guilds:
+            if GUILD_INFOS[guild_id].wow_guild_name:
+                await self._set_gms_and_officers(guild_id)
+
+    @command()
+    async def wow(self, ctx, *, cmd: str):
+        await reply(ctx, f"unknown command **{cmd}**, see `!wow help`")
+
+    @wow.subcommand()
+    async def main(self, ctx, name: str, realm: Optional[str] = None):
+        guild = ctx.guild
+        if not guild:
+            await reply(ctx, "This command cannot be issued in DM")
+            return
+
+        async with ctx.channel.typing:
+            if not realm:
+                realm = GUILD_INFOS[guild.id].wow_guild_realm
+            try:
+
+                ilvl_pvp = await self._get_profile_data(realm, name)
+            except InvalidCharacterName:
+                await reply(ctx, f"No character **{name}** exists in realm **{realm}**")
+                return
+
+            discord_id = ctx.author_id
+
+            with self.database.session() as session:
+                async with ctx.channel.typing:
+                    user = self.database.wow_user_by_discord_id(session, discord_id)
+                    ilvl, pvp = ilvl_pvp
+
+                    if not user:
+                        user = WowUser(discord_id=discord_id, character_name=name, realm=realm)
+                        msg = (f"OK, I've registered the character **{name}** (ILvl {ilvl}, RBG {pvp}, realm {realm}) to your account. Next, please tell us what roles you play by issuing `!wow roles xxx`, where `xxx` "
+                                "is one or more of: `t`ank, `m`elee, `r`anged, `h`ealer")
+                        session.add(user)
+                    else:
+                        if (user.character_name, user.realm) == (name, realm):
+                            await reply(ctx, f"That's already your main character. Use `!wow forceupdate` if you want to force an update")
+                            return
+                        user.character_name = name
+                        user.realm = realm
+                        msg = f"OK, I've updated your main character to **{name}** (ILvl {ilvl}, RBG {pvp}, realm {realm})"
+
+                    session.commit()
+
+                    await self._format_nick(user, ilvl_pvp)
+
+        await reply(ctx, msg)
+
+    @wow.subcommand()
+    async def roles(self, ctx, roles: str):
+        ROLE_MAP = {
+            't': WowRole.TANK,
+            'm': WowRole.MELEE,
+            'r': WowRole.RANGED,
+            'h': WowRole.HEALER,
+        }
+
+        discord_id = ctx.author_id
+
+        with self.database.session() as session:
+            user = self.database.wow_user_by_discord_id(session, discord_id)
+            if not user:
+                await reply(ctx, "you are not registered, use `!wow main` first")
+                return
+
+            roles_flag = WowRole.NONE
+            for role in roles:
+                try:
+                    roles_flag |= ROLE_MAP[role.lower()]
+                except KeyError:
+                    await reply(ctx, f"Unknown role **{role}**. Valid roles are one or more of `t`ank, `m`elee, `r`anged, `h`ealer.")
+                    return
+
+            user.roles = roles_flag
+            session.commit()
+            await self._format_nick(user)
+
+        await reply(ctx, "done")
+
+
+    @wow.subcommand()
+    async def forceupdate(self, ctx):
+        guild = ctx.guild
+        if not guild:
+            await reply(ctx, "This command cannot be issued in DM")
+            return
+
+        with self.database.session() as session:
+
+            discord_id = ctx.author_id
+
+            async with ctx.channel.typing:
+                user = self.database.wow_user_by_discord_id(session, discord_id)
+                if not user:
+                    await reply(ctx, "you are not registered, use `!wow main` first")
+                    return
+
+                ilvl, rbg = await self._format_nick(user)
+
+        await reply(ctx, f"Done. Your Item Level is now {ilvl}, and your RBG is {rbg}")
+
+    @wow.subcommand()
+    async def forgetme(self, ctx):
+        with self.database.session() as session:
+            discord_id = ctx.author_id
+
+            user = self.database.wow_user_by_discord_id(session, discord_id)
+            if not user:
+                await reply(ctx, "You are not registered anyway. *Sleep mode reactivated*")
+                return
+
+            session.delete(user)
+
+            session.commit()
+
+        await reply(ctx, "OK, removed you from the database and stopped updating your nickname")
+
+
+    @wow.subcommand()
+    async def updateall(self, ctx):
+        guild = ctx.guild
+
+        if not guild:
+            await reply(ctx, "This command cannot be issued in DM")
+            return
+
+        needed_role = GUILD_INFOS[guild.id].wow_admin_role_name
+        if not any(role.name.lower() == needed_role.lower() for role in ctx.author.roles):
+            await reply(ctx, f"You need the **{needed_role}** to issue this command")
+            return
+
+        async with ctx.channel.typing:
+            await self._set_gms_and_officers(guild.id)
+            with self.database.session() as session:
+                for user_id in guild.members:
+                    user = self.database.wow_user_by_discord_id(session, user_id)
+                    if user:
+                        await self._format_nick(user)
+
+
+        await reply(ctx, "Done")
+
+
+    # Utils
+
+    async def _set_gms_and_officers(self, guild_id):
+        self.gms[guild_id], self.officers[guild_id] = await self._lookup_gm_and_officers(GUILD_INFOS[guild_id])
+
+    async def _lookup_gm_and_officers(self, guild_info):
+        res = await asks.get(f"{self.MASHERY_BASE}/guild/{guild_info.wow_guild_realm}/{guild_info.wow_guild_name}", params={"apikey": MASHERY_API_KEY, "fields": "members"})
+        data = res.json()
+
+        gms = set()
+        officers = set()
+
+        for member in data["members"]:
+            if member["rank"] in guild_info.wow_gm_ranks:
+                gms.add(member["character"]["name"])
+            elif member["rank"] in guild_info.wow_officer_ranks:
+                officers.add(member["character"]["name"])
+
+        return gms, officers
+
+    async def _get_profile_data(self, realm, character_name):
+        res = await asks.get(f"{self.MASHERY_BASE}/character/{realm}/{character_name}", params={"apikey": MASHERY_API_KEY, "fields": "pvp, items"})
+
+        if not res.status_code == 200:
+            raise InvalidCharacterName(realm, character_name)
+
+        data = res.json()
+
+        rbg = ilvl = None
+
+        with suppress(KeyError):
+            rbg = data['pvp']['brackets']['ARENA_BRACKET_RBG']['rating']
+
+        with suppress(KeyError):
+            ilvl = data['items']['averageItemLevel']
+
+        return ilvl, rbg
+
+
+    async def _format_nick(self, user, ilvl_rbg = None):
+
+        if ilvl_rbg:
+            ilvl, rbg = ilvl_rbg
+        else:
+            ilvl, rbg = await self._get_profile_data(user.realm, user.character_name)
+
+        format = f"{ilvl}"
+
+        for role, sym in self.SYMBOL_ROLES.items():
+            if role in user.roles:
+                format += sym
+
+        for gid, guild in self.client.guilds.items():
+            if user.discord_id in guild.members:
+                nick = guild.members[user.discord_id].nickname
+
+                nick_str = str(nick)
+
+                if user.character_name in self.gms[gid]:
+                    prefix = self.SYMBOL_GM
+                elif user.character_name in self.officers[gid]:
+                    prefix = self.SYMBOL_OFFICER
+                else:
+                    prefix = ""
+
+
+                if re.search(r"\{.*?\}", nick_str):
+                    new_nick = re.sub(r"\{.*?\}", '{' + prefix + format + '}', nick_str, count=1)
+                else:
+                    new_nick = nick_str.strip() + ' {' + prefix + format + '}'
+
+                try:
+                    await nick.set(new_nick)
+                except Exception:
+                    logger.exception(f"unable to set nickname for {user} in {guild}")
+
+        return ilvl, rbg
+
+
+Context.add_converter(Member, fuzzy_nick_match)
 
 multio.init('trio')
 
@@ -1469,27 +1741,8 @@ manager = CommandsManager.with_client(client, command_prefix="!")
 @client.event('ready')
 async def ready(ctx):
     await manager.load_plugin(Orisa, database)
+    await manager.load_plugin(Wow, database)
     await ctx.bot.change_status(game=Game(name='"!bt help" for help'))
     logger.info("Ready")
-
-@client.event('guild_member_remove')
-async def remove_member(ctx: Context, member: Member):
-    logger.debug(f"Member {member.name}({member.id}) left the guild")
-    session = database.Session()
-    try:
-        user = database.user_by_discord_id(session, member.id)
-        if user:
-            in_other_guild = False
-            for guild in client.guilds.values():
-                if guild.id != member.guild.id and member.id in guild.members:
-                    in_other_guild = True
-                    break
-            if not in_other_guild:
-                logger.info(f"deleting {user} from database because {member.name} left the guild and has no other guilds")
-                session.delete(user)
-                session.commit()
-    finally:
-        session.close()
-
 
 client.run()
