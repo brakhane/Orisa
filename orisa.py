@@ -248,10 +248,12 @@ class Orisa(Plugin):
     SYMBOL_SUPPORT = '\N{HEAVY PLUS SIGN}'   #\N{VERY HEAVY GREEK CROSS}'
     SYMBOL_FLEX = '\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}' # '\N{FLEXED BICEPS}'   #'\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}'
 
+
     def __init__(self, client, database):
         super().__init__(client)
         self.database = database
         self.dialogues = {}
+
 
     async def load(self):
         await self.spawn(self._sync_all_tags_task)
@@ -266,6 +268,7 @@ class Orisa(Plugin):
         logger.critical("***** GOT EMERGENCY SHUTDOWN COMMAND FROM OWNER *****")
         await self.client.kill()
         raise SystemExit(42)
+
 
     @command()
     @condition(only_owner)
@@ -284,6 +287,7 @@ class Orisa(Plugin):
         finally:
             s.close()
 
+
     @command()
     @condition(only_owner)
     async def post(self, ctx, channel_id: str, *, message:str):
@@ -294,6 +298,7 @@ class Orisa(Plugin):
         channel = self.client.find_channel(channel_id)
         msg = await channel.messages.send(message)
         await ctx.channel.messages.send(f"created {msg.id}")
+
 
     @command()
     @condition(only_owner)
@@ -311,6 +316,7 @@ class Orisa(Plugin):
 #    async def updatehelp(self, ctx, channel_id: int, message_id: int):
 #        await self.client.http.edit_message(channel_id, message_id, embed=self._create_help().to_dict())
 #        await ctx.channel.messages.send("done")
+
 
     @command()
     @condition(only_owner)
@@ -337,6 +343,7 @@ class Orisa(Plugin):
         except trio.TooSlowError as e:
             logger.exception("got timeout")
             await chan.messages.send("TIMEOUT!")
+
 
     @command()
     @condition(only_owner)
@@ -436,11 +443,13 @@ class Orisa(Plugin):
             session.close()
         await ctx.channel.messages.send(content=content, embed=embed)
 
+
     @bt.subcommand()
     @condition(correct_channel)
     async def get(self, ctx, *, member: Member = None):
         r = await self.bt(ctx, member=member)
         return r
+
 
     @bt.subcommand()
     @condition(correct_channel)
@@ -549,6 +558,7 @@ class Orisa(Plugin):
         finally:
             session.close()
 
+
     async def _update_nick_after_secondary_change(self, ctx, user):
             try:
                 await self._update_nick(user)
@@ -595,6 +605,7 @@ class Orisa(Plugin):
 
         finally:
             session.close()
+
 
     @bt.subcommand()
     @condition(correct_channel)
@@ -654,6 +665,7 @@ class Orisa(Plugin):
             session.commit()
             session.close()
 
+
     @bt.subcommand()
     @condition(correct_channel)
     async def forceupdate(self, ctx):
@@ -675,6 +687,7 @@ class Orisa(Plugin):
         finally:
             session.commit()
             session.close()
+
 
     @bt.subcommand()
     async def forgetme(self, ctx):
@@ -705,10 +718,12 @@ class Orisa(Plugin):
         finally:
             session.close()
 
+
     @bt.subcommand()
     @condition(correct_channel)
     async def findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
         await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=False)
+
 
     @bt.subcommand()
     @condition(correct_channel)
@@ -773,11 +788,13 @@ class Orisa(Plugin):
             session.commit()
             await reply(ctx, f"Done. The SR for *{tag.tag}* is now *{sr}*")
 
+
     @bt.subcommand()
     @condition(correct_channel)
     async def setrole(self, ctx, roles_str: str):
         "Alias for setroles"
         return await self.setroles(ctx, roles_str)
+
 
     @bt.subcommand()
     @condition(correct_channel)
@@ -809,9 +826,6 @@ class Orisa(Plugin):
             await reply(ctx, f"Done. Your roles are now **{format_roles(roles)}**.")
         finally:
             session.close()
-
-
-
 
 
     async def _findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None, *, findall):
