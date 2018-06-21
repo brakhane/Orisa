@@ -201,7 +201,7 @@ async def set_channel_suffix(chan, suffix: str):
 
 def format_roles(roles):
     names = {
-        Role.DPS: "DPS",
+        Role.DPS: "Damage",
         Role.MAIN_TANK: "Main Tank",
         Role.OFF_TANK: "Off Tank",
         Role.SUPPORT: "Support",
@@ -467,7 +467,7 @@ class Orisa(Plugin):
                 resp = ("OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed.\n"
                         "Please also tell us the roles you play by using `!bt setroles xxx`, where xxx is one or more of the following letters: "
                         "`d`amage/DPS, `m`ain tank, `o`ff tank, `s`upport. So `!bt setroles ds` for example would say you play both DPS and support.\n"
-                        f"If you want, you can also join the Overwatch role by visiting <#458669204048969748>, this way, you will get "
+                        "If you want, you can also join the Overwatch role by visiting <#458669204048969748>, this way, you will get "
                          "notified of shoutouts to @Overwatch")
             else:
                 if any(tag.tag == battle_tag for tag in user.battle_tags):
@@ -1511,10 +1511,76 @@ class Wow(Plugin):
             if GUILD_INFOS[guild_id].wow_guild_name:
                 await self._set_gms_and_officers(guild_id)
 
+        await self.spawn(self._update_task)
+
     @command()
     @condition(correct_wow_channel)
     async def wow(self, ctx, *, cmd: str):
         await reply(ctx, f"unknown command **{cmd}**, see `!wow help`")
+
+    @wow.subcommand()
+    async def help(self, ctx):
+        embed = Embed(title="WoW commands",
+                      description=("Commands are sorted roughly in order of usefulness\n"
+                                  f"Report issues to <@!{self.client.application_info.owner.id}>"))
+
+        embed.add_field(
+            name="!wow main *character_name* [realm]",
+            value=("Registers (or changes) your character and will update your nick to show you ilvl. "
+                   f"It auto detects whether the character is a GM (`{self.SYMBOL_GM}`) or Officer "
+                   f"(`{self.SYMBOL_OFFICER}`) and will prepend that symbol to the ilvl.\n"
+                   "Your ilvl will be updated periodically, and when Orisa notices you "
+                   "stopped playing WoW (only works when using the Discord Desktop App).\n"
+                   "*realm* is optional, if not given, defaults to the realm of the guild.\n"
+                   "*Example:* `!wow main Orisa`\n"
+                   "*Alternate form:* `!wow main character-realm`"))
+
+        embed.add_field(
+            name="!wow roles xxx",
+            value=("Sets your PvE roles, those will be shown next to your ilvl. Roles are one "
+                   "or more of the following:\n"
+                   f"`m`elee (`{self.SYMBOL_ROLES[WowRole.MELEE]}`), `r`anged (`{self.SYMBOL_ROLES[WowRole.RANGED]}`), "
+                   f"`t`ank (`{self.SYMBOL_ROLES[WowRole.TANK]}`), `h`ealer (`{self.SYMBOL_ROLES[WowRole.HEALER]}`)."
+            ))
+
+        embed.add_field(
+            name="!wow pvp",
+            value=("Switches your account to a PvP one. Instead of ilvl, it will show your "
+                   f"RBG, and will add a `{self.SYMBOL_PVP}` symbol to distinguish it from "
+                   "the ilvl. PvE roles will not be shown in this mode."))
+
+        embed.add_field(
+            name="!wow pve",
+            value=("Switches back to PvE mode"))
+
+        embed.add_field(
+            name="!wow nopvp",
+            value="Same as `!wow pve`")
+
+        embed.add_field(
+            name="!wow forceupdate",
+            value=("Forces your ilvl/RBG to be checked and updated immediately. "
+                   "Checks are done periodically (approximately every hour), you only "
+                   "need to issue this command if you want your new levels to be shown "
+                   "immediately."))
+
+        embed.add_field(
+            name="!wow forgetme",
+            value="Resets your nick and removes you from the database")
+
+        embed.add_field(
+            name="!wow updateall",
+            value=("Forces an immediate update of all guild data and guild members "
+                   "(like every member issued a `forceupdate`). "
+                   "Useful when the GM or Officers change.\n"
+                   "*This is a priviledged command and can only be issued by members with "
+                   "a specific Discord role (which is server specific).*"))
+
+        await ctx.author.send(content=None, embed=embed)
+
+        if not ctx.channel.private:
+            await reply(ctx, "I sent you a DM with information.")
+
 
     @wow.subcommand()
     @condition(correct_wow_channel)
@@ -1709,24 +1775,46 @@ class Wow(Plugin):
             return
 
         async with ctx.channel.typing:
-            await self._set_gms_and_officers(guild.id)
-            with self.database.session() as session:
-                for user_id in guild.members:
-                    user = self.database.wow_user_by_discord_id(session, user_id)
-                    if user:
-                        await self._format_nick(user)
-
+            await self._update_guild(guild)
 
         await reply(ctx, "Done")
 
 
     # Utils
 
+    async def _update_task(self):
+        logger.debug("Waiting 60s before starting WoW sync")
+        await trio.sleep(60)
+        while True:
+            try:
+                await self._update_all_the_things()
+            except Exception:
+                logger.exception("Error during WoW update")
+            await trio.sleep(3600)
+
+    async def _update_all_the_things(self):
+        for guild_id, guild_info in GUILD_INFOS.items():
+            if guild_info.wow_guild_name:
+                await self._update_guild(self.client.guilds[guild_id])
+
+    async def _update_guild(self, guild):
+        await self._set_gms_and_officers(guild.id)
+        with self.database.session() as session:
+            for user_id in guild.members:
+                user = self.database.wow_user_by_discord_id(session, user_id)
+                if user:
+                    try:
+                        await self._format_nick(user)
+                    except Exception:
+                        logger.exception(f"unable to format nick for {user}")
+
+
     async def _set_gms_and_officers(self, guild_id):
         self.gms[guild_id], self.officers[guild_id] = await self._lookup_gm_and_officers(GUILD_INFOS[guild_id])
 
     async def _lookup_gm_and_officers(self, guild_info):
         res = await asks.get(f"{self.MASHERY_BASE}/guild/{guild_info.wow_guild_realm}/{guild_info.wow_guild_name}", params={"apikey": MASHERY_API_KEY, "fields": "members"})
+        logger.debug(f"current quota: {res.headers.get('X-Plan-Quota-Current', '?')}/{res.headers.get('X-Plan-Quota-Allotted', '?')}")
         data = res.json()
 
         gms = set()
@@ -1741,8 +1829,10 @@ class Wow(Plugin):
         return gms, officers
 
     async def _get_profile_data(self, realm, character_name):
+        logger.debug(f"requesting {realm}/{character_name}")
         res = await asks.get(f"{self.MASHERY_BASE}/character/{realm}/{character_name}", params={"apikey": MASHERY_API_KEY, "fields": "pvp, items"})
 
+        logger.debug(f"current quota: {res.headers.get('X-Plan-Quota-Current', '?')}/{res.headers.get('X-Plan-Quota-Allotted', '?')}")
         if not res.status_code == 200:
             raise InvalidCharacterName(realm, character_name)
 
@@ -1756,12 +1846,13 @@ class Wow(Plugin):
         with suppress(KeyError):
             ilvl = data['items']['averageItemLevel']
 
+        logger.debug(f"{realm}/{character_name} done")
         return ilvl, rbg
 
 
     async def _format_nick(self, user, ilvl_rbg = None):
 
-        if ilvl_rbg:
+        if ilvl_rbg is not None:
             ilvl, rbg = ilvl_rbg
         else:
             ilvl, rbg = await self._get_profile_data(user.realm, user.character_name)
@@ -1796,11 +1887,47 @@ class Wow(Plugin):
                     new_nick = nick_str.strip() + ' {' + prefix + format + '}'
 
                 try:
-                    await nick.set(new_nick)
+                    if new_nick != nick_str:
+                        await nick.set(new_nick)
                 except Exception:
                     logger.exception(f"unable to set nickname for {user} in {guild}")
 
         return ilvl, rbg
+
+    # Events
+
+    @event('member_update')
+    async def _member_update(self, ctx, old_member: Member, new_member: Member):
+
+        def plays_wow(m):
+            try:
+                return m.game.name == "World of Warcraft"
+            except AttributeError:
+                return False
+
+        async def wait_and_fire(id_to_sync):
+            logger.debug(f"sleeping for 30s before syncing after WoW close of {new_member.name}")
+            await trio.sleep(30)
+            with self.database.session() as session:
+                user = self.database.wow_user_by_discord_id(session, id_to_sync)
+                await self._format_nick(user)
+            logger.debug(f"done updating nick for {new_member.name} after WoW close")
+
+        if plays_wow(old_member) and (not plays_wow(new_member)):
+            logger.debug(f"{new_member.name} stopped playing WoW")
+
+            session = self.database.Session()
+            try:
+                user = self.database.wow_user_by_discord_id(session, new_member.user.id)
+                if not user:
+                    logger.debug(f"{new_member.name} is not registered, nothing to do.")
+                    return
+
+                logger.info(f"{new_member.name} stopped playing WoW and needs to be checked")
+            finally:
+                session.close()
+
+            await self.spawn(wait_and_fire, new_member.user.id)
 
 
 Context.add_converter(Member, fuzzy_nick_match)
@@ -1811,15 +1938,11 @@ client = Client(BOT_TOKEN)
 
 database = Database()
 
-#@client.event('guild_join')
-#async def guild_join(ctx, guild):
-#    await check_guild(guild)
-
-
 manager = CommandsManager.with_client(client, command_prefix="!")
 
 @client.event('ready')
 async def ready(ctx):
+    logger.debug(f"Guilds are {ctx.bot.guilds}")
     await manager.load_plugin(Orisa, database)
     if MASHERY_API_KEY:
         await manager.load_plugin(Wow, database)

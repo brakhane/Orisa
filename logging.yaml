@@ -11,6 +11,9 @@ loggers:
   orisa:
     level: DEBUG
 
+  curious:
+    level: INFO
+
   sqlalchemy.engine:
     # INFO for SQL statement dump
     level: WARN
