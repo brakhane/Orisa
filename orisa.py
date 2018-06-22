@@ -42,6 +42,7 @@ from curious.commands.manager import CommandsManager
 from curious.commands.plugin import Plugin
 from curious.core.client import Client
 from curious.exc import HierarchyError
+from curious.dataclasses.channel import ChannelType
 from curious.dataclasses.embed import Embed
 from curious.dataclasses.guild import Guild
 from curious.dataclasses.member import Member
@@ -56,7 +57,6 @@ from models import Database, User, BattleTag, Role, WowUser, WowRole
 
 CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
 WOW_CHANNEL_IDS = frozenset(guild.wow_listen_channel_id for guild in GUILD_INFOS.values())
-VOICE_CHANNEL_IDS = (id for guild in GUILD_INFOS.values() for id in guild.voice_channel_ids)
 
 
 with open('logging.yaml') as logfile:
@@ -257,8 +257,6 @@ class Orisa(Plugin):
 
     async def load(self):
         await self.spawn(self._sync_all_tags_task)
-        for chan_id in (id for guild in GUILD_INFOS.values() for id in guild.voice_channel_ids):
-            await self._update_voice_channel(chan_id)
 
     # admin commands
 
@@ -1147,13 +1145,17 @@ class Orisa(Plugin):
 
             await self.spawn(wait_and_fire, ids_to_sync)
 
+
     @event('voice_state_update')
     async def _voice_state_update(self, ctx, member, old_voice_state, new_voice_state):
+        parent = None
         if old_voice_state:
-            await self._update_voice_channel(old_voice_state.channel_id)
-
+            parent = old_voice_state.channel.parent
+            await self._adjust_voice_channels(parent)
+        
         if new_voice_state:
-            await self._update_voice_channel(new_voice_state.channel_id)
+            if new_voice_state.channel.parent != parent:
+                await self._adjust_voice_channels(new_voice_state.channel.parent)
 
 
     @event('message_create')
@@ -1208,40 +1210,103 @@ class Orisa(Plugin):
             del self.dialogues[key]
 
 
-    async def _update_voice_channel(self, channel_id):
-        if channel_id in VOICE_CHANNEL_IDS:
-            chan = self.client.find_channel(channel_id)
+    async def _adjust_voice_channels(self, parent):
+        logger.debug("adjusting parent %s", parent)
+        guild = parent.guild
+        if not guild:
+            logger.debug("channel doesn't belong to a guild")
+            return
+        
+        for cat in GUILD_INFOS[guild.id].managed_voice_categories:
+            if cat.category_id == parent.id:
+                info = cat
+                break
+        else:
+            logger.debug("channel is not managed")
+            return
 
-            if not chan.voice_members:
-                await set_channel_suffix(chan, '')
-                return
+        def prefixkey(chan):
+            return chan.name.rsplit('#', 1)[0].strip()
 
-            session = self.database.Session()
-            try:
-                found_members = session.query(User).filter(User.discord_id.in_(m.id for m in chan.voice_members)).all()
-                dps = main = off = supp = 0
+        def numberkey(chan):
+            return int(chan.name.rsplit('#', 1)[1])
 
-                unknown = len(chan.voice_members) - len(found_members)
+        sorted_channels = sorted(filter(lambda chan: '#' in chan.name, parent.children), key=attrgetter('name'))
+        
+        grouped = groupby(sorted_channels, key=prefixkey)
 
-                for member in found_members:
-                    if member.roles:
-                        dps += Role.DPS in member.roles
-                        main += Role.MAIN_TANK in member.roles
-                        off += Role.OFF_TANK in member.roles
-                        supp += Role.SUPPORT in member.roles
-                    else:
-                        unknown += 1
+        made_changes = False
 
-                suffix = f"{dps}-{main}-{off}-{supp}"
-                if unknown:
-                    suffix += f" {unknown}?"
-                suffix = ""
-                await set_channel_suffix(chan, suffix)
+        for prefix, group in grouped:
+            if prefix not in cat.prefixes:
+                continue
 
+            chans = sorted(group, key=numberkey)
+            
+            empty_channels = [chan for chan in chans if not chan.voice_members]
 
-            finally:
-                session.close()
+            if not empty_channels:
+                if len(chans) < cat.channel_limit:
+                    # add a new channel
+                    name = f"{prefix} #{len(chans)+1}"
+                    logger.debug("creating a new channel %s", name)
+                    
+                    async with self.client.events.wait_for_manager("channel_create", lambda chan:chan.name == name):
+                        await guild.channels.create(type_=ChannelType.VOICE, name=name, parent=parent)
 
+                    logger.debug("created a new channel %s", name)
+
+                    made_changes = True
+            
+            elif len(empty_channels) == 1:
+                # how we want it
+                continue
+
+            else:
+
+                # more than one empty channel, delete the ones with the highest numbers
+                for chan in empty_channels[1:]:
+
+                    id = chan.id
+                    logger.debug("deleting channel %s", chan)
+                    async with self.client.events.wait_for_manager("channel_delete", lambda chan: chan.id == id):
+                        await chan.delete()
+                    made_changes = True
+
+        if made_changes:
+            managed_channels = []
+            unmanaged_channels = []
+
+            # parent.children should be updated by now to contain newly created channels and without deleted ones
+
+            for chan in parent.children:
+                if '#' in chan.name and chan.name.rsplit('#', 1)[0].strip() in cat.prefixes:
+                    managed_channels.append(chan)
+                else:
+                    unmanaged_channels.append(chan)
+            
+
+            managed_group = {}
+            for prefix, group in groupby(sorted(managed_channels, key=prefixkey), key=prefixkey):
+                managed_group[prefix] = sorted(list(group), key=numberkey)
+
+            final_list = unmanaged_channels.copy()
+
+            for prefix in cat.prefixes:
+                chans = managed_group[prefix]
+                # rename channels if necessary
+                for i, chan in enumerate(chans):
+                    new_name = f"{prefix} #{i+1}"
+                    if new_name != chan.name:
+                        await chan.edit(name=new_name)
+                
+                final_list.extend(chans)
+
+            for i, chan in enumerate(final_list):
+                if chan.position != i:
+                    await chan.edit(position=i)
+
+        
 
     def _format_nick(self, user):
         primary = user.battle_tags[0]
