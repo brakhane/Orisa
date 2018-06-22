@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import List, Set, Optional
+from typing import List, Set, Optional, Union, Dict
 
 __all__ = ["GuildInfo", "VoiceCategoryInfo"]
 
@@ -19,4 +19,4 @@ class GuildInfo:
 class VoiceCategoryInfo:
     category_id: int
     channel_limit: int
-    prefixes: List[str]
+    prefixes: Union[List[str], Dict[str, int]]

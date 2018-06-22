@@ -1152,7 +1152,7 @@ class Orisa(Plugin):
         if old_voice_state:
             parent = old_voice_state.channel.parent
             await self._adjust_voice_channels(parent)
-        
+
         if new_voice_state:
             if new_voice_state.channel.parent != parent:
                 await self._adjust_voice_channels(new_voice_state.channel.parent)
@@ -1216,7 +1216,7 @@ class Orisa(Plugin):
         if not guild:
             logger.debug("channel doesn't belong to a guild")
             return
-        
+
         for cat in GUILD_INFOS[guild.id].managed_voice_categories:
             if cat.category_id == parent.id:
                 info = cat
@@ -1232,7 +1232,7 @@ class Orisa(Plugin):
             return int(chan.name.rsplit('#', 1)[1])
 
         sorted_channels = sorted(filter(lambda chan: '#' in chan.name, parent.children), key=attrgetter('name'))
-        
+
         grouped = groupby(sorted_channels, key=prefixkey)
 
         made_changes = False
@@ -1242,7 +1242,7 @@ class Orisa(Plugin):
                 continue
 
             chans = sorted(group, key=numberkey)
-            
+
             empty_channels = [chan for chan in chans if not chan.voice_members]
 
             if not empty_channels:
@@ -1250,14 +1250,19 @@ class Orisa(Plugin):
                     # add a new channel
                     name = f"{prefix} #{len(chans)+1}"
                     logger.debug("creating a new channel %s", name)
-                    
+
+                    if isinstance(cat.prefixes, dict):
+                        limit = cat.prefixes[prefix]
+                    else:
+                        limit = 0
+
                     async with self.client.events.wait_for_manager("channel_create", lambda chan:chan.name == name):
-                        await guild.channels.create(type_=ChannelType.VOICE, name=name, parent=parent)
+                        await guild.channels.create(type_=ChannelType.VOICE, name=name, parent=parent, user_limit=limit)
 
                     logger.debug("created a new channel %s", name)
 
                     made_changes = True
-            
+
             elif len(empty_channels) == 1:
                 # how we want it
                 continue
@@ -1284,7 +1289,7 @@ class Orisa(Plugin):
                     managed_channels.append(chan)
                 else:
                     unmanaged_channels.append(chan)
-            
+
 
             managed_group = {}
             for prefix, group in groupby(sorted(managed_channels, key=prefixkey), key=prefixkey):
@@ -1299,14 +1304,14 @@ class Orisa(Plugin):
                     new_name = f"{prefix} #{i+1}"
                     if new_name != chan.name:
                         await chan.edit(name=new_name)
-                
+
                 final_list.extend(chans)
 
             for i, chan in enumerate(final_list):
                 if chan.position != i:
                     await chan.edit(position=i)
 
-        
+
 
     def _format_nick(self, user):
         primary = user.battle_tags[0]
@@ -1663,7 +1668,7 @@ class Wow(Plugin):
 
     @wow.subcommand()
     @condition(correct_wow_channel)
-    async def main(self, ctx, name: str, realm: Optional[str] = None):
+    async def main(self, ctx, name: str, *, realm: Optional[str] = None):
         guild = ctx.guild
         if not guild:
             await reply(ctx, "This command cannot be issued in DM")
@@ -1950,7 +1955,7 @@ class Wow(Plugin):
             if user.discord_id in guild.members:
                 nick = guild.members[user.discord_id].nickname
 
-                nick_str = str(nick)
+                nick_str = str(guild.members[user.discord_id].name)
 
                 if user.character_name in self.gms[gid]:
                     prefix = self.SYMBOL_GM
