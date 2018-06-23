@@ -1259,8 +1259,6 @@ class Orisa(Plugin):
                     async with self.client.events.wait_for_manager("channel_create", lambda chan:chan.name == name):
                         await guild.channels.create(type_=ChannelType.VOICE, name=name, parent=parent, user_limit=limit)
 
-                    logger.debug("created a new channel %s", name)
-
                     made_changes = True
 
             elif len(empty_channels) == 1:
@@ -1310,7 +1308,6 @@ class Orisa(Plugin):
             for i, chan in enumerate(final_list):
                 if chan.position != i:
                     await chan.edit(position=i)
-
 
 
     def _format_nick(self, user):
@@ -1516,7 +1513,7 @@ class Orisa(Plugin):
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):
     def strip_tags(name):
-        return re.sub(r'^(.*?\|)?([^[]*)(\[.*)?', r'\2', str(name)).strip()
+        return re.sub(r'^(.*?\|)?([^[{]*)((\[|\{).*)?', r'\2', str(name)).strip()
 
     member = member_id = None
     if ctx.guild:
@@ -1599,8 +1596,30 @@ class Wow(Plugin):
 
     @command()
     @condition(correct_wow_channel)
-    async def wow(self, ctx, *, cmd: str):
-        await reply(ctx, f"unknown command **{cmd}**, see `!wow help`")
+    async def wow(self, ctx, *, member: Member = None):
+
+        member_given = member is not None
+        if not member_given:
+            member = ctx.author
+
+        with self.database.session() as s:
+            user = self.database.wow_user_by_discord_id(s, member.id)
+            if user:
+                content = None
+                embed = Embed()
+                embed.add_field(name="Nick", value=member.name)
+                embed.add_field(name="Character and Realm", value=f"**{user.character_name}-{user.realm}**")
+            else:
+                content = f"{member.name} not found in database! *Do you need a hug?*"
+                if member == ctx.author:
+                    embed = Embed(
+                                title="Hint",
+                                description="use `!wow main character_name realm_name` to register, or `!wow help` for more info"
+                            )
+                else:
+                    embed = None
+
+        await ctx.channel.messages.send(content=content, embed=embed)
 
     @wow.subcommand()
     async def help(self, ctx):
@@ -1608,6 +1627,15 @@ class Wow(Plugin):
                       description=("Commands are sorted roughly in order of usefulness\n"
                                   f"Report issues to <@!{self.client.application_info.owner.id}>"))
 
+        embed.add_field(
+            name="!wow [member]",
+            value=("Shows the character and realm of the given member, or your own if no member is given.\n"
+                  "The search is performed fuzzy, so a few letters of the member name should suffice."))
+        embed.add_field(
+            name="!wow reverse character_name",
+            value=("Performs a fuzzy search in the database to find the *member* that plays the given character. "
+                   "The search is performed fuzzy and expects the format `character-realm`. But since it's fuzzy, "
+                   "you generally can omit the realm."))
         embed.add_field(
             name="!wow main *character_name* [realm]",
             value=("Registers (or changes) your character and will update your nick to show you ilvl. "
@@ -1668,18 +1696,22 @@ class Wow(Plugin):
 
     @wow.subcommand()
     @condition(correct_wow_channel)
-    async def main(self, ctx, name: str, *, realm: Optional[str] = None):
+    async def main(self, ctx, *, name_and_realm: str):
         guild = ctx.guild
         if not guild:
             await reply(ctx, "This command cannot be issued in DM")
             return
 
-        if '-' in name and not realm:
-            name, realm = name.strip().split('-')
+        name_and_realm = name_and_realm.strip()
+        if ' ' in name_and_realm:
+            name, realm = name.split(' ', 1)
+        elif '-' in name_and_realm:
+            name, realm = name.split('-', 1)
+        else:
+            name = name_and_realm
+            realm = GUILD_INFOS[guild.id].wow_guild_realm
 
         async with ctx.channel.typing:
-            if not realm:
-                realm = GUILD_INFOS[guild.id].wow_guild_realm
             try:
 
                 ilvl_pvp = await self._get_profile_data(realm, name)
@@ -1713,6 +1745,34 @@ class Wow(Plugin):
                     await self._format_nick(user, ilvl_pvp)
 
         await reply(ctx, msg)
+
+    @wow.subcommand()
+    @condition(correct_wow_channel)
+    async def reverse(self, ctx, *, character_realm: str):
+        guild = ctx.guild
+        if not guild:
+            await reply(ctx, "This command cannot be issued in DM")
+            return
+
+        with self.database.session() as session:
+            async with ctx.channel.typing:
+                # FIXME: this needs to filter out wrong guilds
+                users = session.query(WowUser).all()
+                res = process.extractOne(character_realm, {user.discord_id: f"{user.character_name}-{user.realm}" for user in users}, score_cutoff=50)
+                if res:
+                    name, score, id = res
+                    member = guild.members[id]
+                    content = None
+                    embed = Embed()
+                    embed.add_field(name="Nick", value=member.name)
+                    embed.add_field(name="Character and Realm", value=f"**{name}**")
+                else:
+                    content = "I can't find a character with that name in my database."
+                    embed = None
+
+        await ctx.channel.send(content=content, embed=embed)
+
+
 
     @wow.subcommand()
     @condition(correct_wow_channel)
