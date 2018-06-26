@@ -41,7 +41,7 @@ from curious.commands.exc import ConversionFailedError
 from curious.commands.manager import CommandsManager
 from curious.commands.plugin import Plugin
 from curious.core.client import Client
-from curious.exc import HierarchyError
+from curious.exc import Forbidden, HierarchyError
 from curious.dataclasses.channel import ChannelType
 from curious.dataclasses.embed import Embed
 from curious.dataclasses.guild import Guild
@@ -245,7 +245,7 @@ class Orisa(Plugin):
 
     SYMBOL_DPS = '\N{CROSSED SWORDS}'
     SYMBOL_TANK = '\N{SHIELD}' #\N{VARIATION SELECTOR-16}'
-    SYMBOL_SUPPORT = '\N{HEAVY PLUS SIGN}'   #\N{VERY HEAVY GREEK CROSS}'
+    SYMBOL_SUPPORT = '\N{VERY HEAVY GREEK CROSS}' #'\N{HEAVY PLUS SIGN}'   #\N{VERY HEAVY GREEK CROSS}'
     SYMBOL_FLEX = '\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}' # '\N{FLEXED BICEPS}'   #'\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}'
 
 
@@ -944,9 +944,18 @@ class Orisa(Plugin):
 
     @bt.subcommand()
     async def help(self, ctx):
+        forbidden = False
         for embed in self._create_help(ctx):
-            await ctx.author.send(content=None, embed=embed)
-        if not ctx.channel.private:
+            try:
+                await ctx.author.send(content=None, embed=embed)
+            except Forbidden:
+                forbidden = True
+                break
+
+        if forbidden:
+            await reply(ctx, "I tried to send you a DM with help, but you don't allow DM from server members. "
+                            "I can't post it here, because it's rather long. Please allow DMs and try again.")
+        elif not ctx.channel.private:
             await reply(ctx, "I sent you a DM with instructions.")
 
 
@@ -1688,10 +1697,14 @@ class Wow(Plugin):
                    "*This is a priviledged command and can only be issued by members with "
                    "a specific Discord role (which is server specific).*"))
 
-        await ctx.author.send(content=None, embed=embed)
-
-        if not ctx.channel.private:
-            await reply(ctx, "I sent you a DM with information.")
+        try:
+            await ctx.author.send(content=None, embed=embed)
+        except Forbidden:
+            await reply(ctx, "I tried to send you a DM with help, but you don't allow DM from server members. "
+                             "I can't post it here, because it's rather long. Please allow DMs and try again.")
+        else:
+            if not ctx.channel.private:
+                await reply(ctx, "I sent you a DM with information.")
 
 
     @wow.subcommand()
@@ -1704,9 +1717,9 @@ class Wow(Plugin):
 
         name_and_realm = name_and_realm.strip()
         if ' ' in name_and_realm:
-            name, realm = name.split(' ', 1)
+            name, realm = name_and_realm.split(' ', 1)
         elif '-' in name_and_realm:
-            name, realm = name.split('-', 1)
+            name, realm = name_and_realm.split('-', 1)
         else:
             name = name_and_realm
             realm = GUILD_INFOS[guild.id].wow_guild_realm
@@ -1742,7 +1755,10 @@ class Wow(Plugin):
 
                     session.commit()
 
-                    await self._format_nick(user, ilvl_pvp)
+                    try:
+                        await self._format_nick(user, ilvl_pvp)
+                    except NicknameTooLong:
+                        await reply(ctx, "I cannot add the information to your nickname, as it would be longer than 32 characters. Please shorten your nickname and try again.")
 
         await reply(ctx, msg)
 
@@ -1756,8 +1772,7 @@ class Wow(Plugin):
 
         with self.database.session() as session:
             async with ctx.channel.typing:
-                # FIXME: this needs to filter out wrong guilds
-                users = session.query(WowUser).all()
+                users = session.query(WowUser).filter(WowUser.discord_id.in_(guild.members)).all()
                 res = process.extractOne(character_realm, {user.discord_id: f"{user.character_name}-{user.realm}" for user in users}, score_cutoff=50)
                 if res:
                     name, score, id = res
@@ -1966,9 +1981,9 @@ class Wow(Plugin):
 
         for member in data["members"]:
             if member["rank"] in guild_info.wow_gm_ranks:
-                gms.add(member["character"]["name"])
+                gms.add(member["character"]["name"].lower())
             elif member["rank"] in guild_info.wow_officer_ranks:
-                officers.add(member["character"]["name"])
+                officers.add(member["character"]["name"].lower())
 
         return gms, officers
 
@@ -2016,10 +2031,9 @@ class Wow(Plugin):
                 nick = guild.members[user.discord_id].nickname
 
                 nick_str = str(guild.members[user.discord_id].name)
-
-                if user.character_name in self.gms[gid]:
+                if user.character_name.lower() in self.gms[gid]:
                     prefix = self.SYMBOL_GM
-                elif user.character_name in self.officers[gid]:
+                elif user.character_name.lower() in self.officers[gid]:
                     prefix = self.SYMBOL_OFFICER
                 else:
                     prefix = ""
@@ -2030,11 +2044,13 @@ class Wow(Plugin):
                 else:
                     new_nick = nick_str.strip() + ' {' + prefix + format + '}'
 
-                try:
-                    if new_nick != nick_str:
+                if new_nick != nick_str:
+                    if len(new_nick)>32:
+                        raise NicknameTooLong(new_nick)
+                    try:
                         await nick.set(new_nick)
-                except Exception:
-                    logger.exception(f"unable to set nickname for {user} in {guild}")
+                    except Exception:
+                        logger.exception(f"unable to set nickname for {user} in {guild}")
 
         return ilvl, rbg
 
@@ -2090,7 +2106,7 @@ async def ready(ctx):
     await manager.load_plugin(Orisa, database)
     if MASHERY_API_KEY:
         await manager.load_plugin(Wow, database)
-    await ctx.bot.change_status(game=Game(name='"!bt help" for help'))
+    await ctx.bot.change_status(game=Game(name='!bt help | !wow help'))
     logger.info("Ready")
 
 client.run()
