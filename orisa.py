@@ -1756,7 +1756,7 @@ class Wow(Plugin):
                     session.commit()
 
                     try:
-                        await self._format_nick(user, ilvl_pvp)
+                        await self._format_nick(user, ilvl_pvp, raise_on_long_name=True)
                     except NicknameTooLong:
                         await reply(ctx, "I cannot add the information to your nickname, as it would be longer than 32 characters. Please shorten your nickname and try again.")
 
@@ -2009,7 +2009,7 @@ class Wow(Plugin):
         return ilvl, rbg
 
 
-    async def _format_nick(self, user, ilvl_rbg = None):
+    async def _format_nick(self, user, ilvl_rbg = None, *, raise_on_long_name=False):
 
         if ilvl_rbg is not None:
             ilvl, rbg = ilvl_rbg
@@ -2031,9 +2031,9 @@ class Wow(Plugin):
                 nick = guild.members[user.discord_id].nickname
 
                 nick_str = str(guild.members[user.discord_id].name)
-                if user.character_name.lower() in self.gms[gid]:
+                if user.character_name.lower() in self.gms.get(gid, set()):
                     prefix = self.SYMBOL_GM
-                elif user.character_name.lower() in self.officers[gid]:
+                elif user.character_name.lower() in self.officers.get(gid, set()):
                     prefix = self.SYMBOL_OFFICER
                 else:
                     prefix = ""
@@ -2046,11 +2046,13 @@ class Wow(Plugin):
 
                 if new_nick != nick_str:
                     if len(new_nick)>32:
-                        raise NicknameTooLong(new_nick)
-                    try:
-                        await nick.set(new_nick)
-                    except Exception:
-                        logger.exception(f"unable to set nickname for {user} in {guild}")
+                        if raise_on_long_name:
+                            raise NicknameTooLong(new_nick)
+                    else:
+                        try:
+                            await nick.set(new_nick)
+                        except Exception:
+                            logger.exception(f"unable to set nickname for {user} in {guild}")
 
         return ilvl, rbg
 
