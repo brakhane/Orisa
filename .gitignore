@@ -1,8 +1,16 @@
+# local files
 config.py
-logging.yaml
 orisa.log*
 *.sqlite
-.*.swp
+
+# Development
 *.bat
-.vscode
 *.exe
+dummy.py
+
+# Setuptools
+.eggs
+
+# Editors
+.*.swp
+.vscode

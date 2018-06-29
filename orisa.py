@@ -17,7 +17,6 @@ import logging.config
 
 import re
 import random
-from bisect import bisect
 from contextlib import suppress
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -49,10 +48,11 @@ from curious.dataclasses.member import Member
 from curious.dataclasses.presence import Game, Status
 from fuzzywuzzy import process, fuzz
 from lxml import html
+from sqlalchemy.orm import joinedload
 
 from config import BOT_TOKEN, CHANNEL_NAMES, GUILD_INFOS, MASHERY_API_KEY
 
-from models import Database, User, BattleTag, Role, WowUser, WowRole
+from models import Database, User, BattleTag, SR, Role, WowUser, WowRole
 
 
 CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
@@ -79,7 +79,6 @@ class InvalidFormat(Exception):
     def __init__(self, key):
         self.key = key
 
-RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
 RANKS = ('Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grand Master')
 COLORS = (
     0xcd7e32, # Bronze
@@ -91,15 +90,12 @@ COLORS = (
     0xf1d592, # Grand Master
 )
 
-# Utilities
-
-def get_rank(sr):
-    return bisect(RANK_CUTOFF, sr) if sr is not None else None
-
 SR_CACHE = TTLCache(maxsize=1000, ttl=30)
 SR_LOCKS = TTLCache(maxsize=1000, ttl=60) # if a request should be hanging for 60s, just try another
 
-async def get_sr_rank(battletag):
+# Utilities
+
+async def get_sr(battletag):
     try:
         lock = SR_LOCKS[battletag]
     except KeyError:
@@ -137,7 +133,7 @@ async def get_sr_rank(battletag):
         else:
             rank_image = None
 
-        res = SR_CACHE[battletag] = (sr, get_rank(sr), rank_image)
+        res = SR_CACHE[battletag] = (sr, rank_image)
         return res
     finally:
         lock.release()
@@ -327,17 +323,6 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
-    async def randomize(self, ctx):
-        with self.database.session() as s:
-            for tag in s.query(BattleTag).all():
-                tag.last_update += timedelta(minutes=random.randint(0, 50))
-            s.commit()
-        await reply(ctx, "randomized last updates")
-
-
-
-    @command()
-    @condition(only_owner)
     async def d(self, ctx):
         """testing123"""
         rec = ctx.author.id
@@ -390,10 +375,10 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def bt(self, ctx, *, member: Member = None):
 
-        def format_sr(sr):
-            if not sr:
+        def format_sr(tag):
+            if not tag.sr:
                 return "—"
-            return f"{sr} ({RANKS[get_rank(sr)]})"
+            return f"{tag.sr} ({RANKS[tag.rank]})"
 
 
         member_given = member is not None
@@ -413,8 +398,8 @@ class Orisa(Plugin):
                 tag_value = f"**{primary.tag}**\n"
                 tag_value += "\n".join(tag.tag for tag in secondary)
 
-                sr_value = f"**{format_sr(primary.sr)}**\n"
-                sr_value += "\n".join(format_sr(tag.sr) for tag in secondary)
+                sr_value = f"**{format_sr(primary)}**\n"
+                sr_value += "\n".join(format_sr(tag) for tag in secondary)
 
                 multiple_tags = len(user.battle_tags) > 1
 
@@ -422,8 +407,8 @@ class Orisa(Plugin):
                 if any(tag.sr for tag in user.battle_tags):
                     embed.add_field(name="SRs" if multiple_tags else "SR", value=sr_value)
 
-                if primary.sr:
-                    embed.colour = COLORS[get_rank(primary.sr)]
+                if primary.rank is not None:
+                    embed.colour = COLORS[primary.rank]
 
                 if user.roles:
                     embed.add_field(name="Roles", value=format_roles(user.roles))
@@ -497,7 +482,7 @@ class Orisa(Plugin):
 
             try:
                 async with ctx.channel.typing:
-                    sr, rank, image = await get_sr_rank(battle_tag)
+                    sr, image = await get_sr(battle_tag)
             except InvalidBattleTag as e:
                 await reply(ctx, f"Invalid BattleTag: {e.message}")
                 raise
@@ -505,13 +490,8 @@ class Orisa(Plugin):
                 resp += "\nYou don't have an SR though, you probably need to finish your placement matches... I still saved your BattleTag."
                 sr = None
 
-            tag.last_update = datetime.utcnow()
-            tag.sr = sr
-            rank = get_rank(sr)
-            if user.highest_rank is None:
-                user.highest_rank = rank
-            else:
-                user.highest_rank = max([user.highest_rank, rank or 0])
+            tag.update_sr(sr)
+            rank = tag.rank
 
             sort_secondaries(user)
 
@@ -555,9 +535,6 @@ class Orisa(Plugin):
                 return
 
             removed = user.battle_tags.pop(index)
-            if removed.sr:
-                if user.highest_rank == get_rank(removed.sr):
-                    user.highest_rank = max(filter(lambda x: x is not None, (get_rank(tag.sr) for tag in user.battle_tags)), default=None)
             session.commit()
             await reply(ctx, f'Removed **{removed.tag}**')
             await self._update_nick_after_secondary_change(ctx, user)
@@ -683,14 +660,20 @@ class Orisa(Plugin):
             if not user:
                 await reply(ctx, "you are not registered")
             else:
+                fault = False
                 async with ctx.channel.typing:
                     for tag in user.battle_tags:
                         try:
                             await self._sync_tag(tag)
                         except Exception as e:
                             logger.exception(f'exception while syncing {tag}')
-                await reply(ctx, f"OK, I have updated your data. Your (primary) SR is now {user.battle_tags[0].sr}. "
-                                 "If that is not correct, you need to log out of Overwatch once and try again.")
+                            fault = True
+
+                if fault:
+                    await reply(ctx, "There were some problems updating your SR. Try again later.")
+                else:
+                    await reply(ctx, f"OK, I have updated your data. Your (primary) SR is now {user.battle_tags[0].sr}. "
+                                     "If that is not correct, you need to log out of Overwatch once and try again.")
         finally:
             session.commit()
             session.close()
@@ -786,12 +769,10 @@ class Orisa(Plugin):
                                      f"So, if that is indeed correct, reissue this command with a ! added to the SR, like `!bt newsr 1234!`")
                     return
 
-            tag.sr = sr
-
-            rank = get_rank(sr)
+            rank = tag.rank
             image = f"https://d1u1mce87gyfbn.cloudfront.net/game/rank-icons/season-2/rank-{rank+1}.png"
 
-            await self._handle_new_sr(tag, sr, rank, image)
+            await self._handle_new_sr(tag, sr, image)
             session.commit()
             await reply(ctx, f"Done. The SR for *{tag.tag}* is now *{sr}*")
 
@@ -880,7 +861,8 @@ class Orisa(Plugin):
 
                 type_msg = f"between {min_sr} and {max_sr} SR"
 
-            candidates = session.query(BattleTag).filter(BattleTag.sr.between(min_sr, max_sr)).all()
+            candidates = (session.query(BattleTag).join(BattleTag.current_sr).options(joinedload(BattleTag.user))
+                          .filter(SR.value.between(min_sr, max_sr)).all())
 
             users = set(c.user for c in candidates)
 
@@ -963,7 +945,7 @@ class Orisa(Plugin):
 
         if forbidden:
             await reply(ctx, "I tried to send you a DM with help, but you don't allow DM from server members. "
-                            "I can't post it here, because it's rather long. Please allow DMs and try again.")
+                             "I can't post it here, because it's rather long. Please allow DMs and try again.")
         elif not ctx.channel.private:
             await reply(ctx, "I sent you a DM with instructions.")
 
@@ -1338,7 +1320,7 @@ class Orisa(Plugin):
     def _format_nick(self, user):
         primary = user.battle_tags[0]
 
-        rankno = get_rank(primary.sr)
+        rankno = primary.rank
         rank = RANKS[rankno] if rankno is not None else "Unranked"
         sr = primary.sr or "noSR"
 
@@ -1349,14 +1331,14 @@ class Orisa(Plugin):
             secondary_sr = None
         else:
             # secondary accounts, mark SR
-            sr = f"{sr}*"
+            sr = f"{sr.value}*"
             rank = f"{rank}*"
 
         if secondary_sr is None:
             secondary_sr = "noSR"
             secondary_rank = "Unranked"
         else:
-            secondary_rank = RANKS[get_rank(secondary_sr)]
+            secondary_rank = RANKS[user.battle_tags[1].rank]
 
         srs = list(sorted(t.sr or -1 for t in user.battle_tags))
 
@@ -1365,7 +1347,8 @@ class Orisa(Plugin):
 
         if srs:
             lowest_sr, highest_sr = srs[0], srs[-1]
-            lowest_rank, highest_rank = (RANKS[get_rank(sr)] for sr in (srs[0], srs[-1]))
+            # FIXME: SR().rank is hacky
+            lowest_rank, highest_rank = (sr and RANKS[SR(value=sr).rank] for sr in (srs[0], srs[-1]))
         else:
             lowest_sr = highest_sr = "noSR"
             lowest_rank = highest_rank = "Unranked"
@@ -1393,6 +1376,7 @@ class Orisa(Plugin):
 
     async def _update_nick(self, user):
         user_id = user.discord_id
+        exception = None
 
         for guild in self.client.guilds.values():
             try:
@@ -1411,8 +1395,12 @@ class Orisa(Plugin):
             if str(nn) != new_nn:
                 try:
                     await guild.members[user_id].nickname.set(new_nn)
-                except Exception:
+                except Exception as e:
                     logger.exception("error while setting nick")
+                    exception = e
+
+        if exception:
+            raise exception
 
         return new_nn
 
@@ -1434,9 +1422,8 @@ class Orisa(Plugin):
                 logger.exception(f"Cannot send congrats for guild {guild}")
 
     async def _sync_tag(self, tag):
-
         try:
-            sr, rank, image = await get_sr_rank(tag.tag)
+            sr, image = await get_sr(tag.tag)
         except UnableToFindSR:
             logger.debug(f"No SR for {tag.tag}, oh well...")
             sr = rank = image = None
@@ -1444,12 +1431,12 @@ class Orisa(Plugin):
             tag.error_count += 1
             logger.exception(f"Got exception while requesting {tag.tag}")
             raise
-        await self._handle_new_sr(tag, sr, rank, image)
+        await self._handle_new_sr(tag, sr, image)
 
-    async def _handle_new_sr(self, tag, sr, rank, image):
-        tag.last_update = datetime.utcnow()
+    async def _handle_new_sr(self, tag, sr, image):
         tag.error_count = 0
-        tag.sr = sr
+        tag.update_sr(sr)
+
         try:
             await self._update_nick(tag.user)
         except HierarchyError:
@@ -1469,11 +1456,13 @@ class Orisa(Plugin):
                 await discord_user.send(msg)
 
             # we can still do the rest, no need to return here
+        rank = tag.rank
+
         if rank is not None:
             user = tag.user
-            if user.highest_rank is None:
-                user.highest_rank = rank
-
+            if True: #highest rank
+                pass
+            # FIXME: update
             elif rank > user.highest_rank:
                 logger.debug(f"user {user} old rank {user.highest_rank}, new rank {rank}, sending congrats...")
                 await self._send_congrats(user, rank, image)
@@ -1516,6 +1505,7 @@ class Orisa(Plugin):
         else:
             logger.debug("No tags need to be synced")
 
+
     async def _sync_tags(self, ids_to_sync):
         queue = trio.Queue(len(ids_to_sync))
         for tag_id in ids_to_sync:
@@ -1526,6 +1516,7 @@ class Orisa(Plugin):
                 nursery.start_soon(self._sync_tags_from_queue, queue)
         logger.info("done syncing")
 
+
     async def _sync_all_tags_task(self):
         await trio.sleep(10)
         logger.debug("started waiting...")
@@ -1535,6 +1526,7 @@ class Orisa(Plugin):
             except Exception as e:
                 logger.exception(f"something went wrong during _sync_check")
             await trio.sleep(60)
+
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):
     def strip_tags(name):

@@ -1,7 +1,7 @@
+__all__ = ["GuildInfo", "VoiceCategoryInfo"]
+
 from dataclasses import dataclass, field
 from typing import List, Set, Optional, Union, Dict
-
-__all__ = ["GuildInfo", "VoiceCategoryInfo"]
 
 @dataclass
 class GuildInfo:
