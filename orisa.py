@@ -49,6 +49,7 @@ from curious.dataclasses.presence import Game, Status
 from fuzzywuzzy import process, fuzz
 from lxml import html
 from sqlalchemy.orm import joinedload
+from sqlalchemy.sql import func, desc, and_
 
 from config import BOT_TOKEN, CHANNEL_NAMES, GUILD_INFOS, MASHERY_API_KEY
 
@@ -664,7 +665,7 @@ class Orisa(Plugin):
                 async with ctx.channel.typing:
                     for tag in user.battle_tags:
                         try:
-                            await self._sync_tag(tag)
+                            await self._sync_tag(session, tag)
                         except Exception as e:
                             logger.exception(f'exception while syncing {tag}')
                             fault = True
@@ -764,15 +765,16 @@ class Orisa(Plugin):
                     return
 
                 # check for fat finger
-                if abs(tag.sr - sr) > 200 and not force:
+                if tag.sr and abs(tag.sr - sr) > 200 and not force:
                     await reply(ctx, f"Whoa! {sr} looks like a big change compared to your previous SR of {tag.sr}. To avoid typos, I will only update it if you are sure."
                                      f"So, if that is indeed correct, reissue this command with a ! added to the SR, like `!bt newsr 1234!`")
                     return
 
+            tag.update_sr(sr)
             rank = tag.rank
             image = f"https://d1u1mce87gyfbn.cloudfront.net/game/rank-icons/season-2/rank-{rank+1}.png"
 
-            await self._handle_new_sr(tag, sr, image)
+            await self._handle_new_sr(session, tag, sr, image)
             session.commit()
             await reply(ctx, f"Done. The SR for *{tag.tag}* is now *{sr}*")
 
@@ -1421,7 +1423,7 @@ class Orisa(Plugin):
             except Exception:
                 logger.exception(f"Cannot send congrats for guild {guild}")
 
-    async def _sync_tag(self, tag):
+    async def _sync_tag(self, session, tag):
         try:
             sr, image = await get_sr(tag.tag)
         except UnableToFindSR:
@@ -1431,12 +1433,11 @@ class Orisa(Plugin):
             tag.error_count += 1
             logger.exception(f"Got exception while requesting {tag.tag}")
             raise
-        await self._handle_new_sr(tag, sr, image)
-
-    async def _handle_new_sr(self, tag, sr, image):
         tag.error_count = 0
         tag.update_sr(sr)
+        await self._handle_new_sr(session, tag, sr, image)
 
+    async def _handle_new_sr(self, session, tag, sr, image):
         try:
             await self._update_nick(tag.user)
         except HierarchyError:
@@ -1457,14 +1458,15 @@ class Orisa(Plugin):
 
             # we can still do the rest, no need to return here
         rank = tag.rank
-
         if rank is not None:
             user = tag.user
-            if True: #highest rank
-                pass
-            # FIXME: update
-            elif rank > user.highest_rank:
-                logger.debug(f"user {user} old rank {user.highest_rank}, new rank {rank}, sending congrats...")
+
+            # get highest SR, but exclude current_sr
+            prev_highest_sr_value = session.query(func.max(SR.value)).filter(and_(SR.battle_tag == tag, SR != tag.current_sr))
+            prev_highest_sr = session.query(SR).filter(SR.value==prev_highest_sr_value).order_by(desc(SR.timestamp)).first()
+
+            if prev_highest_sr and rank > prev_highest_sr.rank:
+                logger.debug(f"user {user} old rank {prev_highest_sr.rank}, new rank {rank}, sending congrats...")
                 await self._send_congrats(user, rank, image)
                 user.highest_rank = rank
 
@@ -1485,7 +1487,7 @@ class Orisa(Plugin):
             session = self.database.Session()
             try:
                 tag = self.database.tag_by_id(session, tag_id)
-                await self._sync_tag(tag)
+                await self._sync_tag(session, tag)
             except Exception:
                 logger.exception(f'exception while syncing {tag.tag} for {tag.user.discord_id}')
             finally:
