@@ -267,6 +267,15 @@ class Orisa(Plugin):
         await self.client.kill()
         raise SystemExit(42)
 
+    @command()
+    @condition(only_owner)
+    async def createallchannels(self, ctx):
+        logger.info("creating all channels")
+
+        for gi in GUILD_INFOS.values():
+            for vc in gi.managed_voice_categories:
+                await self._adjust_voice_channels(self.client.find_channel(vc.category_id), create_all_channels=True)
+
 
     @command()
     @condition(only_owner)
@@ -1219,7 +1228,7 @@ class Orisa(Plugin):
             del self.dialogues[key]
 
 
-    async def _adjust_voice_channels(self, parent):
+    async def _adjust_voice_channels(self, parent, *, create_all_channels=False):
         logger.debug("adjusting parent %s", parent)
         guild = parent.guild
         if not guild:
@@ -1254,28 +1263,34 @@ class Orisa(Plugin):
 
             empty_channels = [chan for chan in chans if not chan.voice_members]
 
-            if not empty_channels:
+            async def add_a_channel():
+                name = f"{prefix} #{len(chans)+1}"
+                logger.debug("creating a new channel %s", name)
+
+                if isinstance(cat.prefixes, dict):
+                    limit = cat.prefixes[prefix]
+                else:
+                    limit = 0
+
+                async with self.client.events.wait_for_manager("channel_create", lambda chan:chan.name == name):
+                    await guild.channels.create(type_=ChannelType.VOICE, name=name, parent=parent, user_limit=limit)
+
+                made_changes = True
+
+            if create_all_channels:
+                while len(chans) < cat.channel_limit:
+                    await add_a_channel()
+                    chans.append("dummy") # value doesn't matter
+
+            elif not empty_channels:
                 if len(chans) < cat.channel_limit:
-                    # add a new channel
-                    name = f"{prefix} #{len(chans)+1}"
-                    logger.debug("creating a new channel %s", name)
-
-                    if isinstance(cat.prefixes, dict):
-                        limit = cat.prefixes[prefix]
-                    else:
-                        limit = 0
-
-                    async with self.client.events.wait_for_manager("channel_create", lambda chan:chan.name == name):
-                        await guild.channels.create(type_=ChannelType.VOICE, name=name, parent=parent, user_limit=limit)
-
-                    made_changes = True
+                    await add_a_channel()
 
             elif len(empty_channels) == 1:
                 # how we want it
                 continue
 
             else:
-
                 # more than one empty channel, delete the ones with the highest numbers
                 for chan in empty_channels[1:]:
 
@@ -1284,6 +1299,8 @@ class Orisa(Plugin):
                     async with self.client.events.wait_for_manager("channel_delete", lambda chan: chan.id == id):
                         await chan.delete()
                     made_changes = True
+
+        del chans # just to make sure we don't use it later, see hack above
 
         if made_changes:
             managed_channels = []
@@ -1296,7 +1313,6 @@ class Orisa(Plugin):
                     managed_channels.append(chan)
                 else:
                     unmanaged_channels.append(chan)
-
 
             managed_group = {}
             for prefix, group in groupby(sorted(managed_channels, key=prefixkey), key=prefixkey):
