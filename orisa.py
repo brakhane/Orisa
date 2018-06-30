@@ -1333,7 +1333,7 @@ class Orisa(Plugin):
             secondary_sr = None
         else:
             # secondary accounts, mark SR
-            sr = f"{sr.value}*"
+            sr = f"{sr}*"
             rank = f"{rank}*"
 
         if secondary_sr is None:
