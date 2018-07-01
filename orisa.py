@@ -14,13 +14,14 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 import logging.config
-
 import re
 import random
-from contextlib import suppress
+
+from contextlib import contextmanager, suppress
+from contextvars import ContextVar
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from itertools import groupby
+from itertools import groupby, count
 from operator import attrgetter, itemgetter
 from string import Template
 from typing import Optional
@@ -29,6 +30,7 @@ import asks
 import html5lib
 import multio
 import pendulum
+import tabulate
 import trio
 import yaml
 
@@ -48,10 +50,11 @@ from curious.dataclasses.member import Member
 from curious.dataclasses.presence import Game, Status
 from fuzzywuzzy import process, fuzz
 from lxml import html
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.sql import func, desc, and_
+from wcwidth import wcswidth
 
-from config import BOT_TOKEN, CHANNEL_NAMES, GUILD_INFOS, MASHERY_API_KEY
+from config import BOT_TOKEN, CHANNEL_NAMES, GLADOS_TOKEN, GUILD_INFOS, MASHERY_API_KEY
 
 from models import Database, User, BattleTag, SR, Role, WowUser, WowRole
 
@@ -139,9 +142,11 @@ async def get_sr(battletag):
     finally:
         lock.release()
 
+
 def sort_secondaries(user):
     user.battle_tags[1:] = list(sorted(user.battle_tags[1:], key=attrgetter("tag")))
     user.battle_tags.reorder()
+
 
 async def send_long(send_func, msg):
     "Splits a long message >2000 into smaller chunks"
@@ -162,8 +167,10 @@ async def send_long(send_func, msg):
         if part:
             await send_func(part)
 
+
 async def reply(ctx, msg):
     return await ctx.channel.messages.send(f"<@!{ctx.author.id}> {msg}")
+
 
 def resolve_tag_or_index(user, tag_or_index):
     try:
@@ -178,6 +185,7 @@ def resolve_tag_or_index(user, tag_or_index):
         if index >= len(user.battle_tags):
             raise ValueError("You don't even have that many secondary BattleTags")
     return index
+
 
 async def set_channel_suffix(chan, suffix: str):
     name = chan.name
@@ -196,6 +204,7 @@ async def set_channel_suffix(chan, suffix: str):
     if name != new_name:
         await chan.edit(name=new_name)
 
+
 def format_roles(roles):
     names = {
         Role.DPS: "Damage",
@@ -205,13 +214,17 @@ def format_roles(roles):
     }
     return ", ".join(names[r] for r in Role if r and r in roles)
 
+
 # Conditions
+
 
 def correct_channel(ctx):
     return ctx.channel.id in CHANNEL_IDS or ctx.channel.private
 
+
 def correct_wow_channel(ctx):
     return ctx.channel.id in WOW_CHANNEL_IDS or ctx.channel.private
+
 
 def only_owner(ctx):
     try:
@@ -219,6 +232,7 @@ def only_owner(ctx):
     except AttributeError:
         # application_info is None
         return False
+
 
 def only_owner_all_channels(ctx):
     try:
@@ -229,6 +243,7 @@ def only_owner_all_channels(ctx):
 
 
 # Dataclasses
+
 
 @dataclass
 class Dialogue:
@@ -253,19 +268,23 @@ class Orisa(Plugin):
 
 
     async def load(self):
-        await self.spawn(self._sync_all_tags_task)
+        logger.warning("*****BACKGROUND SYNC DISABLED*****")
+        # await self.spawn(self._sync_all_tags_task)
+
 
     # admin commands
 
+
     @command()
-    @condition(only_owner)
+    @condition(only_owner, bypass_owner=False)
     async def shutdown(self, ctx):
         logger.critical("***** GOT EMERGENCY SHUTDOWN COMMAND FROM OWNER *****")
         await self.client.kill()
         raise SystemExit(42)
 
+
     @command()
-    @condition(only_owner)
+    @condition(only_owner, bypass_owner=False)
     async def createallchannels(self, ctx):
         logger.info("creating all channels")
 
@@ -275,7 +294,7 @@ class Orisa(Plugin):
 
 
     @command()
-    @condition(only_owner)
+    @condition(only_owner, bypass_owner=False)
     async def messageall(self, ctx, *, message: str):
         s = self.database.Session()
         try:
@@ -293,7 +312,7 @@ class Orisa(Plugin):
 
 
     @command()
-    @condition(only_owner)
+    @condition(only_owner, bypass_owner=False)
     async def post(self, ctx, channel_id: str, *, message:str):
         try:
             channel_id = CHANNEL_NAMES[channel_id]
@@ -305,7 +324,7 @@ class Orisa(Plugin):
 
 
     @command()
-    @condition(only_owner)
+    @condition(only_owner, bypass_owner=False)
     async def delete(self, ctx, channel_id: str, message_id: int):
         try:
             channel_id = CHANNEL_NAMES[channel_id]
@@ -314,6 +333,7 @@ class Orisa(Plugin):
         # low level access, because getting a message requires MESSAGE_HISTORY permission
         await self.client.http.delete_message(channel_id, message_id)
         await ctx.channel.messages.send("deleted")
+
 
 #    @command()
 #    @condition(only_owner)
@@ -325,18 +345,32 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner)
     async def d(self, ctx):
-        """testing123"""
+        """testing123 With *formatting*
+        
+        **OH YEAH!**
+        """
         rec = ctx.author.id
         chan = ctx.channel
         try:
-            name = await self._prompt(chan, rec, "What is your name?")
-            quest = await self._prompt(chan, rec, f"So {name}, what is your quest?")
-            ans = await self._prompt(chan, rec, f"As someone whose quest is {quest}, you should know this: What is the capital of Assyria?")
+
+            with self.client.as_glados():
+                name = await self._prompt(chan, rec, "What is your name?")
+                quest = await self._prompt(chan, rec, f"So {name}, what is your quest?")
+                ans = await self._prompt(chan, rec, f"As someone whose quest is {quest}, you should know this: What is the capital of Assyria?")
             await ctx.channel.messages.send(f"{ans}...")
         except trio.TooSlowError as e:
             logger.exception("got timeout")
             await chan.messages.send("TIMEOUT!")
 
+
+    @command()
+    @condition(only_owner)
+    async def hs(self, ctx):
+
+        prev_date = datetime.utcnow() - timedelta(days=1)
+
+        with self.database.session() as session:
+            await self._top_players(session, ctx, prev_date)
 
     @command()
     @condition(only_owner)
@@ -351,7 +385,7 @@ class Orisa(Plugin):
 
 
     @command()
-    @condition(only_owner)
+    @condition(only_owner, bypass_owner=False)
     async def cleanup(self, ctx, *, doit: str = None):
         member_ids = [id for guild in self.client.guilds.values() for id in guild.members.keys()]
         session = self.database.Session()
@@ -370,7 +404,9 @@ class Orisa(Plugin):
     async def ping(self, ctx):
         await reply(ctx, "pong")
 
+
     # bt commands
+
 
     @command()
     @condition(correct_channel)
@@ -738,7 +774,8 @@ class Orisa(Plugin):
                 tag_str, sr_str = arg1, arg2
 
                 try:
-                    tag, score, index = process.extractOne(tag_str, {t.position: t.tag for t in user.battle_tags}, score_cutoff=50)
+                    _, score, index = process.extractOne(tag_str, {t.position: t.tag for t in user.battle_tags}, score_cutoff=50)
+                    tag = user.battle_tags[index]
                 except (ValueError, TypeError):
                     tag = None
 
@@ -932,7 +969,6 @@ class Orisa(Plugin):
 
         finally:
             session.close()
-
 
 
     @bt.subcommand()
@@ -1197,7 +1233,7 @@ class Orisa(Plugin):
 
     # Util
 
-    async def _prompt(self, channel, recipient_id, msg, timeout=3):
+    async def _prompt(self, channel, recipient_id, msg, timeout=60):
         dialog = Dialogue(datetime.utcnow(), None)
         key = (channel.id, recipient_id)
         if key in self.dialogues:
@@ -1328,7 +1364,10 @@ class Orisa(Plugin):
             sr = primary.sr
         else:
             sr = "noSR"
-            for old_sr in primary.sr_history:
+            # normally, we only save different values for SR, so if there is
+            # a non null value, it should be the second or third, but just
+            # to be sure, check the first 10...
+            for old_sr in primary.sr_history[:10]:
                 if old_sr.value:
                     sr = f"{old_sr.value}?"
                     rank = f"{RANKS[old_sr.rank]}?"
@@ -1414,6 +1453,7 @@ class Orisa(Plugin):
 
         return new_nn
 
+    
     async def _send_congrats(self, user, rank, image):
         for guild in self.client.guilds.values():
             try:
@@ -1431,6 +1471,109 @@ class Orisa(Plugin):
             except Exception:
                 logger.exception(f"Cannot send congrats for guild {guild}")
 
+
+    async def _top_players(self, session, ctx, prev_date):
+
+        def prev_sr(tag):
+            for sr in tag.sr_history[:30]:
+                prev_sr = sr
+                if sr.timestamp < prev_date:
+                    break
+            return prev_sr
+
+        tags = (session.query(BattleTag).options(joinedload(BattleTag.user))
+                .join(BattleTag.current_sr)
+                .order_by(desc(SR.value)).filter(SR.value != None).all())
+
+        tags_and_prev = [(tag, prev_sr(tag)) for tag in tags]
+
+        top_per_guild = {}
+
+        guilds = self.client.guilds.values()
+
+        users_seen = set()
+
+        # Not the best runtime performance, we'll worry about that when we have
+        # hundreds of guilds with hundreds of members
+        for tag, prev_sr in tags_and_prev:
+            if tag.user.id in users_seen:
+                continue
+            else:
+                users_seen.add(tag.user.id)
+            found = False
+
+            for guild in guilds:
+                try:
+                    member = guild.members[tag.user.discord_id]
+                except KeyError:
+                    continue
+
+                top_per_guild.setdefault(guild.id, []).append((member, tag, prev_sr.value))
+                found = True
+
+            @dataclass
+            class dummy:
+                name: str
+
+            if not found:
+                #top_per_guild.setdefault(tag.user.discord_id%1, []).append((dummy(name=f"X{tag.user.discord_id}"), tag, prev_sr.value))
+                logger.warning("User %i not found in any of the guilds", tag.user.discord_id)
+
+        def member_name(member):
+            name = str(member.name)
+            name = re.sub(r'\[.*?\]', '', name)
+            name = re.sub(r'\{.*?\}', '', name)
+
+            return "".join(ch if wcswidth(ch)==1 else "" for ch in name)
+
+        for guild_id, tops in top_per_guild.items():
+
+            prev_top_tags = [top[1] for top in sorted(tops, key=itemgetter(2), reverse=True)]
+
+            def prev_str(pos, tag):
+                old_pos = prev_top_tags.index(tag) + 1
+                if pos == old_pos:
+                    sym = ""
+                elif pos > old_pos:
+                    sym = "↓"
+                else:
+                    sym = "↑"
+
+                return f"({old_pos:2}) {sym}"
+
+            def delta_fmt(delta):
+                if delta == 0:
+                    return ""
+                else:
+                    return f"{delta:+4}"
+
+            data = [(ix+1, prev_str(ix+1, tag), member_name(member), tag.tag, tag.sr, delta_fmt(tag.sr - prev_sr))
+                    for ix, (member, tag, prev_sr) in enumerate(tops)]
+
+            tabulate.PRESERVE_WHITESPACE = True
+            table_lines = tabulate.tabulate(data, headers=['#', 'prev', 'Member', 'BattleTag', 'SR', 'ΔSR'], tablefmt="psql").split("\n")
+
+            table_lines = [f"`{line}`" for line in table_lines]
+
+            # Split table into submessages, because a short "line" is visible after each message
+            # we want it to be in "nice" multiples
+
+            ix = 0
+            lines = 20
+
+            table_lines.insert(0, "Hello! Here are the current SR highscores. If a member has more than one "
+                                  "BattleTag, only the tag with the highest SR is considered.\n")
+            try:
+                send = self.client.find_channel(GUILD_INFOS[guild_id].listen_channel_id).messages.send
+                while ix < len(table_lines):
+                    # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
+                    step = lines if ix else lines+3
+                    await send_long(send, "\n".join(table_lines[ix:ix+step]))
+                    ix += step 
+            except Exception:
+                logger.exception("unable to send top players to guild %i", guild_id)
+
+    
     async def _sync_tag(self, session, tag):
         try:
             sr, image = await get_sr(tag.tag)
@@ -1445,6 +1588,7 @@ class Orisa(Plugin):
         tag.update_sr(sr)
         await self._handle_new_sr(session, tag, sr, image)
 
+    
     async def _handle_new_sr(self, session, tag, sr, image):
         try:
             await self._update_nick(tag.user)
@@ -2075,6 +2219,8 @@ class Wow(Plugin):
 
         return ilvl, rbg
 
+
+
     # Events
 
     @event('member_update')
@@ -2115,7 +2261,39 @@ Context.add_converter(Member, fuzzy_nick_match)
 
 multio.init('trio')
 
-client = Client(BOT_TOKEN)
+import inspect
+
+
+
+from curious.core.httpclient import HTTPClient
+
+GLaDOS: ContextVar[bool] = ContextVar('GLaDOS', default=False)
+
+class MyClient(Client):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__GLaDOS_http = HTTPClient(GLADOS_TOKEN, bot=True)
+
+    @contextmanager
+    def as_glados(self):
+        token = GLaDOS.set(True)
+        try:
+            yield
+        finally:
+            GLaDOS.reset(token)
+
+    def _http_get(self):
+        return self.__GLaDOS_http if GLaDOS.get() else self.__http
+
+
+    def _http_set(self, http):
+        self.__http = http
+
+
+    http = property(_http_get, _http_set)
+
+client = MyClient(BOT_TOKEN)
 
 database = Database()
 
