@@ -1324,7 +1324,12 @@ class Orisa(Plugin):
 
         rankno = primary.rank
         rank = RANKS[rankno] if rankno is not None else "Unranked"
-        sr = primary.sr or "noSR"
+        if not primary.sr:
+            sr = "noSR"
+            for old_sr in primary.sr_history:
+                if old_sr.value:
+                    sr = f"{old_sr.value}❓"
+                    break
 
         try:
             secondary_sr = user.battle_tags[1].sr
