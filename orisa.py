@@ -117,7 +117,7 @@ async def get_sr(battletag):
 
         url = f'https://playoverwatch.com/en-us/career/pc/{battletag.replace("#", "-")}'
         logger.info(f'requesting {url}')
-        result = await asks.get(url)
+        result = await asks.get(url, connection_timeout=30, timeout=30)
         if result.status_code != 200:
             raise RuntimeError(f'got status code {result.status_code} from Blizz')
 
@@ -1324,7 +1324,9 @@ class Orisa(Plugin):
 
         rankno = primary.rank
         rank = RANKS[rankno] if rankno is not None else "Unranked"
-        if not primary.sr:
+        if primary.sr:
+            sr = primary.sr
+        else:
             sr = "noSR"
             for old_sr in primary.sr_history:
                 if old_sr.value:
@@ -1516,6 +1518,7 @@ class Orisa(Plugin):
 
     async def _sync_tags(self, ids_to_sync):
         queue = trio.Queue(len(ids_to_sync))
+        logger.debug("preparing to sync ids: {}", ids_to_sync)
         for tag_id in ids_to_sync:
             await queue.put(tag_id)
 
