@@ -1328,7 +1328,8 @@ class Orisa(Plugin):
             sr = "noSR"
             for old_sr in primary.sr_history:
                 if old_sr.value:
-                    sr = f"{old_sr.value}❓"
+                    sr = f"{old_sr.value}?"
+                    rank = f"{RANKS[old_sr.rank]}?"
                     break
 
         try:
