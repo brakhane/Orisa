@@ -14,8 +14,10 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 import logging.config
+import math
 import re
 import random
+import unicodedata
 
 from contextlib import contextmanager, suppress
 from contextvars import ContextVar
@@ -37,6 +39,7 @@ import yaml
 from cachetools.func import TTLCache
 from curious import event
 from curious.commands.context import Context
+from curious.commands.conditions import author_has_roles
 from curious.commands.decorators import command, condition
 from curious.commands.exc import ConversionFailedError
 from curious.commands.manager import CommandsManager
@@ -217,7 +220,6 @@ def format_roles(roles):
 
 # Conditions
 
-
 def correct_channel(ctx):
     return ctx.channel.id in CHANNEL_IDS or ctx.channel.private
 
@@ -228,7 +230,7 @@ def correct_wow_channel(ctx):
 
 def only_owner(ctx):
     try:
-        return ctx.author.id == ctx.application_info.owner.id and ctx.channel.private
+        return ctx.author.id == ctx.bot.application_info.owner.id and ctx.channel.private
     except AttributeError:
         # application_info is None
         return False
@@ -236,7 +238,7 @@ def only_owner(ctx):
 
 def only_owner_all_channels(ctx):
     try:
-        return ctx.author.id == ctx.application_info.owner.id
+        return ctx.author.id == ctx.bot.application_info.owner.id
     except AttributeError:
         # application_info is None
         return False
@@ -268,18 +270,27 @@ class Orisa(Plugin):
 
 
     async def load(self):
-        logger.warning("*****BACKGROUND SYNC DISABLED*****")
-        # await self.spawn(self._sync_all_tags_task)
+        await self.spawn(self._sync_all_tags_task)
 
 
     # admin commands
 
 
     @command()
-    @condition(only_owner, bypass_owner=False)
-    async def shutdown(self, ctx):
+    #@condition(only_owner, bypass_owner=False)
+    @author_has_roles("Clan Administrator")
+    async def shutdown(self, ctx, safety:str=None):
+        if safety != "Orisa":
+            await reply(ctx, "If you want me to shut down, you need to issue `!bt shutdown Orisa` exactly as shown")
         logger.critical("***** GOT EMERGENCY SHUTDOWN COMMAND FROM OWNER *****")
-        await self.client.kill()
+        try:
+            await reply(ctx, "Shutting down...")
+        except:
+            pass
+        try:
+            await self.client.kill()
+        except:
+            pass
         raise SystemExit(42)
 
 
@@ -325,7 +336,12 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner, bypass_owner=False)
-    async def delete(self, ctx, channel_id: str, message_id: int):
+    async def delete(self, ctx, channel_id: str, message_id: int=None):
+        match = re.match(r"https://discordapp.com/channels/[0-9]+/([0-9]+)/([0-9]+)", channel_id)
+        if match:
+            channel_id = int(match.group(1))
+            message_id = int(match.group(2))
+
         try:
             channel_id = CHANNEL_NAMES[channel_id]
         except KeyError:
@@ -346,7 +362,7 @@ class Orisa(Plugin):
     @condition(only_owner)
     async def d(self, ctx):
         """testing123 With *formatting*
-        
+
         **OH YEAH!**
         """
         rec = ctx.author.id
@@ -371,6 +387,13 @@ class Orisa(Plugin):
 
         with self.database.session() as session:
             await self._top_players(session, ctx, prev_date)
+
+    @command()
+    @condition(only_owner)
+    async def ranking(self, ctx, date:str):
+        date = pendulum.parse(date, tz=None)
+        with self.database.session() as session:
+            await self._player_ranking(session, ctx, date)
 
     @command()
     @condition(only_owner)
@@ -1284,6 +1307,8 @@ class Orisa(Plugin):
             empty_channels = [chan for chan in chans if not chan.voice_members]
 
             async def add_a_channel():
+                nonlocal made_changes
+
                 name = f"{prefix} #{len(chans)+1}"
                 logger.debug("creating a new channel %s", name)
 
@@ -1453,7 +1478,7 @@ class Orisa(Plugin):
 
         return new_nn
 
-    
+
     async def _send_congrats(self, user, rank, image):
         for guild in self.client.guilds.values():
             try:
@@ -1470,6 +1495,86 @@ class Orisa(Plugin):
                 await self.client.find_channel(GUILD_INFOS[guild.id].congrats_channel_id).messages.send(content=f"Let's hear it for <@!{user.discord_id}>!", embed=embed)
             except Exception:
                 logger.exception(f"Cannot send congrats for guild {guild}")
+
+
+    async def _player_ranking(self, session, ctx, date):
+
+        guild_id = 443691528951693312
+
+        def get_sr(tag):
+            for sr in tag.sr_history:
+                found_sr = sr.value
+                if sr.timestamp < date:
+                    break
+            else:
+                # if no SR is before that date, we have none at that
+                # point in time
+                found_sr = None
+            return found_sr
+
+        guild = self.client.guilds[guild_id]
+
+        tags = session.query(BattleTag).options(joinedload(BattleTag.user)).all()
+
+        data = []
+        for tag in tags:
+            try:
+                member = guild.members[tag.user.discord_id]
+            except KeyError:
+                continue
+            sr = get_sr(tag)
+            if not sr:
+                continue
+            data.append((member, tag, sr))
+
+
+        data.sort(key=lambda x:(x[2] or 0,str(x[0].name)), reverse=True)
+
+        def member_name(member):
+            name = str(member.name)
+            name = re.sub(r'\[.*?\]', '', name)
+            name = re.sub(r'\{.*?\}', '', name)
+            name = re.sub(r'\s{2,}', ' ', name)
+
+            return "".join(ch if ord(ch)<256 or unicodedata.category(ch)[0] != "S" else "" for ch in name)
+
+
+        table_data = []
+        prev_sr = None
+        pos = 1
+        logger.debug("starting %i",len(data))
+        for ix, (member, tag, sr) in enumerate(data):
+
+            if sr != prev_sr:
+                pos = ix+1
+            prev_sr = sr
+
+            table_data.append((pos, member_name(member), tag.tag, sr))
+
+        tabulate.PRESERVE_WHITESPACE = True
+        table_lines = tabulate.tabulate(table_data, headers=['#', 'Member', 'BattleTag', 'SR'], tablefmt="psql").split("\n")
+
+        table_lines = [f"`{line}`" for line in table_lines]
+
+        # Split table into submessages, because a short "line" is visible after each message
+        # we want it to be in "nice" multiples
+
+        ix = 0
+        lines = 20
+
+        table_lines.insert(0, f"**SR ranking as of {pendulum.instance(date).to_day_datetime_string()}**\n")
+
+        send = self.client.find_channel(GUILD_INFOS[guild_id].listen_channel_id).messages.send
+        send = self.client.application_info.owner.send
+        while ix < len(table_lines):
+            # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
+            step = lines if ix else lines+3
+            await send_long(send, "\n".join(table_lines[ix:ix+step]))
+            ix += step
+
+
+
+
 
 
     async def _top_players(self, session, ctx, prev_date):
@@ -1523,14 +1628,19 @@ class Orisa(Plugin):
             name = str(member.name)
             name = re.sub(r'\[.*?\]', '', name)
             name = re.sub(r'\{.*?\}', '', name)
+            name = re.sub(r'\s{2,}', ' ', name)
 
-            return "".join(ch if wcswidth(ch)==1 else "" for ch in name)
+            return "".join(ch if ord(ch)<256 or unicodedata.category(ch)[0] != "S" else "" for ch in name)
 
         for guild_id, tops in top_per_guild.items():
 
-            prev_top_tags = [top[1] for top in sorted(tops, key=itemgetter(2), reverse=True)]
+            # FIXME: wrong if there is a tie
+            prev_top_tags = [top[1] for top in sorted(tops, key=lambda x:x[2] or 0, reverse=True)]
 
-            def prev_str(pos, tag):
+            def prev_str(pos, tag, prev_sr):
+                if not prev_sr:
+                    return "(——)"
+
                 old_pos = prev_top_tags.index(tag) + 1
                 if pos == old_pos:
                     sym = ""
@@ -1541,14 +1651,19 @@ class Orisa(Plugin):
 
                 return f"({old_pos:2}) {sym}"
 
-            def delta_fmt(delta):
-                if delta == 0:
+            def delta_fmt(curr, prev):
+                if not curr or not prev or curr == prev:
                     return ""
                 else:
-                    return f"{delta:+4}"
+                    return f"{curr-prev:+4}"
 
-            data = [(ix+1, prev_str(ix+1, tag), member_name(member), tag.tag, tag.sr, delta_fmt(tag.sr - prev_sr))
-                    for ix, (member, tag, prev_sr) in enumerate(tops)]
+            table_prev_sr = None
+            data = []
+            for ix, (member, tag, prev_sr) in enumerate(tops):
+                if tag.sr != table_prev_sr:
+                    pos = ix+1
+                table_prev_sr = tag.sr
+                data.append((pos, prev_str(ix+1, tag, prev_sr), member_name(member), tag.tag, tag.sr, delta_fmt(tag.sr, prev_sr)))
 
             tabulate.PRESERVE_WHITESPACE = True
             table_lines = tabulate.tabulate(data, headers=['#', 'prev', 'Member', 'BattleTag', 'SR', 'ΔSR'], tablefmt="psql").split("\n")
@@ -1562,18 +1677,20 @@ class Orisa(Plugin):
             lines = 20
 
             table_lines.insert(0, "Hello! Here are the current SR highscores. If a member has more than one "
-                                  "BattleTag, only the tag with the highest SR is considered.\n")
+                                  "BattleTag, only the tag with the highest SR is considered. Player who didn't "
+                                  "do their placements this season but logged into OW are not shown.\n")
             try:
                 send = self.client.find_channel(GUILD_INFOS[guild_id].listen_channel_id).messages.send
+                # send = self.client.application_info.owner.send
                 while ix < len(table_lines):
                     # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
                     step = lines if ix else lines+3
                     await send_long(send, "\n".join(table_lines[ix:ix+step]))
-                    ix += step 
+                    ix += step
             except Exception:
                 logger.exception("unable to send top players to guild %i", guild_id)
 
-    
+
     async def _sync_tag(self, session, tag):
         try:
             sr, image = await get_sr(tag.tag)
@@ -1588,7 +1705,7 @@ class Orisa(Plugin):
         tag.update_sr(sr)
         await self._handle_new_sr(session, tag, sr, image)
 
-    
+
     async def _handle_new_sr(self, session, tag, sr, image):
         try:
             await self._update_nick(tag.user)
@@ -1662,7 +1779,7 @@ class Orisa(Plugin):
 
     async def _sync_tags(self, ids_to_sync):
         queue = trio.Queue(len(ids_to_sync))
-        logger.debug("preparing to sync ids: {}", ids_to_sync)
+        logger.debug("preparing to sync ids: %s", ids_to_sync)
         for tag_id in ids_to_sync:
             await queue.put(tag_id)
 
@@ -1879,10 +1996,10 @@ class Wow(Plugin):
             return
 
         name_and_realm = name_and_realm.strip()
-        if ' ' in name_and_realm:
-            name, realm = name_and_realm.split(' ', 1)
-        elif '-' in name_and_realm:
+        if '-' in name_and_realm:
             name, realm = name_and_realm.split('-', 1)
+        elif ' ' in name_and_realm:
+            name, realm = name_and_realm.split(' ', 1)
         else:
             name = name_and_realm
             realm = GUILD_INFOS[guild.id].wow_guild_realm

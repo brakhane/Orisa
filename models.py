@@ -197,7 +197,7 @@ class Database:
             # slight randomization to avoid having all
             # battletags update at the same time if Orisa didn't run
             # for a while
-            return timedelta(minutes=random.randint(55, 65))
+            return timedelta(minutes=random.randint(50, 70))
         elif 0 < error_count < 3:
             return timedelta(minutes=5) # we actually want to try again fast, in case it was a temporary problem
         elif 3 <= error_count < 5:
