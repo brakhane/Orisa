@@ -381,12 +381,12 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
-    async def hs(self, ctx):
+    async def hs(self, ctx, style:str = "psql"):
 
         prev_date = datetime.utcnow() - timedelta(days=1)
 
         with self.database.session() as session:
-            await self._top_players(session, ctx, prev_date)
+            await self._top_players(session, ctx, prev_date, style)
 
     @command()
     @condition(only_owner)
@@ -1574,7 +1574,7 @@ class Orisa(Plugin):
 
 
 
-    async def _top_players(self, session, ctx, prev_date):
+    async def _top_players(self, session, ctx, prev_date, style="psql"):
 
         def prev_sr(tag):
             for sr in tag.sr_history[:30]:
@@ -1660,10 +1660,10 @@ class Orisa(Plugin):
                 if tag.sr != table_prev_sr:
                     pos = ix+1
                 table_prev_sr = tag.sr
-                data.append((pos, prev_str(ix+1, tag, prev_sr), member_name(member), tag.tag, tag.sr, delta_fmt(tag.sr, prev_sr)))
+                data.append((pos, prev_str(ix+1, tag, prev_sr), member_name(member), tag.sr, delta_fmt(tag.sr, prev_sr)))
 
             tabulate.PRESERVE_WHITESPACE = True
-            table_lines = tabulate.tabulate(data, headers=['#', 'prev', 'Member', 'BattleTag', 'SR', 'ΔSR'], tablefmt="psql").split("\n")
+            table_lines = tabulate.tabulate(data, headers=['#', 'prev', 'Member', 'SR', 'ΔSR'], tablefmt=style).split("\n")
 
             table_lines = [f"`{line}`" for line in table_lines]
 
@@ -1732,7 +1732,7 @@ class Orisa(Plugin):
             prev_highest_sr_value = session.query(func.max(SR.value)).filter(SR.battle_tag == tag, SR.id != tag.current_sr_id)
             prev_highest_sr = session.query(SR).filter(SR.value==prev_highest_sr_value).order_by(desc(SR.timestamp)).first()
 
-            logger.debug(f"prev_sr {prev_highest_sr} {tag.current_sr_value}")
+            logger.debug(f"prev_sr {prev_highest_sr} {tag.current_sr.value}")
             if prev_highest_sr and rank > prev_highest_sr.rank:
                 logger.debug(f"user {user} old rank {prev_highest_sr.rank}, new rank {rank}, sending congrats...")
                 await self._send_congrats(user, rank, image)
