@@ -24,14 +24,21 @@ from contextvars import ContextVar
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from itertools import groupby, count
+from io import BytesIO
 from operator import attrgetter, itemgetter
 from string import Template
 from typing import Optional
 
 import asks
+import dateutil.parser as date_parser
 import html5lib
+import matplotlib
+import matplotlib.pyplot as plt
 import multio
+import numpy as np
+import pandas as pd
 import pendulum
+import seaborn as sns
 import tabulate
 import trio
 import yaml
@@ -426,6 +433,8 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def ping(self, ctx):
         await reply(ctx, "pong")
+
+
 
 
     # bt commands
@@ -1168,9 +1177,79 @@ class Orisa(Plugin):
                   "`!bt setroles so`: you play Support and Off Tanks\n"
                   "`!bt setroles dmos`: you are a true Flex and play everything."
         )
+        embed.add_field(
+            name='!bt srgraph [from_date]',
+            value="*This command is in beta and can change at any time; it might also have bugs, report them please*\n"
+                  "Shows a graph of your SR. If from_date is given, the graph starts at that date, otherwise it starts "
+                  "as early as Orisa has data.")
 
 
         return embeds
+
+    @bt.subcommand()
+    async def srgraph(self, ctx, date:str = None):
+
+        with self.database.session() as session:
+            user = self.database.user_by_discord_id(session, ctx.author.id)
+            if not user:
+                await reply(ctx, "You are not registered")
+                return
+            sns.set()
+
+            tag = user.battle_tags[0]
+
+            data = [(sr.timestamp, sr.value) for sr in tag.sr_history]
+
+            data = pd.DataFrame.from_records(reversed(data), columns=['timestamp', 'sr'])
+
+            if date:
+                try:
+                    date = date_parser.parse(date, parserinfo=date_parser.parserinfo(dayfirst=True))
+                except ValueError:
+                    await reply(ctx, "I don't know what date {date} is supposed to mean. Please use "
+                                    "the format DD.MM.YY or YYYY-MM-DD")
+
+                data = data[data.timestamp>=date].reset_index(drop=True)
+
+            fig, ax = plt.subplots()
+
+            data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
+
+            for is_min, ix in enumerate([data.sr.idxmax(), data.sr.idxmin()]):
+                col = "C2" if is_min else "C1"
+                
+                val = data.iloc[ix].sr
+                ax.axhline(y=val, color=col, linestyle="--")
+
+                ax.annotate(int(val), xy=(1, val), xycoords=("axes fraction", "data"), 
+                            xytext=(5,-3), textcoords="offset points",
+                            color=col)
+                
+            data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
+
+            if True:
+                for ix in data.sr[pd.isna].index:
+                    x = data.iloc[ix-1:ix]
+                    x = x.append(data.iloc[ix+1:ix+2])
+                    x.loc[0, "timestamp"] = data.iloc[ix].timestamp
+                    x.set_index("timestamp").sr.plot(style="C0:", ax=ax, drawstyle="steps-post")
+
+            ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%d.%m."))
+            #ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(byhour=(0, 12)))
+            plt.xlabel("Date")
+            plt.ylabel("SR")
+
+            image = BytesIO()
+            plt.savefig(format="png", fname=image, transparent=False)
+            image.seek(0)
+            embed = Embed(title="SR History", description=f"Here is your SR history starting from "
+                        f"{'the beginning of time' if not date else pendulum.instance(date).to_formatted_date_string()}.\n"
+                        "A dotted line means that you had no SR during that time (probably due to off-season)")
+            embed.set_image(image_url="attachment://graph.png")
+            await ctx.channel.messages.upload(image, filename="graph.png", message_embed=embed)
+            
+
+
 
 
     # Events
@@ -1450,7 +1529,7 @@ class Orisa(Plugin):
 
     async def _update_nick(self, user):
         user_id = user.discord_id
-        exception = None
+        exception = new_nn = None
 
         for guild in self.client.guilds.values():
             try:
