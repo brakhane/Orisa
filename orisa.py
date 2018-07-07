@@ -1565,15 +1565,12 @@ class Orisa(Plugin):
         table_lines.insert(0, f"**SR ranking as of {pendulum.instance(date).to_day_datetime_string()}**\n")
 
         send = self.client.find_channel(GUILD_INFOS[guild_id].listen_channel_id).messages.send
-        send = self.client.application_info.owner.send
+        #send = self.client.application_info.owner.send
         while ix < len(table_lines):
             # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
             step = lines if ix else lines+3
             await send_long(send, "\n".join(table_lines[ix:ix+step]))
             ix += step
-
-
-
 
 
 
@@ -1731,9 +1728,11 @@ class Orisa(Plugin):
             user = tag.user
 
             # get highest SR, but exclude current_sr
-            prev_highest_sr_value = session.query(func.max(SR.value)).filter(and_(SR.battle_tag == tag, SR != tag.current_sr))
+            session.flush()
+            prev_highest_sr_value = session.query(func.max(SR.value)).filter(SR.battle_tag == tag, SR.id != tag.current_sr_id)
             prev_highest_sr = session.query(SR).filter(SR.value==prev_highest_sr_value).order_by(desc(SR.timestamp)).first()
 
+            logger.debug(f"prev_sr {prev_highest_sr} {tag.current_sr_value}")
             if prev_highest_sr and rank > prev_highest_sr.rank:
                 logger.debug(f"user {user} old rank {prev_highest_sr.rank}, new rank {rank}, sending congrats...")
                 await self._send_congrats(user, rank, image)
@@ -1742,11 +1741,14 @@ class Orisa(Plugin):
 
     async def _sync_tags_from_queue(self, queue):
         first = True
+        logger.debug("syncing from queue %r", queue)
         while True:
             try:
                 tag_id = queue.get_nowait()
             except trio.WouldBlock:
+                logger.debug("queue %r is empty, done.", queue)
                 return
+            logger.debug("got %s from queue %r", tag_id, queue)
             if not first:
                 delay = random.random() * 5.
                 logger.debug(f"rate limiting: sleeping for {delay:.02}s")
@@ -1757,6 +1759,7 @@ class Orisa(Plugin):
             try:
                 tag = self.database.tag_by_id(session, tag_id)
                 await self._sync_tag(session, tag)
+                session.commit()
             except Exception:
                 logger.exception(f'exception while syncing {tag.tag} for {tag.user.discord_id}')
             finally:
@@ -1779,7 +1782,7 @@ class Orisa(Plugin):
 
     async def _sync_tags(self, ids_to_sync):
         queue = trio.Queue(len(ids_to_sync))
-        logger.debug("preparing to sync ids: %s", ids_to_sync)
+        logger.debug("preparing to sync ids: %s into queue %r", ids_to_sync, queue)
         for tag_id in ids_to_sync:
             await queue.put(tag_id)
 

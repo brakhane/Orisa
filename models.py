@@ -170,7 +170,7 @@ class Database:
         self.Session = sessionmaker(bind=engine, autoflush=False)
         Base.metadata.create_all(engine)
 
-        self._min_time = datetime.utcnow() - min(self._sync_delay(x) for x in range(10))
+        self._min_delay = min(self._sync_delay(x) for x in range(10))
 
     @contextmanager
     def session(self):
@@ -209,5 +209,5 @@ class Database:
             return timedelta(days=1)
 
     def get_tags_to_be_synced(self, session):
-        results = session.query(BattleTag).join(BattleTag.current_sr).filter(SR.timestamp <= self._min_time).all()
+        results = session.query(BattleTag).join(BattleTag.current_sr).filter(SR.timestamp <= datetime.utcnow() - self._min_delay).all()
         return [result.id for result in results if result.last_update <= datetime.utcnow() - self._sync_delay(result.error_count)]
