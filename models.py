@@ -53,6 +53,13 @@ class RoleType(types.TypeDecorator):
             return (self.op("&", return_type=types.Integer)(other)).bool_op("=")(other.value)
 
 
+class Cron(Base):
+    __tablename__ = 'crontab'
+
+    id = Column(String, primary_key=True, index=True)
+    last_run = Column(DateTime, nullable=False)
+
+
 class User(Base):
     __tablename__ = 'users'
 

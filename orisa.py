@@ -62,12 +62,13 @@ from curious.dataclasses.presence import Game, Status
 from fuzzywuzzy import process, fuzz
 from lxml import html
 from sqlalchemy.orm import joinedload, selectinload
+from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql import func, desc, and_
 from wcwidth import wcswidth
 
 from config import BOT_TOKEN, CHANNEL_NAMES, GLADOS_TOKEN, GUILD_INFOS, MASHERY_API_KEY
 
-from models import Database, User, BattleTag, SR, Role, WowUser, WowRole
+from models import Cron, Database, User, BattleTag, SR, Role, WowUser, WowRole
 
 
 CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
@@ -280,6 +281,7 @@ class Orisa(Plugin):
     async def load(self):
         await self.spawn(self._sync_all_tags_task)
 
+        await self.spawn(self._cron_task)
 
     # admin commands
 
@@ -394,7 +396,7 @@ class Orisa(Plugin):
         prev_date = datetime.utcnow() - timedelta(days=1)
 
         with self.database.session() as session:
-            await self._top_players(session, ctx, prev_date, style)
+            await self._top_players(session, prev_date, style)
 
     @command()
     @condition(only_owner)
@@ -1653,7 +1655,7 @@ class Orisa(Plugin):
 
 
 
-    async def _top_players(self, session, ctx, prev_date, style="psql"):
+    async def _top_players(self, session, prev_date, style="psql"):
 
         def prev_sr(tag):
             for sr in tag.sr_history[:30]:
@@ -1880,6 +1882,39 @@ class Orisa(Plugin):
             except Exception as e:
                 logger.exception(f"something went wrong during _sync_check")
             await trio.sleep(60)
+
+
+    async def _cron_task(self):
+        "poor man's cron, hardcode all the things"
+
+        while True:
+            try:
+                logger.debug("checking cron...")
+                with self.database.session() as s:
+                    try:
+                        hs = s.query(Cron).filter_by(id="highscore").one()
+                    except NoResultFound:
+                        hs = Cron(id="highscore", last_run=datetime.utcnow())
+                        s.add(hs)
+                    next_run = datetime.today().replace(hour=9, minute=0, second=0, microsecond=0)
+                    logger.debug("next_run %s, last_run %s", next_run, hs.last_run)
+                    if hs.last_run < next_run:
+                        logger.debug("running highscore...")
+                        await self._cron_run_highscore()
+                        logger.debug("done running hiscore")
+                        hs.last_run = datetime.utcnow()
+                    s.commit()
+            except Exception:
+                logger.exception("Error during cron")
+            await trio.sleep(60)
+
+    async def _cron_run_highscore(self):
+        prev_date = datetime.utcnow() - timedelta(days=1)
+
+        with self.database.session() as session:
+            await self._top_players(session, prev_date)
+
+
 
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):
