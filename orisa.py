@@ -33,6 +33,7 @@ import asks
 import dateutil.parser as date_parser
 import html5lib
 import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import multio
 import numpy as np
@@ -1217,14 +1218,14 @@ class Orisa(Plugin):
 
             for is_min, ix in enumerate([data.sr.idxmax(), data.sr.idxmin()]):
                 col = "C2" if is_min else "C1"
-                
+
                 val = data.iloc[ix].sr
                 ax.axhline(y=val, color=col, linestyle="--")
 
-                ax.annotate(int(val), xy=(1, val), xycoords=("axes fraction", "data"), 
+                ax.annotate(int(val), xy=(1, val), xycoords=("axes fraction", "data"),
                             xytext=(5,-3), textcoords="offset points",
                             color=col)
-                
+
             data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
 
             if True:
@@ -1242,12 +1243,11 @@ class Orisa(Plugin):
             image = BytesIO()
             plt.savefig(format="png", fname=image, transparent=False)
             image.seek(0)
-            embed = Embed(title="SR History", description=f"Here is your SR history starting from "
-                        f"{'the beginning of time' if not date else pendulum.instance(date).to_formatted_date_string()}.\n"
+            embed = Embed(title=f"SR History For {ctx.author.name}", description=f"Here is your SR history starting from "
+                        f"{'when you registered' if not date else pendulum.instance(date).to_formatted_date_string()}.\n"
                         "A dotted line means that you had no SR during that time (probably due to off-season)")
             embed.set_image(image_url="attachment://graph.png")
             await ctx.channel.messages.upload(image, filename="graph.png", message_embed=embed)
-            
 
 
 

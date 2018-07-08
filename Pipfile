@@ -16,6 +16,8 @@ pendulum = "*"
 cachetools = "*"
 wcwidth = "*"
 tabulate = "*"
+pandas = "*"
+seaborn = "*"
 
 [dev-packages]
 # pylint = "*"
