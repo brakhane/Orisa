@@ -1235,7 +1235,7 @@ class Orisa(Plugin):
                     x = data.iloc[ix-1:ix]
                     x = x.append(data.iloc[ix+1:ix+2])
                     x.loc[0, "timestamp"] = data.iloc[ix].timestamp
-                    x.set_index("timestamp").sr.plot(style="C0:", ax=ax, drawstyle="steps-post")
+                    x.set_index("timestamp").sr.plot(style="C0:", ax=ax, )#drawstyle="steps-post")
 
             ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%d.%m."))
             #ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(byhour=(0, 12)))
@@ -1868,7 +1868,7 @@ class Orisa(Plugin):
             await queue.put(tag_id)
 
         async with trio.open_nursery() as nursery:
-            for _ in range(5):
+            for _ in range(min(len(ids_to_sync), 5)):
                 nursery.start_soon(self._sync_tags_from_queue, queue)
         logger.info("done syncing")
 
@@ -1898,7 +1898,7 @@ class Orisa(Plugin):
                         s.add(hs)
                     next_run = datetime.today().replace(hour=9, minute=0, second=0, microsecond=0)
                     logger.debug("next_run %s, last_run %s", next_run, hs.last_run)
-                    if hs.last_run < next_run:
+                    if next_run < datetime.utcnow() and hs.last_run < next_run:
                         logger.debug("running highscore...")
                         await self._cron_run_highscore()
                         logger.debug("done running hiscore")
