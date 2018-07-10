@@ -192,7 +192,7 @@ def resolve_tag_or_index(user, tag_or_index):
             tag, score, index = process.extractOne(tag_or_index, {t.position: t.tag for t in user.battle_tags}, score_cutoff=50)
         except (ValueError, TypeError):
             raise ValueError(f'The BattleTag "{tag_or_index}" is not registered for your account '
-                              '(I even did a fuzzy search), use `!bt register` first.')
+                              '(I even did a fuzzy search), use `!ow register` first.')
     else:
         if index >= len(user.battle_tags):
             raise ValueError("You don't even have that many secondary BattleTags")
@@ -291,7 +291,7 @@ class Orisa(Plugin):
     @author_has_roles("Clan Administrator")
     async def shutdown(self, ctx, safety:str=None):
         if safety != "Orisa":
-            await reply(ctx, "If you want me to shut down, you need to issue `!bt shutdown Orisa` exactly as shown")
+            await reply(ctx, "If you want me to shut down, you need to issue `!ow shutdown Orisa` exactly as shown")
         logger.critical("***** GOT EMERGENCY SHUTDOWN COMMAND FROM OWNER *****")
         try:
             await reply(ctx, "Shutting down...")
@@ -443,9 +443,9 @@ class Orisa(Plugin):
     # bt commands
 
 
-    @command()
+    @command(aliases=("bt", ))
     @condition(correct_channel)
-    async def bt(self, ctx, *, member: Member = None):
+    async def ow(self, ctx, *, member: Member = None):
 
         def format_sr(tag):
             if not tag.sr:
@@ -494,28 +494,28 @@ class Orisa(Plugin):
                     footer_text = f"The SR was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
 
                 if member == ctx.author and member_given:
-                    footer_text += "\nBTW, you do not need to specify your nickname if you want your own BattleTag; just !bt is enough"
+                    footer_text += "\nBTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough"
                 embed.set_footer(text=footer_text)
             else:
                 content = f"{member.name} not found in database! *Do you need a hug?*"
                 if member == ctx.author:
                     embed = Embed(
                                 title="Hint",
-                                description="use `!bt register BattleTag#1234` to register, or `!bt help` for more info"
+                                description="use `!ow register BattleTag#1234` to register, or `!ow help` for more info"
                             )
         finally:
             session.close()
         await ctx.channel.messages.send(content=content, embed=embed)
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     @condition(correct_channel)
     async def get(self, ctx, *, member: Member = None):
         r = await self.bt(ctx, member=member)
         return r
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     @condition(correct_channel)
     async def register(self, ctx, battle_tag: str = None):
         if battle_tag is None:
@@ -538,8 +538,8 @@ class Orisa(Plugin):
                         break
 
                 resp = ("OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed.\n"
-                        "Please also tell us the roles you play by using `!bt setroles xxx`, where xxx is one or more of the following letters: "
-                        "`d`amage/DPS, `m`ain tank, `o`ff tank, `s`upport. So `!bt setroles ds` for example would say you play both DPS and support.\n"
+                        "Please also tell us the roles you play by using `!ow setroles xxx`, where xxx is one or more of the following letters: "
+                        "`d`amage/DPS, `m`ain tank, `o`ff tank, `s`upport. So `!ow setroles ds` for example would say you play both DPS and support.\n"
                         "If you want, you can also join the Overwatch role by visiting <#458669204048969748>, this way, you will get "
                          "notified of shoutouts to @Overwatch")
             else:
@@ -550,7 +550,7 @@ class Orisa(Plugin):
                 tag = BattleTag(tag=battle_tag)
                 user.battle_tags.append(tag)
                 resp = (f"OK. I've added {battle_tag} to the list of your BattleTags. Your primary BattleTag remains **{user.battle_tags[0].tag}**. "
-                        f"To change your primary tag, use `!bt setprimary yourbattletag`, see help for more details.")
+                        f"To change your primary tag, use `!ow setprimary yourbattletag`, see help for more details.")
 
             try:
                 async with ctx.channel.typing:
@@ -585,7 +585,7 @@ class Orisa(Plugin):
 
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     @condition(correct_channel)
     async def unregister(self, ctx, tag_or_index: str):
         session = self.database.Session()
@@ -602,8 +602,8 @@ class Orisa(Plugin):
                 return
             if index == 0:
                 await reply(ctx,
-                    "You cannot unregister your primary BattleTag. Use `!bt setprimary` to set a different primary first, or "
-                    "use `!bt forgetme` to delete all your data.")
+                    "You cannot unregister your primary BattleTag. Use `!ow setprimary` to set a different primary first, or "
+                    "use `!ow forgetme` to delete all your data.")
                 return
 
             removed = user.battle_tags.pop(index)
@@ -623,12 +623,12 @@ class Orisa(Plugin):
             except NicknameTooLong as e:
                 await reply(ctx,
                 f'However, your new nickname "{e.nickname}" is now longer than 32 characters, which Discord doesn\'t allow. '
-                 'Please choose a different format, or shorten your nickname and do a `!bt forceupdate` afterwards.')
+                 'Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards.')
             except:
                 await reply(ctx, "However, there was an error updating your nickname. I will try that again later.")
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     @condition(correct_channel)
     async def setprimary(self, ctx, tag_or_index: str):
         session = self.database.Session()
@@ -663,7 +663,7 @@ class Orisa(Plugin):
             session.close()
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     @condition(correct_channel)
     async def format(self, ctx, *, format: str):
         if ']' in format:
@@ -722,7 +722,7 @@ class Orisa(Plugin):
             session.close()
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     @condition(correct_channel)
     async def forceupdate(self, ctx):
         session = self.database.Session()
@@ -751,7 +751,7 @@ class Orisa(Plugin):
             session.close()
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     async def forgetme(self, ctx):
         session = self.database.Session()
         try:
@@ -781,19 +781,19 @@ class Orisa(Plugin):
             session.close()
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     @condition(correct_channel)
     async def findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
         await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=False)
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     @condition(correct_channel)
     async def findallplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
         await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=True)
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     @condition(correct_channel)
     async def newsr(self, ctx, arg1, arg2 = None):
         with self.database.session() as session:
@@ -839,7 +839,7 @@ class Orisa(Plugin):
                 # check for fat finger
                 if tag.sr and abs(tag.sr - sr) > 200 and not force:
                     await reply(ctx, f"Whoa! {sr} looks like a big change compared to your previous SR of {tag.sr}. To avoid typos, I will only update it if you are sure."
-                                     f"So, if that is indeed correct, reissue this command with a ! added to the SR, like `!bt newsr 1234!`")
+                                     f"So, if that is indeed correct, reissue this command with a ! added to the SR, like `!ow newsr 1234!`")
                     return
 
             tag.update_sr(sr)
@@ -851,14 +851,14 @@ class Orisa(Plugin):
             await reply(ctx, f"Done. The SR for *{tag.tag}* is now *{sr}*")
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     @condition(correct_channel)
     async def setrole(self, ctx, roles_str: str):
         "Alias for setroles"
         return await self.setroles(ctx, roles_str)
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     @condition(correct_channel)
     async def setroles(self, ctx, roles_str: str):
         names = {
@@ -1006,7 +1006,7 @@ class Orisa(Plugin):
             session.close()
 
 
-    @bt.subcommand()
+    @ow.subcommand()
     async def help(self, ctx):
         forbidden = False
         for embed in self._create_help(ctx):
@@ -1043,52 +1043,52 @@ class Orisa(Plugin):
                 "It will also send a short message to the chat when you ranked up.\n"
                 f"*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{self.client.application_info.owner.id}>*\n"
                 f"\n**The commands only work in the <#{channel_id}> channel or by sending me a DM**\n"
-                "If you are new to Orisa, you are probably looking for `!bt register`\n"
+                "If you are new to Orisa, you are probably looking for `!ow register`\n"
 
                 ),
         )
         embed.add_field(
-            name='!bt [nick]',
+            name='!ow [nick]',
             value=('Shows the BattleTag for the given nickname, or your BattleTag '
                    'if no nickname is given. `nick` can contain spaces. A fuzzy search for the nickname is performed.\n'
                    '*Examples:*\n'
-                   '`!bt` will show your BattleTag\n'
-                   '`!bt the chosen one` will show the BattleTag of "tHE ChOSeN ONe"\n'
-                   '`!bt orisa` will show the BattleTag of "SG | Orisa", "Orisa", or "Orisad"\n'
-                   '`!bt oirsa` and `!bt ori` will probably also show the BattleTag of "Orisa"')
+                   '`!ow` will show your BattleTag\n'
+                   '`!ow the chosen one` will show the BattleTag of "tHE ChOSeN ONe"\n'
+                   '`!ow orisa` will show the BattleTag of "SG | Orisa", "Orisa", or "Orisad"\n'
+                   '`!ow oirsa` and `!ow ori` will probably also show the BattleTag of "Orisa"')
         )
         embed.add_field(
-            name='!bt findplayers [max diff] *or* !bt findplayers min max',
+            name='!ow findplayers [max diff] *or* !ow findplayers min max',
             value='*This command is still in beta and may change at any time!*\n'
                   'This command is intended to find partners for your Competitive team and shows you all registered and online users within the specified range.\n'
                   'If `max diff` is not given, the maximum range that allows you to queue with them is used, so 1000 below 3500 SR, and 500 otherwise. '
                   'If `max diff` is given, it is used instead. `findplayers` then searches for all online players that around that range of your own SR.\n'
-                  'Alternatively, you can give two parameters, `!bt findplayers min max`. In this mode, `findplayers` will search for all online players that are between '
+                  'Alternatively, you can give two parameters, `!ow findplayers min max`. In this mode, `findplayers` will search for all online players that are between '
                   'min and max.\n'
                   'Note that `findplayers` will take all registered BattleTags of players into account, not just their primary.\n'
                   '*Examples:*\n'
-                  '`!bt findplayers`: finds all players that you could start a competitive queue with\n'
-                  '`!bt findplayers 123`: finds all players that are within 123 SR of your SR\n'
-                  '`!bt findplayers 1500 2300`: finds all players between 1500 and 2300 SR\n'
+                  '`!ow findplayers`: finds all players that you could start a competitive queue with\n'
+                  '`!ow findplayers 123`: finds all players that are within 123 SR of your SR\n'
+                  '`!ow findplayers 1500 2300`: finds all players between 1500 and 2300 SR\n'
         )
         embed.add_field(
-            name='!bt findallplayers [max diff] *or* !bt findplayers min max',
+            name='!ow findallplayers [max diff] *or* !ow findplayers min max',
             value='Same as `findplayers`, but also includes offline players'
         )
         embed.add_field(
-            name='!bt forceupdate',
+            name='!ow forceupdate',
             value='Immediately checks your account data and updates your nick accordingly.\n'
                   '*Checks and updates are done automatically, use this command only if '
                   'you want your nick to be up to date immediately!*'
         )
         embed.add_field(
-            name='!bt forgetme',
+            name='!ow forgetme',
             value='All your BattleTags will be removed from the database and your nick '
                   'will not be updated anymore. You can re-register at any time.'
         )
 
         embed.add_field(
-            name='!bt format *format*',
+            name='!ow format *format*',
             value="Lets you specify how your SR or rank is displayed. It will always be shown in [square\u00a0brackets] appended to your name.\n"
                 "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`. The second form is useful when there are no spaces "
                 "between the placeholder name and the text. For example, to get `[2000 SR]`, you *can* use just `$sr SR`, however, to get `[2000SR]`, you need "
@@ -1113,11 +1113,11 @@ class Orisa(Plugin):
         embed.add_field(
             name="\N{BLACK STAR} *bt format examples*",
             value=
-                '`!bt format test $sr SR` will result in [test 2345 SR]\n'
-                '`!bt format Potato/$rank` in [Potato/Gold].\n'
-                '`!bt format $sr (alt: $secondary_sr)` in [1234* (alt: 2345)]\n'
-                '`!bt format $sr ($sr_range)` in [1234* (600-4200)]\n'
-                '`!bt format $sr ($rank_range)` in [1234* (Bronze-Grand Master)]\n\n'
+                '`!ow format test $sr SR` will result in [test 2345 SR]\n'
+                '`!ow format Potato/$rank` in [Potato/Gold].\n'
+                '`!ow format $sr (alt: $secondary_sr)` in [1234* (alt: 2345)]\n'
+                '`!ow format $sr ($sr_range)` in [1234* (600-4200)]\n'
+                '`!ow format $sr ($rank_range)` in [1234* (Bronze-Grand Master)]\n\n'
                 '*By default, the format is `$sr`*'
         )
 
@@ -1126,62 +1126,62 @@ class Orisa(Plugin):
         embeds.append(embed)
 
         embed.add_field(
-            name='!bt get nick',
-            value=('Same as `!bt [nick]`, (only) useful when the nick is the same as a command.\n'
+            name='!ow get nick',
+            value=('Same as `!ow [nick]`, (only) useful when the nick is the same as a command.\n'
                    '*Example:*\n'
-                   '`!bt get register foo` will search for the nick "register foo"')
+                   '`!ow get register foo` will search for the nick "register foo"')
         )
         embed.add_field(
-            name='!bt register BattleTag#1234',
+            name='!ow register BattleTag#1234',
             value='Registers your account with the given BattleTag, or adds a secondary BattleTag to your account. '
                 'Your OW account will be checked periodically and your nick will be '
                 'automatically updated to show your SR or rank (see the *format* command for more info). '
                 '`register` will fail if the BattleTag is invalid. *BattleTags are case-sensitive!*'
         )
         embed.add_field(
-            name='!bt unregister *battletag*',
+            name='!ow unregister *battletag*',
             value='If you have secondary BattleTags, you can remove the given BattleTag from the list. Unlike register, the search is performed fuzzy, so '
                 'you normally only have to specify the first few letters of the BattleTag to remove.\n'
                 'You cannot remove your primary BattleTag, you have to choose a different primary BattleTag first.\n'
                 '*Example:*\n'
-                '`!bt unregister foo`'
+                '`!ow unregister foo`'
         )
         embed.add_field(
-            name='!bt unregister *index*',
+            name='!ow unregister *index*',
             value='Like `unregister battletag`, but removes the battletag by number. Your first secondary is 1, your second 2, etc.\n'
-                "The order is shown by the `!bt` command (it's alphabetical).\n"
+                "The order is shown by the `!ow` command (it's alphabetical).\n"
                 "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
                 '*Example:*\n'
-                '`!bt unregister 1`'
+                '`!ow unregister 1`'
         )
         embed.add_field(
-            name='!bt setprimary *battletag*',
+            name='!ow setprimary *battletag*',
             value="Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using, the its SR is shown in your nick\n"
                 'Unlike `register`, the search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n'
                 'The given BattleTag must already be registered as one of your BattleTags.\n'
                 '*Example:*\n'
-                '`!bt setprimary jjonak`'
+                '`!ow setprimary jjonak`'
         )
         embed.add_field(
-            name='!bt setprimary *index*',
-            value="Like `!bt setprimary battletag`, but uses numbers, 1 is your first secondary, 2 your seconds etc. The order is shown by `!bt` (alphabetical)\n"
+            name='!ow setprimary *index*',
+            value="Like `!ow setprimary battletag`, but uses numbers, 1 is your first secondary, 2 your seconds etc. The order is shown by `!ow` (alphabetical)\n"
                 "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
                 '*Example:*\n'
-                '`!bt setprimary 1`'
+                '`!ow setprimary 1`'
         )
         embed.add_field(
-            name='!bt setroles *roles*',
-            value="Sets the role you can/want to play. It will be shown in `!bt` and will also be used to update the number of roles "
+            name='!ow setroles *roles*',
+            value="Sets the role you can/want to play. It will be shown in `!ow` and will also be used to update the number of roles "
                   "in voice channels you join.\n"
                   '*roles* is a single "word" consisting of one or more of the following identifiers (both upper and lower case work):\n'
                   '`d` for DPS, `m` for Main Tank, `o` for Off Tank, `s` for Support\n'
                   '*Examples:*\n'
-                  "`!bt setroles d`: you only play DPS\n"
-                  "`!bt setroles so`: you play Support and Off Tanks\n"
-                  "`!bt setroles dmos`: you are a true Flex and play everything."
+                  "`!ow setroles d`: you only play DPS\n"
+                  "`!ow setroles so`: you play Support and Off Tanks\n"
+                  "`!ow setroles dmos`: you are a true Flex and play everything."
         )
         embed.add_field(
-            name='!bt srgraph [from_date]',
+            name='!ow srgraph [from_date]',
             value="*This command is in beta and can change at any time; it might also have bugs, report them please*\n"
                   "Shows a graph of your SR. If from_date is given, the graph starts at that date, otherwise it starts "
                   "as early as Orisa has data.")
@@ -1189,7 +1189,7 @@ class Orisa(Plugin):
 
         return embeds
 
-    @bt.subcommand()
+    @ow.subcommand()
     async def srgraph(self, ctx, date:str = None):
 
         with self.database.session() as session:
@@ -1303,8 +1303,13 @@ class Orisa(Plugin):
     @event('message_create')
     async def _message_create(self, ctx, msg):
         #logger.debug(f"got message {msg.author} {msg.channel} {msg.content} {msg.snowflake_timestamp}")
-        if msg.content.startswith("!bt"):
+        if msg.content.startswith("!ow"):
             logger.info(f"{msg.author.name} in {msg.channel.type.name} issued {msg.content}")
+        if msg.content.startswith("!bt"):
+            logger.info(f"DEPRECATED bt: {msg.author.name} in {msg.channel.type.name} issued {msg.content}")
+            if msg.channel.type == 1 or (msg.channel.id in (x.listen_channel_id for x in GUILD_INFOS.values())):
+                await msg.channel.messages.send(f"{msg.author.mention} `!bt` is deprecated, please use `!ow` from now on")
+            return
         if msg.content.startswith("!"):
             return
         try:
@@ -1798,7 +1803,7 @@ class Orisa(Plugin):
                 if tag.user.format == "%s":
                     msg += "\nPlease shorten your nickname."
                 else:
-                    msg += "\nTry to use the %s format (you can type `!bt format %s` into this DM channel, or shorten your nickname."
+                    msg += "\nTry to use the %s format (you can type `!ow format %s` into this DM channel, or shorten your nickname."
                 msg += "\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience."
                 discord_user = await self.client.get_user(tag.user.discord_id)
                 await discord_user.send(msg)
@@ -1906,7 +1911,7 @@ class Orisa(Plugin):
                     s.commit()
             except Exception:
                 logger.exception("Error during cron")
-            await trio.sleep(60)
+            await trio.sleep(10*60)
 
     async def _cron_run_highscore(self):
         prev_date = datetime.utcnow() - timedelta(days=1)
@@ -2539,7 +2544,7 @@ async def ready(ctx):
     await manager.load_plugin(Orisa, database)
     if MASHERY_API_KEY:
         await manager.load_plugin(Wow, database)
-    await ctx.bot.change_status(game=Game(name='!bt help | !wow help'))
+    await ctx.bot.change_status(game=Game(name='!ow help | !wow help'))
     logger.info("Ready")
 
 client.run()
