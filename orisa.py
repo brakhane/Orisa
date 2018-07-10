@@ -440,7 +440,7 @@ class Orisa(Plugin):
 
 
 
-    # bt commands
+    # ow commands
 
 
     @command(aliases=("bt", ))
@@ -511,7 +511,7 @@ class Orisa(Plugin):
     @ow.subcommand()
     @condition(correct_channel)
     async def get(self, ctx, *, member: Member = None):
-        r = await self.bt(ctx, member=member)
+        r = await self.ow(ctx, member=member)
         return r
 
 
@@ -1096,7 +1096,7 @@ class Orisa(Plugin):
                 "Your format string needs to use at least either `$sr` or `$rank`.\n"
         )
         embed.add_field(
-            name="\N{BLACK STAR} *bt format placeholders (prepend a $)*",
+            name="\N{BLACK STAR} *ow format placeholders (prepend a $)*",
             value=
                 "*The following placeholders are defined:*\n"
                 f"`dps`, `tank`, `support`, `flex`\nSymbols for the respective roles: `{self.SYMBOL_DPS}`, `{self.SYMBOL_TANK}`, `{self.SYMBOL_SUPPORT}`, `{self.SYMBOL_FLEX}`\n\n"
@@ -1111,7 +1111,7 @@ class Orisa(Plugin):
                 "`rank_range`\nDito, but for rank.\n"
         )
         embed.add_field(
-            name="\N{BLACK STAR} *bt format examples*",
+            name="\N{BLACK STAR} *ow format examples*",
             value=
                 '`!ow format test $sr SR` will result in [test 2345 SR]\n'
                 '`!ow format Potato/$rank` in [Potato/Gold].\n'
