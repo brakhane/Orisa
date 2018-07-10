@@ -2229,16 +2229,10 @@ class Wow(Plugin):
         await self._pvp(ctx, True)
 
 
-    @wow.subcommand()
+    @wow.subcommand(aliases=("pve", ))
     @condition(correct_wow_channel)
     async def nopvp(self, ctx):
         await self._pvp(ctx, False)
-
-    @wow.subcommand()
-    @condition(correct_wow_channel)
-    async def pve(self, ctx):
-        await self._pvp(ctx, False)
-
 
     async def _pvp(self, ctx, pvp):
         guild = ctx.guild
