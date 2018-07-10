@@ -1218,8 +1218,8 @@ class Orisa(Plugin):
 
             data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
 
-            for is_min, ix in enumerate([data.sr.idxmax(), data.sr.idxmin()]):
-                col = "C2" if is_min else "C1"
+            for is_max, ix in enumerate([data.sr.idxmin(), data.sr.idxmax()]):
+                col = "C1" if is_max else "C2"
 
                 val = data.iloc[ix].sr
                 ax.axhline(y=val, color=col, linestyle="--")
