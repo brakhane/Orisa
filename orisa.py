@@ -17,6 +17,8 @@ import logging.config
 import math
 import re
 import random
+import os
+import traceback
 import unicodedata
 
 from contextlib import contextmanager, suppress
@@ -42,6 +44,7 @@ import pendulum
 import seaborn as sns
 import tabulate
 import trio
+import raven
 import yaml
 
 from cachetools.func import TTLCache
@@ -66,7 +69,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql import func, desc, and_
 from wcwidth import wcswidth
 
-from config import BOT_TOKEN, CHANNEL_NAMES, GLADOS_TOKEN, GUILD_INFOS, MASHERY_API_KEY
+from config import BOT_TOKEN, CHANNEL_NAMES, GLADOS_TOKEN, GUILD_INFOS, MASHERY_API_KEY, SENTRY_DSN
 
 from models import Cron, Database, User, BattleTag, SR, Role, WowUser, WowRole
 
@@ -83,6 +86,9 @@ logger = logging.getLogger("orisa")
 class InvalidBattleTag(Exception):
     def __init__(self, message):
         self.message = message
+
+class BlizzardError(RuntimeError):
+    pass
 
 class UnableToFindSR(Exception):
     pass
@@ -134,7 +140,7 @@ async def get_sr(battletag):
         logger.info(f'requesting {url}')
         result = await asks.get(url, connection_timeout=30, timeout=30)
         if result.status_code != 200:
-            raise RuntimeError(f'got status code {result.status_code} from Blizz')
+            raise BlizzardError(f'got status code {result.status_code} from Blizz')
 
         document = html.fromstring(result.content)
         srs = document.xpath('//div[@class="competitive-rank"]/div/text()')
@@ -413,6 +419,8 @@ class Orisa(Plugin):
             try:
                 await self._update_nick(user)
             except Exception:
+                if raven_client:
+                    raven_client.captureException()
                 logger.exception("something went wrong during updatenicks")
         await ctx.channel.messages.send("Done")
 
@@ -557,6 +565,9 @@ class Orisa(Plugin):
                     sr, image = await get_sr(battle_tag)
             except InvalidBattleTag as e:
                 await reply(ctx, f"Invalid BattleTag: {e.message}")
+                return
+            except BlizzardError as e:
+                await reply(ctx, f"Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later")
                 raise
             except UnableToFindSR:
                 resp += "\nYou don't have an SR though, you probably need to finish your placement matches... I still saved your BattleTag."
@@ -738,6 +749,8 @@ class Orisa(Plugin):
                         try:
                             await self._sync_tag(session, tag)
                         except Exception as e:
+                            if raven_client:
+                                raven_client.captureException()
                             logger.exception(f'exception while syncing {tag}')
                             fault = True
 
@@ -1782,6 +1795,8 @@ class Orisa(Plugin):
             sr = rank = image = None
         except Exception:
             tag.error_count += 1
+            if raven_client:
+                raven_client.captureException()
             logger.exception(f"Got exception while requesting {tag.tag}")
             raise
         tag.error_count = 0
@@ -1911,7 +1926,7 @@ class Orisa(Plugin):
                     s.commit()
             except Exception:
                 logger.exception("Error during cron")
-            await trio.sleep(10*60)
+            await trio.sleep(1*60)
 
     async def _cron_run_highscore(self):
         prev_date = datetime.utcnow() - timedelta(days=1)
@@ -2526,6 +2541,7 @@ class MyClient(Client):
 
     http = property(_http_get, _http_set)
 
+
 client = MyClient(BOT_TOKEN)
 
 database = Database()
@@ -2540,5 +2556,21 @@ async def ready(ctx):
         await manager.load_plugin(Wow, database)
     await ctx.bot.change_status(game=Game(name='!ow help | !wow help'))
     logger.info("Ready")
+
+
+if SENTRY_DSN:
+    raven_client = raven.Client(
+        dsn=SENTRY_DSN,
+        release=raven.fetch_git_sha(os.path.dirname(__file__)),
+    )
+
+    @client.event('command_error')
+    async def command_error(ev_ctx, ctx, err):
+        exc_info = (type(err), err, err.__traceback__)
+        raven_client.captureException(exc_info)
+        fmtted = ''.join(traceback.format_exception(*exc_info))
+        logger.error(f"Error in command!\n{fmtted}")
+else:
+    raven_client = None
 
 client.run()

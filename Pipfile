@@ -18,6 +18,7 @@ wcwidth = "*"
 tabulate = "*"
 pandas = "*"
 seaborn = "*"
+raven = "*"
 
 [dev-packages]
 # pylint = "*"
