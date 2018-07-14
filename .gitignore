@@ -2,6 +2,7 @@
 config.py
 orisa.log*
 *.sqlite
+logging.yaml
 
 # Development
 *.bat

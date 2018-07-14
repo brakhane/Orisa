@@ -1773,7 +1773,7 @@ class Orisa(Plugin):
             lines = 20
 
             table_lines.insert(0, "Hello! Here are the current SR highscores. If a member has more than one "
-                                  "BattleTag, only the tag with the highest SR is considered. Player who didn't "
+                                  "BattleTag, only the tag with the highest SR is considered. Players who didn't "
                                   "do their placements this season but logged into OW are not shown.\n")
             try:
                 send = self.client.find_channel(GUILD_INFOS[guild_id].listen_channel_id).messages.send
@@ -2208,7 +2208,7 @@ class Wow(Plugin):
 
     @wow.subcommand()
     @condition(correct_wow_channel)
-    async def roles(self, ctx, roles: str):
+    async def roles(self, ctx, *, roles: str):
         ROLE_MAP = {
             't': WowRole.TANK,
             'm': WowRole.MELEE,
@@ -2217,6 +2217,7 @@ class Wow(Plugin):
         }
 
         discord_id = ctx.author.id
+        roles = roles.replace(' ', '')
 
         with self.database.session() as session:
             user = self.database.wow_user_by_discord_id(session, discord_id)
