@@ -19,4 +19,5 @@ class GuildInfo:
 class VoiceCategoryInfo:
     category_id: int
     channel_limit: int
+    remove_unknown: bool
     prefixes: Union[List[str], Dict[str, int]]

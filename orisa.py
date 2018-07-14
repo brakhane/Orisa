@@ -73,7 +73,6 @@ from config import BOT_TOKEN, CHANNEL_NAMES, GLADOS_TOKEN, GUILD_INFOS, MASHERY_
 
 from models import Cron, Database, User, BattleTag, SR, Role, WowUser, WowRole
 
-
 CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
 WOW_CHANNEL_IDS = frozenset(guild.wow_listen_channel_id for guild in GUILD_INFOS.values())
 
@@ -584,11 +583,13 @@ class Orisa(Plugin):
                 await self._update_nick(user)
             except NicknameTooLong as e:
                 resp += (f"\n**Adding your SR to your nickname would result in '{e.nickname}' and with {len(e.nickname)} characters, be longer than Discord's maximum of 32.** Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.")
-
+            except HierarchyError as e:
+                resp += ('\n**I do not have enough permissions to update your nickname. The owner needs to move the "Orisa" role higher '
+                         'so that is higher that your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry.**')
             except Exception as e:
                 logger.exception(f"unable to update nick for user {user}")
-                resp += ("\nHowever, right now I couldn't update your nickname, will try that again later. If you are a clan admin, "
-                         "I simply cannot update your nickname ever, period. People will still be able to ask for your BattleTag, though.")
+                resp += ("\nHowever, right now I couldn't update your nickname, will try that again later."
+                         "People will still be able to ask for your BattleTag, though.")
         finally:
             session.close()
 
@@ -1391,35 +1392,55 @@ class Orisa(Plugin):
         def numberkey(chan):
             return int(chan.name.rsplit('#', 1)[1])
 
+        async def delete_channel(chan):
+            nonlocal made_changes
+
+            id = chan.id
+            logger.debug("deleting channel %s", chan)
+            async with self.client.events.wait_for_manager("channel_delete", lambda chan: chan.id == id):
+                await chan.delete()
+            made_changes = True
+
+        async def add_a_channel():
+            nonlocal made_changes, chans, cat, guild
+
+            name = f"{prefix} #{len(chans)+1}"
+            logger.debug("creating a new channel %s", name)
+
+            if isinstance(cat.prefixes, dict):
+                limit = cat.prefixes[prefix]
+            else:
+                limit = 0
+
+            async with self.client.events.wait_for_manager("channel_create", lambda chan:chan.name == name):
+                await guild.channels.create(type_=ChannelType.VOICE, name=name, parent=parent, user_limit=limit)
+
+            made_changes = True
+
         sorted_channels = sorted(filter(lambda chan: '#' in chan.name, parent.children), key=attrgetter('name'))
 
-        grouped = groupby(sorted_channels, key=prefixkey)
+        grouped = list((prefix, list(sorted(group, key=numberkey))) for prefix,group in groupby(sorted_channels, key=prefixkey))
 
         made_changes = False
 
-        for prefix, group in grouped:
+        found_prefixes = frozenset(prefix for prefix, _ in grouped)
+
+        for wanted_prefix in cat.prefixes:
+            if wanted_prefix not in found_prefixes:
+                grouped.append((wanted_prefix, ()))
+
+        for prefix, chans in grouped:
+            logger.debug("working on prefix %s, chans %s", prefix, chans)
             if prefix not in cat.prefixes:
+                logger.debug("%s is not in prefixes", prefix)
+                if cat.remove_unknown:
+                    for chan in chans:
+                        # deleting a used channel is not cool
+                        if not chan.voice_members:
+                            await delete_channel(chan)
                 continue
 
-            chans = sorted(group, key=numberkey)
-
             empty_channels = [chan for chan in chans if not chan.voice_members]
-
-            async def add_a_channel():
-                nonlocal made_changes
-
-                name = f"{prefix} #{len(chans)+1}"
-                logger.debug("creating a new channel %s", name)
-
-                if isinstance(cat.prefixes, dict):
-                    limit = cat.prefixes[prefix]
-                else:
-                    limit = 0
-
-                async with self.client.events.wait_for_manager("channel_create", lambda chan:chan.name == name):
-                    await guild.channels.create(type_=ChannelType.VOICE, name=name, parent=parent, user_limit=limit)
-
-                made_changes = True
 
             if create_all_channels:
                 while len(chans) < cat.channel_limit:
@@ -1437,12 +1458,7 @@ class Orisa(Plugin):
             else:
                 # more than one empty channel, delete the ones with the highest numbers
                 for chan in empty_channels[1:]:
-
-                    id = chan.id
-                    logger.debug("deleting channel %s", chan)
-                    async with self.client.events.wait_for_manager("channel_delete", lambda chan: chan.id == id):
-                        await chan.delete()
-                    made_changes = True
+                    await delete_channel(chan)
 
         del chans # just to make sure we don't use it later, see hack above
 
@@ -1568,6 +1584,8 @@ class Orisa(Plugin):
             if str(nn) != new_nn:
                 try:
                     await guild.members[user_id].nickname.set(new_nn)
+                except HierarchyError:
+                    logger.info("Cannot update nick %s to %s due to not enough permissions", nn, new_nn)
                 except Exception as e:
                     logger.exception("error while setting nick")
                     exception = e
@@ -1785,7 +1803,6 @@ class Orisa(Plugin):
                     ix += step
             except Exception:
                 logger.exception("unable to send top players to guild %i", guild_id)
-
 
     async def _sync_tag(self, session, tag):
         try:
