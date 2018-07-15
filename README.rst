@@ -53,7 +53,8 @@ After that, you're set, just run ``pipenv python orisa.py``.
 
 You need to use Discords developer pages to create a link you can use to allow
 Orisa on your site. Orisa needs the following permissions: "Manage Nicknames", "Send Messages",
-"Embed Links".
+"Embed Links". For ``srgraph`` she also needs "Attach Files" and if you want her to manage the
+amount of voice channels (currently undocumented), you would also need "Manage Channels".
 
 Once Orisa has joined, you will need to move the newly created Orisa role as high as possible;
 the reason is that Discord only allows nickname changes to be done to people whose highest
