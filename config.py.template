@@ -50,5 +50,8 @@ BOT_TOKEN = ''
 # The Mashery API key (for WoW)
 MASHERY_API_KEY = ''
 
+# Leave empty for now
+GLADOS_TOKEN = ''
+
 # Sentry DSN, empty to disable
 SENTRY_DSN = ''
