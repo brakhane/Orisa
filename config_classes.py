@@ -17,7 +17,19 @@ class GuildInfo:
 
 @dataclass
 class VoiceCategoryInfo:
+    # the ID of the voice channel category
     category_id: int
+    # the maximum amount of channels that should
+    # be created per prefix
     channel_limit: int
+    # should unknown managed channels be removed?
+    # a channel is considered managed if
+    # it is a child of the category and contains a #
     remove_unknown: bool
+    # a list of prefix strings, or a dict
+    # {"QP": 0, "Comp": 6} would mean that
+    # Orisa should ensure that at least one empty
+    # QP and Comp channel exists, up to channel_limit
+    # Also, the created comp channels should only allow
+    # 6 people
     prefixes: Union[List[str], Dict[str, int]]

@@ -17,10 +17,8 @@ GUILD_INFOS = {
         # The channel Orisa listens on (besides DM)
         listen_channel_id=123,
 
-        # A list of voice channels that Orisa should track
-        # and adjust the channel suffix when people with
-        # specific roles join
-        voice_channel_ids=[
+        # A list of VoiceCategoryInfos, see config_classes
+        managed_voice_categories=[
         ],
         # The Wow guild for this Discord guild
         wow_guild_name="",
