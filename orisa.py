@@ -1197,7 +1197,7 @@ class Orisa(Plugin):
         embed.add_field(
             name='!ow srgraph [from_date]',
             value="*This command is in beta and can change at any time; it might also have bugs, report them please*\n"
-                  "Shows a graph of your SR. If from_date is given, the graph starts at that date, otherwise it starts "
+                  "Shows a graph of your SR. If from_date (as DD.MM.YY or YYYY-MM-DD) is given, the graph starts at that date, otherwise it starts "
                   "as early as Orisa has data.")
 
 
@@ -1223,7 +1223,7 @@ class Orisa(Plugin):
                 try:
                     date = date_parser.parse(date, parserinfo=date_parser.parserinfo(dayfirst=True))
                 except ValueError:
-                    await reply(ctx, "I don't know what date {date} is supposed to mean. Please use "
+                    await reply(ctx, f"I don't know what date {date} is supposed to mean. Please use "
                                     "the format DD.MM.YY or YYYY-MM-DD")
 
                 data = data[data.timestamp>=date].reset_index(drop=True)
@@ -1441,6 +1441,7 @@ class Orisa(Plugin):
                 continue
 
             empty_channels = [chan for chan in chans if not chan.voice_members]
+            logger.debug("empty channels %s", empty_channels)
 
             if create_all_channels:
                 while len(chans) < cat.channel_limit:
@@ -1876,7 +1877,10 @@ class Orisa(Plugin):
             session = self.database.Session()
             try:
                 tag = self.database.tag_by_id(session, tag_id)
-                await self._sync_tag(session, tag)
+                if tag:
+                    await self._sync_tag(session, tag)
+                else:
+                    logger.warn(f"No tag for id {tag_id} found, probably deleted")
                 session.commit()
             except Exception:
                 logger.exception(f'exception while syncing {tag.tag} for {tag.user.discord_id}')
@@ -1934,7 +1938,7 @@ class Orisa(Plugin):
                         hs = Cron(id="highscore", last_run=datetime.utcnow())
                         s.add(hs)
                     next_run = datetime.today().replace(hour=9, minute=0, second=0, microsecond=0)
-                    logger.debug("next_run %s, last_run %s", next_run, hs.last_run)
+                    logger.debug("next_run %s, now %s, last_run %s", next_run, datetime.utcnow(), hs.last_run)
                     if next_run < datetime.utcnow() and hs.last_run < next_run:
                         logger.debug("running highscore...")
                         await self._cron_run_highscore()
