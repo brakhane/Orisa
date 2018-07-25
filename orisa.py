@@ -450,7 +450,7 @@ class Orisa(Plugin):
     # ow commands
 
 
-    @command(aliases=("bt", ))
+    @command()
     @condition(correct_channel)
     async def ow(self, ctx, *, member: Member = None):
 
@@ -1319,11 +1319,6 @@ class Orisa(Plugin):
         #logger.debug(f"got message {msg.author} {msg.channel} {msg.content} {msg.snowflake_timestamp}")
         if msg.content.startswith("!ow"):
             logger.info(f"{msg.author.name} in {msg.channel.type.name} issued {msg.content}")
-        if msg.content.startswith("!bt"):
-            logger.info(f"DEPRECATED bt: {msg.author.name} in {msg.channel.type.name} issued {msg.content}")
-            if msg.channel.type == 1 or (msg.channel.id in (x.listen_channel_id for x in GUILD_INFOS.values())):
-                await msg.channel.messages.send(f"{msg.author.mention} `!bt` is deprecated, please use `!ow` from now on")
-            return
         if msg.content.startswith("!"):
             return
         try:

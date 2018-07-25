@@ -29,7 +29,7 @@ Features
 * Finds (registered) players in a given SR range
 * Congratulates every player when he/she reached a new personal best rank
 * Tries to be as user friendly as possible: has an extensive help and gives suggestions.
-* Uses fuzzy search whenever possible, ``!bt oirsa`` will still find and display the BattleTags of the user named "Orisa"
+* Uses fuzzy search whenever possible, ``!ow oirsa`` will still find and display the BattleTags of the user named "Orisa"
 * Has been called "the best Overwatch Discord bot I've seen" by at least 2 people
 * Might have been called "a stupid Omnic I do not trust" by Zarya
 * Is not evil; it won't even try to eat your cat
