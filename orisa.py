@@ -1279,8 +1279,8 @@ class Orisa(Plugin):
                 return False
 
         async def wait_and_fire(ids_to_sync):
-            logger.debug(f"sleeping for 30s before syncing after OW close of {new_member.name}")
-            await trio.sleep(30)
+            logger.debug(f"sleeping for 20s before syncing after OW close of {new_member.name}")
+            await trio.sleep(20)
             await self._sync_tags(ids_to_sync)
             logger.debug(f"done syncing tags for {new_member.name} after OW close")
 
