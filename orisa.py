@@ -14,6 +14,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import logging
 import logging.config
+
+import csv
 import math
 import re
 import random
@@ -26,7 +28,7 @@ from contextvars import ContextVar
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from itertools import groupby, count
-from io import BytesIO
+from io import BytesIO, StringIO
 from operator import attrgetter, itemgetter
 from string import Template
 from typing import Optional
@@ -867,14 +869,14 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     @condition(correct_channel)
-    async def setrole(self, ctx, roles_str: str):
+    async def setrole(self, ctx, *, roles_str: str):
         "Alias for setroles"
         return await self.setroles(ctx, roles_str)
 
 
     @ow.subcommand()
     @condition(correct_channel)
-    async def setroles(self, ctx, roles_str: str):
+    async def setroles(self, ctx, *, roles_str: str):
         names = {
             'd': Role.DPS,
             'm': Role.MAIN_TANK,
@@ -884,7 +886,7 @@ class Orisa(Plugin):
 
         roles = Role.NONE
 
-        for role in roles_str.lower():
+        for role in roles_str.replace(' ', '').lower():
             try:
                 roles |= names[role]
             except KeyError:
@@ -1775,8 +1777,17 @@ class Orisa(Plugin):
                 table_prev_sr = tag.sr
                 data.append((pos, prev_str(ix+1, tag, prev_sr), member_name(member), tag.sr, delta_fmt(tag.sr, prev_sr)))
 
+            headers = ['#', 'prev', 'Member', 'SR', 'ΔSR']
+            csv_file = StringIO()
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerow(headers)
+            csv_writer.writerows(data)
+
+            csv_file = BytesIO(csv_file.getvalue().encode('utf-8'))
+            csv_file.seek(0)
+
             tabulate.PRESERVE_WHITESPACE = True
-            table_lines = tabulate.tabulate(data, headers=['#', 'prev', 'Member', 'SR', 'ΔSR'], tablefmt=style).split("\n")
+            table_lines = tabulate.tabulate(data, headers=headers, tablefmt=style).split("\n")
 
             table_lines = [f"`{line}`" for line in table_lines]
 
@@ -1790,13 +1801,16 @@ class Orisa(Plugin):
                                   "BattleTag, only the tag with the highest SR is considered. Players who didn't "
                                   "do their placements this season but logged into OW are not shown.\n")
             try:
-                send = self.client.find_channel(GUILD_INFOS[guild_id].listen_channel_id).messages.send
+                chan = self.client.find_channel(GUILD_INFOS[guild_id].listen_channel_id)
+                send = chan.messages.send
                 # send = self.client.application_info.owner.send
                 while ix < len(table_lines):
                     # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
                     step = lines if ix else lines+3
                     await send_long(send, "\n".join(table_lines[ix:ix+step]))
                     ix += step
+
+                await chan.messages.upload(csv_file, filename="ranking.csv")
             except Exception:
                 logger.exception("unable to send top players to guild %i", guild_id)
 
@@ -2576,6 +2590,7 @@ async def ready(ctx):
 
 
 if SENTRY_DSN:
+    logger.info("USING SENTRY")
     raven_client = raven.Client(
         dsn=SENTRY_DSN,
         release=raven.fetch_git_sha(os.path.dirname(__file__)),
@@ -2589,5 +2604,6 @@ if SENTRY_DSN:
         logger.error(f"Error in command!\n{fmtted}")
 else:
     raven_client = None
+    logger.info("NOT USING SENTRY")
 
 client.run()
