@@ -1525,7 +1525,6 @@ class Orisa(Plugin):
 
             for i, chan in enumerate(final_list):
                 if chan.position != i:
-                    logger.debug(f"setting {chan} to position {i}")
                     await chan.edit(position=i)
 
 
