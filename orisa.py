@@ -330,6 +330,14 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner, bypass_owner=False)
+    async def adjustallchannels(self, ctx):
+        for gi in GUILD_INFOS.values():
+            for vc in gi.managed_voice_categories:
+                await self._adjust_voice_channels(self.client.find_channel(vc.category_id))
+
+
+    @command()
+    @condition(only_owner, bypass_owner=False)
     async def messageall(self, ctx, *, message: str):
         s = self.database.Session()
         try:
@@ -1511,7 +1519,7 @@ class Orisa(Plugin):
             for prefix, group in groupby(sorted(managed_channels, key=prefixkey), key=prefixkey):
                 managed_group[prefix] = sorted(list(group), key=numberkey)
 
-            final_list = unmanaged_channels.copy()
+            final_list = []
 
             for prefix in cat.prefixes:
                 chans = managed_group[prefix]
@@ -1523,9 +1531,12 @@ class Orisa(Plugin):
 
                 final_list.extend(chans)
 
+            start_pos = max(chan.position for chan in unmanaged_channels) + 1
+
             for i, chan in enumerate(final_list):
-                if chan.position != i:
-                    await chan.edit(position=i)
+                pos = start_pos + i
+                if chan.position != pos:
+                    await chan.edit(position=pos)
 
 
     def _format_nick(self, user):
