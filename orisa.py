@@ -23,7 +23,7 @@ import os
 import traceback
 import unicodedata
 
-from contextlib import contextmanager, suppress
+from contextlib import contextmanager, nullcontext, suppress
 from contextvars import ContextVar
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
@@ -139,7 +139,14 @@ async def get_sr(battletag):
 
         url = f'https://playoverwatch.com/en-us/career/pc/{battletag.replace("#", "-")}'
         logger.info(f'requesting {url}')
-        result = await asks.get(url, connection_timeout=30, timeout=30)
+        try:
+            result = await asks.get(url,
+                                    headers={'User-Agent': 'Orisa/0.1 (+https://github.com/brakhane/Orisa)'},
+                                    connection_timeout=10, timeout=10)
+        except asks.errors.RequestTimeout:
+            raise BlizzardError('Timeout')
+        except Exception as e:
+            raise BlizzardError('Something went wrong', e)
         if result.status_code != 200:
             raise BlizzardError(f'got status code {result.status_code} from Blizz')
 
@@ -342,14 +349,28 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner, bypass_owner=False)
     async def post(self, ctx, channel_id: str, *, message:str):
+        await self._post(ctx, channel_id, message, glados=False)
+
+    @command()
+    @condition(only_owner, bypass_owner=False)
+    async def gpost(self, ctx, channel_id:str, *, message:str):
+        await self._post(ctx, channel_id, message, glados=True)
+
+    async def _post(self, ctx, channel_id: str, message: str, glados: bool):
         try:
             channel_id = CHANNEL_NAMES[channel_id]
         except KeyError:
             channel_id = int(channel_id)
         channel = self.client.find_channel(channel_id)
-        msg = await channel.messages.send(message)
+        with self.client.as_glados() if glados else nullcontext():
+            msg = await channel.messages.send(message)
         await ctx.channel.messages.send(f"created {msg.id}")
 
+    @command()
+    @condition(only_owner, bypass_owner=False)
+    async def gdelete(self, ctx, channel_id: str, message_id: int=None):
+        with self.client.as_glados():
+            await self.delete(ctx, channel_id, message_id)
 
     @command()
     @condition(only_owner, bypass_owner=False)
@@ -1213,61 +1234,72 @@ class Orisa(Plugin):
             if not user:
                 await reply(ctx, "You are not registered")
                 return
-            sns.set()
+            else:
+                await self._srgraph(ctx, user, ctx.author.name, date)
 
-            tag = user.battle_tags[0]
+    @ow.subcommand()
+    @condition(only_owner)
+    async def usersrgraph(self, ctx, member:Member, date:str = None):
+        with self.database.session() as session:
+            user = self.database.user_by_discord_id(session, member.id)
+            if not user:
+                await reply(f"{member.name} not registered")
+                return
+            else:
+                await self._srgraph(ctx, user, member.name, date)
 
-            data = [(sr.timestamp, sr.value) for sr in tag.sr_history]
+    async def _srgraph(self, ctx, user, name, date:str = None):
+        tag = user.battle_tags[0]
 
-            data = pd.DataFrame.from_records(reversed(data), columns=['timestamp', 'sr'])
+        data = [(sr.timestamp, sr.value) for sr in tag.sr_history]
 
-            if date:
-                try:
-                    date = date_parser.parse(date, parserinfo=date_parser.parserinfo(dayfirst=True))
-                except ValueError:
-                    await reply(ctx, f"I don't know what date {date} is supposed to mean. Please use "
-                                    "the format DD.MM.YY or YYYY-MM-DD")
+        data = pd.DataFrame.from_records(reversed(data), columns=['timestamp', 'sr'])
 
-                data = data[data.timestamp>=date].reset_index(drop=True)
+        if date:
+            try:
+                date = date_parser.parse(date, parserinfo=date_parser.parserinfo(dayfirst=True))
+            except ValueError:
+                await reply(ctx, f"I don't know what date {date} is supposed to mean. Please use "
+                                "the format DD.MM.YY or YYYY-MM-DD")
 
-            fig, ax = plt.subplots()
+            data = data[data.timestamp>=date].reset_index(drop=True)
 
-            data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
+        fig, ax = plt.subplots()
 
-            for is_max, ix in enumerate([data.sr.idxmin(), data.sr.idxmax()]):
-                col = "C1" if is_max else "C2"
+        data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
 
-                val = data.iloc[ix].sr
-                ax.axhline(y=val, color=col, linestyle="--")
+        for is_max, ix in enumerate([data.sr.idxmin(), data.sr.idxmax()]):
+            col = "C2" if is_max else "C1"
 
-                ax.annotate(int(val), xy=(1, val), xycoords=("axes fraction", "data"),
-                            xytext=(5,-3), textcoords="offset points",
-                            color=col)
+            val = data.iloc[ix].sr
+            ax.axhline(y=val, color=col, linestyle="--")
 
-            data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
+            ax.annotate(int(val), xy=(1, val), xycoords=("axes fraction", "data"),
+                        xytext=(5,-3), textcoords="offset points",
+                        color=col)
 
-            if True:
-                for ix in data.sr[pd.isna].index:
-                    x = data.iloc[ix-1:ix]
-                    x = x.append(data.iloc[ix+1:ix+2])
-                    x.loc[0, "timestamp"] = data.iloc[ix].timestamp
-                    x.set_index("timestamp").sr.plot(style="C0:", ax=ax, )#drawstyle="steps-post")
+        data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
 
-            ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%d.%m."))
-            #ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(byhour=(0, 12)))
-            plt.xlabel("Date")
-            plt.ylabel("SR")
+        if True:
+            for ix in data.sr[pd.isna].index:
+                x = data.iloc[ix-1:ix]
+                x = x.append(data.iloc[ix+1:ix+2])
+                x.loc[0, "timestamp"] = data.iloc[ix].timestamp
+                x.set_index("timestamp").sr.plot(style="C0:", ax=ax, )#drawstyle="steps-post")
 
-            image = BytesIO()
-            plt.savefig(format="png", fname=image, transparent=False)
-            image.seek(0)
-            embed = Embed(title=f"SR History For {ctx.author.name}", description=f"Here is your SR history starting from "
-                        f"{'when you registered' if not date else pendulum.instance(date).to_formatted_date_string()}.\n"
-                        "A dotted line means that you had no SR during that time (probably due to off-season)")
-            embed.set_image(image_url="attachment://graph.png")
-            await ctx.channel.messages.upload(image, filename="graph.png", message_embed=embed)
+        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%d.%m."))
+        #ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(byhour=(0, 12)))
+        plt.xlabel("Date")
+        plt.ylabel("SR")
 
-
+        image = BytesIO()
+        plt.savefig(format="png", fname=image, transparent=False)
+        image.seek(0)
+        embed = Embed(title=f"SR History For {name}", description=f"Here is your SR history starting from "
+                    f"{'when you registered' if not date else pendulum.instance(date).to_formatted_date_string()}.\n"
+                    "A dotted line means that you had no SR during that time (probably due to off-season)")
+        embed.set_image(image_url="attachment://graph.png")
+        await ctx.channel.messages.upload(image, filename="graph.png", message_embed=embed)
 
 
     # Events
@@ -1345,6 +1377,7 @@ class Orisa(Plugin):
                 for guild in client.guilds.values():
                     if guild.id != member.guild.id and member.id in guild.members:
                         in_other_guild = True
+                        logger.debug(f"{member.name} is still in guild {guild.id}")
                         break
                 if not in_other_guild:
                     logger.info(f"deleting {user} from database because {member.name} left the guild and has no other guilds")
@@ -1414,6 +1447,8 @@ class Orisa(Plugin):
 
             made_changes = True
 
+        voice_channels = [chan for chan in parent.children if chan.type == ChannelType.VOICE]
+
         sorted_channels = sorted(filter(lambda chan: '#' in chan.name, parent.children), key=attrgetter('name'))
 
         grouped = list((prefix, list(sorted(group, key=numberkey))) for prefix,group in groupby(sorted_channels, key=prefixkey))
@@ -1466,7 +1501,7 @@ class Orisa(Plugin):
 
             # parent.children should be updated by now to contain newly created channels and without deleted ones
 
-            for chan in parent.children:
+            for chan in (chan for chan in parent.children if chan.type == ChannelType.VOICE):
                 if '#' in chan.name and chan.name.rsplit('#', 1)[0].strip() in cat.prefixes:
                     managed_channels.append(chan)
                 else:
@@ -1490,6 +1525,7 @@ class Orisa(Plugin):
 
             for i, chan in enumerate(final_list):
                 if chan.position != i:
+                    logger.debug(f"setting {chan} to position {i}")
                     await chan.edit(position=i)
 
 
