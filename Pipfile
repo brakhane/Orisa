@@ -4,15 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-dataclasses = "*"
-"html5lib" = "*"
+"html5lib" = ">=1.0.1,<2.0.0"
 lxml = "*"
 sqlalchemy = "*"
 trio = "*"
 fuzzywuzzy = {extras = ["speedup"]}
 pyyaml = "*"
 pendulum = "*"
-"discord-curious" = {path = "../curious", editable = true}
+"discord-curious" = ">=0.7.9,<0.8.0"
 cachetools = "*"
 wcwidth = "*"
 tabulate = "*"
@@ -25,4 +24,4 @@ raven = "*"
 # "flake8" = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.7"
