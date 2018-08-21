@@ -1257,6 +1257,8 @@ class Orisa(Plugin):
                 await self._srgraph(ctx, user, member.name, date)
 
     async def _srgraph(self, ctx, user, name, date:str = None):
+        sns.set()
+
         tag = user.battle_tags[0]
 
         data = [(sr.timestamp, sr.value) for sr in tag.sr_history]
@@ -1868,6 +1870,8 @@ class Orisa(Plugin):
             sr = rank = image = None
         except Exception:
             tag.error_count += 1
+            # we need to update the last_update pseudo-column
+            tag.update_sr(tag.sr)
             if raven_client:
                 raven_client.captureException()
             logger.exception(f"Got exception while requesting {tag.tag}")
