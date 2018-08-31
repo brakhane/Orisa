@@ -1481,7 +1481,7 @@ class Orisa(Plugin):
                         if not chan.voice_members:
                             await delete_channel(chan)
                 continue
-
+            logger.debug("voicemembers %s", [chan.voice_members for chan in chans])
             empty_channels = [chan for chan in chans if not chan.voice_members]
             logger.debug("empty channels %s", empty_channels)
 
