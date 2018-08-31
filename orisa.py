@@ -1858,7 +1858,7 @@ class Orisa(Plugin):
                     await send_long(send, "\n".join(table_lines[ix:ix+step]))
                     ix += step
 
-                await chan.messages.upload(csv_file, filename="ranking.csv")
+                await chan.messages.upload(csv_file, filename=f"ranking {pendulum.now().to_iso8601_string()[:10]}.csv")
             except Exception:
                 logger.exception("unable to send top players to guild %i", guild_id)
 
