@@ -8,6 +8,7 @@ class GuildInfo:
     congrats_channel_id: int
     listen_channel_id: int
     managed_voice_categories: List["VoiceCategoryInfo"]
+    extra_register_text: str
     wow_admin_role_name: str
     wow_guild_realm: Optional[str]
     wow_guild_name: Optional[str]
