@@ -1799,7 +1799,7 @@ class Orisa(Plugin):
 
             def prev_str(pos, tag, prev_sr):
                 if not prev_sr:
-                    return "(——)"
+                    return "  (——)"
 
                 old_pos = prev_top_tags.index(tag) + 1
                 if pos == old_pos:
@@ -1809,7 +1809,7 @@ class Orisa(Plugin):
                 else:
                     sym = "↑"
 
-                return f"({old_pos:2}) {sym}"
+                return f"{sym} ({old_pos:2})"
 
             def delta_fmt(curr, prev):
                 if not curr or not prev or curr == prev:
