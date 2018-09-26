@@ -1467,7 +1467,7 @@ class Orisa(Plugin):
 
         for wanted_prefix in cat.prefixes:
             if wanted_prefix not in found_prefixes:
-                grouped.append((wanted_prefix, ()))
+                grouped.append((wanted_prefix, []))
 
         for prefix, chans in grouped:
             logger.debug("working on prefix %s, chans %s", prefix, chans)
@@ -1531,7 +1531,7 @@ class Orisa(Plugin):
 
                 final_list.extend(chans)
 
-            start_pos = max(chan.position for chan in unmanaged_channels) + 1
+            start_pos = max(chan.position for chan in unmanaged_channels) + 1 if unmanaged_channels else 1
 
             for i, chan in enumerate(final_list):
                 pos = start_pos + i
