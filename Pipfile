@@ -7,7 +7,7 @@ name = "pypi"
 "html5lib" = ">=1.0.1,<2.0.0"
 lxml = "*"
 sqlalchemy = "*"
-trio = "*"
+trio = ">=0.7.0,<0.8.0"
 fuzzywuzzy = {extras = ["speedup"]}
 pyyaml = "*"
 pendulum = "*"
