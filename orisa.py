@@ -598,7 +598,7 @@ class Orisa(Plugin):
                 await reply(ctx, f"Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later")
                 raise
             except UnableToFindSR:
-                resp += "\nYou don't have an SR though, you probably need to finish your placement matches... I still saved your BattleTag."
+                resp += "\nYou don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your BattleTag."
                 sr = None
 
             tag.update_sr(sr)
@@ -788,7 +788,8 @@ class Orisa(Plugin):
                     await reply(ctx, "There were some problems updating your SR. Try again later.")
                 else:
                     await reply(ctx, f"OK, I have updated your data. Your (primary) SR is now {user.battle_tags[0].sr}. "
-                                     "If that is not correct, you need to log out of Overwatch once and try again.")
+                                     "If that is not correct, you need to log out of Overwatch once and try again; your "
+                                     "profile also needs to be public for me to track your SR.")
         finally:
             session.commit()
             session.close()
@@ -1846,8 +1847,9 @@ class Orisa(Plugin):
             lines = 20
 
             table_lines.insert(0, "Hello! Here are the current SR highscores. If a member has more than one "
-                                  "BattleTag, only the tag with the highest SR is considered. Players who didn't "
-                                  "do their placements this season but logged into OW are not shown.\n")
+                                  "BattleTag, only the tag with the highest SR is considered. Players with  "
+                                  "private profiles, or those that didn't do their placements this season yet "
+                                  "are not shown.\n")
             try:
                 chan = self.client.find_channel(GUILD_INFOS[guild_id].listen_channel_id)
                 send = chan.messages.send
