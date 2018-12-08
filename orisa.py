@@ -1865,36 +1865,32 @@ class Orisa(Plugin):
                 user.highest_rank = rank
 
 
-    async def _sync_tags_from_queue(self, queue):
+    async def _sync_tags_from_channel(self, channel):
         first = True
-        logger.debug("syncing from queue %r", queue)
-        while True:
-            try:
-                tag_id = queue.get_nowait()
-            except trio.WouldBlock:
-                logger.debug("queue %r is empty, done.", queue)
-                return
-            logger.debug("got %s from queue %r", tag_id, queue)
-            if not first:
-                delay = random.random() * 5.
-                logger.debug(f"rate limiting: sleeping for {delay:.02}s")
-                await trio.sleep(delay)
-            else:
-                first = False
-            session = self.database.Session()
-            try:
-                tag = self.database.tag_by_id(session, tag_id)
-                if tag:
-                    await self._sync_tag(session, tag)
+        logger.debug("syncing from channel %r", channel)
+        async with channel:
+            async for tag_id in channel:
+                logger.debug("got %s from channel %r", tag_id, channel)
+                if not first:
+                    delay = random.random() * 5.
+                    logger.debug(f"rate limiting: sleeping for {delay:.02}s")
+                    await trio.sleep(delay)
                 else:
-                    logger.warn(f"No tag for id {tag_id} found, probably deleted")
-                session.commit()
-            except Exception:
-                logger.exception(f'exception while syncing {tag.tag} for {tag.user.discord_id}')
-            finally:
-                session.commit()
-                session.close()
-
+                    first = False
+                session = self.database.Session()
+                try:
+                    tag = self.database.tag_by_id(session, tag_id)
+                    if tag:
+                        await self._sync_tag(session, tag)
+                    else:
+                        logger.warn(f"No tag for id {tag_id} found, probably deleted")
+                    session.commit()
+                except Exception:
+                    logger.exception(f'exception while syncing {tag.tag} for {tag.user.discord_id}')
+                finally:
+                    session.commit()
+                    session.close()
+        logger.debug("channel %r closed, done", channel)
 
     async def _sync_check(self):
         session = self.database.Session()
@@ -1910,14 +1906,17 @@ class Orisa(Plugin):
 
 
     async def _sync_tags(self, ids_to_sync):
-        queue = trio.Queue(len(ids_to_sync))
-        logger.debug("preparing to sync ids: %s into queue %r", ids_to_sync, queue)
-        for tag_id in ids_to_sync:
-            await queue.put(tag_id)
+        send_ch, receive_ch = trio.open_memory_channel(len(ids_to_sync))
+        logger.debug("preparing to sync ids: %s into channel %r", ids_to_sync, send_ch)
+
+        async with send_ch:
+            for tag_id in ids_to_sync:
+                await send_ch.send(tag_id)
 
         async with trio.open_nursery() as nursery:
-            for _ in range(min(len(ids_to_sync), 5)):
-                nursery.start_soon(self._sync_tags_from_queue, queue)
+            async with receive_ch:
+                for _ in range(min(len(ids_to_sync), 5)):
+                    nursery.start_soon(self._sync_tags_from_channel, receive_ch.clone())
         logger.info("done syncing")
 
 
