@@ -2100,7 +2100,7 @@ class Wow(Plugin):
             if GUILD_INFOS[guild_id].wow_guild_name:
                 await self._set_gms_and_officers(guild_id)
 
-        await self.spawn(self._update_task)
+        # await self.spawn(self._update_task)
 
     @command()
     @condition(correct_wow_channel)
