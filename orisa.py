@@ -267,16 +267,6 @@ def only_owner_all_channels(ctx):
         return False
 
 
-# Dataclasses
-
-
-@dataclass
-class Dialogue:
-    min_timestamp: datetime
-    last_message_id: int = None
-    queue:trio.Queue = field(default_factory=lambda:trio.Queue(1))
-
-
 # Main Orisa code
 class Orisa(Plugin):
 
@@ -402,27 +392,6 @@ class Orisa(Plugin):
 #    async def updatehelp(self, ctx, channel_id: int, message_id: int):
 #        await self.client.http.edit_message(channel_id, message_id, embed=self._create_help().to_dict())
 #        await ctx.channel.messages.send("done")
-
-
-    @command()
-    @condition(only_owner)
-    async def d(self, ctx):
-        """testing123 With *formatting*
-
-        **OH YEAH!**
-        """
-        rec = ctx.author.id
-        chan = ctx.channel
-        try:
-
-            with self.client.as_glados():
-                name = await self._prompt(chan, rec, "What is your name?")
-                quest = await self._prompt(chan, rec, f"So {name}, what is your quest?")
-                ans = await self._prompt(chan, rec, f"As someone whose quest is {quest}, you should know this: What is the capital of Assyria?")
-            await ctx.channel.messages.send(f"{ans}...")
-        except trio.TooSlowError as e:
-            logger.exception("got timeout")
-            await chan.messages.send("TIMEOUT!")
 
 
     @command()
@@ -1364,14 +1333,6 @@ class Orisa(Plugin):
             logger.info(f"{msg.author.name} in {msg.channel.type.name} issued {msg.content}")
         if msg.content.startswith("!"):
             return
-        try:
-            dialog = self.dialogues[(msg.channel.id, msg.author.id)]
-            if msg.snowflake_timestamp >= dialog.min_timestamp:
-                await dialog.queue.put(msg)
-            else:
-                logger.info(f"too young! {dialog.min_timestamp}")
-        except KeyError:
-            pass
         if msg.channel.private and re.match(r"^[0-9]{3,4}!?$", msg.content.strip()):
             # single number, special case for newsr
             await self.newsr(Context(msg, ctx), msg.content.strip())
@@ -1394,21 +1355,6 @@ class Orisa(Plugin):
                     session.commit()
 
     # Util
-
-    async def _prompt(self, channel, recipient_id, msg, timeout=60):
-        dialog = Dialogue(datetime.utcnow(), None)
-        key = (channel.id, recipient_id)
-        if key in self.dialogues:
-            raise ValueError("a dialog is already in progress")
-        self.dialogues[key] = dialog
-        await channel.messages.send(msg)
-        try:
-            with trio.fail_after(timeout):
-                result = await dialog.queue.get()
-                return result
-        finally:
-            del self.dialogues[key]
-
 
     async def _adjust_voice_channels(self, parent, *, create_all_channels=False):
         logger.debug("adjusting parent %s", parent)
