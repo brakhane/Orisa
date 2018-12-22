@@ -37,7 +37,8 @@ import asks
 import dateutil.parser as date_parser
 import html5lib
 import matplotlib
-matplotlib.use('Agg')
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import multio
 import numpy as np
@@ -71,52 +72,70 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql import func, desc, and_
 from wcwidth import wcswidth
 
-from config import BOT_TOKEN, CHANNEL_NAMES, GLADOS_TOKEN, GUILD_INFOS, MASHERY_API_KEY, SENTRY_DSN
+from config import (
+    BOT_TOKEN,
+    CHANNEL_NAMES,
+    GLADOS_TOKEN,
+    GUILD_INFOS,
+    MASHERY_API_KEY,
+    SENTRY_DSN,
+)
 
 from models import Cron, Database, User, BattleTag, SR, Role, WowUser, WowRole
 
 CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
-WOW_CHANNEL_IDS = frozenset(guild.wow_listen_channel_id for guild in GUILD_INFOS.values())
+WOW_CHANNEL_IDS = frozenset(
+    guild.wow_listen_channel_id for guild in GUILD_INFOS.values()
+)
 
 
-with open('logging.yaml') as logfile:
+with open("logging.yaml") as logfile:
     logging.config.dictConfig(yaml.safe_load(logfile))
 
 logger = logging.getLogger("orisa")
+
 
 class InvalidBattleTag(Exception):
     def __init__(self, message):
         self.message = message
 
+
 class BlizzardError(RuntimeError):
     pass
 
+
 class UnableToFindSR(Exception):
     pass
+
 
 class NicknameTooLong(Exception):
     def __init__(self, nickname):
         self.nickname = nickname
 
+
 class InvalidFormat(Exception):
     def __init__(self, key):
         self.key = key
 
-RANKS = ('Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond', 'Master', 'Grand Master')
+
+RANKS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grand Master")
 COLORS = (
-    0xcd7e32, # Bronze
-    0xc0c0c0, # Silver
-    0xffd700, # Gold
-    0xe5e4e2, # Platinum
-    0xa2bfd3, # Diamond
-    0xf9ca61, # Master
-    0xf1d592, # Grand Master
+    0xCD7E32,  # Bronze
+    0xC0C0C0,  # Silver
+    0xFFD700,  # Gold
+    0xE5E4E2,  # Platinum
+    0xA2BFD3,  # Diamond
+    0xF9CA61,  # Master
+    0xF1D592,  # Grand Master
 )
 
 SR_CACHE = TTLCache(maxsize=1000, ttl=30)
-SR_LOCKS = TTLCache(maxsize=1000, ttl=60) # if a request should be hanging for 60s, just try another
+SR_LOCKS = TTLCache(
+    maxsize=1000, ttl=60
+)  # if a request should be hanging for 60s, just try another
 
 # Utilities
+
 
 async def get_sr(battletag):
     try:
@@ -127,35 +146,44 @@ async def get_sr(battletag):
 
     await lock.acquire()
     try:
-        if not re.match(r'\w+#[0-9]+', battletag):
-            raise InvalidBattleTag('Malformed BattleTag. BattleTags look like SomeName#1234: a name and a # sign followed by a number and contain no spaces. They are case-sensitive, too!')
+        if not re.match(r"\w+#[0-9]+", battletag):
+            raise InvalidBattleTag(
+                "Malformed BattleTag. BattleTags look like SomeName#1234: a name and a # sign followed by a number and contain no spaces. They are case-sensitive, too!"
+            )
 
         try:
             res = SR_CACHE[battletag]
-            logger.info(f'got SR for {battletag} from cache')
+            logger.info(f"got SR for {battletag} from cache")
             return res
         except KeyError:
             pass
 
         url = f'https://playoverwatch.com/en-us/career/pc/{battletag.replace("#", "-")}'
-        logger.info(f'requesting {url}')
+        logger.info(f"requesting {url}")
         try:
-            result = await asks.get(url,
-                                    headers={'User-Agent': 'Orisa/0.1 (+https://github.com/brakhane/Orisa)'},
-                                    connection_timeout=10, timeout=10)
+            result = await asks.get(
+                url,
+                headers={
+                    "User-Agent": "Orisa/0.1 (+https://github.com/brakhane/Orisa)"
+                },
+                connection_timeout=10,
+                timeout=10,
+            )
         except asks.errors.RequestTimeout:
-            raise BlizzardError('Timeout')
+            raise BlizzardError("Timeout")
         except Exception as e:
-            raise BlizzardError('Something went wrong', e)
+            raise BlizzardError("Something went wrong", e)
         if result.status_code != 200:
-            raise BlizzardError(f'got status code {result.status_code} from Blizz')
+            raise BlizzardError(f"got status code {result.status_code} from Blizz")
 
         document = html.fromstring(result.content)
         srs = document.xpath('//div[@class="competitive-rank"]/div/text()')
         rank_image_elems = document.xpath('//div[@class="competitive-rank"]/img/@src')
         if not srs:
-            if 'Profile Not Found' in result.text:
-                raise InvalidBattleTag(f"No profile with BattleTag {battletag} found. BattleTags are case-sensitive!")
+            if "Profile Not Found" in result.text:
+                raise InvalidBattleTag(
+                    f"No profile with BattleTag {battletag} found. BattleTags are case-sensitive!"
+                )
             raise UnableToFindSR()
         sr = int(srs[0])
         if rank_image_elems:
@@ -203,10 +231,16 @@ def resolve_tag_or_index(user, tag_or_index):
         index = int(tag_or_index)
     except ValueError:
         try:
-            tag, score, index = process.extractOne(tag_or_index, {t.position: t.tag for t in user.battle_tags}, score_cutoff=50)
+            tag, score, index = process.extractOne(
+                tag_or_index,
+                {t.position: t.tag for t in user.battle_tags},
+                score_cutoff=50,
+            )
         except (ValueError, TypeError):
-            raise ValueError(f'The BattleTag "{tag_or_index}" is not registered for your account '
-                              '(I even did a fuzzy search), use `!ow register` first.')
+            raise ValueError(
+                f'The BattleTag "{tag_or_index}" is not registered for your account '
+                "(I even did a fuzzy search), use `!ow register` first."
+            )
     else:
         if index >= len(user.battle_tags):
             raise ValueError("You don't even have that many secondary BattleTags")
@@ -216,14 +250,14 @@ def resolve_tag_or_index(user, tag_or_index):
 async def set_channel_suffix(chan, suffix: str):
     name = chan.name
 
-    if ':' in name:
+    if ":" in name:
         if suffix:
-            new_name = re.sub(r':.*', f': {suffix}', name)
+            new_name = re.sub(r":.*", f": {suffix}", name)
         else:
-            new_name = re.sub(r':.*', '', name)
+            new_name = re.sub(r":.*", "", name)
     else:
         if suffix:
-            new_name = f'{name}: {suffix}'
+            new_name = f"{name}: {suffix}"
         else:
             new_name = name
 
@@ -243,6 +277,7 @@ def format_roles(roles):
 
 # Conditions
 
+
 def correct_channel(ctx):
     return ctx.channel.id in CHANNEL_IDS or ctx.channel.private
 
@@ -253,7 +288,9 @@ def correct_wow_channel(ctx):
 
 def only_owner(ctx):
     try:
-        return ctx.author.id == ctx.bot.application_info.owner.id and ctx.channel.private
+        return (
+            ctx.author.id == ctx.bot.application_info.owner.id and ctx.channel.private
+        )
     except AttributeError:
         # application_info is None
         return False
@@ -270,17 +307,19 @@ def only_owner_all_channels(ctx):
 # Main Orisa code
 class Orisa(Plugin):
 
-    SYMBOL_DPS = '\N{CROSSED SWORDS}'
-    SYMBOL_TANK = '\N{SHIELD}' #\N{VARIATION SELECTOR-16}'
-    SYMBOL_SUPPORT = '\N{VERY HEAVY GREEK CROSS}' #'\N{HEAVY PLUS SIGN}'   #\N{VERY HEAVY GREEK CROSS}'
-    SYMBOL_FLEX = '\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}' # '\N{FLEXED BICEPS}'   #'\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}'
-
+    SYMBOL_DPS = "\N{CROSSED SWORDS}"
+    SYMBOL_TANK = "\N{SHIELD}"  # \N{VARIATION SELECTOR-16}'
+    SYMBOL_SUPPORT = (
+        "\N{VERY HEAVY GREEK CROSS}"
+    )  #'\N{HEAVY PLUS SIGN}'   #\N{VERY HEAVY GREEK CROSS}'
+    SYMBOL_FLEX = (
+        "\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}"
+    )  # '\N{FLEXED BICEPS}'   #'\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}'
 
     def __init__(self, client, database):
         super().__init__(client)
         self.database = database
         self.dialogues = {}
-
 
     async def load(self):
         await self.spawn(self._sync_all_tags_task)
@@ -289,13 +328,15 @@ class Orisa(Plugin):
 
     # admin commands
 
-
     @command()
-    #@condition(only_owner, bypass_owner=False)
+    # @condition(only_owner, bypass_owner=False)
     @author_has_roles("Clan Administrator")
-    async def shutdown(self, ctx, safety:str=None):
+    async def shutdown(self, ctx, safety: str = None):
         if safety != "Orisa":
-            await reply(ctx, "If you want me to shut down, you need to issue `!ow shutdown Orisa` exactly as shown")
+            await reply(
+                ctx,
+                "If you want me to shut down, you need to issue `!ow shutdown Orisa` exactly as shown",
+            )
         logger.critical("***** GOT EMERGENCY SHUTDOWN COMMAND FROM OWNER *****")
         try:
             await reply(ctx, "Shutting down...")
@@ -307,7 +348,6 @@ class Orisa(Plugin):
             pass
         raise SystemExit(42)
 
-
     @command()
     @condition(only_owner, bypass_owner=False)
     async def createallchannels(self, ctx):
@@ -315,16 +355,18 @@ class Orisa(Plugin):
 
         for gi in GUILD_INFOS.values():
             for vc in gi.managed_voice_categories:
-                await self._adjust_voice_channels(self.client.find_channel(vc.category_id), create_all_channels=True)
-
+                await self._adjust_voice_channels(
+                    self.client.find_channel(vc.category_id), create_all_channels=True
+                )
 
     @command()
     @condition(only_owner, bypass_owner=False)
     async def adjustallchannels(self, ctx):
         for gi in GUILD_INFOS.values():
             for vc in gi.managed_voice_categories:
-                await self._adjust_voice_channels(self.client.find_channel(vc.category_id))
-
+                await self._adjust_voice_channels(
+                    self.client.find_channel(vc.category_id)
+                )
 
     @command()
     @condition(only_owner, bypass_owner=False)
@@ -343,15 +385,14 @@ class Orisa(Plugin):
         finally:
             s.close()
 
-
     @command()
     @condition(only_owner, bypass_owner=False)
-    async def post(self, ctx, channel_id: str, *, message:str):
+    async def post(self, ctx, channel_id: str, *, message: str):
         await self._post(ctx, channel_id, message, glados=False)
 
     @command()
     @condition(only_owner, bypass_owner=False)
-    async def gpost(self, ctx, channel_id:str, *, message:str):
+    async def gpost(self, ctx, channel_id: str, *, message: str):
         await self._post(ctx, channel_id, message, glados=True)
 
     async def _post(self, ctx, channel_id: str, message: str, glados: bool):
@@ -366,14 +407,16 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner, bypass_owner=False)
-    async def gdelete(self, ctx, channel_id: str, message_id: int=None):
+    async def gdelete(self, ctx, channel_id: str, message_id: int = None):
         with self.client.as_glados():
             await self.delete(ctx, channel_id, message_id)
 
     @command()
     @condition(only_owner, bypass_owner=False)
-    async def delete(self, ctx, channel_id: str, message_id: int=None):
-        match = re.match(r"https://discordapp.com/channels/[0-9]+/([0-9]+)/([0-9]+)", channel_id)
+    async def delete(self, ctx, channel_id: str, message_id: int = None):
+        match = re.match(
+            r"https://discordapp.com/channels/[0-9]+/([0-9]+)/([0-9]+)", channel_id
+        )
         if match:
             channel_id = int(match.group(1))
             message_id = int(match.group(2))
@@ -386,17 +429,15 @@ class Orisa(Plugin):
         await self.client.http.delete_message(channel_id, message_id)
         await ctx.channel.messages.send("deleted")
 
-
-#    @command()
-#    @condition(only_owner)
-#    async def updatehelp(self, ctx, channel_id: int, message_id: int):
-#        await self.client.http.edit_message(channel_id, message_id, embed=self._create_help().to_dict())
-#        await ctx.channel.messages.send("done")
-
+    #    @command()
+    #    @condition(only_owner)
+    #    async def updatehelp(self, ctx, channel_id: int, message_id: int):
+    #        await self.client.http.edit_message(channel_id, message_id, embed=self._create_help().to_dict())
+    #        await ctx.channel.messages.send("done")
 
     @command()
     @condition(only_owner)
-    async def hs(self, ctx, style:str = "psql"):
+    async def hs(self, ctx, style: str = "psql"):
 
         prev_date = datetime.utcnow() - timedelta(days=1)
 
@@ -405,7 +446,7 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
-    async def ranking(self, ctx, date:str):
+    async def ranking(self, ctx, date: str):
         date = pendulum.parse(date, tz=None)
         with self.database.session() as session:
             await self._player_ranking(session, ctx, date)
@@ -423,42 +464,38 @@ class Orisa(Plugin):
                 logger.exception("something went wrong during updatenicks")
         await ctx.channel.messages.send("Done")
 
-
     @command()
     @condition(only_owner, bypass_owner=False)
     async def cleanup(self, ctx, *, doit: str = None):
-        member_ids = [id for guild in self.client.guilds.values() for id in guild.members.keys()]
+        member_ids = [
+            id for guild in self.client.guilds.values() for id in guild.members.keys()
+        ]
         session = self.database.Session()
         try:
             registered_ids = [x[0] for x in session.query(User.discord_id).all()]
             stale_ids = set(registered_ids) - set(member_ids)
-            ids = ', '.join(f"<@{id}>" for id in stale_ids)
-            await ctx.channel.messages.send(f"there are {len(stale_ids)} stale entries: {ids}")
+            ids = ", ".join(f"<@{id}>" for id in stale_ids)
+            await ctx.channel.messages.send(
+                f"there are {len(stale_ids)} stale entries: {ids}"
+            )
 
         finally:
             session.close()
-
 
     @command()
     @condition(correct_channel)
     async def ping(self, ctx):
         await reply(ctx, "pong")
 
-
-
-
     # ow commands
-
 
     @command()
     @condition(correct_channel)
     async def ow(self, ctx, *, member: Member = None):
-
         def format_sr(tag):
             if not tag.sr:
                 return "—"
             return f"{tag.sr} ({RANKS[tag.rank]})"
-
 
         member_given = member is not None
         if not member_given:
@@ -470,7 +507,7 @@ class Orisa(Plugin):
         try:
             user = self.database.user_by_discord_id(session, member.id)
             if user:
-                embed = Embed(colour=0x659dbd) # will be overwritten later if SR is set
+                embed = Embed(colour=0x659DBD)  # will be overwritten later if SR is set
                 embed.add_field(name="Nick", value=member.name)
 
                 primary, *secondary = user.battle_tags
@@ -482,9 +519,13 @@ class Orisa(Plugin):
 
                 multiple_tags = len(user.battle_tags) > 1
 
-                embed.add_field(name="BattleTags" if multiple_tags else "BattleTag", value=tag_value)
+                embed.add_field(
+                    name="BattleTags" if multiple_tags else "BattleTag", value=tag_value
+                )
                 if any(tag.sr for tag in user.battle_tags):
-                    embed.add_field(name="SRs" if multiple_tags else "SR", value=sr_value)
+                    embed.add_field(
+                        name="SRs" if multiple_tags else "SR", value=sr_value
+                    )
 
                 if primary.rank is not None:
                     embed.colour = COLORS[primary.rank]
@@ -493,9 +534,9 @@ class Orisa(Plugin):
                     embed.add_field(name="Roles", value=format_roles(user.roles))
 
                 if multiple_tags:
-                    #footer_text = f"The SR of the BattleTags were last updated "
-                    #footer_text += ", ".join(pendulum.instance(tag.last_update).diff_for_humans() for tag in user.battle_tags)
-                    #footer_text += " respectively."
+                    # footer_text = f"The SR of the BattleTags were last updated "
+                    # footer_text += ", ".join(pendulum.instance(tag.last_update).diff_for_humans() for tag in user.battle_tags)
+                    # footer_text += " respectively."
                     footer_text = f"The SR of the primary BattleTag was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
                 else:
                     footer_text = f"The SR was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
@@ -507,20 +548,18 @@ class Orisa(Plugin):
                 content = f"{member.name} not found in database! *Do you need a hug?*"
                 if member == ctx.author:
                     embed = Embed(
-                                title="Hint",
-                                description="use `!ow register BattleTag#1234` to register, or `!ow help` for more info"
-                            )
+                        title="Hint",
+                        description="use `!ow register BattleTag#1234` to register, or `!ow help` for more info",
+                    )
         finally:
             session.close()
         await ctx.channel.messages.send(content=content, embed=embed)
-
 
     @ow.subcommand()
     @condition(correct_channel)
     async def get(self, ctx, *, member: Member = None):
         r = await self.ow(ctx, member=member)
         return r
-
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -546,16 +585,24 @@ class Orisa(Plugin):
                         extra_text = GUILD_INFOS[guild.id].extra_register_text
                         break
 
-                resp = ("OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed.\n" + extra_text)
+                resp = (
+                    "OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed.\n"
+                    + extra_text
+                )
             else:
                 if any(tag.tag == battle_tag for tag in user.battle_tags):
-                    await reply(ctx, "You already registered that BattleTag, so there's nothing for me to do. *Sleep mode reactivated.*")
+                    await reply(
+                        ctx,
+                        "You already registered that BattleTag, so there's nothing for me to do. *Sleep mode reactivated.*",
+                    )
                     return
 
                 tag = BattleTag(tag=battle_tag)
                 user.battle_tags.append(tag)
-                resp = (f"OK. I've added {battle_tag} to the list of your BattleTags. Your primary BattleTag remains **{user.battle_tags[0].tag}**. "
-                        f"To change your primary tag, use `!ow setprimary yourbattletag`, see help for more details.")
+                resp = (
+                    f"OK. I've added {battle_tag} to the list of your BattleTags. Your primary BattleTag remains **{user.battle_tags[0].tag}**. "
+                    f"To change your primary tag, use `!ow setprimary yourbattletag`, see help for more details."
+                )
 
             try:
                 async with ctx.channel.typing:
@@ -564,7 +611,10 @@ class Orisa(Plugin):
                 await reply(ctx, f"Invalid BattleTag: {e.message}")
                 return
             except BlizzardError as e:
-                await reply(ctx, f"Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later")
+                await reply(
+                    ctx,
+                    f"Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later",
+                )
                 raise
             except UnableToFindSR:
                 resp += "\nYou don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your BattleTag."
@@ -580,20 +630,22 @@ class Orisa(Plugin):
             try:
                 await self._update_nick(user)
             except NicknameTooLong as e:
-                resp += (f"\n**Adding your SR to your nickname would result in '{e.nickname}' and with {len(e.nickname)} characters, be longer than Discord's maximum of 32.** Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.")
+                resp += f"\n**Adding your SR to your nickname would result in '{e.nickname}' and with {len(e.nickname)} characters, be longer than Discord's maximum of 32.** Please shorten your nick to be no longer than 28 characters. I will regularly try to update it."
             except HierarchyError as e:
-                resp += ('\n**I do not have enough permissions to update your nickname. The owner needs to move the "Orisa" role higher '
-                         'so that is higher that your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry.**')
+                resp += (
+                    '\n**I do not have enough permissions to update your nickname. The owner needs to move the "Orisa" role higher '
+                    "so that is higher that your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry.**"
+                )
             except Exception as e:
                 logger.exception(f"unable to update nick for user {user}")
-                resp += ("\nHowever, right now I couldn't update your nickname, will try that again later."
-                         "People will still be able to ask for your BattleTag, though.")
+                resp += (
+                    "\nHowever, right now I couldn't update your nickname, will try that again later."
+                    "People will still be able to ask for your BattleTag, though."
+                )
         finally:
             session.close()
 
         await reply(ctx, resp)
-
-
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -602,7 +654,9 @@ class Orisa(Plugin):
         try:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, "You are not registered, there's nothing for me to do.")
+                await reply(
+                    ctx, "You are not registered, there's nothing for me to do."
+                )
                 return
 
             try:
@@ -611,32 +665,37 @@ class Orisa(Plugin):
                 await reply(ctx, e.args[0])
                 return
             if index == 0:
-                await reply(ctx,
+                await reply(
+                    ctx,
                     "You cannot unregister your primary BattleTag. Use `!ow setprimary` to set a different primary first, or "
-                    "use `!ow forgetme` to delete all your data.")
+                    "use `!ow forgetme` to delete all your data.",
+                )
                 return
 
             removed = user.battle_tags.pop(index)
             session.commit()
-            await reply(ctx, f'Removed **{removed.tag}**')
+            await reply(ctx, f"Removed **{removed.tag}**")
             await self._update_nick_after_secondary_change(ctx, user)
 
         finally:
             session.close()
 
-
     async def _update_nick_after_secondary_change(self, ctx, user):
-            try:
-                await self._update_nick(user)
-            except HierarchyError:
-                pass
-            except NicknameTooLong as e:
-                await reply(ctx,
+        try:
+            await self._update_nick(user)
+        except HierarchyError:
+            pass
+        except NicknameTooLong as e:
+            await reply(
+                ctx,
                 f'However, your new nickname "{e.nickname}" is now longer than 32 characters, which Discord doesn\'t allow. '
-                 'Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards.')
-            except:
-                await reply(ctx, "However, there was an error updating your nickname. I will try that again later.")
-
+                "Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards.",
+            )
+        except:
+            await reply(
+                ctx,
+                "However, there was an error updating your nickname. I will try that again later.",
+            )
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -653,7 +712,10 @@ class Orisa(Plugin):
                 await reply(ctx, e.args[0])
                 return
             if index == 0:
-                await reply(ctx, f'"{user.battle_tags[0].tag}" already is your primary BattleTag. *Going back to sleep*')
+                await reply(
+                    ctx,
+                    f'"{user.battle_tags[0].tag}" already is your primary BattleTag. *Going back to sleep*',
+                )
                 return
 
             p, s = user.battle_tags[0], user.battle_tags[index]
@@ -662,24 +724,26 @@ class Orisa(Plugin):
             session.commit()
 
             for i, t in enumerate(sorted(user.battle_tags[1:], key=attrgetter("tag"))):
-                t.position = i+1
+                t.position = i + 1
 
             session.commit()
 
-            await reply(ctx, f'Done. Your primary BattleTag is now **{user.battle_tags[0].tag}**.')
+            await reply(
+                ctx,
+                f"Done. Your primary BattleTag is now **{user.battle_tags[0].tag}**.",
+            )
             await self._update_nick_after_secondary_change(ctx, user)
 
         finally:
             session.close()
 
-
     @ow.subcommand()
     @condition(correct_channel)
     async def format(self, ctx, *, format: str):
-        if ']' in format:
+        if "]" in format:
             await reply(ctx, "format string may not contain square brackets")
             return
-        if not re.search(r'\$((sr|rank)(?!\w))|(\{(sr|rank)(?!\w)})', format):
+        if not re.search(r"\$((sr|rank)(?!\w))|(\{(sr|rank)(?!\w)})", format):
             await reply(ctx, "format string must contain at least a $sr or $rank")
             return
         if not format:
@@ -698,39 +762,46 @@ class Orisa(Plugin):
                 try:
                     new_nick = await self._update_nick(user)
                 except InvalidFormat as e:
-                    await reply(ctx, f'Invalid format string: unknown placeholder "{e.key}"')
+                    await reply(
+                        ctx, f'Invalid format string: unknown placeholder "{e.key}"'
+                    )
                     session.rollback()
                 except NicknameTooLong as e:
-                    await reply(ctx, f"Sorry, using this format would make your nickname be longer than 32 characters ({len(e.nickname)} to be exact).\n"
-                                f"Please choose a shorter format or shorten your nickname")
+                    await reply(
+                        ctx,
+                        f"Sorry, using this format would make your nickname be longer than 32 characters ({len(e.nickname)} to be exact).\n"
+                        f"Please choose a shorter format or shorten your nickname",
+                    )
                     session.rollback()
                 else:
                     titles = [
-                            "Smarties Expert",
-                            "Bread Scientist",
-                            "Eternal Bosom of Hot Love",
-                            "Sith Lord of Security",
-                            "Namer of Clouds",
-                            "Scourge of Beer Cans",
-                            "Muse of Jeff Kaplan",
-                            "Shredded Cheese Authority",
-                            "MILF Commander",
-                            "Cunning Linguist",
-                            "Pork Rind Expert",
-                            "Dinosaur Supervisor",
-                            "Galactic Viceroy of C9",
-                            "Earl of Bacon",
-                            "Dean of Pizza",
-                            "Duke of Tacos",
-                            "Retail Jedi",
-                            "Pornography Historian",
-                            ]
+                        "Smarties Expert",
+                        "Bread Scientist",
+                        "Eternal Bosom of Hot Love",
+                        "Sith Lord of Security",
+                        "Namer of Clouds",
+                        "Scourge of Beer Cans",
+                        "Muse of Jeff Kaplan",
+                        "Shredded Cheese Authority",
+                        "MILF Commander",
+                        "Cunning Linguist",
+                        "Pork Rind Expert",
+                        "Dinosaur Supervisor",
+                        "Galactic Viceroy of C9",
+                        "Earl of Bacon",
+                        "Dean of Pizza",
+                        "Duke of Tacos",
+                        "Retail Jedi",
+                        "Pornography Historian",
+                    ]
 
-                    await reply(ctx, f'Done. Henceforth, ye shall be knownst as "{new_nick}, {random.choice(titles)}."')
+                    await reply(
+                        ctx,
+                        f'Done. Henceforth, ye shall be knownst as "{new_nick}, {random.choice(titles)}."',
+                    )
         finally:
             session.commit()
             session.close()
-
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -750,19 +821,24 @@ class Orisa(Plugin):
                         except Exception as e:
                             if raven_client:
                                 raven_client.captureException()
-                            logger.exception(f'exception while syncing {tag}')
+                            logger.exception(f"exception while syncing {tag}")
                             fault = True
 
                 if fault:
-                    await reply(ctx, "There were some problems updating your SR. Try again later.")
+                    await reply(
+                        ctx,
+                        "There were some problems updating your SR. Try again later.",
+                    )
                 else:
-                    await reply(ctx, f"OK, I have updated your data. Your (primary) SR is now {user.battle_tags[0].sr}. "
-                                     "If that is not correct, you need to log out of Overwatch once and try again; your "
-                                     "profile also needs to be public for me to track your SR.")
+                    await reply(
+                        ctx,
+                        f"OK, I have updated your data. Your (primary) SR is now {user.battle_tags[0].sr}. "
+                        "If that is not correct, you need to log out of Overwatch once and try again; your "
+                        "profile also needs to be public for me to track your SR.",
+                    )
         finally:
             session.commit()
             session.close()
-
 
     @ow.subcommand()
     async def forgetme(self, ctx):
@@ -778,7 +854,7 @@ class Orisa(Plugin):
                             nn = str(guild.members[user_id].name)
                         except KeyError:
                             continue
-                        new_nn = re.sub(r'\s*\[.*?\]', '', nn, count=1).strip()
+                        new_nn = re.sub(r"\s*\[.*?\]", "", nn, count=1).strip()
                         try:
                             await guild.members[user_id].nickname.set(new_nn)
                         except HierarchyError:
@@ -789,26 +865,26 @@ class Orisa(Plugin):
                 await reply(ctx, f"OK, deleted {ctx.author.name} from database")
                 session.commit()
             else:
-                await reply(ctx, "you are not registered anyway, so there's nothing for me to forget...")
+                await reply(
+                    ctx,
+                    "you are not registered anyway, so there's nothing for me to forget...",
+                )
         finally:
             session.close()
-
 
     @ow.subcommand()
     @condition(correct_channel)
     async def findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
         await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=False)
 
-
     @ow.subcommand()
     @condition(correct_channel)
     async def findallplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
         await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=True)
 
-
     @ow.subcommand()
     @condition(correct_channel)
-    async def newsr(self, ctx, arg1, arg2 = None):
+    async def newsr(self, ctx, arg1, arg2=None):
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
@@ -822,13 +898,20 @@ class Orisa(Plugin):
                 tag_str, sr_str = arg1, arg2
 
                 try:
-                    _, score, index = process.extractOne(tag_str, {t.position: t.tag for t in user.battle_tags}, score_cutoff=50)
+                    _, score, index = process.extractOne(
+                        tag_str,
+                        {t.position: t.tag for t in user.battle_tags},
+                        score_cutoff=50,
+                    )
                     tag = user.battle_tags[index]
                 except (ValueError, TypeError):
                     tag = None
 
                 if not tag:
-                    await reply(ctx, f"I have no idea which of your BattleTags you mean by '{tag_str}'")
+                    await reply(
+                        ctx,
+                        f"I have no idea which of your BattleTags you mean by '{tag_str}'",
+                    )
                     return
             # check for fat fingering
             force = False
@@ -841,7 +924,10 @@ class Orisa(Plugin):
                 else:
                     sr = int(sr_str)
             except ValueError:
-                await reply(ctx, "I don't know about you, but '{sr_str}' doesn't look like a number to me")
+                await reply(
+                    ctx,
+                    "I don't know about you, but '{sr_str}' doesn't look like a number to me",
+                )
                 return
 
             if sr is not None:
@@ -851,8 +937,11 @@ class Orisa(Plugin):
 
                 # check for fat finger
                 if tag.sr and abs(tag.sr - sr) > 200 and not force:
-                    await reply(ctx, f"Whoa! {sr} looks like a big change compared to your previous SR of {tag.sr}. To avoid typos, I will only update it if you are sure."
-                                     f"So, if that is indeed correct, reissue this command with a ! added to the SR, like `!ow newsr 1234!`")
+                    await reply(
+                        ctx,
+                        f"Whoa! {sr} looks like a big change compared to your previous SR of {tag.sr}. To avoid typos, I will only update it if you are sure."
+                        f"So, if that is indeed correct, reissue this command with a ! added to the SR, like `!ow newsr 1234!`",
+                    )
                     return
 
             tag.update_sr(sr)
@@ -863,31 +952,32 @@ class Orisa(Plugin):
             session.commit()
             await reply(ctx, f"Done. The SR for *{tag.tag}* is now *{sr}*")
 
-
     @ow.subcommand()
     @condition(correct_channel)
     async def setrole(self, ctx, *, roles_str: str):
         "Alias for setroles"
         return await self.setroles(ctx, roles_str)
 
-
     @ow.subcommand()
     @condition(correct_channel)
     async def setroles(self, ctx, *, roles_str: str):
         names = {
-            'd': Role.DPS,
-            'm': Role.MAIN_TANK,
-            'o': Role.OFF_TANK,
-            's': Role.SUPPORT,
+            "d": Role.DPS,
+            "m": Role.MAIN_TANK,
+            "o": Role.OFF_TANK,
+            "s": Role.SUPPORT,
         }
 
         roles = Role.NONE
 
-        for role in roles_str.replace(' ', '').lower():
+        for role in roles_str.replace(" ", "").lower():
             try:
                 roles |= names[role]
             except KeyError:
-                await reply(ctx, f"Unknown role identifier '{role}'. Valid role identifiers are: `d` (DPS), `m` (Main Tank), `o` (Off Tank), `s` (Support). They can be combined, eg. `ds` would mean DPS + Support.")
+                await reply(
+                    ctx,
+                    f"Unknown role identifier '{role}'. Valid role identifiers are: `d` (DPS), `m` (Main Tank), `o` (Off Tank), `s` (Support). They can be combined, eg. `ds` would mean DPS + Support.",
+                )
                 return
 
         session = self.database.Session()
@@ -902,9 +992,12 @@ class Orisa(Plugin):
         finally:
             session.close()
 
-
-    async def _findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None, *, findall):
-        logger.info(f"{ctx.author.id} issued findplayers {diff_or_min_sr} {max_sr} {findall}")
+    async def _findplayers(
+        self, ctx, diff_or_min_sr: int = None, max_sr: int = None, *, findall
+    ):
+        logger.info(
+            f"{ctx.author.id} issued findplayers {diff_or_min_sr} {max_sr} {findall}"
+        )
 
         session = self.database.Session()
         try:
@@ -923,12 +1016,17 @@ class Orisa(Plugin):
                         return
 
                     if sr_diff > 5000:
-                        await reply(ctx, "You just had to try ridiculous values, didn't you?")
+                        await reply(
+                            ctx, "You just had to try ridiculous values, didn't you?"
+                        )
                         return
 
                 base_sr = asker.battle_tags[0].sr
                 if not base_sr:
-                    await reply(ctx, "You primary BattleTag has no SR, please give a SR range you want to search for instead")
+                    await reply(
+                        ctx,
+                        "You primary BattleTag has no SR, please give a SR range you want to search for instead",
+                    )
                     return
 
                 if sr_diff is None:
@@ -942,14 +1040,26 @@ class Orisa(Plugin):
                 # we are looking at a range
                 min_sr = diff_or_min_sr
 
-                if not ((500 <= min_sr <= 5000) and (500 <= max_sr <= 5000) and (min_sr <= max_sr)):
-                    await reply(ctx, "min and max must be between 500 and 5000, and min must not be larger than max.")
+                if not (
+                    (500 <= min_sr <= 5000)
+                    and (500 <= max_sr <= 5000)
+                    and (min_sr <= max_sr)
+                ):
+                    await reply(
+                        ctx,
+                        "min and max must be between 500 and 5000, and min must not be larger than max.",
+                    )
                     return
 
                 type_msg = f"between {min_sr} and {max_sr} SR"
 
-            candidates = (session.query(BattleTag).join(BattleTag.current_sr).options(joinedload(BattleTag.user))
-                          .filter(SR.value.between(min_sr, max_sr)).all())
+            candidates = (
+                session.query(BattleTag)
+                .join(BattleTag.current_sr)
+                .options(joinedload(BattleTag.user))
+                .filter(SR.value.between(min_sr, max_sr))
+                .all()
+            )
 
             users = set(c.user for c in candidates)
 
@@ -971,7 +1081,6 @@ class Orisa(Plugin):
                     else:
                         online.append(member)
 
-
             def format_member(member):
                 nonlocal cmap
                 markup = "~~" if member.status == Status.DND else ""
@@ -984,7 +1093,6 @@ class Orisa(Plugin):
                     hint = ""
 
                 return f"{markup}{str(member.name)}\u00a0{member.mention}{markup}\u00a0{hint}\n"
-
 
             msg = ""
 
@@ -1018,7 +1126,6 @@ class Orisa(Plugin):
         finally:
             session.close()
 
-
     @ow.subcommand()
     async def help(self, ctx):
         forbidden = False
@@ -1030,11 +1137,13 @@ class Orisa(Plugin):
                 break
 
         if forbidden:
-            await reply(ctx, "I tried to send you a DM with help, but you don't allow DM from server members. "
-                             "I can't post it here, because it's rather long. Please allow DMs and try again.")
+            await reply(
+                ctx,
+                "I tried to send you a DM with help, but you don't allow DM from server members. "
+                "I can't post it here, because it's rather long. Please allow DMs and try again.",
+            )
         elif not ctx.channel.private:
             await reply(ctx, "I sent you a DM with instructions.")
-
 
     def _create_help(self, ctx):
         channel_id = None
@@ -1057,81 +1166,80 @@ class Orisa(Plugin):
                 f"*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{self.client.application_info.owner.id}>*\n"
                 f"\n**The commands only work in the <#{channel_id}> channel or by sending me a DM**\n"
                 "If you are new to Orisa, you are probably looking for `!ow register`\n"
+            ),
+        )
+        embed.add_field(
+            name="!ow [nick]",
+            value=(
+                "Shows the BattleTag for the given nickname, or your BattleTag "
+                "if no nickname is given. `nick` can contain spaces. A fuzzy search for the nickname is performed.\n"
+                "*Examples:*\n"
+                "`!ow` will show your BattleTag\n"
+                '`!ow the chosen one` will show the BattleTag of "tHE ChOSeN ONe"\n'
+                '`!ow orisa` will show the BattleTag of "SG | Orisa", "Orisa", or "Orisad"\n'
+                '`!ow oirsa` and `!ow ori` will probably also show the BattleTag of "Orisa"'
+            ),
+        )
+        embed.add_field(
+            name="!ow findplayers [max diff] *or* !ow findplayers min max",
+            value="*This command is still in beta and may change at any time!*\n"
+            "This command is intended to find partners for your Competitive team and shows you all registered and online users within the specified range.\n"
+            "If `max diff` is not given, the maximum range that allows you to queue with them is used, so 1000 below 3500 SR, and 500 otherwise. "
+            "If `max diff` is given, it is used instead. `findplayers` then searches for all online players that around that range of your own SR.\n"
+            "Alternatively, you can give two parameters, `!ow findplayers min max`. In this mode, `findplayers` will search for all online players that are between "
+            "min and max.\n"
+            "Note that `findplayers` will take all registered BattleTags of players into account, not just their primary.\n"
+            "*Examples:*\n"
+            "`!ow findplayers`: finds all players that you could start a competitive queue with\n"
+            "`!ow findplayers 123`: finds all players that are within 123 SR of your SR\n"
+            "`!ow findplayers 1500 2300`: finds all players between 1500 and 2300 SR\n",
+        )
+        embed.add_field(
+            name="!ow findallplayers [max diff] *or* !ow findplayers min max",
+            value="Same as `findplayers`, but also includes offline players",
+        )
+        embed.add_field(
+            name="!ow forceupdate",
+            value="Immediately checks your account data and updates your nick accordingly.\n"
+            "*Checks and updates are done automatically, use this command only if "
+            "you want your nick to be up to date immediately!*",
+        )
+        embed.add_field(
+            name="!ow forgetme",
+            value="All your BattleTags will be removed from the database and your nick "
+            "will not be updated anymore. You can re-register at any time.",
+        )
 
-                ),
-        )
         embed.add_field(
-            name='!ow [nick]',
-            value=('Shows the BattleTag for the given nickname, or your BattleTag '
-                   'if no nickname is given. `nick` can contain spaces. A fuzzy search for the nickname is performed.\n'
-                   '*Examples:*\n'
-                   '`!ow` will show your BattleTag\n'
-                   '`!ow the chosen one` will show the BattleTag of "tHE ChOSeN ONe"\n'
-                   '`!ow orisa` will show the BattleTag of "SG | Orisa", "Orisa", or "Orisad"\n'
-                   '`!ow oirsa` and `!ow ori` will probably also show the BattleTag of "Orisa"')
-        )
-        embed.add_field(
-            name='!ow findplayers [max diff] *or* !ow findplayers min max',
-            value='*This command is still in beta and may change at any time!*\n'
-                  'This command is intended to find partners for your Competitive team and shows you all registered and online users within the specified range.\n'
-                  'If `max diff` is not given, the maximum range that allows you to queue with them is used, so 1000 below 3500 SR, and 500 otherwise. '
-                  'If `max diff` is given, it is used instead. `findplayers` then searches for all online players that around that range of your own SR.\n'
-                  'Alternatively, you can give two parameters, `!ow findplayers min max`. In this mode, `findplayers` will search for all online players that are between '
-                  'min and max.\n'
-                  'Note that `findplayers` will take all registered BattleTags of players into account, not just their primary.\n'
-                  '*Examples:*\n'
-                  '`!ow findplayers`: finds all players that you could start a competitive queue with\n'
-                  '`!ow findplayers 123`: finds all players that are within 123 SR of your SR\n'
-                  '`!ow findplayers 1500 2300`: finds all players between 1500 and 2300 SR\n'
-        )
-        embed.add_field(
-            name='!ow findallplayers [max diff] *or* !ow findplayers min max',
-            value='Same as `findplayers`, but also includes offline players'
-        )
-        embed.add_field(
-            name='!ow forceupdate',
-            value='Immediately checks your account data and updates your nick accordingly.\n'
-                  '*Checks and updates are done automatically, use this command only if '
-                  'you want your nick to be up to date immediately!*'
-        )
-        embed.add_field(
-            name='!ow forgetme',
-            value='All your BattleTags will be removed from the database and your nick '
-                  'will not be updated anymore. You can re-register at any time.'
-        )
-
-        embed.add_field(
-            name='!ow format *format*',
+            name="!ow format *format*",
             value="Lets you specify how your SR or rank is displayed. It will always be shown in [square\u00a0brackets] appended to your name.\n"
-                "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`. The second form is useful when there are no spaces "
-                "between the placeholder name and the text. For example, to get `[2000 SR]`, you *can* use just `$sr SR`, however, to get `[2000SR]`, you need "
-                "to use `${sr}SR`, because `$srSR` would refer to a nonexistant placeholder `srSR`.\n"
-                "Your format string needs to use at least either `$sr` or `$rank`.\n"
+            "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`. The second form is useful when there are no spaces "
+            "between the placeholder name and the text. For example, to get `[2000 SR]`, you *can* use just `$sr SR`, however, to get `[2000SR]`, you need "
+            "to use `${sr}SR`, because `$srSR` would refer to a nonexistant placeholder `srSR`.\n"
+            "Your format string needs to use at least either `$sr` or `$rank`.\n",
         )
         embed.add_field(
             name="\N{BLACK STAR} *ow format placeholders (prepend a $)*",
-            value=
-                "*The following placeholders are defined:*\n"
-                f"`dps`, `tank`, `support`, `flex`\nSymbols for the respective roles: `{self.SYMBOL_DPS}`, `{self.SYMBOL_TANK}`, `{self.SYMBOL_SUPPORT}`, `{self.SYMBOL_FLEX}`\n\n"
-                "`sr`\nyour SR; if you have secondary accounts, an asterisk (\*) is added at the end.\n\n"
-                "`rank`\nyour Rank; if you have secondary accounts, an asterisk (\*) is added at the end.\n\n"
-                "`secondary_sr`\nThe SR of your secondary account, if you have registered one.\nIf you have more than one secondary account (you really like to "
-                "give Blizzard money, don't you), the first secondary account (sorted alphabetically) will be used; in that case, consider using `$sr_range` instead.\n\n"
-                "`secondary_rank`\nLike `secondary_sr`, but shows the rank instead.\n\n"
-                "`lowest_sr`, `highest_sr`\nthe lowest/highest SR of all your accounts, including your primary. Only useful if you have more than one secondary.\n\n"
-                "`lowest_rank`, `highest_rank`\nthe same, just for rank.\n\n"
-                "`sr_range`\nThe same as `${lowest_sr}–${highest_sr}`.\n\n"
-                "`rank_range`\nDito, but for rank.\n"
+            value="*The following placeholders are defined:*\n"
+            f"`dps`, `tank`, `support`, `flex`\nSymbols for the respective roles: `{self.SYMBOL_DPS}`, `{self.SYMBOL_TANK}`, `{self.SYMBOL_SUPPORT}`, `{self.SYMBOL_FLEX}`\n\n"
+            "`sr`\nyour SR; if you have secondary accounts, an asterisk (\*) is added at the end.\n\n"
+            "`rank`\nyour Rank; if you have secondary accounts, an asterisk (\*) is added at the end.\n\n"
+            "`secondary_sr`\nThe SR of your secondary account, if you have registered one.\nIf you have more than one secondary account (you really like to "
+            "give Blizzard money, don't you), the first secondary account (sorted alphabetically) will be used; in that case, consider using `$sr_range` instead.\n\n"
+            "`secondary_rank`\nLike `secondary_sr`, but shows the rank instead.\n\n"
+            "`lowest_sr`, `highest_sr`\nthe lowest/highest SR of all your accounts, including your primary. Only useful if you have more than one secondary.\n\n"
+            "`lowest_rank`, `highest_rank`\nthe same, just for rank.\n\n"
+            "`sr_range`\nThe same as `${lowest_sr}–${highest_sr}`.\n\n"
+            "`rank_range`\nDito, but for rank.\n",
         )
         embed.add_field(
             name="\N{BLACK STAR} *ow format examples*",
-            value=
-                '`!ow format test $sr SR` will result in [test 2345 SR]\n'
-                '`!ow format Potato/$rank` in [Potato/Gold].\n'
-                '`!ow format $sr (alt: $secondary_sr)` in [1234* (alt: 2345)]\n'
-                '`!ow format $sr ($sr_range)` in [1234* (600-4200)]\n'
-                '`!ow format $sr ($rank_range)` in [1234* (Bronze-Grand Master)]\n\n'
-                '*By default, the format is `$sr`*'
+            value="`!ow format test $sr SR` will result in [test 2345 SR]\n"
+            "`!ow format Potato/$rank` in [Potato/Gold].\n"
+            "`!ow format $sr (alt: $secondary_sr)` in [1234* (alt: 2345)]\n"
+            "`!ow format $sr ($sr_range)` in [1234* (600-4200)]\n"
+            "`!ow format $sr ($rank_range)` in [1234* (Bronze-Grand Master)]\n\n"
+            "*By default, the format is `$sr`*",
         )
 
         embeds = [embed]
@@ -1139,71 +1247,73 @@ class Orisa(Plugin):
         embeds.append(embed)
 
         embed.add_field(
-            name='!ow get nick',
-            value=('Same as `!ow [nick]`, (only) useful when the nick is the same as a command.\n'
-                   '*Example:*\n'
-                   '`!ow get register foo` will search for the nick "register foo"')
+            name="!ow get nick",
+            value=(
+                "Same as `!ow [nick]`, (only) useful when the nick is the same as a command.\n"
+                "*Example:*\n"
+                '`!ow get register foo` will search for the nick "register foo"'
+            ),
         )
         embed.add_field(
-            name='!ow register BattleTag#1234',
-            value='Registers your account with the given BattleTag, or adds a secondary BattleTag to your account. '
-                'Your OW account will be checked periodically and your nick will be '
-                'automatically updated to show your SR or rank (see the *format* command for more info). '
-                '`register` will fail if the BattleTag is invalid. *BattleTags are case-sensitive!*'
+            name="!ow register BattleTag#1234",
+            value="Registers your account with the given BattleTag, or adds a secondary BattleTag to your account. "
+            "Your OW account will be checked periodically and your nick will be "
+            "automatically updated to show your SR or rank (see the *format* command for more info). "
+            "`register` will fail if the BattleTag is invalid. *BattleTags are case-sensitive!*",
         )
         embed.add_field(
-            name='!ow unregister *battletag*',
-            value='If you have secondary BattleTags, you can remove the given BattleTag from the list. Unlike register, the search is performed fuzzy, so '
-                'you normally only have to specify the first few letters of the BattleTag to remove.\n'
-                'You cannot remove your primary BattleTag, you have to choose a different primary BattleTag first.\n'
-                '*Example:*\n'
-                '`!ow unregister foo`'
+            name="!ow unregister *battletag*",
+            value="If you have secondary BattleTags, you can remove the given BattleTag from the list. Unlike register, the search is performed fuzzy, so "
+            "you normally only have to specify the first few letters of the BattleTag to remove.\n"
+            "You cannot remove your primary BattleTag, you have to choose a different primary BattleTag first.\n"
+            "*Example:*\n"
+            "`!ow unregister foo`",
         )
         embed.add_field(
-            name='!ow unregister *index*',
-            value='Like `unregister battletag`, but removes the battletag by number. Your first secondary is 1, your second 2, etc.\n'
-                "The order is shown by the `!ow` command (it's alphabetical).\n"
-                "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
-                '*Example:*\n'
-                '`!ow unregister 1`'
+            name="!ow unregister *index*",
+            value="Like `unregister battletag`, but removes the battletag by number. Your first secondary is 1, your second 2, etc.\n"
+            "The order is shown by the `!ow` command (it's alphabetical).\n"
+            "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
+            "*Example:*\n"
+            "`!ow unregister 1`",
         )
         embed.add_field(
-            name='!ow setprimary *battletag*',
+            name="!ow setprimary *battletag*",
             value="Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using, the its SR is shown in your nick\n"
-                'Unlike `register`, the search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n'
-                'The given BattleTag must already be registered as one of your BattleTags.\n'
-                '*Example:*\n'
-                '`!ow setprimary jjonak`'
+            "Unlike `register`, the search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n"
+            "The given BattleTag must already be registered as one of your BattleTags.\n"
+            "*Example:*\n"
+            "`!ow setprimary jjonak`",
         )
         embed.add_field(
-            name='!ow setprimary *index*',
+            name="!ow setprimary *index*",
             value="Like `!ow setprimary battletag`, but uses numbers, 1 is your first secondary, 2 your seconds etc. The order is shown by `!ow` (alphabetical)\n"
-                "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
-                '*Example:*\n'
-                '`!ow setprimary 1`'
+            "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
+            "*Example:*\n"
+            "`!ow setprimary 1`",
         )
         embed.add_field(
-            name='!ow setroles *roles*',
+            name="!ow setroles *roles*",
             value="Sets the role you can/want to play. It will be shown in `!ow` and will also be used to update the number of roles "
-                  "in voice channels you join.\n"
-                  '*roles* is a single "word" consisting of one or more of the following identifiers (both upper and lower case work):\n'
-                  '`d` for DPS, `m` for Main Tank, `o` for Off Tank, `s` for Support\n'
-                  '*Examples:*\n'
-                  "`!ow setroles d`: you only play DPS\n"
-                  "`!ow setroles so`: you play Support and Off Tanks\n"
-                  "`!ow setroles dmos`: you are a true Flex and play everything."
+            "in voice channels you join.\n"
+            '*roles* is a single "word" consisting of one or more of the following identifiers (both upper and lower case work):\n'
+            "`d` for DPS, `m` for Main Tank, `o` for Off Tank, `s` for Support\n"
+            "*Examples:*\n"
+            "`!ow setroles d`: you only play DPS\n"
+            "`!ow setroles so`: you play Support and Off Tanks\n"
+            "`!ow setroles dmos`: you are a true Flex and play everything.",
         )
         embed.add_field(
-            name='!ow srgraph [from_date]',
+            name="!ow srgraph [from_date]",
             value="*This command is in beta and can change at any time; it might also have bugs, report them please*\n"
-                  "Shows a graph of your SR. If from_date (as DD.MM.YY or YYYY-MM-DD) is given, the graph starts at that date, otherwise it starts "
-                  "as early as Orisa has data.")
-
+            "Shows a graph of your SR. If from_date (as DD.MM.YY or YYYY-MM-DD) is given, the graph starts at that date, otherwise it starts "
+            "as early as Orisa has data.",
+        )
 
         return embeds
 
     @ow.subcommand()
-    async def srgraph(self, ctx, date:str = None):
+    async def srgraph(self, ctx, date: str = None):
 
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, ctx.author.id)
@@ -1215,7 +1325,7 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     @condition(only_owner)
-    async def usersrgraph(self, ctx, member:Member, date:str = None):
+    async def usersrgraph(self, ctx, member: Member, date: str = None):
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, member.id)
             if not user:
@@ -1224,23 +1334,28 @@ class Orisa(Plugin):
             else:
                 await self._srgraph(ctx, user, member.name, date)
 
-    async def _srgraph(self, ctx, user, name, date:str = None):
+    async def _srgraph(self, ctx, user, name, date: str = None):
         sns.set()
 
         tag = user.battle_tags[0]
 
         data = [(sr.timestamp, sr.value) for sr in tag.sr_history]
 
-        data = pd.DataFrame.from_records(reversed(data), columns=['timestamp', 'sr'])
+        data = pd.DataFrame.from_records(reversed(data), columns=["timestamp", "sr"])
 
         if date:
             try:
-                date = date_parser.parse(date, parserinfo=date_parser.parserinfo(dayfirst=True))
+                date = date_parser.parse(
+                    date, parserinfo=date_parser.parserinfo(dayfirst=True)
+                )
             except ValueError:
-                await reply(ctx, f"I don't know what date {date} is supposed to mean. Please use "
-                                "the format DD.MM.YY or YYYY-MM-DD")
+                await reply(
+                    ctx,
+                    f"I don't know what date {date} is supposed to mean. Please use "
+                    "the format DD.MM.YY or YYYY-MM-DD",
+                )
 
-            data = data[data.timestamp>=date].reset_index(drop=True)
+            data = data[data.timestamp >= date].reset_index(drop=True)
 
         fig, ax = plt.subplots()
 
@@ -1252,38 +1367,48 @@ class Orisa(Plugin):
             val = data.iloc[ix].sr
             ax.axhline(y=val, color=col, linestyle="--")
 
-            ax.annotate(int(val), xy=(1, val), xycoords=("axes fraction", "data"),
-                        xytext=(5,-3), textcoords="offset points",
-                        color=col)
+            ax.annotate(
+                int(val),
+                xy=(1, val),
+                xycoords=("axes fraction", "data"),
+                xytext=(5, -3),
+                textcoords="offset points",
+                color=col,
+            )
 
         data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
 
         if True:
             for ix in data.sr[pd.isna].index:
-                x = data.iloc[ix-1:ix]
-                x = x.append(data.iloc[ix+1:ix+2])
+                x = data.iloc[ix - 1 : ix]
+                x = x.append(data.iloc[ix + 1 : ix + 2])
                 x.loc[0, "timestamp"] = data.iloc[ix].timestamp
-                x.set_index("timestamp").sr.plot(style="C0:", ax=ax, )#drawstyle="steps-post")
+                x.set_index("timestamp").sr.plot(
+                    style="C0:", ax=ax
+                )  # drawstyle="steps-post")
 
         ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%d.%m."))
-        #ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(byhour=(0, 12)))
+        # ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(byhour=(0, 12)))
         plt.xlabel("Date")
         plt.ylabel("SR")
 
         image = BytesIO()
         plt.savefig(format="png", fname=image, transparent=False)
         image.seek(0)
-        embed = Embed(title=f"SR History For {name}", description=f"Here is your SR history starting from "
-                    f"{'when you registered' if not date else pendulum.instance(date).to_formatted_date_string()}.\n"
-                    "A dotted line means that you had no SR during that time (probably due to off-season)")
+        embed = Embed(
+            title=f"SR History For {name}",
+            description=f"Here is your SR history starting from "
+            f"{'when you registered' if not date else pendulum.instance(date).to_formatted_date_string()}.\n"
+            "A dotted line means that you had no SR during that time (probably due to off-season)",
+        )
         embed.set_image(image_url="attachment://graph.png")
-        await ctx.channel.messages.upload(image, filename="graph.png", message_embed=embed)
-
+        await ctx.channel.messages.upload(
+            image, filename="graph.png", message_embed=embed
+        )
 
     # Events
-    @event('member_update')
+    @event("member_update")
     async def _member_update(self, ctx, old_member: Member, new_member: Member):
-
         def plays_overwatch(m):
             try:
                 return m.game.name == "Overwatch"
@@ -1291,7 +1416,9 @@ class Orisa(Plugin):
                 return False
 
         async def wait_and_fire(ids_to_sync):
-            logger.debug(f"sleeping for 20s before syncing after OW close of {new_member.name}")
+            logger.debug(
+                f"sleeping for 20s before syncing after OW close of {new_member.name}"
+            )
             await trio.sleep(20)
             await self._sync_tags(ids_to_sync)
             logger.debug(f"done syncing tags for {new_member.name} after OW close")
@@ -1307,14 +1434,15 @@ class Orisa(Plugin):
                     return
 
                 ids_to_sync = [t.id for t in user.battle_tags]
-                logger.info(f"{new_member.name} stopped playing OW and has {len(ids_to_sync)} BattleTags that need to be checked")
+                logger.info(
+                    f"{new_member.name} stopped playing OW and has {len(ids_to_sync)} BattleTags that need to be checked"
+                )
             finally:
                 session.close()
 
             await self.spawn(wait_and_fire, ids_to_sync)
 
-
-    @event('voice_state_update')
+    @event("voice_state_update")
     async def _voice_state_update(self, ctx, member, old_voice_state, new_voice_state):
         parent = None
         if old_voice_state:
@@ -1325,21 +1453,24 @@ class Orisa(Plugin):
             if new_voice_state.channel.parent != parent:
                 await self._adjust_voice_channels(new_voice_state.channel.parent)
 
-
-    @event('message_create')
+    @event("message_create")
     async def _message_create(self, ctx, msg):
-        #logger.debug(f"got message {msg.author} {msg.channel} {msg.content} {msg.snowflake_timestamp}")
+        # logger.debug(f"got message {msg.author} {msg.channel} {msg.content} {msg.snowflake_timestamp}")
         if msg.content.startswith("!ow"):
-            logger.info(f"{msg.author.name} in {msg.channel.type.name} issued {msg.content}")
+            logger.info(
+                f"{msg.author.name} in {msg.channel.type.name} issued {msg.content}"
+            )
         if msg.content.startswith("!"):
             return
         if msg.channel.private and re.match(r"^[0-9]{3,4}!?$", msg.content.strip()):
             # single number, special case for newsr
             await self.newsr(Context(msg, ctx), msg.content.strip())
 
-    @event('guild_member_remove')
+    @event("guild_member_remove")
     async def _guild_member_remove(self, ctx: Context, member: Member):
-        logger.debug(f"Member {member.name}({member.id}) left the guild ({member.guild})")
+        logger.debug(
+            f"Member {member.name}({member.id}) left the guild ({member.guild})"
+        )
         with self.database.session() as session:
             user = database.user_by_discord_id(session, member.id)
             if user:
@@ -1350,7 +1481,9 @@ class Orisa(Plugin):
                         logger.debug(f"{member.name} is still in guild {guild.id}")
                         break
                 if not in_other_guild:
-                    logger.info(f"deleting {user} from database because {member.name} left the guild and has no other guilds")
+                    logger.info(
+                        f"deleting {user} from database because {member.name} left the guild and has no other guilds"
+                    )
                     session.delete(user)
                     session.commit()
 
@@ -1372,17 +1505,19 @@ class Orisa(Plugin):
             return
 
         def prefixkey(chan):
-            return chan.name.rsplit('#', 1)[0].strip()
+            return chan.name.rsplit("#", 1)[0].strip()
 
         def numberkey(chan):
-            return int(chan.name.rsplit('#', 1)[1])
+            return int(chan.name.rsplit("#", 1)[1])
 
         async def delete_channel(chan):
             nonlocal made_changes
 
             id = chan.id
             logger.debug("deleting channel %s", chan)
-            async with self.client.events.wait_for_manager("channel_delete", lambda chan: chan.id == id):
+            async with self.client.events.wait_for_manager(
+                "channel_delete", lambda chan: chan.id == id
+            ):
                 await chan.delete()
             made_changes = True
 
@@ -1397,16 +1532,28 @@ class Orisa(Plugin):
             else:
                 limit = 0
 
-            async with self.client.events.wait_for_manager("channel_create", lambda chan:chan.name == name):
-                await guild.channels.create(type_=ChannelType.VOICE, name=name, parent=parent, user_limit=limit)
+            async with self.client.events.wait_for_manager(
+                "channel_create", lambda chan: chan.name == name
+            ):
+                await guild.channels.create(
+                    type_=ChannelType.VOICE, name=name, parent=parent, user_limit=limit
+                )
 
             made_changes = True
 
-        voice_channels = [chan for chan in parent.children if chan.type == ChannelType.VOICE]
+        voice_channels = [
+            chan for chan in parent.children if chan.type == ChannelType.VOICE
+        ]
 
-        sorted_channels = sorted(filter(lambda chan: '#' in chan.name, parent.children), key=attrgetter('name'))
+        sorted_channels = sorted(
+            filter(lambda chan: "#" in chan.name, parent.children),
+            key=attrgetter("name"),
+        )
 
-        grouped = list((prefix, list(sorted(group, key=numberkey))) for prefix,group in groupby(sorted_channels, key=prefixkey))
+        grouped = list(
+            (prefix, list(sorted(group, key=numberkey)))
+            for prefix, group in groupby(sorted_channels, key=prefixkey)
+        )
 
         made_changes = False
 
@@ -1433,7 +1580,7 @@ class Orisa(Plugin):
             if create_all_channels:
                 while len(chans) < cat.channel_limit:
                     await add_a_channel()
-                    chans.append("dummy") # value doesn't matter
+                    chans.append("dummy")  # value doesn't matter
 
             elif not empty_channels:
                 if len(chans) < cat.channel_limit:
@@ -1448,7 +1595,7 @@ class Orisa(Plugin):
                 for chan in empty_channels[1:]:
                     await delete_channel(chan)
 
-        del chans # just to make sure we don't use it later, see hack above
+        del chans  # just to make sure we don't use it later, see hack above
 
         if made_changes:
             managed_channels = []
@@ -1456,14 +1603,21 @@ class Orisa(Plugin):
 
             # parent.children should be updated by now to contain newly created channels and without deleted ones
 
-            for chan in (chan for chan in parent.children if chan.type == ChannelType.VOICE):
-                if '#' in chan.name and chan.name.rsplit('#', 1)[0].strip() in cat.prefixes:
+            for chan in (
+                chan for chan in parent.children if chan.type == ChannelType.VOICE
+            ):
+                if (
+                    "#" in chan.name
+                    and chan.name.rsplit("#", 1)[0].strip() in cat.prefixes
+                ):
                     managed_channels.append(chan)
                 else:
                     unmanaged_channels.append(chan)
 
             managed_group = {}
-            for prefix, group in groupby(sorted(managed_channels, key=prefixkey), key=prefixkey):
+            for prefix, group in groupby(
+                sorted(managed_channels, key=prefixkey), key=prefixkey
+            ):
                 managed_group[prefix] = sorted(list(group), key=numberkey)
 
             final_list = []
@@ -1478,13 +1632,16 @@ class Orisa(Plugin):
 
                 final_list.extend(chans)
 
-            start_pos = max(chan.position for chan in unmanaged_channels) + 1 if unmanaged_channels else 1
+            start_pos = (
+                max(chan.position for chan in unmanaged_channels) + 1
+                if unmanaged_channels
+                else 1
+            )
 
             for i, chan in enumerate(final_list):
                 pos = start_pos + i
                 if chan.position != pos:
                     await chan.edit(position=pos)
-
 
     def _format_nick(self, user):
         primary = user.battle_tags[0]
@@ -1528,7 +1685,9 @@ class Orisa(Plugin):
         if srs:
             lowest_sr, highest_sr = srs[0], srs[-1]
             # FIXME: SR().rank is hacky
-            lowest_rank, highest_rank = (sr and RANKS[SR(value=sr).rank] for sr in (srs[0], srs[-1]))
+            lowest_rank, highest_rank = (
+                sr and RANKS[SR(value=sr).rank] for sr in (srs[0], srs[-1])
+            )
         else:
             lowest_sr = highest_sr = "noSR"
             lowest_rank = highest_rank = "Unranked"
@@ -1548,11 +1707,9 @@ class Orisa(Plugin):
                 tank=self.SYMBOL_TANK,
                 support=self.SYMBOL_SUPPORT,
                 flex=self.SYMBOL_FLEX,
-
             )
         except KeyError as e:
             raise InvalidFormat(e.args[0]) from e
-
 
     async def _update_nick(self, user):
         user_id = user.discord_id
@@ -1564,10 +1721,10 @@ class Orisa(Plugin):
             except KeyError:
                 continue
             formatted = self._format_nick(user)
-            if re.search(r'\[.*?\]', str(nn)):
-                new_nn = re.sub(r'\[.*?\]', f'[{formatted}]', nn)
+            if re.search(r"\[.*?\]", str(nn)):
+                new_nn = re.sub(r"\[.*?\]", f"[{formatted}]", nn)
             else:
-                new_nn = f'{nn} [{formatted}]'
+                new_nn = f"{nn} [{formatted}]"
 
             if len(new_nn) > 32:
                 raise NicknameTooLong(new_nn)
@@ -1576,7 +1733,11 @@ class Orisa(Plugin):
                 try:
                     await guild.members[user_id].nickname.set(new_nn)
                 except HierarchyError:
-                    logger.info("Cannot update nick %s to %s due to not enough permissions", nn, new_nn)
+                    logger.info(
+                        "Cannot update nick %s to %s due to not enough permissions",
+                        nn,
+                        new_nn,
+                    )
                 except Exception as e:
                     logger.exception("error while setting nick")
                     exception = e
@@ -1585,7 +1746,6 @@ class Orisa(Plugin):
             raise exception
 
         return new_nn
-
 
     async def _send_congrats(self, user, rank, image):
         for guild in self.client.guilds.values():
@@ -1600,14 +1760,17 @@ class Orisa(Plugin):
 
                 embed.set_thumbnail(url=image)
 
-                await self.client.find_channel(GUILD_INFOS[guild.id].congrats_channel_id).messages.send(content=f"Let's hear it for <@!{user.discord_id}>!", embed=embed)
+                await self.client.find_channel(
+                    GUILD_INFOS[guild.id].congrats_channel_id
+                ).messages.send(
+                    content=f"Let's hear it for <@!{user.discord_id}>!", embed=embed
+                )
             except Exception:
                 logger.exception(f"Cannot send congrats for guild {guild}")
 
-
     async def _player_ranking(self, session, ctx, date):
 
-        guild_id = 443691528951693312
+        guild_id = 443_691_528_951_693_312
 
         def get_sr(tag):
             for sr in tag.sr_history:
@@ -1635,32 +1798,35 @@ class Orisa(Plugin):
                 continue
             data.append((member, tag, sr))
 
-
-        data.sort(key=lambda x:(x[2] or 0,str(x[0].name)), reverse=True)
+        data.sort(key=lambda x: (x[2] or 0, str(x[0].name)), reverse=True)
 
         def member_name(member):
             name = str(member.name)
-            name = re.sub(r'\[.*?\]', '', name)
-            name = re.sub(r'\{.*?\}', '', name)
-            name = re.sub(r'\s{2,}', ' ', name)
+            name = re.sub(r"\[.*?\]", "", name)
+            name = re.sub(r"\{.*?\}", "", name)
+            name = re.sub(r"\s{2,}", " ", name)
 
-            return "".join(ch if ord(ch)<256 or unicodedata.category(ch)[0] != "S" else "" for ch in name)
-
+            return "".join(
+                ch if ord(ch) < 256 or unicodedata.category(ch)[0] != "S" else ""
+                for ch in name
+            )
 
         table_data = []
         prev_sr = None
         pos = 1
-        logger.debug("starting %i",len(data))
+        logger.debug("starting %i", len(data))
         for ix, (member, tag, sr) in enumerate(data):
 
             if sr != prev_sr:
-                pos = ix+1
+                pos = ix + 1
             prev_sr = sr
 
             table_data.append((pos, member_name(member), tag.tag, sr))
 
         tabulate.PRESERVE_WHITESPACE = True
-        table_lines = tabulate.tabulate(table_data, headers=['#', 'Member', 'BattleTag', 'SR'], tablefmt="psql").split("\n")
+        table_lines = tabulate.tabulate(
+            table_data, headers=["#", "Member", "BattleTag", "SR"], tablefmt="psql"
+        ).split("\n")
 
         table_lines = [f"`{line}`" for line in table_lines]
 
@@ -1670,20 +1836,22 @@ class Orisa(Plugin):
         ix = 0
         lines = 20
 
-        table_lines.insert(0, f"**SR ranking as of {pendulum.instance(date).to_day_datetime_string()}**\n")
+        table_lines.insert(
+            0,
+            f"**SR ranking as of {pendulum.instance(date).to_day_datetime_string()}**\n",
+        )
 
-        send = self.client.find_channel(GUILD_INFOS[guild_id].listen_channel_id).messages.send
-        #send = self.client.application_info.owner.send
+        send = self.client.find_channel(
+            GUILD_INFOS[guild_id].listen_channel_id
+        ).messages.send
+        # send = self.client.application_info.owner.send
         while ix < len(table_lines):
             # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
-            step = lines if ix else lines+3
-            await send_long(send, "\n".join(table_lines[ix:ix+step]))
+            step = lines if ix else lines + 3
+            await send_long(send, "\n".join(table_lines[ix : ix + step]))
             ix += step
 
-
-
     async def _top_players(self, session, prev_date, style="psql"):
-
         def prev_sr(tag):
             for sr in tag.sr_history[:30]:
                 prev_sr = sr
@@ -1691,11 +1859,14 @@ class Orisa(Plugin):
                     break
             return prev_sr
 
-        tags = (session.query(BattleTag).options(joinedload(BattleTag.user))
-                .join(BattleTag.current_sr)
-                .order_by(desc(SR.value))
-                .filter(SR.value != None)
-                .all())
+        tags = (
+            session.query(BattleTag)
+            .options(joinedload(BattleTag.user))
+            .join(BattleTag.current_sr)
+            .order_by(desc(SR.value))
+            .filter(SR.value != None)
+            .all()
+        )
 
         tags_and_prev = [(tag, prev_sr(tag)) for tag in tags]
 
@@ -1720,7 +1891,9 @@ class Orisa(Plugin):
                 except KeyError:
                     continue
 
-                top_per_guild.setdefault(guild.id, []).append((member, tag, prev_sr.value))
+                top_per_guild.setdefault(guild.id, []).append(
+                    (member, tag, prev_sr.value)
+                )
                 found = True
 
             @dataclass
@@ -1728,21 +1901,28 @@ class Orisa(Plugin):
                 name: str
 
             if not found:
-                #top_per_guild.setdefault(tag.user.discord_id%1, []).append((dummy(name=f"X{tag.user.discord_id}"), tag, prev_sr.value))
-                logger.warning("User %i not found in any of the guilds", tag.user.discord_id)
+                # top_per_guild.setdefault(tag.user.discord_id%1, []).append((dummy(name=f"X{tag.user.discord_id}"), tag, prev_sr.value))
+                logger.warning(
+                    "User %i not found in any of the guilds", tag.user.discord_id
+                )
 
         def member_name(member):
             name = str(member.name)
-            name = re.sub(r'\[.*?\]', '', name)
-            name = re.sub(r'\{.*?\}', '', name)
-            name = re.sub(r'\s{2,}', ' ', name)
+            name = re.sub(r"\[.*?\]", "", name)
+            name = re.sub(r"\{.*?\}", "", name)
+            name = re.sub(r"\s{2,}", " ", name)
 
-            return "".join(ch if ord(ch)<256 or unicodedata.category(ch)[0] != "S" else "" for ch in name)
+            return "".join(
+                ch if ord(ch) < 256 or unicodedata.category(ch)[0] != "S" else ""
+                for ch in name
+            )
 
         for guild_id, tops in top_per_guild.items():
 
             # FIXME: wrong if there is a tie
-            prev_top_tags = [top[1] for top in sorted(tops, key=lambda x:x[2] or 0, reverse=True)]
+            prev_top_tags = [
+                top[1] for top in sorted(tops, key=lambda x: x[2] or 0, reverse=True)
+            ]
 
             def prev_str(pos, tag, prev_sr):
                 if not prev_sr:
@@ -1768,21 +1948,31 @@ class Orisa(Plugin):
             data = []
             for ix, (member, tag, prev_sr) in enumerate(tops):
                 if tag.sr != table_prev_sr:
-                    pos = ix+1
+                    pos = ix + 1
                 table_prev_sr = tag.sr
-                data.append((pos, prev_str(ix+1, tag, prev_sr), member_name(member), tag.sr, delta_fmt(tag.sr, prev_sr)))
+                data.append(
+                    (
+                        pos,
+                        prev_str(ix + 1, tag, prev_sr),
+                        member_name(member),
+                        tag.sr,
+                        delta_fmt(tag.sr, prev_sr),
+                    )
+                )
 
-            headers = ['#', 'prev', 'Member', 'SR', 'ΔSR']
+            headers = ["#", "prev", "Member", "SR", "ΔSR"]
             csv_file = StringIO()
             csv_writer = csv.writer(csv_file)
             csv_writer.writerow(headers)
             csv_writer.writerows(data)
 
-            csv_file = BytesIO(csv_file.getvalue().encode('utf-8'))
+            csv_file = BytesIO(csv_file.getvalue().encode("utf-8"))
             csv_file.seek(0)
 
             tabulate.PRESERVE_WHITESPACE = True
-            table_lines = tabulate.tabulate(data, headers=headers, tablefmt=style).split("\n")
+            table_lines = tabulate.tabulate(
+                data, headers=headers, tablefmt=style
+            ).split("\n")
 
             table_lines = [f"`{line}`" for line in table_lines]
 
@@ -1792,21 +1982,27 @@ class Orisa(Plugin):
             ix = 0
             lines = 20
 
-            table_lines.insert(0, "Hello! Here are the current SR highscores. If a member has more than one "
-                                  "BattleTag, only the tag with the highest SR is considered. Players with  "
-                                  "private profiles, or those that didn't do their placements this season yet "
-                                  "are not shown.\n")
+            table_lines.insert(
+                0,
+                "Hello! Here are the current SR highscores. If a member has more than one "
+                "BattleTag, only the tag with the highest SR is considered. Players with  "
+                "private profiles, or those that didn't do their placements this season yet "
+                "are not shown.\n",
+            )
             try:
                 chan = self.client.find_channel(GUILD_INFOS[guild_id].listen_channel_id)
                 send = chan.messages.send
                 # send = self.client.application_info.owner.send
                 while ix < len(table_lines):
                     # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
-                    step = lines if ix else lines+3
-                    await send_long(send, "\n".join(table_lines[ix:ix+step]))
+                    step = lines if ix else lines + 3
+                    await send_long(send, "\n".join(table_lines[ix : ix + step]))
                     ix += step
 
-                await chan.messages.upload(csv_file, filename=f"ranking {pendulum.now().to_iso8601_string()[:10]}.csv")
+                await chan.messages.upload(
+                    csv_file,
+                    filename=f"ranking {pendulum.now().to_iso8601_string()[:10]}.csv",
+                )
             except Exception:
                 logger.exception("unable to send top players to guild %i", guild_id)
 
@@ -1828,7 +2024,6 @@ class Orisa(Plugin):
         tag.update_sr(sr)
         await self._handle_new_sr(session, tag, sr, image)
 
-
     async def _handle_new_sr(self, session, tag, sr, image):
         try:
             await self._update_nick(tag.user)
@@ -1836,7 +2031,9 @@ class Orisa(Plugin):
             # not much we can do, just ignore
             pass
         except NicknameTooLong as e:
-            if tag.user.last_problematic_nickname_warning is None or tag.user.last_problematic_nickname_warning < datetime.utcnow() - timedelta(days=7):
+            if tag.user.last_problematic_nickname_warning is None or tag.user.last_problematic_nickname_warning < datetime.utcnow() - timedelta(
+                days=7
+            ):
                 tag.user.last_problematic_nickname_warning = datetime.utcnow()
                 msg = "*To avoid spamming you, I will only send out this warning once per week*\n"
                 msg += f"Hi! I just tried to update your nickname, but the result '{e.nickname}' would be longer than 32 characters."
@@ -1855,15 +2052,23 @@ class Orisa(Plugin):
 
             # get highest SR, but exclude current_sr
             session.flush()
-            prev_highest_sr_value = session.query(func.max(SR.value)).filter(SR.battle_tag == tag, SR.id != tag.current_sr_id)
-            prev_highest_sr = session.query(SR).filter(SR.value==prev_highest_sr_value).order_by(desc(SR.timestamp)).first()
+            prev_highest_sr_value = session.query(func.max(SR.value)).filter(
+                SR.battle_tag == tag, SR.id != tag.current_sr_id
+            )
+            prev_highest_sr = (
+                session.query(SR)
+                .filter(SR.value == prev_highest_sr_value)
+                .order_by(desc(SR.timestamp))
+                .first()
+            )
 
             logger.debug(f"prev_sr {prev_highest_sr} {tag.current_sr.value}")
             if prev_highest_sr and rank > prev_highest_sr.rank:
-                logger.debug(f"user {user} old rank {prev_highest_sr.rank}, new rank {rank}, sending congrats...")
+                logger.debug(
+                    f"user {user} old rank {prev_highest_sr.rank}, new rank {rank}, sending congrats..."
+                )
                 await self._send_congrats(user, rank, image)
                 user.highest_rank = rank
-
 
     async def _sync_tags_from_channel(self, channel):
         first = True
@@ -1872,7 +2077,7 @@ class Orisa(Plugin):
             async for tag_id in channel:
                 logger.debug("got %s from channel %r", tag_id, channel)
                 if not first:
-                    delay = random.random() * 5.
+                    delay = random.random() * 5.0
                     logger.debug(f"rate limiting: sleeping for {delay:.02}s")
                     await trio.sleep(delay)
                 else:
@@ -1886,7 +2091,9 @@ class Orisa(Plugin):
                         logger.warn(f"No tag for id {tag_id} found, probably deleted")
                     session.commit()
                 except Exception:
-                    logger.exception(f'exception while syncing {tag.tag} for {tag.user.discord_id}')
+                    logger.exception(
+                        f"exception while syncing {tag.tag} for {tag.user.discord_id}"
+                    )
                 finally:
                     session.commit()
                     session.close()
@@ -1904,7 +2111,6 @@ class Orisa(Plugin):
         else:
             logger.debug("No tags need to be synced")
 
-
     async def _sync_tags(self, ids_to_sync):
         send_ch, receive_ch = trio.open_memory_channel(len(ids_to_sync))
         logger.debug("preparing to sync ids: %s into channel %r", ids_to_sync, send_ch)
@@ -1919,7 +2125,6 @@ class Orisa(Plugin):
                     nursery.start_soon(self._sync_tags_from_channel, receive_ch.clone())
         logger.info("done syncing")
 
-
     async def _sync_all_tags_task(self):
         await trio.sleep(10)
         logger.debug("started waiting...")
@@ -1929,7 +2134,6 @@ class Orisa(Plugin):
             except Exception as e:
                 logger.exception(f"something went wrong during _sync_check")
             await trio.sleep(60)
-
 
     async def _cron_task(self):
         "poor man's cron, hardcode all the things"
@@ -1943,8 +2147,15 @@ class Orisa(Plugin):
                     except NoResultFound:
                         hs = Cron(id="highscore", last_run=datetime.utcnow())
                         s.add(hs)
-                    next_run = datetime.today().replace(hour=9, minute=0, second=0, microsecond=0)
-                    logger.debug("next_run %s, now %s, last_run %s", next_run, datetime.utcnow(), hs.last_run)
+                    next_run = datetime.today().replace(
+                        hour=9, minute=0, second=0, microsecond=0
+                    )
+                    logger.debug(
+                        "next_run %s, now %s, last_run %s",
+                        next_run,
+                        datetime.utcnow(),
+                        hs.last_run,
+                    )
                     if next_run < datetime.utcnow() and hs.last_run < next_run:
                         logger.debug("running highscore...")
                         await self._cron_run_highscore()
@@ -1953,7 +2164,7 @@ class Orisa(Plugin):
                     s.commit()
             except Exception:
                 logger.exception("Error during cron")
-            await trio.sleep(1*60)
+            await trio.sleep(1 * 60)
 
     async def _cron_run_highscore(self):
         prev_date = datetime.utcnow() - timedelta(days=1)
@@ -1962,17 +2173,17 @@ class Orisa(Plugin):
             await self._top_players(session, prev_date)
 
 
-
-
 def fuzzy_nick_match(ann, ctx: Context, name: str):
     def strip_tags(name):
-        return re.sub(r'^(.*?\|)?([^[{]*)((\[|\{).*)?', r'\2', str(name)).strip()
+        return re.sub(r"^(.*?\|)?([^[{]*)((\[|\{).*)?", r"\2", str(name)).strip()
 
     member = member_id = None
     if ctx.guild:
         guilds = [ctx.guild]
     else:
-        guilds = [guild for guild in ctx.bot.guilds.values() if ctx.author.id in guild.members]
+        guilds = [
+            guild for guild in ctx.bot.guilds.values() if ctx.author.id in guild.members
+        ]
 
     if name.startswith("<@") and name.endswith(">"):
         id = name[2:-1]
@@ -1983,6 +2194,7 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
         except ValueError:
             raise ConversionFailedError(ctx, name, Member, "Invalid member ID")
     else:
+
         def scorer(s1, s2, force_ascii=True, full_process=True):
             if s1.lower() == s2.lower():
                 return 200
@@ -1992,11 +2204,18 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
                     score *= 2
                 return score
 
-        candidates = process.extractBests(name, {id: strip_tags(mem.name) for guild in guilds for id, mem in guild.members.items()}, scorer=scorer)
+        candidates = process.extractBests(
+            name,
+            {
+                id: strip_tags(mem.name)
+                for guild in guilds
+                for id, mem in guild.members.items()
+            },
+            scorer=scorer,
+        )
         logger.debug(f"candidates are {candidates}")
         if candidates:
             member_name, score, member_id = candidates[0]
-
 
     if member_id is not None:
         for guild in guilds:
@@ -2005,7 +2224,9 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
                 break
 
     if member is None:
-        raise ConversionFailedError(ctx, name, Member, 'Cannot find member with that name')
+        raise ConversionFailedError(
+            ctx, name, Member, "Cannot find member with that name"
+        )
     else:
         return member
 
@@ -2019,18 +2240,18 @@ class InvalidCharacterName(RuntimeError):
 class Wow(Plugin):
     """WoW specific functionality"""
 
-    MASHERY_BASE = 'https://eu.api.battle.net/wow'
+    MASHERY_BASE = "https://eu.api.battle.net/wow"
 
-    SYMBOL_GM = '\N{CROWN}'
-    SYMBOL_OFFICER = '\U0001F530'
+    SYMBOL_GM = "\N{CROWN}"
+    SYMBOL_OFFICER = "\U0001F530"
 
-    SYMBOL_PVP = '\N{CROSSED SWORDS}'
+    SYMBOL_PVP = "\N{CROSSED SWORDS}"
 
     SYMBOL_ROLES = {
-        WowRole.TANK: '\N{SHIELD}',
-        WowRole.HEALER: '\N{HELMET WITH WHITE CROSS}',
-        WowRole.RANGED: '\N{BOW AND ARROW}',
-        WowRole.MELEE: '\N{DAGGER KNIFE}',
+        WowRole.TANK: "\N{SHIELD}",
+        WowRole.HEALER: "\N{HELMET WITH WHITE CROSS}",
+        WowRole.RANGED: "\N{BOW AND ARROW}",
+        WowRole.MELEE: "\N{DAGGER KNIFE}",
     }
 
     def __init__(self, client, database):
@@ -2038,7 +2259,6 @@ class Wow(Plugin):
         self.database = database
         self.gms = {}
         self.officers = {}
-
 
     async def load(self):
         for guild_id in self.client.guilds:
@@ -2061,14 +2281,17 @@ class Wow(Plugin):
                 content = None
                 embed = Embed()
                 embed.add_field(name="Nick", value=member.name)
-                embed.add_field(name="Character and Realm", value=f"**{user.character_name}-{user.realm}**")
+                embed.add_field(
+                    name="Character and Realm",
+                    value=f"**{user.character_name}-{user.realm}**",
+                )
             else:
                 content = f"{member.name} not found in database! *Do you need a hug?*"
                 if member == ctx.author:
                     embed = Embed(
-                                title="Hint",
-                                description="use `!wow main character_name realm_name` to register, or `!wow help` for more info"
-                            )
+                        title="Hint",
+                        description="use `!wow main character_name realm_name` to register, or `!wow help` for more info",
+                    )
                 else:
                     embed = None
 
@@ -2076,80 +2299,103 @@ class Wow(Plugin):
 
     @wow.subcommand()
     async def help(self, ctx):
-        embed = Embed(title="WoW commands",
-                      description=("Commands are sorted roughly in order of usefulness\n"
-                                  f"Report issues to <@!{self.client.application_info.owner.id}>"))
+        embed = Embed(
+            title="WoW commands",
+            description=(
+                "Commands are sorted roughly in order of usefulness\n"
+                f"Report issues to <@!{self.client.application_info.owner.id}>"
+            ),
+        )
 
         embed.add_field(
             name="!wow [member]",
-            value=("Shows the character and realm of the given member, or your own if no member is given.\n"
-                  "The search is performed fuzzy, so a few letters of the member name should suffice."))
+            value=(
+                "Shows the character and realm of the given member, or your own if no member is given.\n"
+                "The search is performed fuzzy, so a few letters of the member name should suffice."
+            ),
+        )
         embed.add_field(
             name="!wow reverse character_name",
-            value=("Performs a fuzzy search in the database to find the *member* that plays the given character. "
-                   "The search is performed fuzzy and expects the format `character-realm`. But since it's fuzzy, "
-                   "you generally can omit the realm."))
+            value=(
+                "Performs a fuzzy search in the database to find the *member* that plays the given character. "
+                "The search is performed fuzzy and expects the format `character-realm`. But since it's fuzzy, "
+                "you generally can omit the realm."
+            ),
+        )
         embed.add_field(
             name="!wow main *character_name* [realm]",
-            value=("Registers (or changes) your character and will update your nick to show you ilvl. "
-                   f"It auto detects whether the character is a GM (`{self.SYMBOL_GM}`) or Officer "
-                   f"(`{self.SYMBOL_OFFICER}`) and will prepend that symbol to the ilvl.\n"
-                   "Your ilvl will be updated periodically, and when Orisa notices you "
-                   "stopped playing WoW (only works when using the Discord Desktop App).\n"
-                   "*realm* is optional, if not given, defaults to the realm of the guild.\n"
-                   "*Example:* `!wow main Orisa`\n"
-                   "*Alternate form:* `!wow main character-realm`"))
+            value=(
+                "Registers (or changes) your character and will update your nick to show you ilvl. "
+                f"It auto detects whether the character is a GM (`{self.SYMBOL_GM}`) or Officer "
+                f"(`{self.SYMBOL_OFFICER}`) and will prepend that symbol to the ilvl.\n"
+                "Your ilvl will be updated periodically, and when Orisa notices you "
+                "stopped playing WoW (only works when using the Discord Desktop App).\n"
+                "*realm* is optional, if not given, defaults to the realm of the guild.\n"
+                "*Example:* `!wow main Orisa`\n"
+                "*Alternate form:* `!wow main character-realm`"
+            ),
+        )
 
         embed.add_field(
             name="!wow roles xxx",
-            value=("Sets your PvE roles, those will be shown next to your ilvl. Roles are one "
-                   "or more of the following:\n"
-                   f"`m`elee (`{self.SYMBOL_ROLES[WowRole.MELEE]}`), `r`anged (`{self.SYMBOL_ROLES[WowRole.RANGED]}`), "
-                   f"`t`ank (`{self.SYMBOL_ROLES[WowRole.TANK]}`), `h`ealer (`{self.SYMBOL_ROLES[WowRole.HEALER]}`)."
-            ))
+            value=(
+                "Sets your PvE roles, those will be shown next to your ilvl. Roles are one "
+                "or more of the following:\n"
+                f"`m`elee (`{self.SYMBOL_ROLES[WowRole.MELEE]}`), `r`anged (`{self.SYMBOL_ROLES[WowRole.RANGED]}`), "
+                f"`t`ank (`{self.SYMBOL_ROLES[WowRole.TANK]}`), `h`ealer (`{self.SYMBOL_ROLES[WowRole.HEALER]}`)."
+            ),
+        )
 
         embed.add_field(
             name="!wow pvp",
-            value=("Switches your account to a PvP one. Instead of ilvl, it will show your "
-                   f"RBG, and will add a `{self.SYMBOL_PVP}` symbol to distinguish it from "
-                   "the ilvl. PvE roles will not be shown in this mode."))
+            value=(
+                "Switches your account to a PvP one. Instead of ilvl, it will show your "
+                f"RBG, and will add a `{self.SYMBOL_PVP}` symbol to distinguish it from "
+                "the ilvl. PvE roles will not be shown in this mode."
+            ),
+        )
 
-        embed.add_field(
-            name="!wow pve",
-            value=("Switches back to PvE mode"))
+        embed.add_field(name="!wow pve", value=("Switches back to PvE mode"))
 
-        embed.add_field(
-            name="!wow nopvp",
-            value="Same as `!wow pve`")
+        embed.add_field(name="!wow nopvp", value="Same as `!wow pve`")
 
         embed.add_field(
             name="!wow forceupdate",
-            value=("Forces your ilvl/RBG to be checked and updated immediately. "
-                   "Checks are done periodically (approximately every hour), you only "
-                   "need to issue this command if you want your new levels to be shown "
-                   "immediately."))
+            value=(
+                "Forces your ilvl/RBG to be checked and updated immediately. "
+                "Checks are done periodically (approximately every hour), you only "
+                "need to issue this command if you want your new levels to be shown "
+                "immediately."
+            ),
+        )
 
         embed.add_field(
             name="!wow forgetme",
-            value="Resets your nick and removes you from the database")
+            value="Resets your nick and removes you from the database",
+        )
 
         embed.add_field(
             name="!wow updateall",
-            value=("Forces an immediate update of all guild data and guild members "
-                   "(like every member issued a `forceupdate`). "
-                   "Useful when the GM or Officers change.\n"
-                   "*This is a priviledged command and can only be issued by members with "
-                   "a specific Discord role (which is server specific).*"))
+            value=(
+                "Forces an immediate update of all guild data and guild members "
+                "(like every member issued a `forceupdate`). "
+                "Useful when the GM or Officers change.\n"
+                "*This is a priviledged command and can only be issued by members with "
+                "a specific Discord role (which is server specific).*"
+            ),
+        )
 
         try:
             await ctx.author.send(content=None, embed=embed)
         except Forbidden:
-            await reply(ctx, "I tried to send you a DM with help, but you don't allow DM from server members. "
-                             "I can't post it here, because it's rather long. Please allow DMs and try again.")
+            await reply(
+                ctx,
+                "I tried to send you a DM with help, but you don't allow DM from server members. "
+                "I can't post it here, because it's rather long. Please allow DMs and try again.",
+            )
         else:
             if not ctx.channel.private:
                 await reply(ctx, "I sent you a DM with information.")
-
 
     @wow.subcommand()
     @condition(correct_wow_channel)
@@ -2160,10 +2406,10 @@ class Wow(Plugin):
             return
 
         name_and_realm = name_and_realm.strip()
-        if '-' in name_and_realm:
-            name, realm = name_and_realm.split('-', 1)
-        elif ' ' in name_and_realm:
-            name, realm = name_and_realm.split(' ', 1)
+        if "-" in name_and_realm:
+            name, realm = name_and_realm.split("-", 1)
+        elif " " in name_and_realm:
+            name, realm = name_and_realm.split(" ", 1)
         else:
             name = name_and_realm
             realm = GUILD_INFOS[guild.id].wow_guild_realm
@@ -2184,14 +2430,21 @@ class Wow(Plugin):
                     ilvl, pvp = ilvl_pvp
 
                     if not user:
-                        user = WowUser(discord_id=discord_id, character_name=name, realm=realm)
-                        msg = (f"OK, I've registered the character **{name}** (ILvl {ilvl}, RBG {pvp}, realm {realm}) to your account. Next, please tell us what roles you play by issuing `!wow roles xxx`, where `xxx` "
-                                "is one or more of: `t`ank, `m`elee, `r`anged, `h`ealer.\n"
-                                "You can also use `!wow pvp` to switch to PvP mode.")
+                        user = WowUser(
+                            discord_id=discord_id, character_name=name, realm=realm
+                        )
+                        msg = (
+                            f"OK, I've registered the character **{name}** (ILvl {ilvl}, RBG {pvp}, realm {realm}) to your account. Next, please tell us what roles you play by issuing `!wow roles xxx`, where `xxx` "
+                            "is one or more of: `t`ank, `m`elee, `r`anged, `h`ealer.\n"
+                            "You can also use `!wow pvp` to switch to PvP mode."
+                        )
                         session.add(user)
                     else:
                         if (user.character_name, user.realm) == (name, realm):
-                            await reply(ctx, f"That's already your main character. Use `!wow forceupdate` if you want to force an update")
+                            await reply(
+                                ctx,
+                                f"That's already your main character. Use `!wow forceupdate` if you want to force an update",
+                            )
                             return
                         user.character_name = name
                         user.realm = realm
@@ -2202,7 +2455,10 @@ class Wow(Plugin):
                     try:
                         await self._format_nick(user, ilvl_pvp, raise_on_long_name=True)
                     except NicknameTooLong:
-                        await reply(ctx, "I cannot add the information to your nickname, as it would be longer than 32 characters. Please shorten your nickname and try again.")
+                        await reply(
+                            ctx,
+                            "I cannot add the information to your nickname, as it would be longer than 32 characters. Please shorten your nickname and try again.",
+                        )
 
         await reply(ctx, msg)
 
@@ -2216,8 +2472,19 @@ class Wow(Plugin):
 
         with self.database.session() as session:
             async with ctx.channel.typing:
-                users = session.query(WowUser).filter(WowUser.discord_id.in_(guild.members)).all()
-                res = process.extractOne(character_realm, {user.discord_id: f"{user.character_name}-{user.realm}" for user in users}, score_cutoff=50)
+                users = (
+                    session.query(WowUser)
+                    .filter(WowUser.discord_id.in_(guild.members))
+                    .all()
+                )
+                res = process.extractOne(
+                    character_realm,
+                    {
+                        user.discord_id: f"{user.character_name}-{user.realm}"
+                        for user in users
+                    },
+                    score_cutoff=50,
+                )
                 if res:
                     name, score, id = res
                     member = guild.members[id]
@@ -2231,20 +2498,18 @@ class Wow(Plugin):
 
         await ctx.channel.send(content=content, embed=embed)
 
-
-
     @wow.subcommand()
     @condition(correct_wow_channel)
     async def roles(self, ctx, *, roles: str):
         ROLE_MAP = {
-            't': WowRole.TANK,
-            'm': WowRole.MELEE,
-            'r': WowRole.RANGED,
-            'h': WowRole.HEALER,
+            "t": WowRole.TANK,
+            "m": WowRole.MELEE,
+            "r": WowRole.RANGED,
+            "h": WowRole.HEALER,
         }
 
         discord_id = ctx.author.id
-        roles = roles.replace(' ', '')
+        roles = roles.replace(" ", "")
 
         with self.database.session() as session:
             user = self.database.wow_user_by_discord_id(session, discord_id)
@@ -2257,7 +2522,10 @@ class Wow(Plugin):
                 try:
                     roles_flag |= ROLE_MAP[role.lower()]
                 except KeyError:
-                    await reply(ctx, f"Unknown role **{role}**. Valid roles are one or more of `t`ank, `m`elee, `r`anged, `h`ealer.")
+                    await reply(
+                        ctx,
+                        f"Unknown role **{role}**. Valid roles are one or more of `t`ank, `m`elee, `r`anged, `h`ealer.",
+                    )
                     return
 
             user.roles = roles_flag
@@ -2271,8 +2539,7 @@ class Wow(Plugin):
     async def pvp(self, ctx):
         await self._pvp(ctx, True)
 
-
-    @wow.subcommand(aliases=("pve", ))
+    @wow.subcommand(aliases=("pve",))
     @condition(correct_wow_channel)
     async def nopvp(self, ctx):
         await self._pvp(ctx, False)
@@ -2333,7 +2600,9 @@ class Wow(Plugin):
 
             user = self.database.wow_user_by_discord_id(session, discord_id)
             if not user:
-                await reply(ctx, "You are not registered anyway. *Sleep mode reactivated*")
+                await reply(
+                    ctx, "You are not registered anyway. *Sleep mode reactivated*"
+                )
                 return
 
             user_id = user.discord_id
@@ -2343,7 +2612,7 @@ class Wow(Plugin):
                         nn = str(guild.members[user_id].name)
                     except KeyError:
                         continue
-                    new_nn = re.sub(r'\s*\{.*?\}', '', nn, count=1).strip()
+                    new_nn = re.sub(r"\s*\{.*?\}", "", nn, count=1).strip()
                     try:
                         await guild.members[user_id].nickname.set(new_nn)
                     except HierarchyError:
@@ -2355,8 +2624,9 @@ class Wow(Plugin):
 
             session.commit()
 
-        await reply(ctx, "OK, removed you from the database and stopped updating your nickname")
-
+        await reply(
+            ctx, "OK, removed you from the database and stopped updating your nickname"
+        )
 
     @wow.subcommand()
     @condition(correct_wow_channel)
@@ -2368,15 +2638,21 @@ class Wow(Plugin):
             return
 
         needed_role = GUILD_INFOS[guild.id].wow_admin_role_name
-        if not (ctx.author.id == ctx.bot.application_info.owner.id or any(role.name.lower() == needed_role.lower() for role in ctx.author.roles)):
-            await reply(ctx, f"You need the **{needed_role}** role to issue this command")
+        if not (
+            ctx.author.id == ctx.bot.application_info.owner.id
+            or any(
+                role.name.lower() == needed_role.lower() for role in ctx.author.roles
+            )
+        ):
+            await reply(
+                ctx, f"You need the **{needed_role}** role to issue this command"
+            )
             return
 
         async with ctx.channel.typing:
             await self._update_guild(guild)
 
         await reply(ctx, "Done")
-
 
     # Utils
 
@@ -2406,13 +2682,19 @@ class Wow(Plugin):
                     except Exception:
                         logger.exception(f"unable to format nick for {user}")
 
-
     async def _set_gms_and_officers(self, guild_id):
-        self.gms[guild_id], self.officers[guild_id] = await self._lookup_gm_and_officers(GUILD_INFOS[guild_id])
+        self.gms[guild_id], self.officers[
+            guild_id
+        ] = await self._lookup_gm_and_officers(GUILD_INFOS[guild_id])
 
     async def _lookup_gm_and_officers(self, guild_info):
-        res = await asks.get(f"{self.MASHERY_BASE}/guild/{guild_info.wow_guild_realm}/{guild_info.wow_guild_name}", params={"apikey": MASHERY_API_KEY, "fields": "members"})
-        logger.debug(f"current quota: {res.headers.get('X-Plan-Quota-Current', '?')}/{res.headers.get('X-Plan-Quota-Allotted', '?')}")
+        res = await asks.get(
+            f"{self.MASHERY_BASE}/guild/{guild_info.wow_guild_realm}/{guild_info.wow_guild_name}",
+            params={"apikey": MASHERY_API_KEY, "fields": "members"},
+        )
+        logger.debug(
+            f"current quota: {res.headers.get('X-Plan-Quota-Current', '?')}/{res.headers.get('X-Plan-Quota-Allotted', '?')}"
+        )
         data = res.json()
 
         gms = set()
@@ -2428,9 +2710,14 @@ class Wow(Plugin):
 
     async def _get_profile_data(self, realm, character_name):
         logger.debug(f"requesting {realm}/{character_name}")
-        res = await asks.get(f"{self.MASHERY_BASE}/character/{realm}/{character_name}", params={"apikey": MASHERY_API_KEY, "fields": "pvp, items"})
+        res = await asks.get(
+            f"{self.MASHERY_BASE}/character/{realm}/{character_name}",
+            params={"apikey": MASHERY_API_KEY, "fields": "pvp, items"},
+        )
 
-        logger.debug(f"current quota: {res.headers.get('X-Plan-Quota-Current', '?')}/{res.headers.get('X-Plan-Quota-Allotted', '?')}")
+        logger.debug(
+            f"current quota: {res.headers.get('X-Plan-Quota-Current', '?')}/{res.headers.get('X-Plan-Quota-Allotted', '?')}"
+        )
         if not res.status_code == 200:
             raise InvalidCharacterName(realm, character_name)
 
@@ -2439,22 +2726,20 @@ class Wow(Plugin):
         rbg = ilvl = None
 
         with suppress(KeyError):
-            rbg = data['pvp']['brackets']['ARENA_BRACKET_RBG']['rating']
+            rbg = data["pvp"]["brackets"]["ARENA_BRACKET_RBG"]["rating"]
 
         with suppress(KeyError):
-            ilvl = data['items']['averageItemLevel']
+            ilvl = data["items"]["averageItemLevel"]
 
         logger.debug(f"{realm}/{character_name} done")
         return ilvl, rbg
 
-
-    async def _format_nick(self, user, ilvl_rbg = None, *, raise_on_long_name=False):
+    async def _format_nick(self, user, ilvl_rbg=None, *, raise_on_long_name=False):
 
         if ilvl_rbg is not None:
             ilvl, rbg = ilvl_rbg
         else:
             ilvl, rbg = await self._get_profile_data(user.realm, user.character_name)
-
 
         if user.pvp:
             format = f"{rbg}{self.SYMBOL_PVP}"
@@ -2477,31 +2762,31 @@ class Wow(Plugin):
                 else:
                     prefix = ""
 
-
                 if re.search(r"\{.*?\}", nick_str):
-                    new_nick = re.sub(r"\{.*?\}", '{' + prefix + format + '}', nick_str, count=1)
+                    new_nick = re.sub(
+                        r"\{.*?\}", "{" + prefix + format + "}", nick_str, count=1
+                    )
                 else:
-                    new_nick = nick_str.strip() + ' {' + prefix + format + '}'
+                    new_nick = nick_str.strip() + " {" + prefix + format + "}"
 
                 if new_nick != nick_str:
-                    if len(new_nick)>32:
+                    if len(new_nick) > 32:
                         if raise_on_long_name:
                             raise NicknameTooLong(new_nick)
                     else:
                         try:
                             await nick.set(new_nick)
                         except Exception:
-                            logger.exception(f"unable to set nickname for {user} in {guild}")
+                            logger.exception(
+                                f"unable to set nickname for {user} in {guild}"
+                            )
 
         return ilvl, rbg
 
-
-
     # Events
 
-    @event('member_update')
+    @event("member_update")
     async def _member_update(self, ctx, old_member: Member, new_member: Member):
-
         def plays_wow(m):
             try:
                 return m.game.name == "World of Warcraft"
@@ -2509,7 +2794,9 @@ class Wow(Plugin):
                 return False
 
         async def wait_and_fire(id_to_sync):
-            logger.debug(f"sleeping for 30s before syncing after WoW close of {new_member.name}")
+            logger.debug(
+                f"sleeping for 30s before syncing after WoW close of {new_member.name}"
+            )
             await trio.sleep(30)
             with self.database.session() as session:
                 user = self.database.wow_user_by_discord_id(session, id_to_sync)
@@ -2526,7 +2813,9 @@ class Wow(Plugin):
                     logger.debug(f"{new_member.name} is not registered, nothing to do.")
                     return
 
-                logger.info(f"{new_member.name} stopped playing WoW and needs to be checked")
+                logger.info(
+                    f"{new_member.name} stopped playing WoW and needs to be checked"
+                )
             finally:
                 session.close()
 
@@ -2535,18 +2824,17 @@ class Wow(Plugin):
 
 Context.add_converter(Member, fuzzy_nick_match)
 
-multio.init('trio')
+multio.init("trio")
 
 import inspect
 
 
-
 from curious.core.httpclient import HTTPClient
 
-GLaDOS: ContextVar[bool] = ContextVar('GLaDOS', default=False)
+GLaDOS: ContextVar[bool] = ContextVar("GLaDOS", default=False)
+
 
 class MyClient(Client):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__GLaDOS_http = HTTPClient(GLADOS_TOKEN, bot=True)
@@ -2562,10 +2850,8 @@ class MyClient(Client):
     def _http_get(self):
         return self.__GLaDOS_http if GLaDOS.get() else self.__http
 
-
     def _http_set(self, http):
         self.__http = http
-
 
     http = property(_http_get, _http_set)
 
@@ -2576,29 +2862,31 @@ database = Database()
 
 manager = CommandsManager.with_client(client, command_prefix="!")
 
-@client.event('ready')
+
+@client.event("ready")
 async def ready(ctx):
     logger.debug(f"Guilds are {ctx.bot.guilds}")
     await manager.load_plugin(Orisa, database)
     if MASHERY_API_KEY:
         await manager.load_plugin(Wow, database)
-    await ctx.bot.change_status(game=Game(name='!ow help | !wow help'))
+    await ctx.bot.change_status(game=Game(name="!ow help | !wow help"))
     logger.info("Ready")
 
 
 if SENTRY_DSN:
     logger.info("USING SENTRY")
     raven_client = raven.Client(
-        dsn=SENTRY_DSN,
-        release=raven.fetch_git_sha(os.path.dirname(__file__)),
+        dsn=SENTRY_DSN, release=raven.fetch_git_sha(os.path.dirname(__file__))
     )
 
-    @client.event('command_error')
+    @client.event("command_error")
     async def command_error(ev_ctx, ctx, err):
         exc_info = (type(err), err, err.__traceback__)
         raven_client.captureException(exc_info)
-        fmtted = ''.join(traceback.format_exception(*exc_info))
+        fmtted = "".join(traceback.format_exception(*exc_info))
         logger.error(f"Error in command!\n{fmtted}")
+
+
 else:
     raven_client = None
     logger.info("NOT USING SENTRY")

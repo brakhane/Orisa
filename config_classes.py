@@ -3,6 +3,7 @@ __all__ = ["GuildInfo", "VoiceCategoryInfo"]
 from dataclasses import dataclass, field
 from typing import List, Set, Optional, Union, Dict
 
+
 @dataclass
 class GuildInfo:
     congrats_channel_id: int
@@ -15,6 +16,7 @@ class GuildInfo:
     wow_gm_ranks: Set[int]
     wow_officer_ranks: Set[int]
     wow_listen_channel_id: int
+
 
 @dataclass
 class VoiceCategoryInfo:
