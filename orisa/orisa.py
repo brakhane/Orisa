@@ -16,6 +16,7 @@ import logging
 import logging.config
 
 import csv
+import functools
 import math
 import re
 import random
@@ -44,19 +45,17 @@ import multio
 import numpy as np
 import pandas as pd
 import pendulum
+import raven
 import seaborn as sns
 import tabulate
 import trio
-import raven
 import yaml
 
-from cachetools.func import TTLCache
 from curious import event
 from curious.commands.context import Context
 from curious.commands.conditions import author_has_roles
 from curious.commands.decorators import command, condition
 from curious.commands.exc import ConversionFailedError
-from curious.commands.manager import CommandsManager
 from curious.commands.plugin import Plugin
 from curious.core.client import Client
 from curious.exc import Forbidden, HierarchyError
@@ -67,55 +66,49 @@ from curious.dataclasses.member import Member
 from curious.dataclasses.presence import Game, Status
 from fuzzywuzzy import process, fuzz
 from lxml import html
+from oauthlib.oauth2 import WebApplicationClient
 from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql import func, desc, and_
+from itsdangerous.url_safe import URLSafeTimedSerializer
+from itsdangerous.exc import BadSignature
 from wcwidth import wcswidth
 
-from config import (
-    BOT_TOKEN,
+from .config import (
     CHANNEL_NAMES,
     GLADOS_TOKEN,
     GUILD_INFOS,
     MASHERY_API_KEY,
     SENTRY_DSN,
+    SIGNING_SECRET,
+    OAUTH_CLIENT_ID,
 )
 
-from models import Cron, Database, User, BattleTag, SR, Role, WowUser, WowRole
+from .models import Cron, User, BattleTag, SR, Role
+
+from .exceptions import (
+    BlizzardError,
+    InvalidBattleTag,
+    UnableToFindSR,
+    NicknameTooLong,
+    InvalidFormat
+)
+from .utils import (
+    get_sr,
+    sort_secondaries,
+    send_long,
+    reply,
+    resolve_tag_or_index,
+    set_channel_suffix,
+    format_roles
+)
 
 CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
-WOW_CHANNEL_IDS = frozenset(
-    guild.wow_listen_channel_id for guild in GUILD_INFOS.values()
-)
-
-
-with open("logging.yaml") as logfile:
-    logging.config.dictConfig(yaml.safe_load(logfile))
 
 logger = logging.getLogger("orisa")
 
 
-class InvalidBattleTag(Exception):
-    def __init__(self, message):
-        self.message = message
-
-
-class BlizzardError(RuntimeError):
-    pass
-
-
-class UnableToFindSR(Exception):
-    pass
-
-
-class NicknameTooLong(Exception):
-    def __init__(self, nickname):
-        self.nickname = nickname
-
-
-class InvalidFormat(Exception):
-    def __init__(self, key):
-        self.key = key
+oauth_serializer = URLSafeTimedSerializer(SIGNING_SECRET)
 
 
 RANKS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grand Master")
@@ -129,152 +122,6 @@ COLORS = (
     0xF1D592,  # Grand Master
 )
 
-SR_CACHE = TTLCache(maxsize=1000, ttl=30)
-SR_LOCKS = TTLCache(
-    maxsize=1000, ttl=60
-)  # if a request should be hanging for 60s, just try another
-
-# Utilities
-
-
-async def get_sr(battletag):
-    try:
-        lock = SR_LOCKS[battletag]
-    except KeyError:
-        lock = trio.Lock()
-        SR_LOCKS[battletag] = lock
-
-    await lock.acquire()
-    try:
-        if not re.match(r"\w+#[0-9]+", battletag):
-            raise InvalidBattleTag(
-                "Malformed BattleTag. BattleTags look like SomeName#1234: a name and a # sign followed by a number and contain no spaces. They are case-sensitive, too!"
-            )
-
-        try:
-            res = SR_CACHE[battletag]
-            logger.info(f"got SR for {battletag} from cache")
-            return res
-        except KeyError:
-            pass
-
-        url = f'https://playoverwatch.com/en-us/career/pc/{battletag.replace("#", "-")}'
-        logger.info(f"requesting {url}")
-        try:
-            result = await asks.get(
-                url,
-                headers={
-                    "User-Agent": "Orisa/0.1 (+https://github.com/brakhane/Orisa)"
-                },
-                connection_timeout=10,
-                timeout=10,
-            )
-        except asks.errors.RequestTimeout:
-            raise BlizzardError("Timeout")
-        except Exception as e:
-            raise BlizzardError("Something went wrong", e)
-        if result.status_code != 200:
-            raise BlizzardError(f"got status code {result.status_code} from Blizz")
-
-        document = html.fromstring(result.content)
-        srs = document.xpath('//div[@class="competitive-rank"]/div/text()')
-        rank_image_elems = document.xpath('//div[@class="competitive-rank"]/img/@src')
-        if not srs:
-            if "Profile Not Found" in result.text:
-                raise InvalidBattleTag(
-                    f"No profile with BattleTag {battletag} found. BattleTags are case-sensitive!"
-                )
-            raise UnableToFindSR()
-        sr = int(srs[0])
-        if rank_image_elems:
-            rank_image = str(rank_image_elems[0])
-        else:
-            rank_image = None
-
-        res = SR_CACHE[battletag] = (sr, rank_image)
-        return res
-    finally:
-        lock.release()
-
-
-def sort_secondaries(user):
-    user.battle_tags[1:] = list(sorted(user.battle_tags[1:], key=attrgetter("tag")))
-    user.battle_tags.reorder()
-
-
-async def send_long(send_func, msg):
-    "Splits a long message >2000 into smaller chunks"
-
-    if len(msg) <= 2000:
-        await send_func(msg)
-        return
-    else:
-        lines = msg.split("\n")
-
-        part = ""
-        for line in lines:
-            if len(part) + len(line) > 2000:
-                await send_func(part)
-                part = ""
-            part += line + "\n"
-
-        if part:
-            await send_func(part)
-
-
-async def reply(ctx, msg):
-    return await ctx.channel.messages.send(f"<@!{ctx.author.id}> {msg}")
-
-
-def resolve_tag_or_index(user, tag_or_index):
-    try:
-        index = int(tag_or_index)
-    except ValueError:
-        try:
-            tag, score, index = process.extractOne(
-                tag_or_index,
-                {t.position: t.tag for t in user.battle_tags},
-                score_cutoff=50,
-            )
-        except (ValueError, TypeError):
-            raise ValueError(
-                f'The BattleTag "{tag_or_index}" is not registered for your account '
-                "(I even did a fuzzy search), use `!ow register` first."
-            )
-    else:
-        if index >= len(user.battle_tags):
-            raise ValueError("You don't even have that many secondary BattleTags")
-    return index
-
-
-async def set_channel_suffix(chan, suffix: str):
-    name = chan.name
-
-    if ":" in name:
-        if suffix:
-            new_name = re.sub(r":.*", f": {suffix}", name)
-        else:
-            new_name = re.sub(r":.*", "", name)
-    else:
-        if suffix:
-            new_name = f"{name}: {suffix}"
-        else:
-            new_name = name
-
-    if name != new_name:
-        await chan.edit(name=new_name)
-
-
-def format_roles(roles):
-    names = {
-        Role.DPS: "Damage",
-        Role.MAIN_TANK: "Main Tank",
-        Role.OFF_TANK: "Off Tank",
-        Role.SUPPORT: "Support",
-    }
-    return ", ".join(names[r] for r in Role if r and r in roles)
-
-
 # Conditions
 
 
@@ -282,8 +129,6 @@ def correct_channel(ctx):
     return ctx.channel.id in CHANNEL_IDS or ctx.channel.private
 
 
-def correct_wow_channel(ctx):
-    return ctx.channel.id in WOW_CHANNEL_IDS or ctx.channel.private
 
 
 def only_owner(ctx):
@@ -316,15 +161,21 @@ class Orisa(Plugin):
         "\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}"
     )  # '\N{FLEXED BICEPS}'   #'\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}'
 
-    def __init__(self, client, database):
+    def __init__(self, client, database, raven_client):
         super().__init__(client)
         self.database = database
         self.dialogues = {}
+        self.web_send_ch, self.web_recv_ch = trio.open_memory_channel(0)
+        self.raven_client = raven_client
 
     async def load(self):
         await self.spawn(self._sync_all_tags_task)
 
         await self.spawn(self._cron_task)
+
+        await self.spawn(self._web_server)
+
+        await self.spawn(self._oauth_result_listener)
 
     # admin commands
 
@@ -459,8 +310,8 @@ class Orisa(Plugin):
             try:
                 await self._update_nick(user)
             except Exception:
-                if raven_client:
-                    raven_client.captureException()
+                if self.raven_client:
+                    self.raven_client.captureException()
                 logger.exception("something went wrong during updatenicks")
         await ctx.channel.messages.send("Done")
 
@@ -486,6 +337,21 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def ping(self, ctx):
         await reply(ctx, "pong")
+
+    @command()
+    @condition(only_owner)
+    async def qqww(self, ctx):
+        client = WebApplicationClient(OAUTH_CLIENT_ID)
+        state = oauth_serializer.dumps(ctx.author.id)
+        url, headers, body = client.prepare_authorization_request(
+            'https://eu.battle.net/oauth/authorize',
+            scope=[],
+            redirect_url=f'{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}',
+            state=state,
+        )
+        await ctx.author.send(url)
+
+
 
     # ow commands
 
@@ -534,9 +400,6 @@ class Orisa(Plugin):
                     embed.add_field(name="Roles", value=format_roles(user.roles))
 
                 if multiple_tags:
-                    # footer_text = f"The SR of the BattleTags were last updated "
-                    # footer_text += ", ".join(pendulum.instance(tag.last_update).diff_for_humans() for tag in user.battle_tags)
-                    # footer_text += " respectively."
                     footer_text = f"The SR of the primary BattleTag was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
                 else:
                     footer_text = f"The SR was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
@@ -819,8 +682,8 @@ class Orisa(Plugin):
                         try:
                             await self._sync_tag(session, tag)
                         except Exception as e:
-                            if raven_client:
-                                raven_client.captureException()
+                            if self.raven_client:
+                                self.raven_client.captureException()
                             logger.exception(f"exception while syncing {tag}")
                             fault = True
 
@@ -956,7 +819,7 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def setrole(self, ctx, *, roles_str: str):
         "Alias for setroles"
-        return await self.setroles(ctx, roles_str)
+        return await self.setroles(ctx, roles_str=roles_str)
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -1329,7 +1192,7 @@ class Orisa(Plugin):
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, member.id)
             if not user:
-                await reply(f"{member.name} not registered")
+                await reply(ctx, f"{member.name} not registered")
                 return
             else:
                 await self._srgraph(ctx, user, member.name, date)
@@ -2016,8 +1879,8 @@ class Orisa(Plugin):
             tag.error_count += 1
             # we need to update the last_update pseudo-column
             tag.update_sr(tag.sr)
-            if raven_client:
-                raven_client.captureException()
+            if self.raven_client:
+                self.raven_client.captureException()
             logger.exception(f"Got exception while requesting {tag.tag}")
             raise
         tag.error_count = 0
@@ -2172,6 +2035,27 @@ class Orisa(Plugin):
         with self.database.session() as session:
             await self._top_players(session, prev_date)
 
+    async def _web_server(self):
+        from hypercorn.config import Config
+        from hypercorn.trio import run
+        from . import web
+
+        config = Config()
+        config.application_path = "orisa.web:app"
+        config.debug = True
+
+        web.send_ch = self.web_send_ch
+
+        await run.run_single(config)
+
+    async def _oauth_result_listener(self):
+        async for uid, data in self.web_recv_ch:
+            logger.debug(f"got OAuth response data {data} for uid {uid}")
+            user = await self.client.get_user(uid)
+            await user.send("It seems like your Battletag is {battletag} and your Blizzard ID is {id}".format(**data))
+
+
+
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):
     def strip_tags(name):
@@ -2231,596 +2115,6 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
         return member
 
 
-class InvalidCharacterName(RuntimeError):
-    def __init__(self, realm: str, name: str):
-        self.realm = realm
-        self.name = name
-
-
-class Wow(Plugin):
-    """WoW specific functionality"""
-
-    MASHERY_BASE = "https://eu.api.battle.net/wow"
-
-    SYMBOL_GM = "\N{CROWN}"
-    SYMBOL_OFFICER = "\U0001F530"
-
-    SYMBOL_PVP = "\N{CROSSED SWORDS}"
-
-    SYMBOL_ROLES = {
-        WowRole.TANK: "\N{SHIELD}",
-        WowRole.HEALER: "\N{HELMET WITH WHITE CROSS}",
-        WowRole.RANGED: "\N{BOW AND ARROW}",
-        WowRole.MELEE: "\N{DAGGER KNIFE}",
-    }
-
-    def __init__(self, client, database):
-        super().__init__(client)
-        self.database = database
-        self.gms = {}
-        self.officers = {}
-
-    async def load(self):
-        for guild_id in self.client.guilds:
-            if GUILD_INFOS[guild_id].wow_guild_name:
-                await self._set_gms_and_officers(guild_id)
-
-        # await self.spawn(self._update_task)
-
-    @command()
-    @condition(correct_wow_channel)
-    async def wow(self, ctx, *, member: Member = None):
-
-        member_given = member is not None
-        if not member_given:
-            member = ctx.author
-
-        with self.database.session() as s:
-            user = self.database.wow_user_by_discord_id(s, member.id)
-            if user:
-                content = None
-                embed = Embed()
-                embed.add_field(name="Nick", value=member.name)
-                embed.add_field(
-                    name="Character and Realm",
-                    value=f"**{user.character_name}-{user.realm}**",
-                )
-            else:
-                content = f"{member.name} not found in database! *Do you need a hug?*"
-                if member == ctx.author:
-                    embed = Embed(
-                        title="Hint",
-                        description="use `!wow main character_name realm_name` to register, or `!wow help` for more info",
-                    )
-                else:
-                    embed = None
-
-        await ctx.channel.messages.send(content=content, embed=embed)
-
-    @wow.subcommand()
-    async def help(self, ctx):
-        embed = Embed(
-            title="WoW commands",
-            description=(
-                "Commands are sorted roughly in order of usefulness\n"
-                f"Report issues to <@!{self.client.application_info.owner.id}>"
-            ),
-        )
-
-        embed.add_field(
-            name="!wow [member]",
-            value=(
-                "Shows the character and realm of the given member, or your own if no member is given.\n"
-                "The search is performed fuzzy, so a few letters of the member name should suffice."
-            ),
-        )
-        embed.add_field(
-            name="!wow reverse character_name",
-            value=(
-                "Performs a fuzzy search in the database to find the *member* that plays the given character. "
-                "The search is performed fuzzy and expects the format `character-realm`. But since it's fuzzy, "
-                "you generally can omit the realm."
-            ),
-        )
-        embed.add_field(
-            name="!wow main *character_name* [realm]",
-            value=(
-                "Registers (or changes) your character and will update your nick to show you ilvl. "
-                f"It auto detects whether the character is a GM (`{self.SYMBOL_GM}`) or Officer "
-                f"(`{self.SYMBOL_OFFICER}`) and will prepend that symbol to the ilvl.\n"
-                "Your ilvl will be updated periodically, and when Orisa notices you "
-                "stopped playing WoW (only works when using the Discord Desktop App).\n"
-                "*realm* is optional, if not given, defaults to the realm of the guild.\n"
-                "*Example:* `!wow main Orisa`\n"
-                "*Alternate form:* `!wow main character-realm`"
-            ),
-        )
-
-        embed.add_field(
-            name="!wow roles xxx",
-            value=(
-                "Sets your PvE roles, those will be shown next to your ilvl. Roles are one "
-                "or more of the following:\n"
-                f"`m`elee (`{self.SYMBOL_ROLES[WowRole.MELEE]}`), `r`anged (`{self.SYMBOL_ROLES[WowRole.RANGED]}`), "
-                f"`t`ank (`{self.SYMBOL_ROLES[WowRole.TANK]}`), `h`ealer (`{self.SYMBOL_ROLES[WowRole.HEALER]}`)."
-            ),
-        )
-
-        embed.add_field(
-            name="!wow pvp",
-            value=(
-                "Switches your account to a PvP one. Instead of ilvl, it will show your "
-                f"RBG, and will add a `{self.SYMBOL_PVP}` symbol to distinguish it from "
-                "the ilvl. PvE roles will not be shown in this mode."
-            ),
-        )
-
-        embed.add_field(name="!wow pve", value=("Switches back to PvE mode"))
-
-        embed.add_field(name="!wow nopvp", value="Same as `!wow pve`")
-
-        embed.add_field(
-            name="!wow forceupdate",
-            value=(
-                "Forces your ilvl/RBG to be checked and updated immediately. "
-                "Checks are done periodically (approximately every hour), you only "
-                "need to issue this command if you want your new levels to be shown "
-                "immediately."
-            ),
-        )
-
-        embed.add_field(
-            name="!wow forgetme",
-            value="Resets your nick and removes you from the database",
-        )
-
-        embed.add_field(
-            name="!wow updateall",
-            value=(
-                "Forces an immediate update of all guild data and guild members "
-                "(like every member issued a `forceupdate`). "
-                "Useful when the GM or Officers change.\n"
-                "*This is a priviledged command and can only be issued by members with "
-                "a specific Discord role (which is server specific).*"
-            ),
-        )
-
-        try:
-            await ctx.author.send(content=None, embed=embed)
-        except Forbidden:
-            await reply(
-                ctx,
-                "I tried to send you a DM with help, but you don't allow DM from server members. "
-                "I can't post it here, because it's rather long. Please allow DMs and try again.",
-            )
-        else:
-            if not ctx.channel.private:
-                await reply(ctx, "I sent you a DM with information.")
-
-    @wow.subcommand()
-    @condition(correct_wow_channel)
-    async def main(self, ctx, *, name_and_realm: str):
-        guild = ctx.guild
-        if not guild:
-            await reply(ctx, "This command cannot be issued in DM")
-            return
-
-        name_and_realm = name_and_realm.strip()
-        if "-" in name_and_realm:
-            name, realm = name_and_realm.split("-", 1)
-        elif " " in name_and_realm:
-            name, realm = name_and_realm.split(" ", 1)
-        else:
-            name = name_and_realm
-            realm = GUILD_INFOS[guild.id].wow_guild_realm
-
-        async with ctx.channel.typing:
-            try:
-
-                ilvl_pvp = await self._get_profile_data(realm, name)
-            except InvalidCharacterName:
-                await reply(ctx, f"No character **{name}** exists in realm **{realm}**")
-                return
-
-            discord_id = ctx.author.id
-
-            with self.database.session() as session:
-                async with ctx.channel.typing:
-                    user = self.database.wow_user_by_discord_id(session, discord_id)
-                    ilvl, pvp = ilvl_pvp
-
-                    if not user:
-                        user = WowUser(
-                            discord_id=discord_id, character_name=name, realm=realm
-                        )
-                        msg = (
-                            f"OK, I've registered the character **{name}** (ILvl {ilvl}, RBG {pvp}, realm {realm}) to your account. Next, please tell us what roles you play by issuing `!wow roles xxx`, where `xxx` "
-                            "is one or more of: `t`ank, `m`elee, `r`anged, `h`ealer.\n"
-                            "You can also use `!wow pvp` to switch to PvP mode."
-                        )
-                        session.add(user)
-                    else:
-                        if (user.character_name, user.realm) == (name, realm):
-                            await reply(
-                                ctx,
-                                f"That's already your main character. Use `!wow forceupdate` if you want to force an update",
-                            )
-                            return
-                        user.character_name = name
-                        user.realm = realm
-                        msg = f"OK, I've updated your main character to **{name}** (ILvl {ilvl}, RBG {pvp}, realm {realm})"
-
-                    session.commit()
-
-                    try:
-                        await self._format_nick(user, ilvl_pvp, raise_on_long_name=True)
-                    except NicknameTooLong:
-                        await reply(
-                            ctx,
-                            "I cannot add the information to your nickname, as it would be longer than 32 characters. Please shorten your nickname and try again.",
-                        )
-
-        await reply(ctx, msg)
-
-    @wow.subcommand()
-    @condition(correct_wow_channel)
-    async def reverse(self, ctx, *, character_realm: str):
-        guild = ctx.guild
-        if not guild:
-            await reply(ctx, "This command cannot be issued in DM")
-            return
-
-        with self.database.session() as session:
-            async with ctx.channel.typing:
-                users = (
-                    session.query(WowUser)
-                    .filter(WowUser.discord_id.in_(guild.members))
-                    .all()
-                )
-                res = process.extractOne(
-                    character_realm,
-                    {
-                        user.discord_id: f"{user.character_name}-{user.realm}"
-                        for user in users
-                    },
-                    score_cutoff=50,
-                )
-                if res:
-                    name, score, id = res
-                    member = guild.members[id]
-                    content = None
-                    embed = Embed()
-                    embed.add_field(name="Nick", value=member.name)
-                    embed.add_field(name="Character and Realm", value=f"**{name}**")
-                else:
-                    content = "I can't find a character with that name in my database."
-                    embed = None
-
-        await ctx.channel.send(content=content, embed=embed)
-
-    @wow.subcommand()
-    @condition(correct_wow_channel)
-    async def roles(self, ctx, *, roles: str):
-        ROLE_MAP = {
-            "t": WowRole.TANK,
-            "m": WowRole.MELEE,
-            "r": WowRole.RANGED,
-            "h": WowRole.HEALER,
-        }
-
-        discord_id = ctx.author.id
-        roles = roles.replace(" ", "")
-
-        with self.database.session() as session:
-            user = self.database.wow_user_by_discord_id(session, discord_id)
-            if not user:
-                await reply(ctx, "you are not registered, use `!wow main` first")
-                return
-
-            roles_flag = WowRole.NONE
-            for role in roles:
-                try:
-                    roles_flag |= ROLE_MAP[role.lower()]
-                except KeyError:
-                    await reply(
-                        ctx,
-                        f"Unknown role **{role}**. Valid roles are one or more of `t`ank, `m`elee, `r`anged, `h`ealer.",
-                    )
-                    return
-
-            user.roles = roles_flag
-            session.commit()
-            await self._format_nick(user)
-
-        await reply(ctx, "done")
-
-    @wow.subcommand()
-    @condition(correct_wow_channel)
-    async def pvp(self, ctx):
-        await self._pvp(ctx, True)
-
-    @wow.subcommand(aliases=("pve",))
-    @condition(correct_wow_channel)
-    async def nopvp(self, ctx):
-        await self._pvp(ctx, False)
-
-    async def _pvp(self, ctx, pvp):
-        guild = ctx.guild
-        if not guild:
-            await reply(ctx, "This command cannot be issued in DM")
-            return
-
-        with self.database.session() as session:
-
-            async with ctx.channel.typing:
-                discord_id = ctx.author.id
-
-                user = self.database.wow_user_by_discord_id(session, discord_id)
-                if not user:
-                    await reply(ctx, "You are not registered.")
-                    return
-                user.pvp = pvp
-                session.commit()
-                await self._format_nick(user)
-
-        if pvp:
-            msg = "Done. You can turn PvP off again with `!wow pve`"
-        else:
-            msg = "Done. You can turn PvP on again with `!wow pvp`"
-
-        await reply(ctx, msg)
-
-    @wow.subcommand()
-    @condition(correct_wow_channel)
-    async def forceupdate(self, ctx):
-        guild = ctx.guild
-        if not guild:
-            await reply(ctx, "This command cannot be issued in DM")
-            return
-
-        with self.database.session() as session:
-
-            discord_id = ctx.author.id
-
-            async with ctx.channel.typing:
-                user = self.database.wow_user_by_discord_id(session, discord_id)
-                if not user:
-                    await reply(ctx, "you are not registered, use `!wow main` first")
-                    return
-
-                ilvl, rbg = await self._format_nick(user)
-
-        await reply(ctx, f"Done. Your Item Level is now {ilvl}, and your RBG is {rbg}")
-
-    @wow.subcommand()
-    @condition(correct_wow_channel)
-    async def forgetme(self, ctx):
-        with self.database.session() as session:
-            discord_id = ctx.author.id
-
-            user = self.database.wow_user_by_discord_id(session, discord_id)
-            if not user:
-                await reply(
-                    ctx, "You are not registered anyway. *Sleep mode reactivated*"
-                )
-                return
-
-            user_id = user.discord_id
-            try:
-                for guild in self.client.guilds.values():
-                    try:
-                        nn = str(guild.members[user_id].name)
-                    except KeyError:
-                        continue
-                    new_nn = re.sub(r"\s*\{.*?\}", "", nn, count=1).strip()
-                    try:
-                        await guild.members[user_id].nickname.set(new_nn)
-                    except HierarchyError:
-                        pass
-            except Exception:
-                logger.exception("Some problems while resetting nicks")
-
-            session.delete(user)
-
-            session.commit()
-
-        await reply(
-            ctx, "OK, removed you from the database and stopped updating your nickname"
-        )
-
-    @wow.subcommand()
-    @condition(correct_wow_channel)
-    async def updateall(self, ctx):
-        guild = ctx.guild
-
-        if not guild:
-            await reply(ctx, "This command cannot be issued in DM")
-            return
-
-        needed_role = GUILD_INFOS[guild.id].wow_admin_role_name
-        if not (
-            ctx.author.id == ctx.bot.application_info.owner.id
-            or any(
-                role.name.lower() == needed_role.lower() for role in ctx.author.roles
-            )
-        ):
-            await reply(
-                ctx, f"You need the **{needed_role}** role to issue this command"
-            )
-            return
-
-        async with ctx.channel.typing:
-            await self._update_guild(guild)
-
-        await reply(ctx, "Done")
-
-    # Utils
-
-    async def _update_task(self):
-        logger.debug("Waiting 60s before starting WoW sync")
-        await trio.sleep(60)
-        while True:
-            try:
-                await self._update_all_the_things()
-            except Exception:
-                logger.exception("Error during WoW update")
-            await trio.sleep(3600)
-
-    async def _update_all_the_things(self):
-        for guild_id, guild_info in GUILD_INFOS.items():
-            if guild_info.wow_guild_name:
-                await self._update_guild(self.client.guilds[guild_id])
-
-    async def _update_guild(self, guild):
-        await self._set_gms_and_officers(guild.id)
-        with self.database.session() as session:
-            for user_id in guild.members:
-                user = self.database.wow_user_by_discord_id(session, user_id)
-                if user:
-                    try:
-                        await self._format_nick(user)
-                    except Exception:
-                        logger.exception(f"unable to format nick for {user}")
-
-    async def _set_gms_and_officers(self, guild_id):
-        self.gms[guild_id], self.officers[
-            guild_id
-        ] = await self._lookup_gm_and_officers(GUILD_INFOS[guild_id])
-
-    async def _lookup_gm_and_officers(self, guild_info):
-        res = await asks.get(
-            f"{self.MASHERY_BASE}/guild/{guild_info.wow_guild_realm}/{guild_info.wow_guild_name}",
-            params={"apikey": MASHERY_API_KEY, "fields": "members"},
-        )
-        logger.debug(
-            f"current quota: {res.headers.get('X-Plan-Quota-Current', '?')}/{res.headers.get('X-Plan-Quota-Allotted', '?')}"
-        )
-        data = res.json()
-
-        gms = set()
-        officers = set()
-
-        for member in data["members"]:
-            if member["rank"] in guild_info.wow_gm_ranks:
-                gms.add(member["character"]["name"].lower())
-            elif member["rank"] in guild_info.wow_officer_ranks:
-                officers.add(member["character"]["name"].lower())
-
-        return gms, officers
-
-    async def _get_profile_data(self, realm, character_name):
-        logger.debug(f"requesting {realm}/{character_name}")
-        res = await asks.get(
-            f"{self.MASHERY_BASE}/character/{realm}/{character_name}",
-            params={"apikey": MASHERY_API_KEY, "fields": "pvp, items"},
-        )
-
-        logger.debug(
-            f"current quota: {res.headers.get('X-Plan-Quota-Current', '?')}/{res.headers.get('X-Plan-Quota-Allotted', '?')}"
-        )
-        if not res.status_code == 200:
-            raise InvalidCharacterName(realm, character_name)
-
-        data = res.json()
-
-        rbg = ilvl = None
-
-        with suppress(KeyError):
-            rbg = data["pvp"]["brackets"]["ARENA_BRACKET_RBG"]["rating"]
-
-        with suppress(KeyError):
-            ilvl = data["items"]["averageItemLevel"]
-
-        logger.debug(f"{realm}/{character_name} done")
-        return ilvl, rbg
-
-    async def _format_nick(self, user, ilvl_rbg=None, *, raise_on_long_name=False):
-
-        if ilvl_rbg is not None:
-            ilvl, rbg = ilvl_rbg
-        else:
-            ilvl, rbg = await self._get_profile_data(user.realm, user.character_name)
-
-        if user.pvp:
-            format = f"{rbg}{self.SYMBOL_PVP}"
-        else:
-            format = f"{ilvl}"
-
-            for role, sym in self.SYMBOL_ROLES.items():
-                if role in user.roles:
-                    format += sym
-
-        for gid, guild in self.client.guilds.items():
-            if user.discord_id in guild.members:
-                nick = guild.members[user.discord_id].nickname
-
-                nick_str = str(guild.members[user.discord_id].name)
-                if user.character_name.lower() in self.gms.get(gid, set()):
-                    prefix = self.SYMBOL_GM
-                elif user.character_name.lower() in self.officers.get(gid, set()):
-                    prefix = self.SYMBOL_OFFICER
-                else:
-                    prefix = ""
-
-                if re.search(r"\{.*?\}", nick_str):
-                    new_nick = re.sub(
-                        r"\{.*?\}", "{" + prefix + format + "}", nick_str, count=1
-                    )
-                else:
-                    new_nick = nick_str.strip() + " {" + prefix + format + "}"
-
-                if new_nick != nick_str:
-                    if len(new_nick) > 32:
-                        if raise_on_long_name:
-                            raise NicknameTooLong(new_nick)
-                    else:
-                        try:
-                            await nick.set(new_nick)
-                        except Exception:
-                            logger.exception(
-                                f"unable to set nickname for {user} in {guild}"
-                            )
-
-        return ilvl, rbg
-
-    # Events
-
-    @event("member_update")
-    async def _member_update(self, ctx, old_member: Member, new_member: Member):
-        def plays_wow(m):
-            try:
-                return m.game.name == "World of Warcraft"
-            except AttributeError:
-                return False
-
-        async def wait_and_fire(id_to_sync):
-            logger.debug(
-                f"sleeping for 30s before syncing after WoW close of {new_member.name}"
-            )
-            await trio.sleep(30)
-            with self.database.session() as session:
-                user = self.database.wow_user_by_discord_id(session, id_to_sync)
-                await self._format_nick(user)
-            logger.debug(f"done updating nick for {new_member.name} after WoW close")
-
-        if plays_wow(old_member) and (not plays_wow(new_member)):
-            logger.debug(f"{new_member.name} stopped playing WoW")
-
-            session = self.database.Session()
-            try:
-                user = self.database.wow_user_by_discord_id(session, new_member.user.id)
-                if not user:
-                    logger.debug(f"{new_member.name} is not registered, nothing to do.")
-                    return
-
-                logger.info(
-                    f"{new_member.name} stopped playing WoW and needs to be checked"
-                )
-            finally:
-                session.close()
-
-            await self.spawn(wait_and_fire, new_member.user.id)
-
 
 Context.add_converter(Member, fuzzy_nick_match)
 
@@ -2838,6 +2132,7 @@ class MyClient(Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__GLaDOS_http = HTTPClient(GLADOS_TOKEN, bot=True)
+        self._send_ch, self._recv_ch = trio.open_memory_channel(0)
 
     @contextmanager
     def as_glados(self):
@@ -2855,40 +2150,8 @@ class MyClient(Client):
 
     http = property(_http_get, _http_set)
 
-
-client = MyClient(BOT_TOKEN)
-
-database = Database()
-
-manager = CommandsManager.with_client(client, command_prefix="!")
+    def get_web_send_channel(self):
+        return self._send_ch
 
 
-@client.event("ready")
-async def ready(ctx):
-    logger.debug(f"Guilds are {ctx.bot.guilds}")
-    await manager.load_plugin(Orisa, database)
-    if MASHERY_API_KEY:
-        await manager.load_plugin(Wow, database)
-    await ctx.bot.change_status(game=Game(name="!ow help | !wow help"))
-    logger.info("Ready")
 
-
-if SENTRY_DSN:
-    logger.info("USING SENTRY")
-    raven_client = raven.Client(
-        dsn=SENTRY_DSN, release=raven.fetch_git_sha(os.path.dirname(__file__))
-    )
-
-    @client.event("command_error")
-    async def command_error(ev_ctx, ctx, err):
-        exc_info = (type(err), err, err.__traceback__)
-        raven_client.captureException(exc_info)
-        fmtted = "".join(traceback.format_exception(*exc_info))
-        logger.error(f"Error in command!\n{fmtted}")
-
-
-else:
-    raven_client = None
-    logger.info("NOT USING SENTRY")
-
-client.run()

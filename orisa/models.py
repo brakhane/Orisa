@@ -15,6 +15,7 @@
 import random
 
 from bisect import bisect
+from contextlib import contextmanager
 from datetime import datetime, timedelta
 from enum import Flag, auto
 
@@ -34,8 +35,7 @@ from sqlalchemy.ext.orderinglist import ordering_list
 from sqlalchemy.orm import raiseload, relationship, sessionmaker
 import sqlalchemy.types as types
 
-from config import DATABASE_URI
-from contextlib import contextmanager
+from .config import DATABASE_URI
 
 Base = declarative_base()
 
@@ -100,6 +100,7 @@ class BattleTag(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    blizzard_id = Column(Integer, nullable=True, index=True)  # nullable for backwards compatibility
     current_sr_id = Column(Integer, ForeignKey("srs.id"))
     position = Column(Integer, nullable=False)
 

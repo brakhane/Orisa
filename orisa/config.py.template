@@ -55,3 +55,19 @@ GLADOS_TOKEN = ''
 
 # Sentry DSN, empty to disable
 SENTRY_DSN = ''
+
+# Secret key used to sign state in OAuth requests, random string, but needs
+# to be kept secret
+SIGNING_SECRET = None
+
+# Your OAuth client ID, you got from Blizzard
+OAUTH_CLIENT_ID = None
+
+# Your OAuth client secret
+OAUTH_CLIENT_SECRET = None
+
+# The hostname including https:// (or http:// for testing only)
+OAUTH_REDIRECT_HOST = None
+
+# The path, can just be "/"
+OAUTH_REDIRECT_PATH = None

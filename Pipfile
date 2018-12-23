@@ -18,6 +18,10 @@ tabulate = "*"
 pandas = "*"
 seaborn = "*"
 raven = "*"
+quart-trio = "*"
+hypercorn = "*"
+oauthlib = "*"
+itsdangerous = "*"
 
 [dev-packages]
 # pylint = "*"
