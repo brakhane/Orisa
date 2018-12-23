@@ -82,6 +82,8 @@ from .config import (
     SENTRY_DSN,
     SIGNING_SECRET,
     OAUTH_CLIENT_ID,
+    OAUTH_REDIRECT_HOST,
+    OAUTH_REDIRECT_PATH,
 )
 
 from .models import Cron, User, BattleTag, SR, Role
@@ -339,7 +341,7 @@ class Orisa(Plugin):
         await reply(ctx, "pong")
 
     @command()
-    @condition(only_owner)
+    #@condition(only_owner)
     async def qqww(self, ctx):
         client = WebApplicationClient(OAUTH_CLIENT_ID)
         state = oauth_serializer.dumps(ctx.author.id)
@@ -2043,6 +2045,7 @@ class Orisa(Plugin):
         config = Config()
         config.application_path = "orisa.web:app"
         config.debug = True
+        config.access_logger = config.error_logger = logger
 
         web.send_ch = self.web_send_ch
 

@@ -30,8 +30,12 @@ app.debug = True
 async def handle_oauth():
     client = WebApplicationClient(OAUTH_CLIENT_ID)
     logger.debug(f"got OAuth auth URL {request.url}")
-    
-    data = client.parse_request_uri_response(request.url)
+
+    # we are behind a proxy, and hypercorn doesn't support
+    # proxy headers yet, so just fake https to avoid an exception
+    request_url = request.url.replace("http:", "https:")
+
+    data = client.parse_request_uri_response(request_url)
 
     s = URLSafeTimedSerializer(SIGNING_SECRET)
 
@@ -44,7 +48,7 @@ async def handle_oauth():
 
     url, headers, body = client.prepare_token_request(
         'https://eu.battle.net/oauth/token',
-        authorization_response=request.url,
+        authorization_response=request_url,
         scope=[],
         redirect_url=f'{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}'
     )
@@ -54,16 +58,16 @@ async def handle_oauth():
     # remove client_id and add scope, blizzard is a little bit picky...
     body = re.sub(r"client_id=.*?&", "scope=&", body)
 
-    resp = (await asks.post(url, 
-        headers=headers, 
+    resp = (await asks.post(url,
+        headers=headers,
         auth=asks.BasicAuth((
             OAUTH_CLIENT_ID,
             OAUTH_CLIENT_SECRET)),
         data=body))
 
-    print(client.parse_request_body_response(resp.text, scope=[]))
-    print(resp.json())
-    print(client.token)
+    logger.debug(resp.json())
+    logger.debug(client.parse_request_body_response(resp.text, scope=[]))
+    logger.debug(client.token)
 
     url, headers, body = client.add_token('https://eu.battle.net/oauth/userinfo')
 

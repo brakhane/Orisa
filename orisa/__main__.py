@@ -9,9 +9,6 @@ import raven
 from curious.commands.manager import CommandsManager
 from curious.dataclasses.presence import Game, Status
 
-from hypercorn.config import Config
-from hypercorn.trio import run
-
 from . import web
 from .config import (
     SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN,
