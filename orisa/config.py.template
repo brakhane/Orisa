@@ -69,5 +69,5 @@ OAUTH_CLIENT_SECRET = None
 # The hostname including https:// (or http:// for testing only)
 OAUTH_REDIRECT_HOST = None
 
-# The path, can just be "/"
+# The path, can just be "/", but must end with a slash
 OAUTH_REDIRECT_PATH = None

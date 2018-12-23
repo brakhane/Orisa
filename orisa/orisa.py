@@ -414,7 +414,7 @@ class Orisa(Plugin):
                 if member == ctx.author:
                     embed = Embed(
                         title="Hint",
-                        description="use `!ow register BattleTag#1234` to register, or `!ow help` for more info",
+                        description="use `!ow register` to register, or `!ow help` for more info",
                     )
         finally:
             session.close()
@@ -428,89 +428,29 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     @condition(correct_channel)
-    async def register(self, ctx, battle_tag: str = None):
-        if battle_tag is None:
-            await reply(ctx, "missing BattleTag")
-            return
-        member_id = ctx.message.author_id
-        session = self.database.Session()
-        try:
-            user = self.database.user_by_discord_id(session, member_id)
-            resp = None
-            if user is None:
-                tag = BattleTag(tag=battle_tag)
-                user = User(discord_id=member_id, battle_tags=[tag], format="$sr")
-                session.add(user)
+    async def register(self, ctx, *, ignored: str = None):
+        user_id = ctx.message.author_id
+        client = WebApplicationClient(OAUTH_CLIENT_ID)
+        state = oauth_serializer.dumps(user_id)
+        url, headers, body = client.prepare_authorization_request(
+            'https://eu.battle.net/oauth/authorize',
+            scope=[],
+            redirect_url=f'{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}',
+            state=state,
+        )
+        msg = (f"To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click "
+               f"this link:\n"
+               f"{url}\n"
+               "and give me permission to access your data. I only need this permission once, you can remove it "
+               f"later in your BattleNet account.\n"
+               f"Protip: if you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
+               f"account data for that account instead.")
 
-                channel_id = None
-                extra_text = ""
-                for guild in self.client.guilds.values():
-                    if member_id in guild.members:
-                        channel_id = GUILD_INFOS[guild.id].listen_channel_id
-                        extra_text = GUILD_INFOS[guild.id].extra_register_text
-                        break
+        await ctx.author.send(msg)
+        if not ctx.channel.private:
+            await reply(ctx, "I sent you a DM with instructions.")
 
-                resp = (
-                    "OK. People can now ask me for your BattleTag, and I will update your nick whenever I notice that your SR changed.\n"
-                    + extra_text
-                )
-            else:
-                if any(tag.tag == battle_tag for tag in user.battle_tags):
-                    await reply(
-                        ctx,
-                        "You already registered that BattleTag, so there's nothing for me to do. *Sleep mode reactivated.*",
-                    )
-                    return
 
-                tag = BattleTag(tag=battle_tag)
-                user.battle_tags.append(tag)
-                resp = (
-                    f"OK. I've added {battle_tag} to the list of your BattleTags. Your primary BattleTag remains **{user.battle_tags[0].tag}**. "
-                    f"To change your primary tag, use `!ow setprimary yourbattletag`, see help for more details."
-                )
-
-            try:
-                async with ctx.channel.typing:
-                    sr, image = await get_sr(battle_tag)
-            except InvalidBattleTag as e:
-                await reply(ctx, f"Invalid BattleTag: {e.message}")
-                return
-            except BlizzardError as e:
-                await reply(
-                    ctx,
-                    f"Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later",
-                )
-                raise
-            except UnableToFindSR:
-                resp += "\nYou don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your BattleTag."
-                sr = None
-
-            tag.update_sr(sr)
-            rank = tag.rank
-
-            sort_secondaries(user)
-
-            session.commit()
-
-            try:
-                await self._update_nick(user)
-            except NicknameTooLong as e:
-                resp += f"\n**Adding your SR to your nickname would result in '{e.nickname}' and with {len(e.nickname)} characters, be longer than Discord's maximum of 32.** Please shorten your nick to be no longer than 28 characters. I will regularly try to update it."
-            except HierarchyError as e:
-                resp += (
-                    '\n**I do not have enough permissions to update your nickname. The owner needs to move the "Orisa" role higher '
-                    "so that is higher that your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry.**"
-                )
-            except Exception as e:
-                logger.exception(f"unable to update nick for user {user}")
-                resp += (
-                    "\nHowever, right now I couldn't update your nickname, will try that again later."
-                    "People will still be able to ask for your BattleTag, though."
-                )
-        finally:
-            session.close()
-
-        await reply(ctx, resp)
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -1116,12 +1056,12 @@ class Orisa(Plugin):
             value=(
                 "Same as `!ow [nick]`, (only) useful when the nick is the same as a command.\n"
                 "*Example:*\n"
-                '`!ow get register foo` will search for the nick "register foo"'
+                '`!ow get register` will search for the nick "register"'
             ),
         )
         embed.add_field(
-            name="!ow register BattleTag#1234",
-            value="Registers your account with the given BattleTag, or adds a secondary BattleTag to your account. "
+            name="!ow register",
+            value="Create a link to your BattleNet account, or adds a secondary BattleTag to your account. "
             "Your OW account will be checked periodically and your nick will be "
             "automatically updated to show your SR or rank (see the *format* command for more info). "
             "`register` will fail if the BattleTag is invalid. *BattleTags are case-sensitive!*",
@@ -2054,9 +1994,88 @@ class Orisa(Plugin):
     async def _oauth_result_listener(self):
         async for uid, data in self.web_recv_ch:
             logger.debug(f"got OAuth response data {data} for uid {uid}")
-            user = await self.client.get_user(uid)
-            await user.send("It seems like your Battletag is {battletag} and your Blizzard ID is {id}".format(**data))
+            await self._handle_registration(uid, data['battletag'], data['id'])
 
+    async def _handle_registration(self, user_id, battle_tag, blizzard_id):
+        session = self.database.Session()
+        try:
+            user_obj = await self.client.get_user(user_id)
+            user_channel = await user_obj.open_private_channel()
+
+            user = self.database.user_by_discord_id(session, user_id)
+            resp = None
+            tag = BattleTag(tag=battle_tag, blizzard_id=blizzard_id)
+
+            if user is None:
+                user = User(discord_id=user_id, battle_tags=[tag], format="$sr")
+                session.add(user)
+
+                extra_text = ""
+                for guild in self.client.guilds.values():
+                    if user_id in guild.members:
+                        extra_text = GUILD_INFOS[guild.id].extra_register_text
+                        break
+
+                resp = (
+                    f"OK. People can now ask me for your BattleTag **{battle_tag}**, and I will update your nick whenever I notice that your SR changed. "
+                    f"If you have more than one account, simply issue `!ow register` again.\n"
+                    + extra_text
+                )
+            else:
+                if any(tag.tag == battle_tag for tag in user.battle_tags):
+                    await user_obj.send(
+                        f"You already registered the BattleTag *{battle_tag}*, so there's nothing for me to do. *Sleep mode reactivated.*\n"
+                        "Tip: Open the URL in a private/igcognito tab next time, so you can enter the credentials of the account you want."
+                    )
+                    return
+
+                user.battle_tags.append(tag)
+                resp = (
+                    f"OK. I've added **{battle_tag}** to the list of your BattleTags. **Your primary BattleTag remains {user.battle_tags[0].tag}**. "
+                    f"To change your primary tag, use `!ow setprimary yourbattletag`, see help for more details."
+                )
+
+            try:
+                async with user_channel.typing:
+                    sr, image = await get_sr(battle_tag)
+            except InvalidBattleTag as e:
+                await user_channel.messages.send(f"Invalid BattleTag: {e.message}??? I got your directly from Blizzard, but they claim it doesn't exist... Try again later, Blizzard have fucked up.")
+                return
+            except BlizzardError as e:
+                await user_channel.messages.send(f"Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later",
+                )
+                raise
+            except UnableToFindSR:
+                resp += "\nYou don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your BattleTag."
+                sr = None
+
+            tag.update_sr(sr)
+            rank = tag.rank
+
+            sort_secondaries(user)
+
+            session.commit()
+
+            try:
+                await self._update_nick(user)
+            except NicknameTooLong as e:
+                resp += f"\n**Adding your SR to your nickname would result in '{e.nickname}' and with {len(e.nickname)} characters, be longer than Discord's maximum of 32.** Please shorten your nick to be no longer than 28 characters. I will regularly try to update it."
+            except HierarchyError as e:
+                resp += (
+                    '\n**I do not have enough permissions to update your nickname. The owner needs to move the "Orisa" role higher '
+                    "so that is higher that your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry.**"
+                )
+            except Exception as e:
+                logger.exception(f"unable to update nick for user {user}")
+                resp += (
+                    "\nHowever, right now I couldn't update your nickname, will try that again later."
+                    "People will still be able to ask for your BattleTag, though."
+                )
+
+            await user_channel.messages.send(resp)
+
+        finally:
+            session.close()
 
 
 

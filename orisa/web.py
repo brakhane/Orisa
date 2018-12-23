@@ -24,7 +24,28 @@ app = QuartTrio(__name__)
 
 send_ch = None
 
-app.debug = True
+app.debug = False
+
+
+def centered(text):
+    return """
+<!doctype html>
+<html>
+  <head>
+    <style>
+      .center {
+          height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="center">""" + text + """</div>
+  </body>
+</html>"""
+
 
 @app.route(OAUTH_REDIRECT_PATH)
 async def handle_oauth():
@@ -42,38 +63,40 @@ async def handle_oauth():
     try:
         uid = s.loads(data['state'], max_age=600)
     except SignatureExpired:
-        return "The data has expired. Please request a new URL with !ow register"
+        return centered("The link has expired. Please request a new link with <pre>!ow register</pre>")
     except BadSignature:
-        return "invalid data. Please request a new URL with !ow register"
+        return centered("The data I got back is invalid. Please request a new URL with <pre>!ow register</pre>")
 
-    url, headers, body = client.prepare_token_request(
-        'https://eu.battle.net/oauth/token',
-        authorization_response=request_url,
-        scope=[],
-        redirect_url=f'{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}'
-    )
+    try:
+        url, headers, body = client.prepare_token_request(
+            'https://eu.battle.net/oauth/token',
+            authorization_response=request_url,
+            scope=[],
+            redirect_url=f'{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}'
+        )
 
-    logger.debug(f"got data {(url, headers, body)}")
+        logger.debug(f"got data {(url, headers, body)}")
 
-    # remove client_id and add scope, blizzard is a little bit picky...
-    body = re.sub(r"client_id=.*?&", "scope=&", body)
+        # remove client_id and add scope, blizzard is a little bit picky...
+        body = re.sub(r"client_id=.*?&", "scope=&", body)
 
-    resp = (await asks.post(url,
-        headers=headers,
-        auth=asks.BasicAuth((
-            OAUTH_CLIENT_ID,
-            OAUTH_CLIENT_SECRET)),
-        data=body))
+        resp = (await asks.post(url,
+            headers=headers,
+            auth=asks.BasicAuth((
+                OAUTH_CLIENT_ID,
+                OAUTH_CLIENT_SECRET)),
+            data=body))
 
-    logger.debug(resp.json())
-    logger.debug(client.parse_request_body_response(resp.text, scope=[]))
-    logger.debug(client.token)
+        logger.debug(resp.json())
+        logger.debug(client.parse_request_body_response(resp.text, scope=[]))
+        logger.debug(client.token)
 
-    url, headers, body = client.add_token('https://eu.battle.net/oauth/userinfo')
+        url, headers, body = client.add_token('https://eu.battle.net/oauth/userinfo')
 
-    data = (await asks.get(url, headers=headers)).json()
+        data = (await asks.get(url, headers=headers)).json()
+    except Exception:
+        logger.error(f"Something went wrong while getting OAuth data for {uid} {request_url}", exc_info=True)
+        return centered("I'm sorry. Something went wrong on my side. Try to reissue !ow register")
     await send_ch.send((uid, data))
 
-    msg = f"{uid} is {data}. You can now close this window, you should have a DM from Orisa"
-
-    return msg
+    return centered("Thank you! I have sent you a DM. You can now close this window.")
