@@ -1225,13 +1225,11 @@ class Orisa(Plugin):
             logger.debug(f"done syncing tags for {new_member.name} after OW close")
 
         if plays_overwatch(old_member) and (not plays_overwatch(new_member)):
-            logger.debug(f"{new_member.name} stopped playing OW")
-
             session = self.database.Session()
             try:
                 user = self.database.user_by_discord_id(session, new_member.user.id)
                 if not user:
-                    logger.debug(f"{new_member.name} is not registered, nothing to do.")
+                    logger.debug(f"{new_member.name} stopped playing OW but is not registered, nothing to do.")
                     return
 
                 ids_to_sync = [t.id for t in user.battle_tags]
