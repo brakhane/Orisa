@@ -58,6 +58,7 @@ from curious.commands.decorators import command, condition
 from curious.commands.exc import ConversionFailedError
 from curious.commands.plugin import Plugin
 from curious.core.client import Client
+from curious.core.httpclient import HTTPClient
 from curious.exc import Forbidden, HierarchyError
 from curious.dataclasses.channel import ChannelType
 from curious.dataclasses.embed import Embed
@@ -1871,7 +1872,6 @@ class Orisa(Plugin):
 
     async def _sync_tags_from_channel(self, channel):
         first = True
-        logger.debug("syncing from channel %r", channel)
         async with channel:
             async for tag_id in channel:
                 logger.debug("got %s from channel %r", tag_id, channel)
@@ -2136,11 +2136,6 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
 Context.add_converter(Member, fuzzy_nick_match)
 
 multio.init("trio")
-
-import inspect
-
-
-from curious.core.httpclient import HTTPClient
 
 GLaDOS: ContextVar[bool] = ContextVar("GLaDOS", default=False)
 
