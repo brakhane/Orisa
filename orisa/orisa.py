@@ -36,6 +36,8 @@ from typing import Optional
 
 import asks
 import dateutil.parser as date_parser
+import hypercorn.config
+import hypercorn.trio
 import html5lib
 import matplotlib
 
@@ -86,9 +88,7 @@ from .config import (
     OAUTH_REDIRECT_HOST,
     OAUTH_REDIRECT_PATH,
 )
-
 from .models import Cron, User, BattleTag, SR, Role
-
 from .exceptions import (
     BlizzardError,
     InvalidBattleTag,
@@ -105,6 +105,7 @@ from .utils import (
     set_channel_suffix,
     format_roles,
 )
+from . import web
 
 CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
 
@@ -1230,7 +1231,9 @@ class Orisa(Plugin):
             try:
                 user = self.database.user_by_discord_id(session, new_member.user.id)
                 if not user:
-                    logger.debug(f"{new_member.name} stopped playing OW but is not registered, nothing to do.")
+                    logger.debug(
+                        f"{new_member.name} stopped playing OW but is not registered, nothing to do."
+                    )
                     return
 
                 ids_to_sync = [t.id for t in user.battle_tags]
@@ -1972,18 +1975,14 @@ class Orisa(Plugin):
             await self._top_players(session, prev_date)
 
     async def _web_server(self):
-        from hypercorn.config import Config
-        from hypercorn.trio import run
-        from . import web
-
-        config = Config()
+        config = hypercorn.config.Config()
         config.application_path = "orisa.web:app"
         config.debug = True
         config.access_logger = config.error_logger = logger
 
         web.send_ch = self.web_send_ch
 
-        await run.run_single(config)
+        await hypercorn.trio.run.run_single(config)
 
     async def _oauth_result_listener(self):
         async for uid, data in self.web_recv_ch:
