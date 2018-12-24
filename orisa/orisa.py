@@ -2019,7 +2019,7 @@ class Orisa(Plugin):
                 if any(tag.tag == battle_tag for tag in user.battle_tags):
                     await user_obj.send(
                         f"You already registered the BattleTag *{battle_tag}*, so there's nothing for me to do. *Sleep mode reactivated.*\n"
-                        "Tip: Open the URL in a private/igcognito tab next time, so you can enter the credentials of the account you want."
+                        "Tip: Open the URL in a private/incognito tab next time, so you can enter the credentials of the account you want."
                     )
                     return
 
