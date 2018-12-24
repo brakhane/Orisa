@@ -3,7 +3,7 @@
 # settings and then right clicking on a user, server/guild or channel
 # to copy the ID.
 
-from config_classes import *
+from .config_classes import *
 
 # The bot token can be found in "My apps" in discord after you
 # register the bot

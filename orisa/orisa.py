@@ -1277,10 +1277,10 @@ class Orisa(Plugin):
             f"Member {member.name}({member.id}) left the guild ({member.guild})"
         )
         with self.database.session() as session:
-            user = database.user_by_discord_id(session, member.id)
+            user = self.database.user_by_discord_id(session, member.id)
             if user:
                 in_other_guild = False
-                for guild in client.guilds.values():
+                for guild in self.client.guilds.values():
                     if guild.id != member.guild.id and member.id in guild.members:
                         in_other_guild = True
                         logger.debug(f"{member.name} is still in guild {guild.id}")
