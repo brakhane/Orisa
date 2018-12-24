@@ -2144,7 +2144,6 @@ class MyClient(Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__GLaDOS_http = HTTPClient(GLADOS_TOKEN, bot=True)
-        self._send_ch, self._recv_ch = trio.open_memory_channel(0)
 
     @contextmanager
     def as_glados(self):
@@ -2161,6 +2160,3 @@ class MyClient(Client):
         self.__http = http
 
     http = property(_http_get, _http_set)
-
-    def get_web_send_channel(self):
-        return self._send_ch
