@@ -331,6 +331,17 @@ class Orisa(Plugin):
             await ctx.channel.messages.send(
                 f"there are {len(stale_ids)} stale entries: {ids}"
             )
+            if doit == "confirm":
+                for id in stale_ids:
+                    user = self.database.user_by_discord_id(session, id)
+                    if not user:
+                        await ctx.channel.messages.send(f"{id} not found in DB???")
+                    else:
+                        session.delete(user)
+                        await ctx.channel.messages.send(f"{user} deleted")
+                session.commit()
+            elif stale_ids:
+                await ctx.channel.messages.send("issue `!cleanup confirm` to delete.")
 
         finally:
             session.close()
