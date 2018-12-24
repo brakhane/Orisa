@@ -10,10 +10,7 @@ from curious.commands.manager import CommandsManager
 from curious.dataclasses.presence import Game, Status
 
 from . import web
-from .config import (
-    SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN,
-    MASHERY_API_KEY,
-)
+from .config import SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN, MASHERY_API_KEY
 from .models import Database
 from .orisa import Orisa, MyClient
 from .wow import Wow
@@ -50,6 +47,7 @@ client = MyClient(BOT_TOKEN)
 database = Database()
 
 manager = CommandsManager.with_client(client, command_prefix="!")
+
 
 @client.event("ready")
 async def ready(ctx):

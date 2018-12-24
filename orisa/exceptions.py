@@ -2,8 +2,10 @@ class InvalidBattleTag(Exception):
     def __init__(self, message):
         self.message = message
 
+
 class BlizzardError(RuntimeError):
     pass
+
 
 class UnableToFindSR(Exception):
     pass
@@ -17,6 +19,3 @@ class NicknameTooLong(Exception):
 class InvalidFormat(Exception):
     def __init__(self, key):
         self.key = key
-
-
-

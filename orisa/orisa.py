@@ -93,7 +93,7 @@ from .exceptions import (
     InvalidBattleTag,
     UnableToFindSR,
     NicknameTooLong,
-    InvalidFormat
+    InvalidFormat,
 )
 from .utils import (
     get_sr,
@@ -102,7 +102,7 @@ from .utils import (
     reply,
     resolve_tag_or_index,
     set_channel_suffix,
-    format_roles
+    format_roles,
 )
 
 CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
@@ -129,8 +129,6 @@ COLORS = (
 
 def correct_channel(ctx):
     return ctx.channel.id in CHANNEL_IDS or ctx.channel.private
-
-
 
 
 def only_owner(ctx):
@@ -341,19 +339,17 @@ class Orisa(Plugin):
         await reply(ctx, "pong")
 
     @command()
-    #@condition(only_owner)
+    # @condition(only_owner)
     async def qqww(self, ctx):
         client = WebApplicationClient(OAUTH_CLIENT_ID)
         state = oauth_serializer.dumps(ctx.author.id)
         url, headers, body = client.prepare_authorization_request(
-            'https://eu.battle.net/oauth/authorize',
+            "https://eu.battle.net/oauth/authorize",
             scope=[],
-            redirect_url=f'{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}',
+            redirect_url=f"{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}",
             state=state,
         )
         await ctx.author.send(url)
-
-
 
     # ow commands
 
@@ -433,24 +429,24 @@ class Orisa(Plugin):
         client = WebApplicationClient(OAUTH_CLIENT_ID)
         state = oauth_serializer.dumps(user_id)
         url, headers, body = client.prepare_authorization_request(
-            'https://eu.battle.net/oauth/authorize',
+            "https://eu.battle.net/oauth/authorize",
             scope=[],
-            redirect_url=f'{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}',
+            redirect_url=f"{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}",
             state=state,
         )
-        msg = (f"To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click "
-               f"this link:\n"
-               f"{url}\n"
-               "and give me permission to access your data. I only need this permission once, you can remove it "
-               f"later in your BattleNet account.\n"
-               f"Protip: if you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
-               f"account data for that account instead.")
+        msg = (
+            f"To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click "
+            f"this link:\n"
+            f"{url}\n"
+            "and give me permission to access your data. I only need this permission once, you can remove it "
+            f"later in your BattleNet account.\n"
+            f"Protip: if you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
+            f"account data for that account instead."
+        )
 
         await ctx.author.send(msg)
         if not ctx.channel.private:
             await reply(ctx, "I sent you a DM with instructions.")
-
-
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -1994,7 +1990,7 @@ class Orisa(Plugin):
     async def _oauth_result_listener(self):
         async for uid, data in self.web_recv_ch:
             logger.debug(f"got OAuth response data {data} for uid {uid}")
-            await self._handle_registration(uid, data['battletag'], data['id'])
+            await self._handle_registration(uid, data["battletag"], data["id"])
 
     async def _handle_registration(self, user_id, battle_tag, blizzard_id):
         session = self.database.Session()
@@ -2039,10 +2035,13 @@ class Orisa(Plugin):
                 async with user_channel.typing:
                     sr, image = await get_sr(battle_tag)
             except InvalidBattleTag as e:
-                await user_channel.messages.send(f"Invalid BattleTag: {e.message}??? I got your directly from Blizzard, but they claim it doesn't exist... Try again later, Blizzard have fucked up.")
+                await user_channel.messages.send(
+                    f"Invalid BattleTag: {e.message}??? I got your directly from Blizzard, but they claim it doesn't exist... Try again later, Blizzard have fucked up."
+                )
                 return
             except BlizzardError as e:
-                await user_channel.messages.send(f"Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later",
+                await user_channel.messages.send(
+                    f"Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later"
                 )
                 raise
             except UnableToFindSR:
@@ -2076,7 +2075,6 @@ class Orisa(Plugin):
 
         finally:
             session.close()
-
 
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):
@@ -2137,7 +2135,6 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
         return member
 
 
-
 Context.add_converter(Member, fuzzy_nick_match)
 
 multio.init("trio")
@@ -2174,6 +2171,3 @@ class MyClient(Client):
 
     def get_web_send_channel(self):
         return self._send_ch
-
-
-

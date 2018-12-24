@@ -15,3 +15,5 @@ dummy.py
 # Editors
 .*.swp
 .vscode
+
+__pycache__

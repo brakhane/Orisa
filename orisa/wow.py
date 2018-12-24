@@ -13,17 +13,10 @@ from curious.dataclasses.member import Member
 from curious.exc import Forbidden, HierarchyError
 from fuzzywuzzy import process
 
-from .config import (
-    GUILD_INFOS,
-    MASHERY_API_KEY,
-)
+from .config import GUILD_INFOS, MASHERY_API_KEY
 
-from .exceptions import (
-    NicknameTooLong,
-)
-from .utils import (
-    reply,
-)
+from .exceptions import NicknameTooLong
+from .utils import reply
 
 from .models import WowUser, WowRole
 
@@ -33,6 +26,7 @@ WOW_CHANNEL_IDS = frozenset(
     guild.wow_listen_channel_id for guild in GUILD_INFOS.values()
 )
 
+
 def correct_wow_channel(ctx):
     return ctx.channel.id in WOW_CHANNEL_IDS or ctx.channel.private
 
@@ -41,7 +35,6 @@ class InvalidCharacterName(RuntimeError):
     def __init__(self, realm: str, name: str):
         self.realm = realm
         self.name = name
-
 
 
 class Wow(Plugin):

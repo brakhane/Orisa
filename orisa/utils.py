@@ -15,7 +15,7 @@ from .exceptions import (
     InvalidBattleTag,
     UnableToFindSR,
     NicknameTooLong,
-    InvalidFormat
+    InvalidFormat,
 )
 from .models import Role
 
@@ -25,8 +25,6 @@ SR_CACHE = TTLCache(maxsize=1000, ttl=30)
 SR_LOCKS = TTLCache(
     maxsize=1000, ttl=60
 )  # if a request should be hanging for 60s, just try another
-
-
 
 
 async def get_sr(battletag):
@@ -165,5 +163,3 @@ def format_roles(roles):
         Role.SUPPORT: "Support",
     }
     return ", ".join(names[r] for r in Role if r and r in roles)
-
-

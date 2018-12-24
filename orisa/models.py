@@ -100,7 +100,9 @@ class BattleTag(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
-    blizzard_id = Column(Integer, nullable=True, index=True)  # nullable for backwards compatibility
+    blizzard_id = Column(
+        Integer, nullable=True, index=True
+    )  # nullable for backwards compatibility
     current_sr_id = Column(Integer, ForeignKey("srs.id"))
     position = Column(Integer, nullable=False)
 
