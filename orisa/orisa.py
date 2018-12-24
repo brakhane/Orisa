@@ -1061,7 +1061,6 @@ class Orisa(Plugin):
             value="Create a link to your BattleNet account, or adds a secondary BattleTag to your account. "
             "Your OW account will be checked periodically and your nick will be "
             "automatically updated to show your SR or rank (see the *format* command for more info). "
-            "`register` will fail if the BattleTag is invalid. *BattleTags are case-sensitive!*",
         )
         embed.add_field(
             name="!ow unregister *battletag*",
@@ -2032,7 +2031,7 @@ class Orisa(Plugin):
                     sr, image = await get_sr(battle_tag)
             except InvalidBattleTag as e:
                 await user_channel.messages.send(
-                    f"Invalid BattleTag: {e.message}??? I got your directly from Blizzard, but they claim it doesn't exist... Try again later, Blizzard have fucked up."
+                    f"Invalid BattleTag: {e.message}??? I got yours directly from Blizzard, but they claim it doesn't exist... Try again later, Blizzard have fucked up."
                 )
                 return
             except BlizzardError as e:

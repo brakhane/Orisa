@@ -7,7 +7,7 @@ import trio
 
 import raven
 from curious.commands.manager import CommandsManager
-from curious.dataclasses.presence import Game, Status
+from curious.dataclasses.presence import Game, GameType, Status
 
 from . import web
 from .config import SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN, MASHERY_API_KEY
@@ -58,7 +58,7 @@ async def ready(ctx):
     if MASHERY_API_KEY:
         await manager.load_plugin(Wow, database)
         msg += " | !wow help"
-    await ctx.bot.change_status(game=Game(name=msg))
+    await ctx.bot.change_status(game=Game(name=msg, type=GameType.LISTENING_TO))
     logger.info("Ready")
 
 

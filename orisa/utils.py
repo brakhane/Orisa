@@ -72,7 +72,7 @@ async def get_sr(battletag):
         if not srs:
             if "Profile Not Found" in result.text:
                 raise InvalidBattleTag(
-                    f"No profile with BattleTag {battletag} found. BattleTags are case-sensitive!"
+                    f"No profile with BattleTag {battletag} found"
                 )
             raise UnableToFindSR()
         sr = int(srs[0])
