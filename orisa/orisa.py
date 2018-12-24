@@ -182,8 +182,8 @@ class Orisa(Plugin):
     # admin commands
 
     @command()
-    # @condition(only_owner, bypass_owner=False)
-    @author_has_roles("Clan Administrator")
+    @condition(only_owner, bypass_owner=False)
+    # @author_has_roles("Clan Administrator")
     async def shutdown(self, ctx, safety: str = None):
         if safety != "Orisa":
             await reply(
@@ -340,18 +340,6 @@ class Orisa(Plugin):
     async def ping(self, ctx):
         await reply(ctx, "pong")
 
-    @command()
-    # @condition(only_owner)
-    async def qqww(self, ctx):
-        client = WebApplicationClient(OAUTH_CLIENT_ID)
-        state = oauth_serializer.dumps(ctx.author.id)
-        url, headers, body = client.prepare_authorization_request(
-            "https://eu.battle.net/oauth/authorize",
-            scope=[],
-            redirect_url=f"{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}",
-            state=state,
-        )
-        await ctx.author.send(url)
 
     # ow commands
 
