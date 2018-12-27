@@ -60,6 +60,10 @@ async def handle_oauth():
     # proxy headers yet, so just fake https to avoid an exception
     request_url = request.url.replace("http:", "https:")
 
+    if "error=access_denied" in request_url:
+        return centered(
+            "You didn't give me permission to access your BattleTag; registration cancelled."
+        )
     data = client.parse_request_uri_response(request_url)
 
     s = URLSafeTimedSerializer(SIGNING_SECRET)
