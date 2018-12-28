@@ -619,9 +619,9 @@ class Orisa(Plugin):
 
         msg = "Done. "
         if new_setting:
-            msg += "Your nick will be updated even when you are not in a OW voice channel. Use `!ow alwaysshowsr off` to turn it off again"
+            msg += "Your nick will be updated even when you are not in an OW voice channel. Use `!ow alwaysshowsr off` to turn it off again"
         else:
-            msg += "Your nick will only be updated when you are in a OW voice channel. Use `!ow alwaysshowsr on` to always update your nick"
+            msg += "Your nick will only be updated when you are in an OW voice channel. Use `!ow alwaysshowsr on` to always update your nick"
         await reply(ctx, msg)
 
 
@@ -1004,7 +1004,7 @@ class Orisa(Plugin):
         )
         embed.add_field(
             name="!ow alwaysupdatenick [on/off]",
-            value="On some servers, Orisa will only update your nick when you are in a OW voice channel. If you want your nick to always be updated, "
+            value="On some servers, Orisa will only update your nick when you are in an OW voice channel. If you want your nick to always be updated, "
             "set this to on.\n"
             "*Example:*\n"
             "`!ow alwaysupdatenick on`"
