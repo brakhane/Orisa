@@ -62,6 +62,7 @@ from curious.commands.plugin import Plugin
 from curious.core.client import Client
 from curious.core.httpclient import HTTPClient
 from curious.exc import Forbidden, HierarchyError
+from curious.ext.paginator import ReactionsPaginator
 from curious.dataclasses.channel import ChannelType
 from curious.dataclasses.embed import Embed
 from curious.dataclasses.guild import Guild
@@ -1134,6 +1135,20 @@ class Orisa(Plugin):
                 return
             else:
                 await self._srgraph(ctx, user, member.name, date)
+
+    @ow.subcommand()
+    @condition(only_owner)
+    async def privacy_policy(self, ctx):
+        with open("privacy.md") as f:
+            text = f.read()
+        await ReactionsPaginator(
+            content=text,
+            channel=ctx.channel,
+            respond_to=ctx.author,
+            title="Privacy Policy"
+        ).paginate()
+
+
 
     async def _srgraph(self, ctx, user, name, date: str = None):
         sns.set()
