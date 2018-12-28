@@ -34,9 +34,7 @@ The data is stored on servers located within the EU.
 
 __**Who has access to the information?**__
 
-Only other members of the Discord server you are a member of can access the information stated above (excluding information stored in log files), this includes your registered BattleTags, your SR, and the history of that SR from the time you registered.
-
-**Your information will not be made available to third parties.**
+Only other members of the Discord server you are a member of can access the information stated above (excluding information stored in log files), this includes your registered BattleTags, your SR, and the history of that SR from the time you registered. **Your information will not be made available to third parties.**
 
 __**How can I obtain a copy of my personal data?**__
 
