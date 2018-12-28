@@ -71,3 +71,6 @@ OAUTH_REDIRECT_HOST = None
 
 # The path, can just be "/", but must end with a slash
 OAUTH_REDIRECT_PATH = None
+
+# Path the privacy policy
+PRIVACY_POLICY_PATH = None

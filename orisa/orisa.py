@@ -88,6 +88,7 @@ from .config import (
     OAUTH_CLIENT_ID,
     OAUTH_REDIRECT_HOST,
     OAUTH_REDIRECT_PATH,
+    PRIVACY_POLICY_PATH,
 )
 from .models import Cron, User, BattleTag, SR, Role
 from .exceptions import (
@@ -1139,7 +1140,7 @@ class Orisa(Plugin):
     @ow.subcommand()
     @condition(only_owner)
     async def privacy_policy(self, ctx):
-        with open("privacy.md") as f:
+        with open(PRIVACY_POLICY_PATH) as f:
             text = f.read()
         await ReactionsPaginator(
             content=text,
