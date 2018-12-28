@@ -116,7 +116,7 @@ logger = logging.getLogger("orisa")
 oauth_serializer = URLSafeTimedSerializer(SIGNING_SECRET)
 
 
-RANKS = ("Brnz", "Slvr", "Gold", "Plat", "Dmnd", "Mstr", "GM")
+RANKS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grand Master")
 COLORS = (
     0xCD7E32,  # Bronze
     0xC0C0C0,  # Silver
