@@ -1003,11 +1003,11 @@ class Orisa(Plugin):
             ),
         )
         embed.add_field(
-            name="!ow alwaysupdatenick [on/off]",
-            value="On some servers, Orisa will only update your nick when you are in an OW voice channel. If you want your nick to always be updated, "
+            name="!ow alwaysshowsr [on/off]",
+            value="On some servers, Orisa will only show your SR or rank in your nick when you are in an OW voice channel. If you want your nick to always show your SR or rank, "
             "set this to on.\n"
             "*Example:*\n"
-            "`!ow alwaysupdatenick on`"
+            "`!ow alwaysshowsr on`"
         )
         embed.add_field(
             name="!ow findplayers [max diff] *or* !ow findplayers min max",
