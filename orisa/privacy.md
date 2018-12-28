@@ -59,7 +59,7 @@ time you registered.
 
 __**How can I obtain a copy of my personal data?**__
 
-At the moment, you'll need to contact Orisa's owner; although "!ow srgraph" pretty much shows all data Orisa has stored.
+At the moment, you'll need to contact Orisa's owner OWNER_ID; although "!ow srgraph" pretty much shows all data Orisa has stored.
 
 __**How can I delete my data?**__
 
