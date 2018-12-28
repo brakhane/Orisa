@@ -1147,6 +1147,9 @@ class Orisa(Plugin):
             text = f.read()
         text = text.replace("OWNER_ID", f"<@!{self.client.application_info.owner.id}>")
         await send_long(ctx.author.send, text)
+        if not ctx.channel.private:
+            await reply(ctx, "I sent you the privacy policy as DM.")
+
 
 
     async def _srgraph(self, ctx, user, name, date: str = None):
