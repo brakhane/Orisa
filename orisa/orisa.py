@@ -116,7 +116,7 @@ logger = logging.getLogger("orisa")
 oauth_serializer = URLSafeTimedSerializer(SIGNING_SECRET)
 
 
-RANKS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grand Master")
+RANKS = ("Brnz", "Slvr", "Gold", "Plat", "Dmnd", "Mstr", "GM")
 COLORS = (
     0xCD7E32,  # Bronze
     0xC0C0C0,  # Silver
@@ -479,7 +479,7 @@ class Orisa(Plugin):
 
     async def _update_nick_after_secondary_change(self, ctx, user):
         try:
-            await self._update_nick(user)
+            await self._update_nick(user, force=True)
         except HierarchyError:
             pass
         except NicknameTooLong as e:
@@ -493,6 +493,9 @@ class Orisa(Plugin):
                 ctx,
                 "However, there was an error updating your nickname. I will try that again later.",
             )
+        with suppress(HierarchyError):
+            await self._update_nick(user)
+
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -557,7 +560,7 @@ class Orisa(Plugin):
             else:
                 user.format = format
                 try:
-                    new_nick = await self._update_nick(user)
+                    new_nick = await self._update_nick(user, force=True)
                 except InvalidFormat as e:
                     await reply(
                         ctx, f'Invalid format string: unknown placeholder "{e.key}"'
@@ -591,7 +594,8 @@ class Orisa(Plugin):
                         "Retail Jedi",
                         "Pornography Historian",
                     ]
-
+                    # reset if SR should not be shown normally
+                    await self._update_nick(user) 
                     await reply(
                         ctx,
                         f'Done. Henceforth, ye shall be knownst as "{new_nick}, {random.choice(titles)}."',
@@ -599,6 +603,27 @@ class Orisa(Plugin):
         finally:
             session.commit()
             session.close()
+
+    @ow.subcommand()
+    @condition(correct_channel)
+    async def alwaysshowsr(self, ctx, param:str="on"):
+        with self.database.session() as session:
+            user = self.database.user_by_discord_id(session, ctx.author.id)
+            if not user:
+                await reply(ctx, "you are not registered")
+                return
+            new_setting = param != "off"
+            user.always_show_sr = new_setting
+            await self._update_nick(user)
+            session.commit()
+
+        msg = "Done. "
+        if new_setting:
+            msg += "Your nick will be updated even when you are not in a OW voice channel. Use `!ow alwaysshowsr off` to turn it off again"
+        else:
+            msg += "Your nick will only be updated when you are in a OW voice channel. Use `!ow alwaysshowsr on` to always update your nick"
+        await reply(ctx, msg)
+
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -978,6 +1003,13 @@ class Orisa(Plugin):
             ),
         )
         embed.add_field(
+            name="!ow alwaysupdatenick [on/off]",
+            value="On some servers, Orisa will only update your nick when you are in a OW voice channel. If you want your nick to always be updated, "
+            "set this to on.\n"
+            "*Example:*\n"
+            "`!ow alwaysupdatenick on`"
+        )
+        embed.add_field(
             name="!ow findplayers [max diff] *or* !ow findplayers min max",
             value="*This command is still in beta and may change at any time!*\n"
             "This command is intended to find partners for your Competitive team and shows you all registered and online users within the specified range.\n"
@@ -1263,6 +1295,11 @@ class Orisa(Plugin):
         if new_voice_state:
             if new_voice_state.channel.parent != parent:
                 await self._adjust_voice_channels(new_voice_state.channel.parent)
+        with self.database.session() as session:
+            user = self.database.user_by_discord_id(session, member.id)
+            if user:
+                formatted = self._format_nick(user)
+                await self._update_nick_for_member(member, formatted)
 
     @event("message_create")
     async def _message_create(self, ctx, msg):
@@ -1522,41 +1559,79 @@ class Orisa(Plugin):
         except KeyError as e:
             raise InvalidFormat(e.args[0]) from e
 
-    async def _update_nick(self, user):
+    async def _update_nick(self, user, *, force=False):
         user_id = user.discord_id
         exception = new_nn = None
 
         for guild in self.client.guilds.values():
             try:
-                nn = str(guild.members[user_id].name)
+                member = guild.members[user_id]
             except KeyError:
                 continue
-            formatted = self._format_nick(user)
-            if re.search(r"\[.*?\]", str(nn)):
-                new_nn = re.sub(r"\[.*?\]", f"[{formatted}]", nn)
-            else:
-                new_nn = f"{nn} [{formatted}]"
-
-            if len(new_nn) > 32:
-                raise NicknameTooLong(new_nn)
-
-            if str(nn) != new_nn:
-                try:
-                    await guild.members[user_id].nickname.set(new_nn)
-                except HierarchyError:
-                    logger.info(
-                        "Cannot update nick %s to %s due to not enough permissions",
-                        nn,
-                        new_nn,
-                    )
-                except Exception as e:
-                    logger.exception("error while setting nick")
-                    exception = e
+            try:
+                formatted = self._format_nick(user)
+                new_nn = await self._update_nick_for_member(member, formatted, user, force=force)
+            except Exception as e:
+                exception = e
+                continue
 
         if exception:
             raise exception
 
         return new_nn
+        
+    async def _update_nick_for_member(self, member, formatted: str, user=None, *, force=False):
+        nn = str(member.name)
+
+        if force or self._show_sr_in_nick(member, user):
+            if re.search(r"\[.*?\]", str(nn)):
+                new_nn = re.sub(r"\[.*?\]", f"[{formatted}]", nn)
+            else:
+                new_nn = f"{nn} [{formatted}]"
+        else:
+            if re.search(r"\[.*?\]", str(nn)):
+                new_nn = re.sub(r"\[.*?\]", "", nn)
+            else:
+                new_nn = nn
+
+        if len(new_nn) > 32:
+            raise NicknameTooLong(new_nn)
+
+        logger.debug("New nick for %s is %s", nn, new_nn)
+
+        if nn != new_nn:
+            try:
+                await member.nickname.set(new_nn)
+            except HierarchyError:
+                logger.info(
+                    "Cannot update nick %s to %s due to not enough permissions",
+                    nn,
+                    new_nn,
+                )
+            except Exception as e:
+                logger.exception("error while setting nick", exc_info=True)
+                raise
+
+        return new_nn
+
+    def _show_sr_in_nick(self, member, user):
+        if member.voice:
+            logger.debug("user %s is currently in voice", member)
+            gi = GUILD_INFOS[member.guild.id]
+            logger.debug("user is in %s with parent %s", member.voice.channel, member.voice.channel.parent)
+            for vc in gi.managed_voice_categories:
+                if vc.category_id == member.voice.channel.parent.id:
+                    logger.debug("that parent is managed")
+                    return vc.show_sr_in_nicks                   
+
+        if GUILD_INFOS[member.guild_id].show_sr_in_nicks_by_default:
+            return True
+
+        if not user:
+            with self.database.session() as session:
+                user = self.database.user_by_discord_id(session, member.id)
+        
+        return user.always_show_sr
 
     async def _send_congrats(self, user, rank, image):
         for guild in self.client.guilds.values():
@@ -1935,7 +2010,9 @@ class Orisa(Plugin):
                         break
 
                 resp = (
-                    f"OK. People can now ask me for your BattleTag **{battle_tag}**, and I will update your nick whenever I notice that your SR changed. "
+                    f"OK. People can now ask me for your BattleTag **{battle_tag}**, and I will keep track of your SR.\n"
+                    f"On some servers, I will only update your nick if you join a OW voice channel. If you want your nick to always show your SR, "
+                    f"use the `!ow alwaysshowsr` command. If you want me to show your rank instead of your SR, use `!ow format $rank`.\n"
                     f"If you have more than one account, simply issue `!ow register` again.\n"
                     + extra_text
                 )
@@ -2064,7 +2141,7 @@ multio.init("trio")
 GLaDOS: ContextVar[bool] = ContextVar("GLaDOS", default=False)
 
 
-class MyClient(Client):
+class OrisaClient(Client):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.__GLaDOS_http = HTTPClient(GLADOS_TOKEN, bot=True)

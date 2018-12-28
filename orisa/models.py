@@ -91,6 +91,8 @@ class User(Base):
 
     roles = Column(RoleType, nullable=False, default=Role.NONE)
 
+    always_show_sr = Column(Boolean, nullable=False, default=False)
+
     def __repr__(self):
         return f"<User(id={self.id}, discord_id={self.discord_id})>"
 

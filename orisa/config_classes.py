@@ -6,6 +6,7 @@ from typing import List, Set, Optional, Union, Dict
 
 @dataclass
 class GuildInfo:
+    show_sr_in_nicks_by_default: bool
     congrats_channel_id: int
     listen_channel_id: int
     managed_voice_categories: List["VoiceCategoryInfo"]
@@ -36,3 +37,7 @@ class VoiceCategoryInfo:
     # Also, the created comp channels should only allow
     # 6 people
     prefixes: Union[List[str], Dict[str, int]]
+    # Should a members nick be updated to show
+    # the SR/rank when in this category,
+    # even when change_nicks_by_default is False?
+    show_sr_in_nicks: bool

@@ -1,4 +1,5 @@
 import logging
+import traceback
 import yaml
 
 
@@ -12,7 +13,7 @@ from curious.dataclasses.presence import Game, GameType, Status
 from . import web
 from .config import SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN, MASHERY_API_KEY
 from .models import Database
-from .orisa import Orisa, MyClient
+from .orisa import Orisa, OrisaClient
 from .wow import Wow
 
 
@@ -42,7 +43,7 @@ else:
     logger.info("NOT USING SENTRY")
 
 
-client = MyClient(BOT_TOKEN)
+client = OrisaClient(BOT_TOKEN)
 
 database = Database()
 
