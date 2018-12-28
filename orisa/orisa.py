@@ -1131,7 +1131,7 @@ class Orisa(Plugin):
                 await self._srgraph(ctx, user, ctx.author.name, date)
 
     @ow.subcommand()
-    @condition(only_owner)
+    @author_has_roles("Admin")
     async def usersrgraph(self, ctx, member: Member, date: str = None):
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, member.id)
