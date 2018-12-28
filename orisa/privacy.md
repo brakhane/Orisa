@@ -3,7 +3,7 @@
 You will only be notified of major updates to this policy. Minor updates, like
 reformatting, rewording, etc. will not be announced.
 
-__**What personal data does Orisa collect, and how it is used?**__
+__**What personal data does Orisa collect, and how is it used?**__
 
 *• Your Discord ID and your BattleTags that you register with Orisa*
 
@@ -46,7 +46,7 @@ Orisa does *not* log any other messages sent by you.
 
 __**Where is the data stored?**__
 
-The data is stored on server located within the EU.
+The data is stored on servers located within the EU.
 
 __**Who has access to the information?**__
 
