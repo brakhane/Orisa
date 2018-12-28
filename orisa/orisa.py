@@ -1064,20 +1064,8 @@ class Orisa(Plugin):
             "automatically updated to show your SR or rank (see the *format* command for more info). "
         )
         embed.add_field(
-            name="!ow unregister *battletag*",
-            value="If you have secondary BattleTags, you can remove the given BattleTag from the list. Unlike register, the search is performed fuzzy, so "
-            "you normally only have to specify the first few letters of the BattleTag to remove.\n"
-            "You cannot remove your primary BattleTag, you have to choose a different primary BattleTag first.\n"
-            "*Example:*\n"
-            "`!ow unregister foo`",
-        )
-        embed.add_field(
-            name="!ow unregister *index*",
-            value="Like `unregister battletag`, but removes the battletag by number. Your first secondary is 1, your second 2, etc.\n"
-            "The order is shown by the `!ow` command (it's alphabetical).\n"
-            "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
-            "*Example:*\n"
-            "`!ow unregister 1`",
+            name="!ow privacy",
+            value="Show Orisa's Privacy Policy"
         )
         embed.add_field(
             name="!ow setprimary *battletag*",
@@ -1111,6 +1099,22 @@ class Orisa(Plugin):
             "Shows a graph of your SR. If from_date (as DD.MM.YY or YYYY-MM-DD) is given, the graph starts at that date, otherwise it starts "
             "as early as Orisa has data.",
         )
+        embed.add_field(
+            name="!ow unregister *battletag*",
+            value="If you have secondary BattleTags, you can remove the given BattleTag from the list. Unlike register, the search is performed fuzzy, so "
+            "you normally only have to specify the first few letters of the BattleTag to remove.\n"
+            "You cannot remove your primary BattleTag, you have to choose a different primary BattleTag first.\n"
+            "*Example:*\n"
+            "`!ow unregister foo`",
+        )
+        embed.add_field(
+            name="!ow unregister *index*",
+            value="Like `unregister battletag`, but removes the battletag by number. Your first secondary is 1, your second 2, etc.\n"
+            "The order is shown by the `!ow` command (it's alphabetical).\n"
+            "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
+            "*Example:*\n"
+            "`!ow unregister 1`",
+        )
 
         return embeds
 
@@ -1137,8 +1141,7 @@ class Orisa(Plugin):
                 await self._srgraph(ctx, user, member.name, date)
 
     @ow.subcommand()
-    @condition(only_owner)
-    async def privacy_policy(self, ctx):
+    async def privacy(self, ctx):
         with open(PRIVACY_POLICY_PATH) as f:
             text = f.read()
         await send_long(ctx.author.send, text)
