@@ -300,13 +300,6 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
-    async def ranking(self, ctx, date: str):
-        date = pendulum.parse(date, tz=None)
-        with self.database.session() as session:
-            await self._player_ranking(session, ctx, date)
-
-    @command()
-    @condition(only_owner)
     async def updatenicks(self, ctx):
         session = self.database.Session()
         for user in session.query(User).all():
@@ -1585,89 +1578,6 @@ class Orisa(Plugin):
                 )
             except Exception:
                 logger.exception(f"Cannot send congrats for guild {guild}")
-
-    async def _player_ranking(self, session, ctx, date):
-
-        guild_id = 443_691_528_951_693_312
-
-        def get_sr(tag):
-            for sr in tag.sr_history:
-                found_sr = sr.value
-                if sr.timestamp < date:
-                    break
-            else:
-                # if no SR is before that date, we have none at that
-                # point in time
-                found_sr = None
-            return found_sr
-
-        guild = self.client.guilds[guild_id]
-
-        tags = session.query(BattleTag).options(joinedload(BattleTag.user)).all()
-
-        data = []
-        for tag in tags:
-            try:
-                member = guild.members[tag.user.discord_id]
-            except KeyError:
-                continue
-            sr = get_sr(tag)
-            if not sr:
-                continue
-            data.append((member, tag, sr))
-
-        data.sort(key=lambda x: (x[2] or 0, str(x[0].name)), reverse=True)
-
-        def member_name(member):
-            name = str(member.name)
-            name = re.sub(r"\[.*?\]", "", name)
-            name = re.sub(r"\{.*?\}", "", name)
-            name = re.sub(r"\s{2,}", " ", name)
-
-            return "".join(
-                ch if ord(ch) < 256 or unicodedata.category(ch)[0] != "S" else ""
-                for ch in name
-            )
-
-        table_data = []
-        prev_sr = None
-        pos = 1
-        logger.debug("starting %i", len(data))
-        for ix, (member, tag, sr) in enumerate(data):
-
-            if sr != prev_sr:
-                pos = ix + 1
-            prev_sr = sr
-
-            table_data.append((pos, member_name(member), tag.tag, sr))
-
-        tabulate.PRESERVE_WHITESPACE = True
-        table_lines = tabulate.tabulate(
-            table_data, headers=["#", "Member", "BattleTag", "SR"], tablefmt="psql"
-        ).split("\n")
-
-        table_lines = [f"`{line}`" for line in table_lines]
-
-        # Split table into submessages, because a short "line" is visible after each message
-        # we want it to be in "nice" multiples
-
-        ix = 0
-        lines = 20
-
-        table_lines.insert(
-            0,
-            f"**SR ranking as of {pendulum.instance(date).to_day_datetime_string()}**\n",
-        )
-
-        send = self.client.find_channel(
-            GUILD_INFOS[guild_id].listen_channel_id
-        ).messages.send
-        # send = self.client.application_info.owner.send
-        while ix < len(table_lines):
-            # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
-            step = lines if ix else lines + 3
-            await send_long(send, "\n".join(table_lines[ix : ix + step]))
-            ix += step
 
     async def _top_players(self, session, prev_date, style="psql"):
         def prev_sr(tag):
