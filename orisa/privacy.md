@@ -1,5 +1,8 @@
 **Privacy Policy, last updated 2018-12-28**
 
+You will only be notified of major updates to this policy. Minor updates, like
+reformatting, rewording, etc. will not be announced.
+
 __**What personal data does Orisa collect, and how it is used?**__
 
 *• Your Discord ID and your BattleTags that you register with Orisa*
