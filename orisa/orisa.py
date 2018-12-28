@@ -437,6 +437,7 @@ class Orisa(Plugin):
             state=state,
         )
         msg = (
+            f"**By registering, you agree to Orisa's Privacy Policy; you can read it by entering `!ow privacy`**\n"
             f"To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click "
             f"this link:\n"
             f"{url}\n"
@@ -1144,6 +1145,7 @@ class Orisa(Plugin):
     async def privacy(self, ctx):
         with open(PRIVACY_POLICY_PATH) as f:
             text = f.read()
+        text = text.replace("OWNER_ID", f"<@!{self.client.application_info.owner.id}>")
         await send_long(ctx.author.send, text)
 
 
