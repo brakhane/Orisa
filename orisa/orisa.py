@@ -1626,6 +1626,16 @@ class Orisa(Plugin):
         return new_nn
 
     def _show_sr_in_nick(self, member, user):
+        if GUILD_INFOS[member.guild_id].show_sr_in_nicks_by_default:
+            return True
+
+        if not user:
+            with self.database.session() as session:
+                user = self.database.user_by_discord_id(session, member.id)
+
+        if user.always_show_sr:
+            return True
+
         if member.voice:
             logger.debug("user %s is currently in voice", member)
             gi = GUILD_INFOS[member.guild.id]
@@ -1639,14 +1649,7 @@ class Orisa(Plugin):
                     logger.debug("that parent is managed")
                     return vc.show_sr_in_nicks
 
-        if GUILD_INFOS[member.guild_id].show_sr_in_nicks_by_default:
-            return True
-
-        if not user:
-            with self.database.session() as session:
-                user = self.database.user_by_discord_id(session, member.id)
-
-        return user.always_show_sr
+        return False
 
     async def _send_congrats(self, user, rank, image):
         for guild in self.client.guilds.values():
