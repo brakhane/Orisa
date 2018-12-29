@@ -71,9 +71,7 @@ async def get_sr(battletag):
         rank_image_elems = document.xpath('//div[@class="competitive-rank"]/img/@src')
         if not srs:
             if "Profile Not Found" in result.text:
-                raise InvalidBattleTag(
-                    f"No profile with BattleTag {battletag} found"
-                )
+                raise InvalidBattleTag(f"No profile with BattleTag {battletag} found")
             raise UnableToFindSR()
         sr = int(srs[0])
         if rank_image_elems:
@@ -135,24 +133,6 @@ def resolve_tag_or_index(user, tag_or_index):
         if index >= len(user.battle_tags):
             raise ValueError("You don't even have that many secondary BattleTags")
     return index
-
-
-async def set_channel_suffix(chan, suffix: str):
-    name = chan.name
-
-    if ":" in name:
-        if suffix:
-            new_name = re.sub(r":.*", f": {suffix}", name)
-        else:
-            new_name = re.sub(r":.*", "", name)
-    else:
-        if suffix:
-            new_name = f"{name}: {suffix}"
-        else:
-            new_name = name
-
-    if name != new_name:
-        await chan.edit(name=new_name)
 
 
 def format_roles(roles):

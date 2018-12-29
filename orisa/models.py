@@ -29,6 +29,7 @@ from sqlalchemy import (
     String,
     ForeignKey,
     create_engine,
+    func,
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.orderinglist import ordering_list
@@ -244,6 +245,15 @@ class Database:
 
     def wow_user_by_discord_id(self, session, discord_id):
         return session.query(WowUser).filter_by(discord_id=discord_id).one_or_none()
+
+    def get_min_max_sr(self, session, discord_ids):
+        return (
+            session.query(func.min(SR.value), func.max(SR.value))
+            .join(BattleTag.current_sr, User)
+            .filter(BattleTag.position == 0)
+            .filter(User.discord_id.in_(discord_ids))
+            .one()
+        )
 
     def _sync_delay(self, error_count):
         if error_count == 0:

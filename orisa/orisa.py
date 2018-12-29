@@ -103,7 +103,6 @@ from .utils import (
     send_long,
     reply,
     resolve_tag_or_index,
-    set_channel_suffix,
     format_roles,
 )
 from . import web
@@ -345,7 +344,6 @@ class Orisa(Plugin):
     async def ping(self, ctx):
         await reply(ctx, "pong")
 
-
     # ow commands
 
     @command()
@@ -496,7 +494,6 @@ class Orisa(Plugin):
         with suppress(HierarchyError):
             await self._update_nick(user)
 
-
     @ow.subcommand()
     @condition(correct_channel)
     async def setprimary(self, ctx, tag_or_index: str):
@@ -595,7 +592,7 @@ class Orisa(Plugin):
                         "Pornography Historian",
                     ]
                     # reset if SR should not be shown normally
-                    await self._update_nick(user) 
+                    await self._update_nick(user)
                     await reply(
                         ctx,
                         f'Done. Henceforth, ye shall be knownst as "{new_nick}, {random.choice(titles)}."',
@@ -606,7 +603,7 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     @condition(correct_channel)
-    async def alwaysshowsr(self, ctx, param:str="on"):
+    async def alwaysshowsr(self, ctx, param: str = "on"):
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
@@ -623,7 +620,6 @@ class Orisa(Plugin):
         else:
             msg += "Your nick will only be updated when you are in an OW voice channel. Use `!ow alwaysshowsr on` to always update your nick"
         await reply(ctx, msg)
-
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -1007,7 +1003,7 @@ class Orisa(Plugin):
             value="On some servers, Orisa will only show your SR or rank in your nick when you are in an OW voice channel. If you want your nick to always show your SR or rank, "
             "set this to on.\n"
             "*Example:*\n"
-            "`!ow alwaysshowsr on`"
+            "`!ow alwaysshowsr on`",
         )
         embed.add_field(
             name="!ow findplayers [max diff] *or* !ow findplayers min max",
@@ -1087,12 +1083,9 @@ class Orisa(Plugin):
             name="!ow register",
             value="Create a link to your BattleNet account, or adds a secondary BattleTag to your account. "
             "Your OW account will be checked periodically and your nick will be "
-            "automatically updated to show your SR or rank (see the *format* command for more info). "
+            "automatically updated to show your SR or rank (see the *format* command for more info). ",
         )
-        embed.add_field(
-            name="!ow privacy",
-            value="Show Orisa's Privacy Policy"
-        )
+        embed.add_field(name="!ow privacy", value="Show Orisa's Privacy Policy")
         embed.add_field(
             name="!ow setprimary *battletag*",
             value="Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using, the its SR is shown in your nick\n"
@@ -1174,8 +1167,6 @@ class Orisa(Plugin):
         await send_long(ctx.author.send, text)
         if not ctx.channel.private:
             await reply(ctx, "I sent you the privacy policy as DM.")
-
-
 
     async def _srgraph(self, ctx, user, name, date: str = None):
         sns.set()
@@ -1295,6 +1286,7 @@ class Orisa(Plugin):
         if new_voice_state:
             if new_voice_state.channel.parent != parent:
                 await self._adjust_voice_channels(new_voice_state.channel.parent)
+
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, member.id)
             if user:
@@ -1352,11 +1344,14 @@ class Orisa(Plugin):
             logger.debug("channel is not managed")
             return
 
+        def chan_name_no_sr(chan):
+            return re.sub(r" \[.*?\]$", "", chan.name)
+
         def prefixkey(chan):
-            return chan.name.rsplit("#", 1)[0].strip()
+            return chan_name_no_sr(chan).rsplit("#", 1)[0].strip()
 
         def numberkey(chan):
-            return int(chan.name.rsplit("#", 1)[1])
+            return int(chan_name_no_sr(chan).rsplit("#", 1)[1])
 
         async def delete_channel(chan):
             nonlocal made_changes
@@ -1445,7 +1440,7 @@ class Orisa(Plugin):
 
         del chans  # just to make sure we don't use it later, see hack above
 
-        if made_changes:
+        if True or made_changes:
             managed_channels = []
             unmanaged_channels = []
 
@@ -1454,10 +1449,7 @@ class Orisa(Plugin):
             for chan in (
                 chan for chan in parent.children if chan.type == ChannelType.VOICE
             ):
-                if (
-                    "#" in chan.name
-                    and chan.name.rsplit("#", 1)[0].strip() in cat.prefixes
-                ):
+                if "#" in chan.name and prefixkey(chan) in cat.prefixes:
                     managed_channels.append(chan)
                 else:
                     unmanaged_channels.append(chan)
@@ -1470,13 +1462,30 @@ class Orisa(Plugin):
 
             final_list = []
 
+            def channel_suffix(session, chan):
+                min, max = self.database.get_min_max_sr(
+                    session, [member.id for member in chan.voice_members]
+                )
+                if min and max:
+                    if min == max:
+                        return f" [~{min}]"
+                    else:
+                        return f" [{min}–{max}]"
+                else:
+                    return ""
+
             for prefix in cat.prefixes:
                 chans = managed_group[prefix]
                 # rename channels if necessary
-                for i, chan in enumerate(chans):
-                    new_name = f"{prefix} #{i+1}"
-                    if new_name != chan.name:
-                        await chan.edit(name=new_name)
+                with self.database.session() as session:
+                    for i, chan in enumerate(chans):
+                        if info.show_sr_in_nicks:
+                            new_name = f"{prefix} #{i+1}{channel_suffix(session, chan)}"
+                        else:
+                            new_name = f"{prefix} #{i+1}"
+
+                        if new_name != chan.name:
+                            await chan.edit(name=new_name)
 
                 final_list.extend(chans)
 
@@ -1570,7 +1579,9 @@ class Orisa(Plugin):
                 continue
             try:
                 formatted = self._format_nick(user)
-                new_nn = await self._update_nick_for_member(member, formatted, user, force=force)
+                new_nn = await self._update_nick_for_member(
+                    member, formatted, user, force=force
+                )
             except Exception as e:
                 exception = e
                 continue
@@ -1579,8 +1590,10 @@ class Orisa(Plugin):
             raise exception
 
         return new_nn
-        
-    async def _update_nick_for_member(self, member, formatted: str, user=None, *, force=False):
+
+    async def _update_nick_for_member(
+        self, member, formatted: str, user=None, *, force=False
+    ):
         nn = str(member.name)
 
         if force or self._show_sr_in_nick(member, user):
@@ -1618,11 +1631,15 @@ class Orisa(Plugin):
         if member.voice:
             logger.debug("user %s is currently in voice", member)
             gi = GUILD_INFOS[member.guild.id]
-            logger.debug("user is in %s with parent %s", member.voice.channel, member.voice.channel.parent)
+            logger.debug(
+                "user is in %s with parent %s",
+                member.voice.channel,
+                member.voice.channel.parent,
+            )
             for vc in gi.managed_voice_categories:
                 if vc.category_id == member.voice.channel.parent.id:
                     logger.debug("that parent is managed")
-                    return vc.show_sr_in_nicks                   
+                    return vc.show_sr_in_nicks
 
         if GUILD_INFOS[member.guild_id].show_sr_in_nicks_by_default:
             return True
@@ -1630,7 +1647,7 @@ class Orisa(Plugin):
         if not user:
             with self.database.session() as session:
                 user = self.database.user_by_discord_id(session, member.id)
-        
+
         return user.always_show_sr
 
     async def _send_congrats(self, user, rank, image):
