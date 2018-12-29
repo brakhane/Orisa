@@ -601,7 +601,7 @@ class Orisa(Plugin):
             session.commit()
             session.close()
 
-    @ow.subcommand()
+    @ow.subcommand(aliases=("alwayshowsr",))
     @condition(correct_channel)
     async def alwaysshowsr(self, ctx, param: str = "on"):
         with self.database.session() as session:
@@ -1591,9 +1591,7 @@ class Orisa(Plugin):
 
         return new_nn
 
-    async def _update_nick_for_member(
-        self, member, formatted: str, user=None, *, force=False
-    ):
+    async def _update_nick_for_member(self, member, formatted: str, user=None, *, force=False):
         nn = str(member.name)
 
         if force or self._show_sr_in_nick(member, user):
