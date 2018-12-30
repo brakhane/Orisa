@@ -99,9 +99,9 @@ async def handle_oauth():
             data=body,
         )
 
-        logger.debug(resp.json())
-        logger.debug(client.parse_request_body_response(resp.text, scope=[]))
-        logger.debug(client.token)
+        client.parse_request_body_response(resp.text, scope=[])
+
+        logger.debug("token is %s", client.token)
 
         url, headers, body = client.add_token("https://eu.battle.net/oauth/userinfo")
 
