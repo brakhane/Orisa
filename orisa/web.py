@@ -7,7 +7,7 @@ from itsdangerous.url_safe import URLSafeTimedSerializer
 from itsdangerous.exc import BadSignature, SignatureExpired
 from oauthlib.oauth2 import WebApplicationClient
 from quart_trio import QuartTrio
-from quart import request
+from quart import request, render_template
 
 from .config import (
     SIGNING_SECRET,
@@ -27,30 +27,6 @@ send_ch = None
 app.debug = False
 
 
-def centered(text):
-    return (
-        """
-<!doctype html>
-<html>
-  <head>
-    <style>
-      .center {
-          height: 100vh;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="center">"""
-        + text
-        + """</div>
-  </body>
-</html>"""
-    )
-
-
 @app.route(OAUTH_REDIRECT_PATH)
 async def handle_oauth():
     client = WebApplicationClient(OAUTH_CLIENT_ID)
@@ -61,7 +37,7 @@ async def handle_oauth():
     request_url = request.url.replace("http:", "https:")
 
     if "error=access_denied" in request_url:
-        return centered(
+        return await render_template("message.html", message=
             "You didn't give me permission to access your BattleTag; registration cancelled."
         )
     data = client.parse_request_uri_response(request_url)
@@ -71,11 +47,11 @@ async def handle_oauth():
     try:
         uid = s.loads(data["state"], max_age=600)
     except SignatureExpired:
-        return centered(
+        return await render_template("message.html", message=
             "The link has expired. Please request a new link with <pre>!ow register</pre>"
         )
     except BadSignature:
-        return centered(
+        return await render_template("message.html", message=
             "The data I got back is invalid. Please request a new URL with <pre>!ow register</pre>"
         )
 
@@ -111,9 +87,9 @@ async def handle_oauth():
             f"Something went wrong while getting OAuth data for {uid} {request_url}",
             exc_info=True,
         )
-        return centered(
-            "I'm sorry. Something went wrong on my side. Try to reissue !ow register"
+        return await render_template("message.html", message=
+            "I'm sorry. Something went wrong on my side. Try to reissue <pre>!ow register</pre>"
         )
     await send_ch.send((uid, data))
 
-    return centered("Thank you! I have sent you a DM. You can now close this window.")
+    return await render_template("message.html", message="Thank you! I have sent you a DM.")
