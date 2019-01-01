@@ -1,4 +1,5 @@
 import logging
+import os
 import traceback
 import yaml
 
@@ -11,10 +12,9 @@ from curious.commands.manager import CommandsManager
 from curious.dataclasses.presence import Game, GameType, Status
 
 from . import web
-from .config import SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN, MASHERY_API_KEY
-from .models import Database
+from .config import GuildInfo, SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN, MASHERY_API_KEY, GUILD_INFOS
+from .models import Database, GuildConfig
 from .orisa import Orisa, OrisaClient
-from .wow import Wow
 
 
 multio.init("trio")
@@ -22,7 +22,7 @@ multio.init("trio")
 with open("logging.yaml") as logfile:
     logging.config.dictConfig(yaml.safe_load(logfile))
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("orisa.main")
 
 if SENTRY_DSN:
     logger.info("USING SENTRY")
@@ -53,12 +53,23 @@ manager = CommandsManager.with_client(client, command_prefix="!")
 @client.event("ready")
 async def ready(ctx):
     logger.debug(f"Guilds are {ctx.bot.guilds}")
+
+
+    #with database.session() as session:
+    #    for i, gc in GUILD_INFOS.items():
+    #        session.add(GuildConfig(id=i, config=__import__("json").dumps(gc.to_js_json())))
+    #    session.commit()
+    #return
+
+    logger.debug("Loading config")
+    with database.session() as session:
+        for config in session.query(GuildConfig).filter(GuildConfig.id.in_(ctx.bot.guilds.keys())):
+            GUILD_INFOS[config.id] = data = GuildInfo.from_json2(config.config)
+            logger.debug("Configured %d as %s", config.id, data)
+
     await manager.load_plugin(Orisa, database, raven_client)
 
     msg = "!ow help"
-    if MASHERY_API_KEY:
-        await manager.load_plugin(Wow, database)
-        msg += " | !wow help"
     await ctx.bot.change_status(game=Game(name=msg, type=GameType.LISTENING_TO))
     logger.info("Ready")
 

@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="jumbotron text-center">
-  <h1>{{ message|safe }}</h1>
-  <hr>
-  <p>You can now close this window.</p>
+<div class="jumbotron text-center {{ classes }}">
+  <div class="lead">{{ message|safe }}</div>
+  <p>You can close this window.</p>
 </div>
 {% endblock %}

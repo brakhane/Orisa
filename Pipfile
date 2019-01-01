@@ -22,6 +22,9 @@ quart-trio = "*"
 hypercorn = "*"
 oauthlib = "*"
 itsdangerous = "*"
+"dataclasses-json" = "*"
+marshmallow = "*"
+quart-cors = "*"
 
 [dev-packages]
 # pylint = "*"
@@ -29,3 +32,6 @@ itsdangerous = "*"
 
 [requires]
 python_version = "3.7"
+
+[pipenv]
+allow_prereleases = true

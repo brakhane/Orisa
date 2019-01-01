@@ -192,30 +192,13 @@ class SR(Base):
         return f"<SR(id={self.id}, value={self.value})>"
 
 
-# WoW stuff
+class GuildConfig(Base):
+    __tablename__ = "guild_configs"
 
+    id = Column(BigInteger, primary_key=True, index=True)
 
-class WowRole(Flag):
-    NONE = 0
-    MELEE = auto()
-    RANGED = auto()
-    TANK = auto()
-    HEALER = auto()
+    config = Column(String, nullable=False)
 
-
-class WowRoleType(RoleType):
-    pytype = WowRole
-
-
-class WowUser(Base):
-    __tablename__ = "wow_users"
-
-    id = Column(Integer, primary_key=True, index=True)
-    discord_id = Column(Integer, index=True, nullable=False)
-    character_name = Column(String, nullable=False)
-    realm = Column(String, nullable=False)
-    roles = Column(WowRoleType, nullable=False, default=WowRole.NONE)
-    pvp = Column(Boolean, nullable=False, default=False)
 
 
 class Database:
@@ -242,9 +225,6 @@ class Database:
 
     def user_by_discord_id(self, session, discord_id):
         return session.query(User).filter_by(discord_id=discord_id).one_or_none()
-
-    def wow_user_by_discord_id(self, session, discord_id):
-        return session.query(WowUser).filter_by(discord_id=discord_id).one_or_none()
 
     def get_min_max_sr(self, session, discord_ids):
         return (

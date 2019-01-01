@@ -107,7 +107,6 @@ from .utils import (
 )
 from . import web
 
-CHANNEL_IDS = frozenset(guild.listen_channel_id for guild in GUILD_INFOS.values())
 
 logger = logging.getLogger("orisa")
 
@@ -130,7 +129,7 @@ COLORS = (
 
 
 def correct_channel(ctx):
-    return ctx.channel.id in CHANNEL_IDS or ctx.channel.private
+    return any(ctx.channel.id == guild.listen_channel_id for guild in GUILD_INFOS.values()) or ctx.channel.private
 
 
 def only_owner(ctx):
@@ -414,6 +413,22 @@ class Orisa(Plugin):
     async def get(self, ctx, *, member: Member = None):
         r = await self.ow(ctx, member=member)
         return r
+
+    @ow.subcommand()
+    #@author_has_roles("Admin")
+    async def config(self, ctx):
+        if ctx.channel.private:
+            ctx.channel.messages.send("The config command must be issued from a channel of the guild to configure")
+            return
+        
+        token = web.create_token(ctx.guild.id)
+        await ctx.author.send(
+            f"You can use the following link to configure me:\n"
+            f"{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}config/{token}\n"
+            f"This link will be valid for 30 minutes."
+        )
+        await reply(ctx, "I sent you a DM")
+        
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -1338,7 +1353,7 @@ class Orisa(Plugin):
 
         for cat in GUILD_INFOS[guild.id].managed_voice_categories:
             if cat.category_id == parent.id:
-                info = cat
+                prefix_map = {prefix.name: prefix for prefix in cat.prefixes}
                 break
         else:
             logger.debug("channel is not managed")
@@ -1370,10 +1385,7 @@ class Orisa(Plugin):
             name = f"{prefix} #{len(chans)+1}"
             logger.debug("creating a new channel %s", name)
 
-            if isinstance(cat.prefixes, dict):
-                limit = cat.prefixes[prefix]
-            else:
-                limit = 0
+            limit = prefix_map[prefix].limit
 
             async with self.client.events.wait_for_manager(
                 "channel_create", lambda chan: chan.name == name
@@ -1402,13 +1414,13 @@ class Orisa(Plugin):
 
         found_prefixes = frozenset(prefix for prefix, _ in grouped)
 
-        for wanted_prefix in cat.prefixes:
+        for wanted_prefix in prefix_map.keys():
             if wanted_prefix not in found_prefixes:
                 grouped.append((wanted_prefix, []))
 
         for prefix, chans in grouped:
             logger.debug("working on prefix %s, chans %s", prefix, chans)
-            if prefix not in cat.prefixes:
+            if prefix not in prefix_map.keys():
                 logger.debug("%s is not in prefixes", prefix)
                 if cat.remove_unknown:
                     for chan in chans:
@@ -1438,8 +1450,6 @@ class Orisa(Plugin):
                 for chan in empty_channels[1:]:
                     await delete_channel(chan)
 
-        del chans  # just to make sure we don't use it later, see hack above
-
         if True or made_changes:
             managed_channels = []
             unmanaged_channels = []
@@ -1449,7 +1459,7 @@ class Orisa(Plugin):
             for chan in (
                 chan for chan in parent.children if chan.type == ChannelType.VOICE
             ):
-                if "#" in chan.name and prefixkey(chan) in cat.prefixes:
+                if "#" in chan.name and prefixkey(chan) in prefix_map.keys():
                     managed_channels.append(chan)
                 else:
                     unmanaged_channels.append(chan)
@@ -1474,12 +1484,12 @@ class Orisa(Plugin):
                 else:
                     return ""
 
-            for prefix in cat.prefixes:
+            for prefix in prefix_map.keys():
                 chans = managed_group[prefix]
                 # rename channels if necessary
                 with self.database.session() as session:
                     for i, chan in enumerate(chans):
-                        if info.show_sr_in_nicks:
+                        if cat.show_sr_in_nicks:
                             new_name = f"{prefix} #{i+1}{channel_suffix(session, chan)}"
                         else:
                             new_name = f"{prefix} #{i+1}"
@@ -1591,7 +1601,9 @@ class Orisa(Plugin):
 
         return new_nn
 
-    async def _update_nick_for_member(self, member, formatted: str, user=None, *, force=False):
+    async def _update_nick_for_member(
+        self, member, formatted: str, user=None, *, force=False
+    ):
         nn = str(member.name)
 
         if force or self._show_sr_in_nick(member, user):
@@ -2000,6 +2012,7 @@ class Orisa(Plugin):
 
         web.send_ch = self.web_send_ch
         web.client = self.client
+        web.orisa = self
 
         await hypercorn.trio.run.run_single(config)
 
