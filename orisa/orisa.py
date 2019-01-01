@@ -1999,6 +1999,7 @@ class Orisa(Plugin):
         config.access_logger = config.error_logger = logger
 
         web.send_ch = self.web_send_ch
+        web.client = self.client
 
         await hypercorn.trio.run.run_single(config)
 

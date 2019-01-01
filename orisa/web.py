@@ -1,6 +1,8 @@
 import logging
 import re
 
+from operator import attrgetter
+
 import asks
 
 from itsdangerous.url_safe import URLSafeTimedSerializer
@@ -22,9 +24,29 @@ logger = logging.getLogger(__name__)
 
 app = QuartTrio(__name__)
 
+# HACK: these two are set by Orisa in orisa.py.
 send_ch = None
+client = None
+
+
+
 
 app.debug = False
+
+@app.route("/bot/ever/channels")
+async def chans():
+    def conv(o):
+        return {
+            "id": o.id,
+            "name": o.name,
+            "children": [conv(c) for c in o.children if c.type == 0],
+        }
+
+    return __import__("json").dumps(
+        [conv(chan) for chan in sorted(
+            (client.guilds[443691528951693312].channels.values()), key=lambda x:(x.type, x.position)) if not chan.parent], indent=2)
+
+
 
 
 @app.route(OAUTH_REDIRECT_PATH)
