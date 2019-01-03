@@ -184,7 +184,7 @@ async def save(guild_id):
 
     async def update():
         for vc in new_gi.managed_voice_categories:
-            await orisa._adjust_voice_channels(client.find_channel(vc.category_id))
+            await orisa._adjust_voice_channels(client.find_channel(vc.category_id), adjust_user_limits=True)
 
         with orisa.database.session() as session:
             for user in session.query(User).filter(User.discord_id.in_(guild.members.keys())).all():
@@ -263,3 +263,12 @@ async def handle_oauth():
     await send_ch.send((uid, data))
 
     return await render_message("Thank you! I have sent you a DM.")
+
+
+if False:
+    @app.after_request
+    async def add_cors(response):
+        response.access_control.allow_origin = ["*"]
+        response.access_control.allow_headers = ["authorization", "content-type"]
+        response.access_control.allow_methods = ["GET", "POST", "PUT"]
+        return response

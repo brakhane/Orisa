@@ -1352,7 +1352,7 @@ class Orisa(Plugin):
 
     # Util
 
-    async def _adjust_voice_channels(self, parent, *, create_all_channels=False):
+    async def _adjust_voice_channels(self, parent, *, create_all_channels=False, adjust_user_limits=False):
         logger.debug("adjusting parent %s", parent)
         guild = parent.guild
         if not guild:
@@ -1504,8 +1504,9 @@ class Orisa(Plugin):
 
                         if new_name != chan.name:
                             await chan.edit(name=new_name)
-                        if chan.user_limit != prefix_info.limit:
-                            await chan.edit(user_limit=prefix_info.limit)
+                        if adjust_user_limits:
+                            limit = prefix_info.limit
+                            await chan.edit(user_limit=limit)
 
                 final_list.extend(chans)
 
