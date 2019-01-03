@@ -25,7 +25,7 @@
           <b-form-checkbox class="custom-switch" v-model="guild_config.show_sr_in_nicks_by_default">
             Always show SR (or rank) in nicknames by default&nbsp;<font-awesome-icon id="always-show-sr-help" icon="question-circle"></font-awesome-icon>
           </b-form-checkbox>
-          <b-popover target="always-show-sr-help" triggers="hover">
+          <b-popover target="always-show-sr-help" triggers="hover click">
             <p>When this setting is on, Orisa will always update the nicknames of all registered users to show their SR in the name (<code>Orisa</code> becomes <code>Orisa [2345]</code>).
             <p>If you feel like your server members focus too much on the SR ("I don't listen to a silver player"), you can turn this setting off.</p>
             <p>When turned off, your server members can still force their SR to be displayed by issuing the <code>!ow alwaysshowsr</code> command.</p>
@@ -90,6 +90,7 @@ Don't forget to use `!ow roles` to set your roles; also don't play Genji."
           :channels="channels"
           :validation_errors="val_errors_mvc(index)"
           :key="index"
+          :index="index"
           @delete-cat-clicked="remove_cat(index)"
         ></managed-voice-category>
         <b-btn variant="primary" @click="add_cat"><font-awesome-icon icon="folder-plus"/> Add a managed channel category</b-btn>

@@ -15,8 +15,8 @@
     </div>
     <div class="card-body">
       <b-card header="Settings">
-        <b-form-checkbox class="custom-switch" v-model="category.show_sr_in_nicks">Show SR of members in managed channels&nbsp;<font-awesome-icon icon="question-circle" id="show-sr-help"></font-awesome-icon></b-form-checkbox>
-        <b-popover target="show-sr-help" triggers="hover">
+        <b-form-checkbox class="custom-switch" v-model="category.show_sr_in_nicks">Show SR of members in managed channels&nbsp;<font-awesome-icon :id="`show-sr-help-${index}`" icon="question-circle"></font-awesome-icon></b-form-checkbox>
+        <b-popover :target="`show-sr-help-${index}`" triggers="hover click">
           <p>When this setting is on, Orisa will adjust the channel name so that the lowest and highest SR of it's members are shown (e.g. "Comp #1 [1234-2345]"). She will also update the nicknames
           of every member in that channel to show their SR (or rank, if that member has configured it via <code>!ow format</code>). Unfortunately, these updated nicknames will only show in the
           channel list after a reload of Discord due to a Discord bug (that Discord isn't going to fix).</p>
@@ -25,8 +25,8 @@
         <br/>
         <b-form-checkbox class="custom-switch" v-model="category.remove_unknown">
           Remove unknown channels with <code>#</code> in this category
-          &nbsp;<font-awesome-icon id="remove-unknown-help" icon="question-circle"></font-awesome-icon>
-          <b-popover target="remove-unknown-help" triggers="hover">
+          &nbsp;<font-awesome-icon :id="`remove-unknown-help-${index}`" icon="question-circle"></font-awesome-icon>
+          <b-popover :target="`remove-unknown-help-${index}`" triggers="hover click">
             <p>With this setting Orisa will automatically remove any channels in this category that contain a <code>#</code>, as they are probably left over channels. For example, if you
             rename "Comp" to "Competitive", there now will be at least aComp #1 channel that should get removed.</p>
             <p>When this settings is off, Orisa will only touch channels that she knows are hers (begin with the prefix and then followed by a <code>#</code>)</p>
@@ -127,6 +127,6 @@ export default {
       })
     }
   },
-  props: ['category', 'validation_errors', 'channels']
+  props: ['category', 'validation_errors', 'channels', 'index']
 }
 </script>
