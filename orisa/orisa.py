@@ -457,9 +457,12 @@ class Orisa(Plugin):
             description=
                 "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click "
                 "the link and give me permission to access your data. I only need this permission once, you can remove it "
-                "later in your BattleNet account.\n\n"
-                "Protip: if you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
-                "account data for that account instead."
+                "later in your BattleNet account."
+        )
+        embed.add_field(
+            name="Protip",
+            value="If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
+                  "account data for that account instead."
         )
         embed.set_footer(text="By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy")
 
