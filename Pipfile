@@ -23,8 +23,6 @@ hypercorn = "*"
 oauthlib = "*"
 itsdangerous = "*"
 "dataclasses-json" = "*"
-marshmallow = "*"
-quart-cors = "*"
 
 [dev-packages]
 # pylint = "*"

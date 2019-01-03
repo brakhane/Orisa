@@ -61,7 +61,7 @@ async def channels(token):
         return "invalid token", 404
 
     guild_id = state["g"]
-    
+
     guild_info = GUILD_INFOS[guild_id]
 
     guild = client.guilds[guild_id]
@@ -93,7 +93,7 @@ async def channels(token):
 
 def validate_config(guild, guild_config):
     errors = {}
-    
+
     chan =  guild.channels.get(guild_config.congrats_channel_id)
     if not chan or chan.type != 0:
         errors["congrats_channel_id"] = "Please select a valid text channel"
@@ -111,10 +111,10 @@ def validate_config(guild, guild_config):
         chan =  guild.channels.get(vc.category_id)
         if not chan or chan.type != 4:
             vc_errors["category_id"] = "Please select a valid category"
-        
+
         if vc.channel_limit is None or not (0 <= vc.channel_limit <= 10):
             vc_errors["channel_limit"] = "Limit must be between 0 and 10"
-        
+
         pe_list = []
         pe_list_has_errors = False
         for prefix in vc.prefixes:
@@ -128,7 +128,7 @@ def validate_config(guild, guild_config):
 
             if pref_errors:
                 pe_list_has_errors = True
-        
+
         if pe_list_has_errors:
             vc_errors["prefixes"] = pe_list
 
@@ -159,13 +159,13 @@ async def save(guild_id):
     except BadSignature:
         return "Invalid token", 401, {'WWW-Authenticate': 'Bearer'}
 
-    
+
     new_gi = GuildInfo.from_json2(await request.data)
     logger.debug(f"old info: {GUILD_INFOS[guild_id]}")
     logger.debug(f"new info: {new_gi}")
-    
+
     guild = client.guilds[guild_id]
-    
+
     errors = validate_config(guild, new_gi)
 
     logger.debug(f"Errors {errors}")
@@ -185,7 +185,7 @@ async def save(guild_id):
     async def update():
         for vc in new_gi.managed_voice_categories:
             await orisa._adjust_voice_channels(client.find_channel(vc.category_id))
-    
+
         with orisa.database.session() as session:
             for user in session.query(User).filter(User.discord_id.in_(guild.members.keys())).all():
                 await orisa._update_nick(user)
@@ -263,11 +263,3 @@ async def handle_oauth():
     await send_ch.send((uid, data))
 
     return await render_message("Thank you! I have sent you a DM.")
-
-
-@app.after_request
-async def add_cors(response):
-    response.access_control.allow_origin = ["*"]
-    response.access_control.allow_headers = ["authorization", "content-type"]
-    response.access_control.allow_methods = ["GET", "POST", "PUT"]
-    return response
