@@ -99,7 +99,7 @@ Don't forget to use `!ow roles` to set your roles; also don't play Genji."
     </b-container>
   </div>
   <div v-else>
-    <b-alert variant="danger" show v-if="load_failed">Something went wrong while loading the data. Please try again later...</b-alert>
+    <b-alert variant="danger" show v-if="load_failed">Something went wrong while loading the data. This link might have expired. Try requesting a new one. If that doesn't help, try again later...</b-alert>
     <div v-else>Loading <font-awesome-icon icon="spinner" pulse></font-awesome-icon></div>
   </div>
 </template>
