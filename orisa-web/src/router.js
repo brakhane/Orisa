@@ -8,10 +8,7 @@ export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
-    {
-      path: '/',
-      redirect: '/config/1234'
-    },
+	  {path: '/', component: Config},
     {
       path: '/config/:token',
       component: Config,

@@ -88,6 +88,7 @@ from .config import (
     OAUTH_REDIRECT_HOST,
     OAUTH_REDIRECT_PATH,
     PRIVACY_POLICY_PATH,
+    WEB_PATH,
 )
 from .models import Cron, User, BattleTag, SR, Role
 from .exceptions import (
@@ -427,15 +428,15 @@ class Orisa(Plugin):
                 )
             )
             return
-        
+
         token = web.create_token(ctx.guild.id)
         await ctx.author.send(
             f"You can use the following link to configure me:\n"
-            f"{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}config/{token}\n"
+            f"{WEB_PATH}config/{token}\n"
             f"This link will be valid for 30 minutes."
         )
         await reply(ctx, "I sent you a DM")
-        
+
 
     @ow.subcommand()
     @condition(correct_channel)
