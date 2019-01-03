@@ -430,11 +430,12 @@ class Orisa(Plugin):
             return
 
         token = web.create_token(ctx.guild.id)
-        await ctx.author.send(
-            f"You can use the following link to configure me:\n"
-            f"{WEB_PATH}config/{token}\n"
-            f"This link will be valid for 30 minutes."
+        embed = Embed(
+            title="Click here to configure me",
+            url=f"{WEB_PATH}config/{token}"
         )
+        embed.set_footer(text="This link will be valid for 30 minutes")
+        await ctx.author.send(content=None, embed=embed)
         await reply(ctx, "I sent you a DM")
 
 
@@ -450,18 +451,19 @@ class Orisa(Plugin):
             redirect_url=f"{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}",
             state=state,
         )
-        msg = (
-            f"**By registering, you agree to Orisa's Privacy Policy; you can read it by entering `!ow privacy`**\n"
-            f"To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click "
-            f"this link:\n"
-            f"{url}\n"
-            "and give me permission to access your data. I only need this permission once, you can remove it "
-            f"later in your BattleNet account.\n"
-            f"Protip: if you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
-            f"account data for that account instead."
+        embed=Embed(
+            url=url,
+            title="Click this link to register",
+            description=
+                "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click "
+                "the link and give me permission to access your data. I only need this permission once, you can remove it "
+                "later in your BattleNet account.\n\n"
+                "Protip: if you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
+                "account data for that account instead."
         )
+        embed.set_footer(text="By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy")
 
-        await ctx.author.send(msg)
+        await ctx.author.send(content=None, embed=embed)
         if not ctx.channel.private:
             await reply(ctx, "I sent you a DM with instructions.")
 
