@@ -76,9 +76,9 @@ Don't forget to use `!ow roles` to set your roles; also don't play Genji."
         >
           <p class="lead">Orisa can help you dynamically create and delete voice channels on demand (not just for OW) and optionally show the SR in the channel names.</p>
           <p>Instead of manually creating <em>Comp #1</em> to <em>Comp #5</em>
-          channels which are empty most you the time, you can have a single <em>Comp #1</em> channel, and as soon as a person joins,
-          Orisa will create an empty <em>Comp #2</em> channel, and optionally show the SR range in the channel name (e.g. <em>Comp #1 [1234-1804]</em>).</p>
-          <p>If <em>Comp #1</em> becomes empty again, <em>Comp #2</em> will be removed again; if on the other hand <em>Comp #3</em> is used, but <em>Comp #1</em> and <em>Comp #2</em> are empty,
+          channels which are empty most of the time, you can have a single <em>Comp #1</em> channel, and as soon as a person joins,
+          Orisa will automatically create an empty <em>Comp #2</em> channel, and optionally show the SR range in the channel name (e.g. <em>Comp #1 [1234-1804]</em>).</p>
+          <p>If <em>Comp #1</em> becomes empty again, <em>Comp #2</em> will automatically be removed again; if on the other hand <em>Comp #3</em> is used, but <em>Comp #1</em> and <em>Comp #2</em> are empty,
           <em>Comp #2</em> will be removed, and <em>Comp #3</em> will be renamed to <em>Comp #2</em>.</p>
           <p>This way, there will always be one (and only one) empty voice channel.</p>
           <p>There are currently no managed voice channels. Click the button below to configure them.</p>
