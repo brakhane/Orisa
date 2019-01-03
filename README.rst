@@ -38,18 +38,11 @@ Installation
 ------------
 
 **If you think Orisa can be useful for your community, instead of installing
-your own instance, try contacting me first.** There are no technical reasons
-my instance cannot handle more than one guild (the current restrictions
-on a single guild are simply shortcuts taken to keep the complexity as low
-as possible); if there is interest, it can be added quickly.
+your own instance, try contacting me first.** My Orisa instance can be configured via
+web, and currently she's not easy to set up; it's easier to just add your Discord server to the
+already running instance.
 
-.. code-block:: bash
-
-    $ pipenv install
-    $ cp config.py.template config.py
-    $ $EDITOR config.py # use your favorite editor to fill in the necessary values
-
-After that, you're set, just run ``pipenv python orisa.py``.
+**This information here is a little bit outdated**
 
 You need to use Discords developer pages to create a link you can use to allow
 Orisa on your site. Orisa needs the following permissions: "Manage Nicknames", "Send Messages",
