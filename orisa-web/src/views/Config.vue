@@ -27,9 +27,9 @@
           </b-form-checkbox>
           <b-popover target="always-show-sr-help" triggers="hover click">
             <p>When this setting is on, Orisa will always update the nicknames of all registered users to show their SR in the name (<code>Orisa</code> becomes <code>Orisa [2345]</code>).
-            <p>If you feel like your server members focus too much on the SR ("I don't listen to a silver player"), you can turn this setting off.</p>
+            <p>If you feel your server members focus too much on the SR ("I don't listen to a silver player"), you can turn this setting off.</p>
             <p>When turned off, your server members can still force their SR to be displayed by issuing the <code>!ow alwaysshowsr</code> command.</p>
-            <p>If unsure, turn this setting on and only turn it off if people react negatively to it.</p>
+            <p>If unsure, activate this setting, and only turn it off if people react negatively to it.</p>
           </b-popover>
           <hr class="hr-3">
           <b-form-group
