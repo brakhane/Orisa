@@ -14,6 +14,8 @@ nicknames to include their current SR (or rank).
 As an added bonus, it tries to motivate people by publically congratulating
 them if they manage to increase their competitive rank (Silver -> Gold etc.)
 
+She also can manage voice channels and create them on demand, and show fancy SR graphs
+
 Why is it called Orisa?
 -----------------------
 
@@ -28,6 +30,11 @@ Features
 * Supports multiple BattleTags per user
 * Finds (registered) players in a given SR range
 * Congratulates every player when he/she reached a new personal best rank
+* Can manage voice channels and create them on demand, e.g. "Comp #2" will be created when "Comp #1" has members in it
+* Can show the SR range of people in the voice channel name, e.g. "Comp #1 [2104-2340]"
+* Allows people to track their SR and display a SR graph
+* Has a `findplayers` command that can suggest people in a specific SR range
+* Can be configured via a web interface
 * Tries to be as user friendly as possible: has an extensive help and gives suggestions.
 * Uses fuzzy search whenever possible, ``!ow oirsa`` will still find and display the BattleTags of the user named "Orisa"
 * Has been called "the best Overwatch Discord bot I've seen" by at least 2 people
