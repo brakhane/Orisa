@@ -2047,7 +2047,7 @@ class Orisa(Plugin):
             user_channel = await user_obj.open_private_channel()
 
             if battle_tag is None:
-                await user_channel.messages.send("I'm sorry, you don't have a BattleTag it seems. Orisa currently only works for PC accounts.")
+                await user_channel.messages.send("I'm sorry, it seems like you don't have a BattleTag. Orisa currently only works for PC accounts.")
                 return
 
             user = self.database.user_by_discord_id(session, user_id)
