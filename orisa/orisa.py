@@ -1492,7 +1492,7 @@ class Orisa(Plugin):
                 else:
                     return ""
 
-            for prefix in prefix_map.keys():
+            for prefix, prefix_info in prefix_map.items():
                 chans = managed_group[prefix]
                 # rename channels if necessary
                 with self.database.session() as session:
@@ -1504,6 +1504,8 @@ class Orisa(Plugin):
 
                         if new_name != chan.name:
                             await chan.edit(name=new_name)
+                        if chan.user_limit != prefix_info.limit:
+                            await chan.edit(user_limit=prefix_info.limit)
 
                 final_list.extend(chans)
 
