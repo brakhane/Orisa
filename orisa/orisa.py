@@ -2035,7 +2035,10 @@ class Orisa(Plugin):
     async def _oauth_result_listener(self):
         async for uid, data in self.web_recv_ch:
             logger.debug(f"got OAuth response data {data} for uid {uid}")
-            await self._handle_registration(uid, data["battletag"], data["id"])
+            try:
+                await self._handle_registration(uid, data["battletag"], data["id"])
+            except Exception:
+                logger.error("Something went wrong when working with data %s", exc_info=True)
 
     async def _handle_registration(self, user_id, battle_tag, blizzard_id):
         session = self.database.Session()
