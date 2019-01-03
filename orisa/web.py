@@ -188,7 +188,10 @@ async def save(guild_id):
 
         with orisa.database.session() as session:
             for user in session.query(User).filter(User.discord_id.in_(guild.members.keys())).all():
-                await orisa._update_nick(user)
+                try:
+                    await orisa._update_nick(user)
+                except Exception:
+                    logger.error("Exception during update", exc_info=True)
 
     await orisa.spawn(update)
 
