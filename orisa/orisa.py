@@ -415,10 +415,17 @@ class Orisa(Plugin):
         return r
 
     @ow.subcommand()
-    #@author_has_roles("Admin")
+    @author_has_roles("Admin")
     async def config(self, ctx):
         if ctx.channel.private:
-            ctx.channel.messages.send("The config command must be issued from a channel of the guild to configure")
+            await ctx.channel.messages.send(
+                content = "The config command must be issued from a channel of the guild to configure. Don't worry, I will send you "
+                          "the config instructions as a DM, so others can't configure me just by watching you sending this command.",
+                embed = Embed(
+                    title="Tip",
+                    description="`!ow config` works in *any* channel, so you can also use a admin only channel",
+                )
+            )
             return
         
         token = web.create_token(ctx.guild.id)
