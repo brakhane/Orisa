@@ -17,7 +17,7 @@
       <b-card header="Settings">
         <b-form-checkbox class="custom-switch" v-model="category.show_sr_in_nicks">Show SR of members in managed channels&nbsp;<font-awesome-icon :id="`show-sr-help-${index}`" icon="question-circle"></font-awesome-icon></b-form-checkbox>
         <b-popover :target="`show-sr-help-${index}`" triggers="hover click">
-          <p>When this setting is on, Orisa will adjust the channel name so that the lowest and highest SR of it's members are shown (e.g. "Comp #1 [1234-2345]"). She will also update the nicknames
+          <p>When this setting is on, Orisa will adjust the channel name so that the lowest and highest SR of its members are shown (e.g. "Comp #1 [1234-2345]"). She will also update the nicknames
           of every member in that channel to show their SR (or rank, if that member has configured it via <code>!ow format</code>). Unfortunately, these updated nicknames will only show in the
           channel list after a reload of Discord due to a Discord bug (that Discord isn't going to fix).</p>
           <p>It is recommended to set this setting on for Overwatch channel categories</p>
