@@ -2036,7 +2036,7 @@ class Orisa(Plugin):
         async for uid, data in self.web_recv_ch:
             logger.debug(f"got OAuth response data {data} for uid {uid}")
             try:
-                await self._handle_registration(uid, data["battletag"], data["id"])
+                await self._handle_registration(uid, data.get("battletag"), data["id"])
             except Exception:
                 logger.error("Something went wrong when working with data %s", exc_info=True)
 
@@ -2045,6 +2045,10 @@ class Orisa(Plugin):
         try:
             user_obj = await self.client.get_user(user_id)
             user_channel = await user_obj.open_private_channel()
+
+            if battle_tag is None:
+                await user_channel.messages.send("I'm sorry, you don't have a BattleTag it seems. Orisa currently only works for PC accounts.")
+                return
 
             user = self.database.user_by_discord_id(session, user_id)
             resp = None
