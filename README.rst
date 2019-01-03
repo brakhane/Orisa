@@ -28,6 +28,7 @@ Features
 * Shows the current SR and/or rank in nicknames, e.g. ``somenick [2345]``. Users can configure what it shown by using flexible format strings
 * SR is automatically updated whenever a player stops playing Overwatch while being in Discord, and also every hour
 * Supports multiple BattleTags per user
+* BattleTags are registered via OAuth, so you can be sure that the BattleTag really belongs to that user
 * Finds (registered) players in a given SR range
 * Congratulates every player when he/she reached a new personal best rank
 * Can manage voice channels and create them on demand, e.g. "Comp #2" will be created when "Comp #1" has members in it
