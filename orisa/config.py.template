@@ -5,36 +5,8 @@
 
 from .config_classes import *
 
-# The bot token can be found in "My apps" in discord after you
-# register the bot
-
-GUILD_INFOS = {
-    # replace 12345 with the ID of your guild
-    12345: GuildInfo(
-        # The channel congratulatory messages should be posted to
-        congrats_channel_id=123,
-
-        # The channel Orisa listens on (besides DM)
-        listen_channel_id=123,
-
-        # A list of VoiceCategoryInfos, see config_classes
-        managed_voice_categories=[
-        ],
-        # The Wow guild for this Discord guild
-        wow_guild_name="",
-        wow_guild_realm="",
-
-        # which guild ranks are Game Masters
-        wow_gm_ranks={0},
-
-        # whild guild ranks are officers
-        wow_officer_ranks={1},
-
-        wow_admin_role_name="",
-
-        wow_listen_channel_id=123,
-    )
-}
+# Needs to be empty.
+GUILD_INFOS = {}
 
 # Aliases for channels, used by admin commands
 # key is alias, value is discord id
@@ -45,6 +17,8 @@ CHANNEL_NAMES = {}
 DATABASE_URI = 'sqlite:///database.sqlite'
 
 # The secret bot token
+# The bot token can be found in "My apps" in discord after you
+# register the bot
 BOT_TOKEN = ''
 
 # The Mashery API key (for WoW)
@@ -71,6 +45,9 @@ OAUTH_REDIRECT_HOST = None
 
 # The path, can just be "/", but must end with a slash
 OAUTH_REDIRECT_PATH = None
+
+# The URL to the web app, where you can configure Orisa (orisa-web)
+WEB_APP_PATH = None
 
 # Path the privacy policy
 PRIVACY_POLICY_PATH = None

@@ -212,15 +212,6 @@ export default {
     }
   },
   mounted () {
-    this.channels = []
-    this.guild_config = { managed_voice_categories: [{ category_id: '4444', prefixes: [] }, { category_id: '1234', prefixes: [{ name: 'foo', limit: 4 }, { name: 'foo', limit: 4 }, { name: 'foo', limit: 4 }] }] }
-    this.guild_name = 'response.data.guild_name'
-    this.guild_id = '12345'
-    this.orig_guild_config = cloneDeep(this.guild_config)
-    //      this.validation_errors= {"extra_register_text": "Alles mist!", managed_voice_categories:[{category_id: "asdasd", channel_limit: "asd", prefixes:[]}, {prefixes: [{name: "must not be empty"}, {}, {limit: "too high"}]}]}
-    //  this.loaded = true
-    // return;
-
     this.$http.get(`config_data/${this.token}`).then(response => {
       this.channels = response.data.channels
       this.guild_config = response.data.guild_config

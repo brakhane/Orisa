@@ -88,7 +88,7 @@ from .config import (
     OAUTH_REDIRECT_HOST,
     OAUTH_REDIRECT_PATH,
     PRIVACY_POLICY_PATH,
-    WEB_PATH,
+    WEB_APP_PATH,
 )
 from .models import Cron, User, BattleTag, SR, Role
 from .exceptions import (
@@ -432,7 +432,7 @@ class Orisa(Plugin):
         token = web.create_token(ctx.guild.id)
         embed = Embed(
             title="Click here to configure me",
-            url=f"{WEB_PATH}config/{token}"
+            url=f"{WEB_APP_PATH}config/{token}"
         )
         embed.set_footer(text="This link will be valid for 30 minutes")
         await ctx.author.send(content=None, embed=embed)
