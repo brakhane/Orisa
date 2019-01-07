@@ -1935,16 +1935,13 @@ class Orisa(Plugin):
     async def _sync_tags(self, ids_to_sync):
         logger.debug("preparing to sync ids %s", ids_to_sync)
         with self.database.session() as session:
-            for tag_id in ids_to_sync:
-                tag = self.database.tag_by_id(session, tag_id)
-                try:
-                    await self._sync_tag(session, tag)
-                except Exception:
-                    logger.exception(
-                        f"exception while syncing {tag.tag} for {tag.user.discord_id}"
-                    )
-                finally:
-                    logger.debug("syncing tag %s done", tag_id)
+            try:
+                with trio.open_nursery() as nursery:
+                    for tag_id in ids_to_sync:
+                        tag = self.database.tag_by_id(session, tag_id)
+                        nursery.start_soon(self._sync_tag, sesssion, tag)
+            except trio.MultiError:
+                logger.error("Error syncing tags", exc_info=True)
             session.commit()
         
         logger.info("done syncing")
