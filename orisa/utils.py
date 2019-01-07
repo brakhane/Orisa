@@ -54,7 +54,7 @@ async def get_sr(battletag):
             result = await asks.get(
                 url,
                 headers={
-                    "User-Agent": "Orisa/0.1 (+https://github.com/brakhane/Orisa)"
+                    "User-Agent": "Orisa/1.0 (+https://github.com/brakhane/Orisa)"
                 },
                 connection_timeout=10,
                 timeout=10,
