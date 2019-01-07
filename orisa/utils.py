@@ -27,7 +27,7 @@ SR_LOCKS = TTLCache(
 )  # if a request should be hanging for 60s, just try another
 
 
-async def get_sr(battletag):
+async def get_sr(asks_session, battletag):
     try:
         lock = SR_LOCKS[battletag]
     except KeyError:
@@ -51,7 +51,7 @@ async def get_sr(battletag):
         url = f'https://playoverwatch.com/en-us/career/pc/{battletag.replace("#", "-")}'
         logger.info(f"requesting {url}")
         try:
-            result = await asks.get(
+            result = await asks_session.get(
                 url,
                 headers={
                     "User-Agent": "Orisa/1.0 (+https://github.com/brakhane/Orisa)"
