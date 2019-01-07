@@ -416,7 +416,7 @@ class Orisa(Plugin):
         return r
 
     @ow.subcommand()
-    @author_has_roles("Admin")
+    @author_has_roles("Orisa Admin")
     async def config(self, ctx):
         if ctx.channel.private:
             await ctx.channel.messages.send(
