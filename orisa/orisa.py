@@ -2052,10 +2052,10 @@ class Orisa(Plugin):
 
             user = self.database.user_by_discord_id(session, user_id)
             resp = None
-            tag = BattleTag(tag=battle_tag, blizzard_id=blizzard_id)
+            new_tag = BattleTag(tag=battle_tag, blizzard_id=blizzard_id)
 
             if user is None:
-                user = User(discord_id=user_id, battle_tags=[tag], format="$sr")
+                user = User(discord_id=user_id, battle_tags=[new_tag], format="$sr")
                 session.add(user)
 
                 extra_text = ""
@@ -2072,18 +2072,26 @@ class Orisa(Plugin):
                     + extra_text
                 )
             else:
-                if any(tag.tag == battle_tag for tag in user.battle_tags):
+                existing_tag = None
+                for tag in user.battle_tags:
+                    if tag.blizzard_id == blizzard_id:
+                        existing_tag = tag
+                        break
+                if existing_tag:
+                    resp = f"It seems like your BattleTag changed from *{existing_tag.tag}* to *{battle_tag}*. I have updated my database."
+                    existing_tag.tag = battle_tag
+                elif any(tag.tag == battle_tag for tag in user.battle_tags):
                     await user_obj.send(
                         f"You already registered the BattleTag *{battle_tag}*, so there's nothing for me to do. *Sleep mode reactivated.*\n"
                         "Tip: Open the URL in a private/incognito tab next time, so you can enter the credentials of the account you want."
                     )
                     return
-
-                user.battle_tags.append(tag)
-                resp = (
-                    f"OK. I've added **{battle_tag}** to the list of your BattleTags. **Your primary BattleTag remains {user.battle_tags[0].tag}**. "
-                    f"To change your primary tag, use `!ow setprimary yourbattletag`, see help for more details."
-                )
+                else:
+                    user.battle_tags.append(new_tag)
+                    resp = (
+                        f"OK. I've added **{battle_tag}** to the list of your BattleTags. **Your primary BattleTag remains {user.battle_tags[0].tag}**. "
+                        f"To change your primary tag, use `!ow setprimary yourbattletag`, see help for more details."
+                    )
 
             try:
                 async with user_channel.typing:
@@ -2102,15 +2110,15 @@ class Orisa(Plugin):
                 resp += "\nYou don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your BattleTag."
                 sr = None
 
-            tag.update_sr(sr)
-            rank = tag.rank
+            new_tag.update_sr(sr)
+            rank = new_tag.rank
 
             sort_secondaries(user)
 
             session.commit()
 
             try:
-                await self._update_nick(user)
+                await self._update_nick(user, force=True)
             except NicknameTooLong as e:
                 resp += f"\n**Adding your SR to your nickname would result in '{e.nickname}' and with {len(e.nickname)} characters, be longer than Discord's maximum of 32.** Please shorten your nick to be no longer than 28 characters. I will regularly try to update it."
             except HierarchyError as e:
@@ -2124,6 +2132,9 @@ class Orisa(Plugin):
                     "\nHowever, right now I couldn't update your nickname, will try that again later."
                     "People will still be able to ask for your BattleTag, though."
                 )
+            finally:
+                with suppress(Exception):
+                    await self._update_nick(user)
 
             await user_channel.messages.send(resp)
 
