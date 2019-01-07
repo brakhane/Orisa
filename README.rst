@@ -46,7 +46,7 @@ Installation
 ------------
 
 **If you think Orisa can be useful for your community, instead of installing
-your own instance, try contacting me first.** My Orisa instance can be configured via
+your own instance, try contacting me first (Joghurt#2732 on discord).** My Orisa instance can be configured via
 web, and currently she's not easy to set up; it's easier to just add your Discord server to the
 already running instance.
 
