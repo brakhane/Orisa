@@ -169,7 +169,6 @@ class Orisa(Plugin):
         self.dialogues = {}
         self.web_send_ch, self.web_recv_ch = trio.open_memory_channel(0)
         self.raven_client = raven_client
-        self.asks_session = asks.Session(connections=5)
 
     async def load(self):
         await self.spawn(self._sync_all_tags_task)
@@ -1858,7 +1857,7 @@ class Orisa(Plugin):
 
     async def _sync_tag(self, session, tag):
         try:
-            sr, image = await get_sr(self.asks_session, tag.tag)
+            sr, image = await get_sr(tag.tag)
         except UnableToFindSR:
             logger.debug(f"No SR for {tag.tag}, oh well...")
             sr = rank = image = None
@@ -1920,6 +1919,34 @@ class Orisa(Plugin):
                 await self._send_congrats(user, rank, image)
                 user.highest_rank = rank
 
+    async def _sync_tags_from_channel(self, channel):
+        first = True
+        async with channel:
+            async for tag_id in channel:
+                logger.debug("got %s from channel %r", tag_id, channel)
+                if not first:
+                    delay = random.random() * 5.0
+                    logger.debug(f"rate limiting: sleeping for {delay:.02}s")
+                    await trio.sleep(delay)
+                else:
+                    first = False
+                session = self.database.Session()
+                try:
+                    tag = self.database.tag_by_id(session, tag_id)
+                    if tag:
+                        await self._sync_tag(session, tag)
+                    else:
+                        logger.warn(f"No tag for id {tag_id} found, probably deleted")
+                    session.commit()
+                except Exception:
+                    logger.exception(
+                        f"exception while syncing {tag.tag} for {tag.user.discord_id}"
+                    )
+                finally:
+                    session.commit()
+                    session.close()
+        logger.debug("channel %r closed, done", channel)
+
     async def _sync_check(self):
         session = self.database.Session()
         try:
@@ -1933,17 +1960,17 @@ class Orisa(Plugin):
             logger.debug("No tags need to be synced")
 
     async def _sync_tags(self, ids_to_sync):
-        logger.debug("preparing to sync ids %s", ids_to_sync)
-        with self.database.session() as session:
-            try:
-                async with trio.open_nursery() as nursery:
-                    for tag_id in ids_to_sync:
-                        tag = self.database.tag_by_id(session, tag_id)
-                        nursery.start_soon(self._sync_tag, session, tag)
-            except trio.MultiError:
-                logger.error("Error syncing tags", exc_info=True)
-            session.commit()
+        send_ch, receive_ch = trio.open_memory_channel(len(ids_to_sync))
+        logger.debug("preparing to sync ids: %s into channel %r", ids_to_sync, send_ch)
 
+        async with send_ch:
+            for tag_id in ids_to_sync:
+                await send_ch.send(tag_id)
+
+        async with trio.open_nursery() as nursery:
+            async with receive_ch:
+                for _ in range(min(len(ids_to_sync), 5)):
+                    nursery.start_soon(self._sync_tags_from_channel, receive_ch.clone())
         logger.info("done syncing")
 
     async def _sync_all_tags_task(self):
@@ -2068,7 +2095,7 @@ class Orisa(Plugin):
 
             try:
                 async with user_channel.typing:
-                    sr, image = await get_sr(self.asks_session, battle_tag)
+                    sr, image = await get_sr(battle_tag)
             except InvalidBattleTag as e:
                 await user_channel.messages.send(
                     f"Invalid BattleTag: {e.message}??? I got yours directly from Blizzard, but they claim it doesn't exist... Try again later, Blizzard have fucked up."
