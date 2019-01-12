@@ -49,7 +49,7 @@ async def get_sr(battletag):
             pass
 
         url = f'https://playoverwatch.com/en-us/career/pc/{battletag.replace("#", "-")}'
-        logger.info(f"requesting {url}")
+        logger.debug(f"requesting {url}")
         try:
             result = await asks.get(
                 url,
