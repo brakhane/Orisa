@@ -2124,7 +2124,7 @@ class Orisa(Plugin):
             except HierarchyError as e:
                 resp += (
                     '\n**I do not have enough permissions to update your nickname. The owner needs to move the "Orisa" role higher '
-                    "so that is higher that your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry.**"
+                    "so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry.**"
                 )
             except Exception as e:
                 logger.exception(f"unable to update nick for user {user}")

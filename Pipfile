@@ -23,6 +23,7 @@ hypercorn = "*"
 oauthlib = "*"
 itsdangerous = "*"
 "dataclasses-json" = "*"
+"asks" = "*"
 
 [dev-packages]
 # pylint = "*"
