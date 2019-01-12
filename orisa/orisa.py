@@ -130,7 +130,10 @@ COLORS = (
 
 
 def correct_channel(ctx):
-    return any(ctx.channel.id == guild.listen_channel_id for guild in GUILD_INFOS.values()) or ctx.channel.private
+    return (
+        any(ctx.channel.id == guild.listen_channel_id for guild in GUILD_INFOS.values())
+        or ctx.channel.private
+    )
 
 
 def only_owner(ctx):
@@ -420,24 +423,22 @@ class Orisa(Plugin):
     async def config(self, ctx):
         if ctx.channel.private:
             await ctx.channel.messages.send(
-                content = "The config command must be issued from a channel of the guild to configure. Don't worry, I will send you "
-                          "the config instructions as a DM, so others can't configure me just by watching you sending this command.",
-                embed = Embed(
+                content="The config command must be issued from a channel of the guild to configure. Don't worry, I will send you "
+                "the config instructions as a DM, so others can't configure me just by watching you sending this command.",
+                embed=Embed(
                     title="Tip",
                     description="`!ow config` works in *any* channel, so you can also use a admin only channel",
-                )
+                ),
             )
             return
 
         token = web.create_token(ctx.guild.id)
         embed = Embed(
-            title="Click here to configure me",
-            url=f"{WEB_APP_PATH}config/{token}"
+            title="Click here to configure me", url=f"{WEB_APP_PATH}config/{token}"
         )
         embed.set_footer(text="This link will be valid for 30 minutes")
         await ctx.author.send(content=None, embed=embed)
         await reply(ctx, "I sent you a DM")
-
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -451,20 +452,21 @@ class Orisa(Plugin):
             redirect_url=f"{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}",
             state=state,
         )
-        embed=Embed(
+        embed = Embed(
             url=url,
-            title="Click this link to register",
-            description=
-                "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click "
-                "the link and give me permission to access your data. I only need this permission once, you can remove it "
-                "later in your BattleNet account."
+            title="Click here to register",
+            description="To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click "
+            "the link above and give me permission to access your data. I only need this permission once, you can remove it "
+            "later in your BattleNet account.",
         )
         embed.add_field(
             name="Protip",
             value="If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
-                  "account data for that account instead."
+            "account data for that account instead.",
         )
-        embed.set_footer(text="By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy")
+        embed.set_footer(
+            text="By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy"
+        )
 
         await ctx.author.send(content=None, embed=embed)
         if not ctx.channel.private:
@@ -1357,7 +1359,9 @@ class Orisa(Plugin):
 
     # Util
 
-    async def _adjust_voice_channels(self, parent, *, create_all_channels=False, adjust_user_limits=False):
+    async def _adjust_voice_channels(
+        self, parent, *, create_all_channels=False, adjust_user_limits=False
+    ):
         logger.debug("adjusting parent %s", parent)
         guild = parent.guild
         if not guild:
@@ -2038,7 +2042,9 @@ class Orisa(Plugin):
             try:
                 await self._handle_registration(uid, data.get("battletag"), data["id"])
             except Exception:
-                logger.error("Something went wrong when working with data %s", exc_info=True)
+                logger.error(
+                    "Something went wrong when working with data %s", exc_info=True
+                )
 
     async def _handle_registration(self, user_id, battle_tag, blizzard_id):
         session = self.database.Session()
@@ -2047,7 +2053,9 @@ class Orisa(Plugin):
             user_channel = await user_obj.open_private_channel()
 
             if battle_tag is None:
-                await user_channel.messages.send("I'm sorry, it seems like you don't have a BattleTag. Orisa currently only works for PC accounts.")
+                await user_channel.messages.send(
+                    "I'm sorry, it seems like you don't have a BattleTag. Orisa currently only works for PC accounts."
+                )
                 return
 
             user = self.database.user_by_discord_id(session, user_id)

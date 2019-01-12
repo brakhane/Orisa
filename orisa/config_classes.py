@@ -9,6 +9,7 @@ from dataclasses_json import dataclass_json
 from dataclasses import dataclass, fields, is_dataclass, asdict
 from typing import List, Set, Optional, Sequence, Union, Dict
 
+
 @dataclass_json
 @dataclass
 class GuildInfo:
@@ -19,7 +20,6 @@ class GuildInfo:
     extra_register_text: str
 
     def to_js_json(self):
-
         def id_to_str(data):
             def convert(key, value):
                 if value is None:
@@ -32,7 +32,8 @@ class GuildInfo:
                     return str(value)
                 else:
                     return value
-            return {k: convert(k, v) for k, v in data.items()}                    
+
+            return {k: convert(k, v) for k, v in data.items()}
 
         # reading the converted JSON into a dict, modifying it and then creating another JSON from that dict
         # is not the most efficient way to get it done, but the data is so small
@@ -41,17 +42,21 @@ class GuildInfo:
         # to_json is added by @dataclass_json
         converted = id_to_str(json.loads(self.to_json()))
         return converted
-        #return json.dumps(converted, separators=(",", ":"))
+        # return json.dumps(converted, separators=(",", ":"))
 
     @classmethod
     def from_json2(cls, json_str):
         def create_instance(cls, data):
             init = {}
             for name, type in typing.get_type_hints(cls).items():
-                if hasattr(type, "__origin__") and issubclass(type.__origin__, typing.Sequence):
+                if hasattr(type, "__origin__") and issubclass(
+                    type.__origin__, typing.Sequence
+                ):
                     elem_type = type.__args__[0]
                     if is_dataclass(elem_type):
-                        init[name] = [create_instance(elem_type, init) for init in data[name]]
+                        init[name] = [
+                            create_instance(elem_type, init) for init in data[name]
+                        ]
                     else:
                         init[name] = [elem_type(init) for init in data[name]]
                 elif is_dataclass(type):
@@ -62,7 +67,7 @@ class GuildInfo:
                     except ValueError:
                         init[name] = None
             return cls(**init)
-        
+
         return create_instance(cls, json.loads(json_str))
 
 

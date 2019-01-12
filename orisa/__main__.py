@@ -12,7 +12,14 @@ from curious.commands.manager import CommandsManager
 from curious.dataclasses.presence import Game, GameType, Status
 
 from . import web
-from .config import GuildInfo, SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN, MASHERY_API_KEY, GUILD_INFOS
+from .config import (
+    GuildInfo,
+    SENTRY_DSN,
+    BOT_TOKEN,
+    GLADOS_TOKEN,
+    MASHERY_API_KEY,
+    GUILD_INFOS,
+)
 from .models import Database, GuildConfig
 from .orisa import Orisa, OrisaClient
 
@@ -54,16 +61,17 @@ manager = CommandsManager.with_client(client, command_prefix="!")
 async def ready(ctx):
     logger.debug(f"Guilds are {ctx.bot.guilds}")
 
-
-    #with database.session() as session:
+    # with database.session() as session:
     #    for i, gc in GUILD_INFOS.items():
     #        session.add(GuildConfig(id=i, config=__import__("json").dumps(gc.to_js_json())))
     #    session.commit()
-    #return
+    # return
 
     logger.debug("Loading config")
     with database.session() as session:
-        for config in session.query(GuildConfig).filter(GuildConfig.id.in_(ctx.bot.guilds.keys())):
+        for config in session.query(GuildConfig).filter(
+            GuildConfig.id.in_(ctx.bot.guilds.keys())
+        ):
             GUILD_INFOS[config.id] = data = GuildInfo.from_json2(config.config)
             logger.debug("Configured %d as %s", config.id, data)
 

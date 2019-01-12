@@ -200,7 +200,6 @@ class GuildConfig(Base):
     config = Column(String, nullable=False)
 
 
-
 class Database:
     def __init__(self):
         engine = create_engine(DATABASE_URI)

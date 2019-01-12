@@ -13,6 +13,7 @@ from quart_trio import QuartTrio
 from quart import Quart, request, render_template, jsonify, Response
 
 from .config import (
+    DEVELOPMENT,
     GUILD_INFOS,
     SIGNING_SECRET,
     OAUTH_CLIENT_ID,
@@ -21,7 +22,8 @@ from .config import (
     OAUTH_REDIRECT_HOST,
 )
 from .config_classes import GuildInfo
-from .models import (User, GuildConfig)
+from .models import User, GuildConfig
+
 logger = logging.getLogger(__name__)
 
 serializer = URLSafeTimedSerializer(SIGNING_SECRET)
@@ -37,7 +39,7 @@ client = None
 orisa = None
 
 
-app.debug = True
+app.debug = DEVELOPMENT
 
 
 async def render_message(message, is_error=False):
@@ -50,6 +52,7 @@ async def render_message(message, is_error=False):
 
 def create_token(guild_id):
     return serializer.dumps({"g": guild_id})
+
 
 @app.route(OAUTH_REDIRECT_PATH + "config_data/<string:token>")
 async def channels(token):
@@ -77,30 +80,59 @@ async def channels(token):
     channels = [
         conv(chan)
         for chan in sorted(
-            (guild.channels.values()),
-            key=lambda x: (x.type, x.position),
+            (guild.channels.values()), key=lambda x: (x.type, x.position)
         )
         if not chan.parent
     ]
 
-    return jsonify({
-        "channels": channels,
-        "guild_name": guild.name,
-        "guild_id": str(guild_id),
-        "guild_config": guild_info.to_js_json()
-    })
+    return jsonify(
+        {
+            "channels": channels,
+            "guild_name": guild.name,
+            "guild_id": str(guild_id),
+            "guild_config": guild_info.to_js_json(),
+        }
+    )
 
 
 def validate_config(guild, guild_config):
     errors = {}
 
-    chan =  guild.channels.get(guild_config.congrats_channel_id)
-    if not chan or chan.type != 0:
-        errors["congrats_channel_id"] = "Please select a valid text channel"
+    def missing_perms(permissions, required):
+        def convert_name(name):
+            return " ".join(part.capitalize() for part in name.split("_"))
 
-    chan =  guild.channels.get(guild_config.listen_channel_id)
+        missing = [
+            convert_name(perm) for perm in required if not getattr(permissions, perm)
+        ]
+
+        if missing:
+            return f"Orisa is missing the following permissions: {', '.join(missing)}"
+        else:
+            return None
+
+    chan = guild.channels.get(guild_config.listen_channel_id)
     if not chan or chan.type != 0:
         errors["listen_channel_id"] = "Please select a valid text channel"
+    else:
+        missing = missing_perms(
+            chan.effective_permissions(guild.me),
+            # we only need to check manage_nicknames once, so we do it here
+            ["send_messages", "embed_links", "attach_files", "manage_nicknames"],
+        )
+        if missing:
+            errors["listen_channel_id"] = missing
+
+    chan = guild.channels.get(guild_config.congrats_channel_id)
+    if not chan or chan.type != 0:
+        errors["congrats_channel_id"] = "Please select a valid text channel"
+    else:
+        missing = missing_perms(
+            chan.effective_permissions(guild.me),
+            ["send_messages", "embed_links", "attach_files"],
+        )
+        if missing:
+            errors["congrats_channel_id"] = missing
 
     vce_list = []
     vce_list_has_errors = False
@@ -108,9 +140,15 @@ def validate_config(guild, guild_config):
     for vc in guild_config.managed_voice_categories:
         vc_errors = {}
 
-        chan =  guild.channels.get(vc.category_id)
+        chan = guild.channels.get(vc.category_id)
         if not chan or chan.type != 4:
             vc_errors["category_id"] = "Please select a valid category"
+        else:
+            missing = missing_perms(
+                chan.effective_permissions(guild.me), ["manage_channels"]
+            )
+            if missing:
+                vc_errors["category_id"] = missing
 
         if vc.channel_limit is None or not (0 <= vc.channel_limit <= 10):
             vc_errors["channel_limit"] = "Limit must be between 0 and 10"
@@ -140,8 +178,6 @@ def validate_config(guild, guild_config):
         errors["managed_voice_categories"] = vce_list
 
     return errors
-    #return {"extra_register_text": "ASDJHASKDJHASLKDJHASDKLJ"}
-
 
 
 @app.route(OAUTH_REDIRECT_PATH + "guild_config/<int:guild_id>", methods=["PUT"])
@@ -150,15 +186,14 @@ async def save(guild_id):
     try:
         token = request.headers["authorization"].split(" ")[1]
     except (KeyError, IndexError):
-        return "Authorization missing", 401, {'WWW-Authenticate': 'Bearer'}
+        return "Authorization missing", 401, {"WWW-Authenticate": "Bearer"}
 
     try:
         serializer.loads(token, max_age=TOKEN_MAX_AGE)
     except SignatureExpired:
-        return "Token expired", 401, {'WWW-Authenticate': 'Bearer'}
+        return "Token expired", 401, {"WWW-Authenticate": "Bearer"}
     except BadSignature:
-        return "Invalid token", 401, {'WWW-Authenticate': 'Bearer'}
-
+        return "Invalid token", 401, {"WWW-Authenticate": "Bearer"}
 
     new_gi = GuildInfo.from_json2(await request.data)
     logger.debug(f"old info: {GUILD_INFOS[guild_id]}")
@@ -184,10 +219,16 @@ async def save(guild_id):
 
     async def update():
         for vc in new_gi.managed_voice_categories:
-            await orisa._adjust_voice_channels(client.find_channel(vc.category_id), adjust_user_limits=True)
+            await orisa._adjust_voice_channels(
+                client.find_channel(vc.category_id), adjust_user_limits=True
+            )
 
         with orisa.database.session() as session:
-            for user in session.query(User).filter(User.discord_id.in_(guild.members.keys())).all():
+            for user in (
+                session.query(User)
+                .filter(User.discord_id.in_(guild.members.keys()))
+                .all()
+            ):
                 try:
                     await orisa._update_nick(user)
                 except Exception:
@@ -268,7 +309,8 @@ async def handle_oauth():
     return await render_message("Thank you! I have sent you a DM.")
 
 
-if False:
+if DEVELOPMENT:
+
     @app.after_request
     async def add_cors(response):
         response.access_control.allow_origin = ["*"]
