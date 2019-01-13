@@ -133,7 +133,7 @@ def correct_channel(ctx):
     return (
         any(
             ctx.channel.id == guild.listen_channel_id
-            for guild in ctx.bot.guild_config.values()
+            for guild in Orisa._instance.guild_config.values()
         )
         or ctx.channel.private
     )
@@ -169,8 +169,12 @@ class Orisa(Plugin):
         "\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}"
     )  # '\N{FLEXED BICEPS}'   #'\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}'
 
+    # dirty hack needed for correct_channel condition
+    _instance = None
+
     def __init__(self, client, database, raven_client):
         super().__init__(client)
+        Orisa._instance = self
         self.database = database
         self.dialogues = {}
         self.web_send_ch, self.web_recv_ch = trio.open_memory_channel(0)
@@ -702,7 +706,7 @@ class Orisa(Plugin):
         await reply(ctx, msg)
 
     @ow.subcommand()
-    @condition(correct_channel)
+    @condition(correct_channel, bypass_owner=False)
     async def forceupdate(self, ctx):
         session = self.database.Session()
         try:
