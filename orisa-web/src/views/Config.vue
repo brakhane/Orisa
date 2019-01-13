@@ -202,113 +202,113 @@ Don't forget to use `!ow roles` to set your roles; also don't play Genji."
 </template>
 
 <script>
-import ChannelSelector from "@/components/ChannelSelector.vue";
-import ManagedVoiceCategory from "@/components/ManagedVoiceCategory.vue";
+import ChannelSelector from '@/components/ChannelSelector.vue'
+import ManagedVoiceCategory from '@/components/ManagedVoiceCategory.vue'
 
-import { library } from "@fortawesome/fontawesome-svg-core";
+import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faSpinner,
   faFolderPlus,
   faQuestionCircle
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { isEqual, isEmpty, cloneDeep } from "lodash";
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { isEqual, isEmpty, cloneDeep } from 'lodash'
 
-library.add(faSpinner, faFolderPlus, faQuestionCircle);
+library.add(faSpinner, faFolderPlus, faQuestionCircle)
 
 export default {
-  name: "config",
+  name: 'config',
   components: {
     ChannelSelector,
     ManagedVoiceCategory,
     FontAwesomeIcon
   },
   methods: {
-    val_errors_mvc(index) {
+    val_errors_mvc (index) {
       if (
         this.validation_errors.managed_voice_categories &&
         this.validation_errors.managed_voice_categories.length > index
       ) {
-        return this.validation_errors.managed_voice_categories[index];
+        return this.validation_errors.managed_voice_categories[index]
       } else {
-        return {};
+        return {}
       }
     },
 
-    val_state(obj) {
+    val_state (obj) {
       if (obj) {
-        return false;
+        return false
       } else {
-        return this.has_validation_errors ? true : null;
+        return this.has_validation_errors ? true : null
       }
     },
 
-    remove_cat(index) {
-      this.guild_config.managed_voice_categories.splice(index, 1);
+    remove_cat (index) {
+      this.guild_config.managed_voice_categories.splice(index, 1)
     },
 
-    add_cat() {
+    add_cat () {
       this.guild_config.managed_voice_categories.push({
         category_id: null,
         channel_limit: 5,
         remove_unknown: true,
         prefixes: [],
         show_sr_in_nicks: true
-      });
+      })
     },
 
-    reset() {
-      this.validation_errors = {};
-      this.save_error = false;
-      this.guild_config = cloneDeep(this.orig_guild_config);
+    reset () {
+      this.validation_errors = {}
+      this.save_error = false
+      this.guild_config = cloneDeep(this.orig_guild_config)
     },
 
-    save() {
-      if (this.saving) return;
-      this.saving = true;
-      this.validation_errors = {};
-      this.save_error = false;
+    save () {
+      if (this.saving) return
+      this.saving = true
+      this.validation_errors = {}
+      this.save_error = false
       this.$http
         .put(`guild_config/${this.guild_id}`, this.guild_config, {
           headers: { Authorization: `Bearer ${this.token}` }
         })
         .then(response => {
-          this.saving = false;
-          this.orig_guild_config = cloneDeep(this.guild_config);
-          this.validation_errors = {};
+          this.saving = false
+          this.orig_guild_config = cloneDeep(this.guild_config)
+          this.validation_errors = {}
         })
         .catch(error => {
-          this.saving = false;
+          this.saving = false
           if (error.request.status === 400) {
-            this.validation_errors = error.response.data;
+            this.validation_errors = error.response.data
           } else {
-            this.save_error = true;
-            console.error(error);
+            this.save_error = true
+            console.error(error)
           }
-        });
+        })
     }
   },
   computed: {
-    unsaved_changes() {
-      return !isEqual(this.guild_config, this.orig_guild_config);
+    unsaved_changes () {
+      return !isEqual(this.guild_config, this.orig_guild_config)
     },
-    has_validation_errors() {
-      return !isEmpty(this.validation_errors);
+    has_validation_errors () {
+      return !isEmpty(this.validation_errors)
     },
-    shake_if_problem() {
+    shake_if_problem () {
       if (this.has_validation_errors || this.save_error) {
-        return "shake";
+        return 'shake'
       } else {
-        return "";
+        return ''
       }
     },
-    higher_roles() {
-      var myPos = this.roles.indexOf(this.my_top_role);
-      return this.roles.slice(myPos + 1);
+    higher_roles () {
+      var myPos = this.roles.indexOf(this.my_top_role)
+      return this.roles.slice(myPos + 1)
     }
   },
-  props: ["token"],
-  data() {
+  props: ['token'],
+  data () {
     return {
       saving: false,
       orig_guild_config: null,
@@ -322,27 +322,27 @@ export default {
       save_error: false,
       roles: null,
       my_top_role: null
-    };
+    }
   },
-  mounted() {
+  mounted () {
     this.$http.get(`config_data/${this.token}`).then(
       response => {
-        this.channels = response.data.channels;
-        this.guild_config = response.data.guild_config;
-        this.guild_name = response.data.guild_name;
-        this.guild_id = response.data.guild_id;
-        this.roles = response.data.roles;
-        this.my_top_role = response.data.top_role;
-        this.orig_guild_config = cloneDeep(this.guild_config);
-        this.loaded = true;
+        this.channels = response.data.channels
+        this.guild_config = response.data.guild_config
+        this.guild_name = response.data.guild_name
+        this.guild_id = response.data.guild_id
+        this.roles = response.data.roles
+        this.my_top_role = response.data.top_role
+        this.orig_guild_config = cloneDeep(this.guild_config)
+        this.loaded = true
       },
       response => {
-        this.load_failed = true;
-        console.error(response);
+        this.load_failed = true
+        console.error(response)
       }
-    );
+    )
   }
-};
+}
 </script>
 
 <style>
