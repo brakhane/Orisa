@@ -42,16 +42,15 @@ Features
 * Might have been called "a stupid Omnic I do not trust" by Zarya
 * Is not evil; it won't even try to eat your cat
 
-
 Using Orisa on your Discord
 ---------------------------
 
 You can simply invite Orisa to your discord by following [this link](https://wur.st/bot/ever/invite). She will send your further information after she has joined your server.
 
-Installation
-------------
+Installation of your own instance
+---------------------------------
 
-**This information here is a little bit outdated**
+**This information here is a little bit outdated, setting Orisa up is not trivial currently.**
 
 You need to use Discords developer pages to create a link you can use to allow
 Orisa on your site. Orisa needs the following permissions: "Manage Nicknames", "Send Messages",
