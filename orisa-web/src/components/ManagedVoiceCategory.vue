@@ -48,12 +48,14 @@
             <p>
               With this setting active, Orisa will automatically remove any empty channels in this category that contain a
               <code>#</code>, as they are probably left over channels. For example, if you
-              rename "Comp" to "Competitive", there now will be at least aComp #1 channel that should get removed.
+              rename "Comp" to "Competitive", there now will be at least a Comp #1 channel that should get removed.
             </p>
-            <p>When this settings is off, Orisa will only touch channels that she knows are hers (begin with the prefix and then followed by a
+            <p>
+              When this settings is off, Orisa will only touch channels that she knows are hers (begin with the prefix and then followed by a
               <code>#</code>)
             </p>
-            <p>Unless you have manually created channels in this category that contain a
+            <p>
+              Unless you have manually created channels in this category that contain a
               <code>#</code>, it is recommended to leave this setting on
             </p>
           </b-popover>
