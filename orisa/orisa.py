@@ -2085,7 +2085,7 @@ class Orisa(Plugin):
                     if tag.blizzard_id == blizzard_id:
                         existing_tag = tag
                         break
-                if existing_tag:
+                if existing_tag and existing_tag.tag != battle_tag:
                     resp = f"It seems like your BattleTag changed from *{existing_tag.tag}* to *{battle_tag}*. I have updated my database."
                     existing_tag.tag = battle_tag
                 elif any(tag.tag == battle_tag for tag in user.battle_tags):
