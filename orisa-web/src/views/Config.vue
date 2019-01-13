@@ -41,19 +41,24 @@
             Discord disallows nickname changes when the member whose nickname should be changed has a higher role than Orisa.
             You need to move the Orisa role all the way to the top if you want her to be able to change all nicknames. Currently, Orisa won't be able to
             update the nicknames of members with the following
-            <span v-if="higher_roles.length ==1">role:</span>
+            <span
+              v-if="higher_roles.length ==1"
+            >role:</span>
             <span v-else>roles:</span>
           </p>
           <ul>
             <li v-for="role in higher_roles" :key="role">{{ role }}</li>
           </ul>
           <p>
-            You can simply drag and drop the Orisa role in the <em>Server Settings &gt; Roles</em> screen,
+            You can simply drag and drop the Orisa role in the
+            <em>Server Settings &gt; Roles</em> screen,
             <a
               href="https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif"
             >like this</a>.
-            <em>Do not give Orisa Administrator rights!</em> It won't work, and is a potential security risk if Orisa has an exploitable bug.
             Orisa will not get more permissions by this, it simply allows her to change more nicknames (the nickname of the server owner cannot be changed by her whatever you do).
+          </p>
+          <p>
+            <em>Do not give the Orisa role Administrator rights!</em> It won't help, and is a potential security risk if Orisa has an exploitable bug.
           </p>
         </div>
       </b-card>
@@ -197,113 +202,113 @@ Don't forget to use `!ow roles` to set your roles; also don't play Genji."
 </template>
 
 <script>
-import ChannelSelector from '@/components/ChannelSelector.vue'
-import ManagedVoiceCategory from '@/components/ManagedVoiceCategory.vue'
+import ChannelSelector from "@/components/ChannelSelector.vue";
+import ManagedVoiceCategory from "@/components/ManagedVoiceCategory.vue";
 
-import { library } from '@fortawesome/fontawesome-svg-core'
+import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faSpinner,
   faFolderPlus,
   faQuestionCircle
-} from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { isEqual, isEmpty, cloneDeep } from 'lodash'
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import { isEqual, isEmpty, cloneDeep } from "lodash";
 
-library.add(faSpinner, faFolderPlus, faQuestionCircle)
+library.add(faSpinner, faFolderPlus, faQuestionCircle);
 
 export default {
-  name: 'config',
+  name: "config",
   components: {
     ChannelSelector,
     ManagedVoiceCategory,
     FontAwesomeIcon
   },
   methods: {
-    val_errors_mvc (index) {
+    val_errors_mvc(index) {
       if (
         this.validation_errors.managed_voice_categories &&
         this.validation_errors.managed_voice_categories.length > index
       ) {
-        return this.validation_errors.managed_voice_categories[index]
+        return this.validation_errors.managed_voice_categories[index];
       } else {
-        return {}
+        return {};
       }
     },
 
-    val_state (obj) {
+    val_state(obj) {
       if (obj) {
-        return false
+        return false;
       } else {
-        return this.has_validation_errors ? true : null
+        return this.has_validation_errors ? true : null;
       }
     },
 
-    remove_cat (index) {
-      this.guild_config.managed_voice_categories.splice(index, 1)
+    remove_cat(index) {
+      this.guild_config.managed_voice_categories.splice(index, 1);
     },
 
-    add_cat () {
+    add_cat() {
       this.guild_config.managed_voice_categories.push({
         category_id: null,
         channel_limit: 5,
         remove_unknown: true,
         prefixes: [],
         show_sr_in_nicks: true
-      })
+      });
     },
 
-    reset () {
-      this.validation_errors = {}
-      this.save_error = false
-      this.guild_config = cloneDeep(this.orig_guild_config)
+    reset() {
+      this.validation_errors = {};
+      this.save_error = false;
+      this.guild_config = cloneDeep(this.orig_guild_config);
     },
 
-    save () {
-      if (this.saving) return
-      this.saving = true
-      this.validation_errors = {}
-      this.save_error = false
+    save() {
+      if (this.saving) return;
+      this.saving = true;
+      this.validation_errors = {};
+      this.save_error = false;
       this.$http
         .put(`guild_config/${this.guild_id}`, this.guild_config, {
           headers: { Authorization: `Bearer ${this.token}` }
         })
         .then(response => {
-          this.saving = false
-          this.orig_guild_config = cloneDeep(this.guild_config)
-          this.validation_errors = {}
+          this.saving = false;
+          this.orig_guild_config = cloneDeep(this.guild_config);
+          this.validation_errors = {};
         })
         .catch(error => {
-          this.saving = false
+          this.saving = false;
           if (error.request.status === 400) {
-            this.validation_errors = error.response.data
+            this.validation_errors = error.response.data;
           } else {
-            this.save_error = true
-            console.error(error)
+            this.save_error = true;
+            console.error(error);
           }
-        })
+        });
     }
   },
   computed: {
-    unsaved_changes () {
-      return !isEqual(this.guild_config, this.orig_guild_config)
+    unsaved_changes() {
+      return !isEqual(this.guild_config, this.orig_guild_config);
     },
-    has_validation_errors () {
-      return !isEmpty(this.validation_errors)
+    has_validation_errors() {
+      return !isEmpty(this.validation_errors);
     },
-    shake_if_problem () {
+    shake_if_problem() {
       if (this.has_validation_errors || this.save_error) {
-        return 'shake'
+        return "shake";
       } else {
-        return ''
+        return "";
       }
     },
-    higher_roles () {
-      var myPos = this.roles.indexOf(this.my_top_role)
-      return this.roles.slice(myPos + 1)
+    higher_roles() {
+      var myPos = this.roles.indexOf(this.my_top_role);
+      return this.roles.slice(myPos + 1);
     }
   },
-  props: ['token'],
-  data () {
+  props: ["token"],
+  data() {
     return {
       saving: false,
       orig_guild_config: null,
@@ -317,27 +322,27 @@ export default {
       save_error: false,
       roles: null,
       my_top_role: null
-    }
+    };
   },
-  mounted () {
+  mounted() {
     this.$http.get(`config_data/${this.token}`).then(
       response => {
-        this.channels = response.data.channels
-        this.guild_config = response.data.guild_config
-        this.guild_name = response.data.guild_name
-        this.guild_id = response.data.guild_id
-        this.roles = response.data.roles
-        this.my_top_role = response.data.top_role
-        this.orig_guild_config = cloneDeep(this.guild_config)
-        this.loaded = true
+        this.channels = response.data.channels;
+        this.guild_config = response.data.guild_config;
+        this.guild_name = response.data.guild_name;
+        this.guild_id = response.data.guild_id;
+        this.roles = response.data.roles;
+        this.my_top_role = response.data.top_role;
+        this.orig_guild_config = cloneDeep(this.guild_config);
+        this.loaded = true;
       },
       response => {
-        this.load_failed = true
-        console.error(response)
+        this.load_failed = true;
+        console.error(response);
       }
-    )
+    );
   }
-}
+};
 </script>
 
 <style>
