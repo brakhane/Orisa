@@ -460,7 +460,7 @@ class Orisa(Plugin):
             "later in your BattleNet account.",
         )
         embed.add_field(
-            name="Protip",
+            name=":information_source: Protip",
             value="If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
             "account data for that account instead.",
         )
@@ -2089,9 +2089,13 @@ class Orisa(Plugin):
                     resp = f"It seems like your BattleTag changed from *{existing_tag.tag}* to *{battle_tag}*. I have updated my database."
                     existing_tag.tag = battle_tag
                 elif any(tag.tag == battle_tag for tag in user.battle_tags):
+                    embed = Embed(
+                        title=":information_source: Tip",
+                        description="Open the URL in a private/incognito tab next time, so you can enter the credentials of the account you want.",
+                    )
                     await user_obj.send(
-                        f"You already registered the BattleTag *{battle_tag}*, so there's nothing for me to do. *Sleep mode reactivated.*\n"
-                        "Tip: Open the URL in a private/incognito tab next time, so you can enter the credentials of the account you want."
+                        f"You already registered the BattleTag *{battle_tag}*, so there's nothing for me to do. *Sleep mode reactivated.*\n",
+                        embed=embed,
                     )
                     return
                 else:
