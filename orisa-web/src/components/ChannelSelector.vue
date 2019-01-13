@@ -13,9 +13,7 @@
 export default {
   name: 'channel-selector',
   data () {
-    return {
-
-    }
+    return {}
   },
   computed: {
     ch () {
