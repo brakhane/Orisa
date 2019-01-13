@@ -31,7 +31,6 @@
       >The save button will appear when you have unsaved changes. After you have saved your changes, you can close this window.</p>
       <b-card
         bg-variant="warning"
-        header="Not all nicknames can be updated"
         class="my-4"
         v-if="higher_roles.length > 0"
       >
@@ -65,7 +64,6 @@
       <b-card
         bg-variant="success"
         text-variant="white"
-        header="All nicknames can be updated"
         class="my-4"
         v-else
       >
