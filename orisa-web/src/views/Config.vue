@@ -52,7 +52,7 @@
             You can simply drag and drop the Orisa role in the
             <em>Server Settings &gt; Roles</em> screen,
             <a
-              href="https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif"
+              href="https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif" target="_blank"
             >like this</a>.
             Orisa will not get more permissions by this, it simply allows her to change more nicknames (the nickname of the server owner cannot be changed by her whatever you do).
           </p>
