@@ -192,7 +192,7 @@ class SR(Base):
         return f"<SR(id={self.id}, value={self.value})>"
 
 
-class GuildConfig(Base):
+class GuildConfigJson(Base):
     __tablename__ = "guild_configs"
 
     id = Column(BigInteger, primary_key=True, index=True)

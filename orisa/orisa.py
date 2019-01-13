@@ -78,9 +78,9 @@ from itsdangerous.exc import BadSignature
 from wcwidth import wcswidth
 
 from .config import (
+    GuildConfig,
     CHANNEL_NAMES,
     GLADOS_TOKEN,
-    GUILD_INFOS,
     MASHERY_API_KEY,
     SENTRY_DSN,
     SIGNING_SECRET,
@@ -90,7 +90,7 @@ from .config import (
     PRIVACY_POLICY_PATH,
     WEB_APP_PATH,
 )
-from .models import Cron, User, BattleTag, SR, Role
+from .models import Cron, User, BattleTag, SR, Role, GuildConfigJson
 from .exceptions import (
     BlizzardError,
     InvalidBattleTag,
@@ -131,7 +131,10 @@ COLORS = (
 
 def correct_channel(ctx):
     return (
-        any(ctx.channel.id == guild.listen_channel_id for guild in GUILD_INFOS.values())
+        any(
+            ctx.channel.id == guild.listen_channel_id
+            for guild in ctx.bot.guild_config.values()
+        )
         or ctx.channel.private
     )
 
@@ -173,7 +176,23 @@ class Orisa(Plugin):
         self.web_send_ch, self.web_recv_ch = trio.open_memory_channel(0)
         self.raven_client = raven_client
 
+        self.guild_config = {}
+        logger.debug("Loading config")
+        with database.session() as session:
+            for config in session.query(GuildConfigJson).filter(
+                GuildConfigJson.id.in_(self.client.guilds.keys())
+            ):
+                self.guild_config[config.id] = data = GuildConfig.from_json2(
+                    config.config
+                )
+                logger.debug("Configured %d as %s", config.id, data)
+
     async def load(self):
+
+        for guild_id, guild in self.client.guilds.items():
+            if guild_id not in self.guild_config:
+                await self._handle_new_guild(guild)
+
         await self.spawn(self._sync_all_tags_task)
 
         await self.spawn(self._cron_task)
@@ -209,7 +228,7 @@ class Orisa(Plugin):
     async def createallchannels(self, ctx):
         logger.info("creating all channels")
 
-        for gi in GUILD_INFOS.values():
+        for gi in self.guild_config.values():
             for vc in gi.managed_voice_categories:
                 await self._adjust_voice_channels(
                     self.client.find_channel(vc.category_id), create_all_channels=True
@@ -218,7 +237,7 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner, bypass_owner=False)
     async def adjustallchannels(self, ctx):
-        for gi in GUILD_INFOS.values():
+        for gi in self.guild_config.values():
             for vc in gi.managed_voice_categories:
                 await self._adjust_voice_channels(
                     self.client.find_channel(vc.category_id)
@@ -417,6 +436,37 @@ class Orisa(Plugin):
     async def get(self, ctx, *, member: Member = None):
         r = await self.ow(ctx, member=member)
         return r
+
+    @ow.subcommand()
+    @condition(correct_channel)
+    async def about(self, ctx):
+        embed = Embed(
+            title="About Orisa",
+            description=(
+                "Orisa is an open source Discord bot to help manage Overwatch Discord communities.\n"
+                "She is written and maintained by Dennis Brakhane (Joghurt#2732 on Discord), and the development is done on Github: "
+                "https://github.com/brakhane/Orisa"
+            ),
+        )
+
+        embed.add_field(
+            name="Invite Orisa to your own Discord",
+            value=(
+                "To invite her to your server, simply click this link, she will message you with further instructions after she has joined your server:\n"
+                "https://wur.st/bot/ever/invite"
+            ),
+        )
+        embed.add_field(
+            name="Join the official Orisa Discord",
+            value=(
+                "If you use Orisa in your Discord server, or generally have suggestions, join the official Orisa Discord. Updates and new features "
+                "will be discussed and announced there:\n"
+                "https://discord.gg/tsNxvFh"
+            ),
+        )
+        await ctx.author.send(content=None, embed=embed)
+        if not ctx.channel.private:
+            await reply(ctx, "I've sent you a DM")
 
     @ow.subcommand()
     @author_has_roles("Orisa Admin")
@@ -998,7 +1048,7 @@ class Orisa(Plugin):
 
         for guild in self.client.guilds.values():
             if ctx.author.id in guild.members:
-                channel_id = GUILD_INFOS[guild.id].listen_channel_id
+                channel_id = self.guild_config[guild.id].listen_channel_id
                 break
 
         embed = Embed(
@@ -1014,6 +1064,7 @@ class Orisa(Plugin):
                 f"*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{self.client.application_info.owner.id}>*\n"
                 f"\n**The commands only work in the <#{channel_id}> channel or by sending me a DM**\n"
                 "If you are new to Orisa, you are probably looking for `!ow register`\n"
+                "If you want to use Orisa on your own server or help developing it, enter `!ow about`"
             ),
         )
         embed.add_field(
@@ -1027,6 +1078,10 @@ class Orisa(Plugin):
                 '`!ow orisa` will show the BattleTag of "SG | Orisa", "Orisa", or "Orisad"\n'
                 '`!ow oirsa` and `!ow ori` will probably also show the BattleTag of "Orisa"'
             ),
+        )
+        embed.add_field(
+            name="!ow about",
+            value="Shows information about Orisa, and how you can add her to your own Discord server, or help supporting her",
         )
         embed.add_field(
             name="!ow alwaysshowsr [on/off]",
@@ -1357,7 +1412,45 @@ class Orisa(Plugin):
                     session.delete(user)
                     session.commit()
 
+    @event("guild_join")
+    async def _guild_joined(self, ctx: Context, guild: Guild):
+        logger.info("Joined guild %s", guild)
+        await self._handle_new_guild(guild)
+
+    @event("guild_streamed")
+    async def _guild_streamed(self, ctx, guild):
+        logger.info("Streamed guild %s", guild)
+        if guild.id not in self.guild_config:
+            await self._handle_new_guild(guild)
+
+    async def _handle_new_guild(self, guild):
+        logger.info("We have a new guild %s \o/", guild)
+        self.guild_config[guild.id] = GuildConfig.default()
+        channel = await self._find_hello_channel(guild)
+        await channel.messages.send(
+            "*Greetings*! I am excited to be here :smiley:\n"
+            "To get started, create a new role named `Orisa Admin` and add yourself and everybody that should be allowed to configure me.\n"
+            "Then, write `!ow config` in this channel and I will send you a link to configure me via DM."
+        )
+
     # Util
+
+    async def _find_hello_channel(self, guild):
+        """Tries to find a channel to post the first hello message to."""
+        for channel in sorted(guild.channels.values(), key=attrgetter("position")):
+            if (
+                channel.type == ChannelType.TEXT
+                and channel.effective_permissions(guild.me).send_messages
+            ):
+                logger.debug("found hello channel %s", channel)
+                return channel
+        else:
+            logger.debug(
+                "no valid hello channel found. Falling back to DM to owner for %s",
+                guild,
+            )
+            # not found, fall back to DM to guild owner
+            return await guild.owner.user.open_private_channel()
 
     async def _adjust_voice_channels(
         self, parent, *, create_all_channels=False, adjust_user_limits=False
@@ -1368,7 +1461,7 @@ class Orisa(Plugin):
             logger.debug("channel doesn't belong to a guild")
             return
 
-        for cat in GUILD_INFOS[guild.id].managed_voice_categories:
+        for cat in self.guild_config[guild.id].managed_voice_categories:
             if cat.category_id == parent.id:
                 prefix_map = {prefix.name: prefix for prefix in cat.prefixes}
                 break
@@ -1658,7 +1751,7 @@ class Orisa(Plugin):
         return new_nn
 
     def _show_sr_in_nick(self, member, user):
-        if GUILD_INFOS[member.guild_id].show_sr_in_nicks_by_default:
+        if self.guild_config[member.guild_id].show_sr_in_nicks_by_default:
             return True
 
         if not user:
@@ -1670,7 +1763,7 @@ class Orisa(Plugin):
 
         if member.voice:
             logger.debug("user %s is currently in voice", member)
-            gi = GUILD_INFOS[member.guild.id]
+            gi = self.guild_config[member.guild.id]
             logger.debug(
                 "user is in %s with parent %s",
                 member.voice.channel,
@@ -1697,7 +1790,7 @@ class Orisa(Plugin):
                 embed.set_thumbnail(url=image)
 
                 await self.client.find_channel(
-                    GUILD_INFOS[guild.id].congrats_channel_id
+                    self.guild_config[guild.id].congrats_channel_id
                 ).messages.send(
                     content=f"Let's hear it for <@!{user.discord_id}>!", embed=embed
                 )
@@ -1843,7 +1936,9 @@ class Orisa(Plugin):
                 "are not shown.\n",
             )
             try:
-                chan = self.client.find_channel(GUILD_INFOS[guild_id].listen_channel_id)
+                chan = self.client.find_channel(
+                    self.guild_config[guild_id].listen_channel_id
+                )
                 send = chan.messages.send
                 # send = self.client.application_info.owner.send
                 while ix < len(table_lines):
@@ -2069,7 +2164,7 @@ class Orisa(Plugin):
                 extra_text = ""
                 for guild in self.client.guilds.values():
                     if user_id in guild.members:
-                        extra_text = GUILD_INFOS[guild.id].extra_register_text
+                        extra_text = self.guild_config[guild.id].extra_register_text
                         break
 
                 resp = (

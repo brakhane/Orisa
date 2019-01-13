@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__all__ = ["GuildInfo", "VoiceCategoryInfo", "PrefixConfig"]
+__all__ = ["GuildConfig", "VoiceCategoryInfo", "PrefixConfig"]
 
 import json
 import typing
@@ -12,12 +12,22 @@ from typing import List, Set, Optional, Sequence, Union, Dict
 
 @dataclass_json
 @dataclass
-class GuildInfo:
+class GuildConfig:
     show_sr_in_nicks_by_default: bool
     congrats_channel_id: int
     listen_channel_id: int
     managed_voice_categories: Sequence[VoiceCategoryInfo]
     extra_register_text: str
+
+    @classmethod
+    def default(cls):
+        return cls(
+            show_sr_in_nicks_by_default=True,
+            congrats_channel_id=None,
+            listen_channel_id=None,
+            extra_register_text=None,
+            managed_voice_categories=[],
+        )
 
     def to_js_json(self):
         def id_to_str(data):

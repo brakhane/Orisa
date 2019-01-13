@@ -29,6 +29,44 @@
       <p
         class="lead"
       >The save button will appear when you have unsaved changes. After you have saved your changes, you can close this window.</p>
+      <b-card
+        bg-variant="warning"
+        header="Not all nicknames can be updated"
+        class="my-4"
+        v-if="higher_roles.length > 0"
+      >
+        <h5 class="card-title">The Orisa role is not the top role!</h5>
+        <div class="card-text">
+          <p>
+            Discord disallows nickname changes when the member whose nickname should be changed has a higher role than Orisa.
+            You need to move the Orisa role all the way to the top if you want her to be able to change all nicknames. Currently, Orisa won't be able to
+            update the nicknames of members with the following
+            <span v-if="higher_roles.length ==1">role:</span>
+            <span v-else>roles:</span>
+          </p>
+          <ul>
+            <li v-for="role in higher_roles" :key="role">{{ role }}</li>
+          </ul>
+          <p>
+            You can simply drag and drop the Orisa role in the <em>Server Settings &gt; Roles</em> screen,
+            <a
+              href="https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif"
+            >like this</a>.
+            <em>Do not give Orisa Administrator rights!</em> It won't work, and is a potential security risk if Orisa has an exploitable bug.
+            Orisa will not get more permissions by this, it simply allows her to change more nicknames (the nickname of the server owner cannot be changed by her whatever you do).
+          </p>
+        </div>
+      </b-card>
+      <b-card
+        bg-variant="success"
+        text-variant="white"
+        header="All nicknames can be updated"
+        class="my-4"
+        v-else
+      >
+        <h5 class="card-title">The Orisa role is the top role</h5>
+        <p>Orisa will be able to change the nicknames of all your members, with the exception of the server owner.</p>
+      </b-card>
       <b-form :novalidate="true">
         <b-card :header="`General Settings for ${guild_name}`" class="mb-3">
           <b-form-checkbox
@@ -96,7 +134,9 @@ Don't forget to use `!ow roles` to set your roles; also don't play Genji."
         </b-card>
 
         <b-card
-          class="mb-3 text-justify bg-info text-white"
+          bg-variant="info"
+          text-variant="white"
+          class="mb-3 text-justify"
           v-if="guild_config.managed_voice_categories.length == 0"
           header="No managed voice channels"
         >
@@ -256,6 +296,10 @@ export default {
       } else {
         return ''
       }
+    },
+    higher_roles () {
+      var myPos = this.roles.indexOf(this.my_top_role)
+      return this.roles.slice(myPos + 1)
     }
   },
   props: ['token'],
@@ -270,7 +314,9 @@ export default {
       loaded: false,
       load_failed: false,
       validation_errors: {},
-      save_error: false
+      save_error: false,
+      roles: null,
+      my_top_role: null
     }
   },
   mounted () {
@@ -280,6 +326,8 @@ export default {
         this.guild_config = response.data.guild_config
         this.guild_name = response.data.guild_name
         this.guild_id = response.data.guild_id
+        this.roles = response.data.roles
+        this.my_top_role = response.data.top_role
         this.orig_guild_config = cloneDeep(this.guild_config)
         this.loaded = true
       },

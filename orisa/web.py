@@ -14,15 +14,14 @@ from quart import Quart, request, render_template, jsonify, Response
 
 from .config import (
     DEVELOPMENT,
-    GUILD_INFOS,
     SIGNING_SECRET,
     OAUTH_CLIENT_ID,
     OAUTH_CLIENT_SECRET,
     OAUTH_REDIRECT_PATH,
     OAUTH_REDIRECT_HOST,
 )
-from .config_classes import GuildInfo
-from .models import User, GuildConfig
+from .config_classes import GuildConfig
+from .models import User, GuildConfigJson
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +64,7 @@ async def channels(token):
 
     guild_id = state["g"]
 
-    guild_info = GUILD_INFOS[guild_id]
+    guild_info = orisa.guild_config[guild_id]
 
     guild = client.guilds[guild_id]
 
@@ -85,11 +84,17 @@ async def channels(token):
         if not chan.parent
     ]
 
+    roles = [
+        role.name for role in sorted(guild.roles.values(), key=attrgetter("position"))
+    ]
+
     return jsonify(
         {
             "channels": channels,
             "guild_name": guild.name,
             "guild_id": str(guild_id),
+            "roles": roles,
+            "top_role": guild.me.top_role.name,
             "guild_config": guild_info.to_js_json(),
         }
     )
@@ -195,8 +200,8 @@ async def save(guild_id):
     except BadSignature:
         return "Invalid token", 401, {"WWW-Authenticate": "Bearer"}
 
-    new_gi = GuildInfo.from_json2(await request.data)
-    logger.debug(f"old info: {GUILD_INFOS[guild_id]}")
+    new_gi = GuildConfig.from_json2(await request.data)
+    logger.debug(f"old info: {orisa.guild_config[guild_id]}")
     logger.debug(f"new info: {new_gi}")
 
     guild = client.guilds[guild_id]
@@ -207,11 +212,15 @@ async def save(guild_id):
     if errors:
         return jsonify(errors), 400
 
-    GUILD_INFOS[guild_id] = new_gi
+    orisa.guild_config[guild_id] = new_gi
 
     with orisa.database.session() as session:
 
-        gc = session.query(GuildConfig).filter_by(id=guild_id).one()
+        gc = session.query(GuildConfigJson).filter_by(id=guild_id).one_or_none()
+        if not gc:
+            gc = GuildConfigJson(id=guild_id)
+            session.add(gc)
+
         new_config = json.dumps(new_gi.to_js_json())
         gc.config = new_config
         logger.info("New config for guild %d is %s", guild_id, new_config)

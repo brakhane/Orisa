@@ -5,9 +5,6 @@
 
 from .config_classes import *
 
-# Needs to be empty.
-GUILD_INFOS = {}
-
 # Aliases for channels, used by admin commands
 # key is alias, value is discord id
 # like {"main": 1234}
