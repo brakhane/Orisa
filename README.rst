@@ -45,7 +45,7 @@ Features
 Using Orisa on your Discord
 ---------------------------
 
-You can simply invite Orisa to your discord by following [this link](https://wur.st/bot/ever/invite). She will send your further information after she has joined your server.
+You can simply invite Orisa to your discord by visiting https://wur.st/bot/ever/invite. She will send your further information after she has joined your server.
 
 Installation of your own instance
 ---------------------------------
