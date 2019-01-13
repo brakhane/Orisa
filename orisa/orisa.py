@@ -1092,7 +1092,7 @@ class Orisa(Plugin):
         )
         embed.add_field(
             name="!ow config",
-            value="This command can only be used by members with the &quot;Orisa Admin&quot; role and allows them to configure Orisa for the specific Discord server"
+            value='This command can only be used by members with the "Orisa Admin" role and allows them to configure Orisa for the specific Discord server',
         )
         embed.add_field(
             name="!ow findplayers [max diff] *or* !ow findplayers min max",
