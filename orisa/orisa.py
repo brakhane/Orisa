@@ -1091,6 +1091,10 @@ class Orisa(Plugin):
             "`!ow alwaysshowsr on`",
         )
         embed.add_field(
+            name="!ow config",
+            value="This command can only be used by members with the &quot;Orisa Admin&quot; role and allows them to configure Orisa for the specific Discord server"
+        )
+        embed.add_field(
             name="!ow findplayers [max diff] *or* !ow findplayers min max",
             value="*This command is still in beta and may change at any time!*\n"
             "This command is intended to find partners for your Competitive team and shows you all registered and online users within the specified range.\n"
