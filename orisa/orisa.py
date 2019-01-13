@@ -1429,7 +1429,8 @@ class Orisa(Plugin):
         channel = await self._find_hello_channel(guild)
         await channel.messages.send(
             "*Greetings*! I am excited to be here :smiley:\n"
-            "To get started, create a new role named `Orisa Admin` and add yourself and everybody that should be allowed to configure me.\n"
+            "To get started, create a new role named `Orisa Admin` (only the name is important, it doesn't need any special permissions) and add yourself "
+            "and everybody that should be allowed to configure me.\n"
             "Then, write `!ow config` in this channel and I will send you a link to configure me via DM."
         )
 
