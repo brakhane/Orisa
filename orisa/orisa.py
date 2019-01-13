@@ -1231,6 +1231,7 @@ class Orisa(Plugin):
         return embeds
 
     @ow.subcommand()
+    @condition(correct_channel)
     async def srgraph(self, ctx, date: str = None):
 
         with self.database.session() as session:
