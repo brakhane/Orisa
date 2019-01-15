@@ -477,11 +477,11 @@ class Orisa(Plugin):
     async def config(self, ctx):
         if ctx.channel.private:
             await ctx.channel.messages.send(
-                content="The config command must be issued from a channel of the guild to configure. Don't worry, I will send you "
-                "the config instructions as a DM, so others can't configure me just by watching you sending this command.",
+                content="The config command must be issued from a channel of the guild to configure. "
+                "Don't worry, I will send you the config instructions as a DM, so others can't configure me just by watching you sending this command.",
                 embed=Embed(
                     title="Tip",
-                    description="`!ow config` works in *any* channel, so you can also use a admin only channel",
+                    description="`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin only channel",
                 ),
             )
             return
@@ -1435,32 +1435,47 @@ class Orisa(Plugin):
     async def _handle_new_guild(self, guild):
         logger.info("We have a new guild %s \o/", guild)
         self.guild_config[guild.id] = GuildConfig.default()
-        channel = await self._find_hello_channel(guild)
-        await channel.messages.send(
+
+        msg = (
             "*Greetings*! I am excited to be here :smiley:\n"
             "To get started, create a new role named `Orisa Admin` (only the name is important, it doesn't need any special permissions) and add yourself "
             "and everybody that should be allowed to configure me.\n"
             "Then, write `!ow config` in this channel and I will send you a link to configure me via DM."
         )
 
-    # Util
-
-    async def _find_hello_channel(self, guild):
-        """Tries to find a channel to post the first hello message to."""
+        # try to find a channel to post the first hello message to
         for channel in sorted(guild.channels.values(), key=attrgetter("position")):
             if (
                 channel.type == ChannelType.TEXT
+                # when read_messages is false, no messages can be sent even if send_messages is true
                 and channel.effective_permissions(guild.me).send_messages
+                and channel.effective_permissions(guild.me).read_messages
             ):
                 logger.debug("found hello channel %s", channel)
-                return channel
+                try:
+                    await channel.messages.send(msg)
+                except Exception:
+                    logger.error(
+                        "Got exception when trying to send to channel %s, checking another one",
+                        channel,
+                        exc_info=True,
+                    )
+                    continue
+                else:
+                    # found one
+                    break
         else:
             logger.debug(
                 "no valid hello channel found. Falling back to DM to owner for %s",
                 guild,
             )
-            # not found, fall back to DM to guild owner
-            return await guild.owner.user.open_private_channel()
+            await guild.owner.send(
+                msg + 
+                f"\n\n*Somebody (hopefully you) invited me to your guild {guild.name}, but I couldn't find a "
+                f"text channel I am allowed to send messages to, so I have to message you directly)*"
+            )
+
+    # Util
 
     async def _adjust_voice_channels(
         self, parent, *, create_all_channels=False, adjust_user_limits=False
