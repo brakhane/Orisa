@@ -120,7 +120,7 @@ Don't forget to use `!ow roles` to set your roles; also don't play Genji."
             description="When a member reaches a new highest rank (e.g. Silver → Gold), Orisa will publically congratulate him/her in this channel. It is highly recommended to select the channel where members chat about OW (Orisa will <strong>only</strong> post 'rank up' messages), but it can also be the same as &quot;Listen Channel&quot;."
           >
             <channel-selector
-              :state="val_state(validation_errors.listen_channel_id)"
+              :state="val_state(validation_errors.congrats_channel_id)"
               v-model="guild_config.congrats_channel_id"
               :channels="channels"
             ></channel-selector>
