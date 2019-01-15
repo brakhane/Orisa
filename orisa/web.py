@@ -123,7 +123,7 @@ def validate_config(guild, guild_config):
         missing = missing_perms(
             chan.effective_permissions(guild.me),
             # we only need to check manage_nicknames once, so we do it here
-            ["send_messages", "embed_links", "attach_files", "manage_nicknames"],
+            ["send_messages", "read_messages", "embed_links", "attach_files", "manage_nicknames"],
         )
         if missing:
             errors["listen_channel_id"] = missing
@@ -134,7 +134,7 @@ def validate_config(guild, guild_config):
     else:
         missing = missing_perms(
             chan.effective_permissions(guild.me),
-            ["send_messages", "embed_links", "attach_files"],
+            ["send_messages", "read_messages", "embed_links", "attach_files"],
         )
         if missing:
             errors["congrats_channel_id"] = missing
