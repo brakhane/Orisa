@@ -585,7 +585,7 @@ class Orisa(Plugin):
         try:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, "You are not registered.")
+                await reply(ctx, "You are not registered. Use `!ow register` first.")
                 return
             try:
                 index = resolve_tag_or_index(user, tag_or_index)
@@ -790,7 +790,7 @@ class Orisa(Plugin):
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                raise reply(ctx, "You are not registered.")
+                raise reply(ctx, "You are not registered. Do `!ow register` first.")
                 return
 
             if arg2 is None:
@@ -886,7 +886,7 @@ class Orisa(Plugin):
         try:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, "You are not registered!")
+                await reply(ctx, "You are not registered! Do `!ow register` first.")
                 return
             user.roles = roles
             session.commit()
@@ -1237,7 +1237,7 @@ class Orisa(Plugin):
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, "You are not registered")
+                await reply(ctx, "You are not registered. Do `!ow register` first.")
                 return
             else:
                 await self._srgraph(ctx, user, ctx.author.name, date)
@@ -1470,7 +1470,7 @@ class Orisa(Plugin):
                 guild,
             )
             await guild.owner.send(
-                msg + 
+                msg +
                 f"\n\n*Somebody (hopefully you) invited me to your guild {guild.name}, but I couldn't find a "
                 f"text channel I am allowed to send messages to, so I have to message you directly)*"
             )
