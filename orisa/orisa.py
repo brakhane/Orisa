@@ -2189,7 +2189,7 @@ class Orisa(Plugin):
                 extra_text = ""
                 for guild in self.client.guilds.values():
                     if user_id in guild.members:
-                        extra_text = self.guild_config[guild.id].extra_register_text
+                        extra_text = self.guild_config[guild.id].extra_register_text or ""
                         break
 
                 resp = (
