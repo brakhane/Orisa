@@ -1441,7 +1441,7 @@ class Orisa(Plugin):
             "To get started, create a new role named `Orisa Admin` (only the name is important, it doesn't need any special permissions) and add yourself "
             "and everybody that should be allowed to configure me.\n"
             "Then, write `!ow config` in this channel and I will send you a link to configure me via DM.\n"
-            "*I won't react to any commands except `!ow help` and `!ow config` until I'm configured for this Discord!*"
+            "*I will ignore all commands except `!ow help` and `!ow config` until I'm configured for this Discord!*"
         )
 
         # try to find a channel to post the first hello message to
