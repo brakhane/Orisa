@@ -25,7 +25,7 @@ but wants to make people's life easier; it wants to be the hero the discord user
 Features
 --------
 
-* Shows the current SR and/or rank in nicknames, e.g. ``somenick [2345]``. Users can configure what it shown by using flexible format strings
+* Shows the current SR and/or rank in nicknames, e.g. ``somenick [2345]``. Users can configure what is shown by using flexible format strings
 * SR is automatically updated whenever a player stops playing Overwatch while being in Discord, and also every hour
 * Supports multiple BattleTags per user
 * BattleTags are registered via OAuth, so you can be sure that the BattleTag really belongs to that user
