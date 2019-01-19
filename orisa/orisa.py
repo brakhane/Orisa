@@ -1030,6 +1030,13 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     async def help(self, ctx):
+        logger.debug(f"{ctx.channel.guild_id} {ctx.channel.guild} {self.guild_config}")
+        if ctx.channel.guild_id not in self.guild_config or self.guild_config[ctx.channel.guild_id] == GuildConfig.default():
+            await reply(
+                ctx,
+                "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!"
+            )
+            return
         forbidden = False
         for embed in self._create_help(ctx):
             try:
@@ -1405,21 +1412,32 @@ class Orisa(Plugin):
         logger.debug(
             f"Member {member.name}({member.id}) left the guild ({member.guild})"
         )
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, member.id)
-            if user:
-                in_other_guild = False
-                for guild in self.client.guilds.values():
-                    if guild.id != member.guild.id and member.id in guild.members:
-                        in_other_guild = True
-                        logger.debug(f"{member.name} is still in guild {guild.id}")
-                        break
-                if not in_other_guild:
-                    logger.info(
-                        f"deleting {user} from database because {member.name} left the guild and has no other guilds"
-                    )
-                    session.delete(user)
-                    session.commit()
+        if member.id == ctx.bot.user.id:
+            logger.info(f"Seems like I was kicked from guild {member.guild}")
+            with self.database.session() as session:
+                gc = session.query(GuildConfigJson).filter_by(id=member.guild.id).one_or_none()
+                if gc:
+                    logger.info("That guild was configured")
+                    session.delete(gc)
+                with suppress(KeyError):
+                    del self.guild_config[member.guild.id]                
+                session.commit()
+        else:
+            with self.database.session() as session:
+                user = self.database.user_by_discord_id(session, member.id)
+                if user:
+                    in_other_guild = False
+                    for guild in self.client.guilds.values():
+                        if guild.id != member.guild.id and member.id in guild.members:
+                            in_other_guild = True
+                            logger.debug(f"{member.name} is still in guild {guild.id}")
+                            break
+                    if not in_other_guild:
+                        logger.info(
+                            f"deleting {user} from database because {member.name} left the guild and has no other guilds"
+                        )
+                        session.delete(user)
+                        session.commit()
 
     @event("guild_join")
     async def _guild_joined(self, ctx: Context, guild: Guild):
