@@ -1276,6 +1276,10 @@ class Orisa(Plugin):
 
         data = [(sr.timestamp, sr.value) for sr in tag.sr_history]
 
+        if not data:
+            await ctx.channel.messages.send(f"There is no data yet for {tag.tag}, try again later")
+            return
+
         data = pd.DataFrame.from_records(reversed(data), columns=["timestamp", "sr"])
 
         if date:
