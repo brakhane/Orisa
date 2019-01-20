@@ -473,7 +473,6 @@ class Orisa(Plugin):
             await reply(ctx, "I've sent you a DM")
 
     @ow.subcommand()
-    @author_has_roles("Orisa Admin")
     async def config(self, ctx):
         if ctx.channel.private:
             await ctx.channel.messages.send(
@@ -484,6 +483,11 @@ class Orisa(Plugin):
                     description="`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin only channel",
                 ),
             )
+            return
+
+        if ctx.author != ctx.bot.application_info.owner and not any(role.name.lower() == "orisa admin" for role in ctx.author.roles):
+            await reply(ctx, "This command can only be used by members with the `Orisa Admin` role")
+            logger.info(f"user {ctx.author} tried to issue ow config without being in Orisa Admin")
             return
 
         token = web.create_token(ctx.guild.id)
