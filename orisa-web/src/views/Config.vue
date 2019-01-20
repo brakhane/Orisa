@@ -29,6 +29,7 @@
       <p
         class="lead"
       >The save button will appear when you have unsaved changes. After you have saved your changes, you can close this window.</p>
+      <p>If you have questions or suggestions, <a target="_blank" href="https://discord.gg/tsNxvFh">join the official Orisa Discord</a>.</p>
       <b-alert variant="warning" class="my-4" show dismissible v-if="higher_roles.length > 0">
         <h5 class="alert-heading">The Orisa role is not the top role!</h5>
         <p>
