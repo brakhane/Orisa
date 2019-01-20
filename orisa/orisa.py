@@ -1030,7 +1030,6 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     async def help(self, ctx):
-        logger.debug(f"{ctx.channel.guild_id} {ctx.channel.guild} {self.guild_config}")
         if ctx.channel.guild_id not in self.guild_config or self.guild_config[ctx.channel.guild_id] == GuildConfig.default():
             await reply(
                 ctx,
