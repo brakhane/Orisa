@@ -88,7 +88,7 @@
             horizontal
             label="Welcome text"
             :invalid-feedback="validation_errors.extra_register_text"
-            description="Server specific text that should be added to the welcome message after registration is done. Can use <a target=&quot;_blank&quot; href=&quot;https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-&quot;>Discord Markdown</a>."
+            description="Optional server specific text that should be added to the welcome message after registration is done. Can use <a target=&quot;_blank&quot; href=&quot;https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-&quot;>Discord Markdown</a>."
           >
             <b-form-textarea
               :state="val_state(validation_errors.extra_register_text)"
