@@ -1494,7 +1494,7 @@ class Orisa(Plugin):
             )
             await guild.owner.send(
                 msg +
-                f"\n\n*Somebody (hopefully you) invited me to your guild {guild.name}, but I couldn't find a "
+                f"\n\n*Somebody (hopefully you) invited me to your server {guild.name}, but I couldn't find a "
                 f"text channel I am allowed to send messages to, so I have to message you directly)*"
             )
 
