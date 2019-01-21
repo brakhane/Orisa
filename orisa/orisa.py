@@ -473,8 +473,9 @@ class Orisa(Plugin):
             await reply(ctx, "I've sent you a DM")
 
     @ow.subcommand()
-    async def config(self, ctx):
-        if ctx.channel.private:
+    async def config(self, ctx, guild_id: int = None):
+        is_owner = ctx.author == ctx.bot.application_info.owner
+        if ctx.channel.private and not is_owner:
             await ctx.channel.messages.send(
                 content="The config command must be issued from a channel of the guild to configure. "
                 "Don't worry, I will send you the config instructions as a DM, so others can't configure me just by watching you sending this command.",
@@ -485,12 +486,16 @@ class Orisa(Plugin):
             )
             return
 
-        if ctx.author != ctx.bot.application_info.owner and not any(role.name.lower() == "orisa admin" for role in ctx.author.roles):
+        if not is_owner and not any(role.name.lower() == "orisa admin" for role in ctx.author.roles):
             await reply(ctx, "This command can only be used by members with the `Orisa Admin` role")
             logger.info(f"user {ctx.author} tried to issue ow config without being in Orisa Admin")
             return
 
-        token = web.create_token(ctx.guild.id)
+        if is_owner and guild_id is not None:
+            token = web.create_token(guild_id)
+        else:
+            token = web.create_token(ctx.guild.id)
+
         embed = Embed(
             title="Click here to configure me", url=f"{WEB_APP_PATH}config/{token}"
         )

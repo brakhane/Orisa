@@ -58,7 +58,7 @@ async def channels(token):
     try:
         state = serializer.loads(token, max_age=TOKEN_MAX_AGE)
     except SignatureExpired:
-        return "token expired", 404
+        return "token expired", 410
     except BadSignature:
         return "invalid token", 404
 
