@@ -486,9 +486,16 @@ class Orisa(Plugin):
             )
             return
 
-        if not is_owner and not any(role.name.lower() == "orisa admin" for role in ctx.author.roles):
-            await reply(ctx, "This command can only be used by members with the `Orisa Admin` role")
-            logger.info(f"user {ctx.author} tried to issue ow config without being in Orisa Admin")
+        if not is_owner and not any(
+            role.name.lower() == "orisa admin" for role in ctx.author.roles
+        ):
+            await reply(
+                ctx,
+                "This command can only be used by members with the `Orisa Admin` role",
+            )
+            logger.info(
+                f"user {ctx.author} tried to issue ow config without being in Orisa Admin"
+            )
             return
 
         if is_owner and guild_id is not None:
@@ -1039,10 +1046,13 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     async def help(self, ctx):
-        if ctx.channel.guild_id not in self.guild_config or self.guild_config[ctx.channel.guild_id] == GuildConfig.default():
+        if (
+            ctx.channel.guild_id not in self.guild_config
+            or self.guild_config[ctx.channel.guild_id] == GuildConfig.default()
+        ):
             await reply(
                 ctx,
-                "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!"
+                "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!",
             )
             return
         forbidden = False
@@ -1285,7 +1295,9 @@ class Orisa(Plugin):
         data = [(sr.timestamp, sr.value) for sr in tag.sr_history]
 
         if not data:
-            await ctx.channel.messages.send(f"There is no data yet for {tag.tag}, try again later")
+            await ctx.channel.messages.send(
+                f"There is no data yet for {tag.tag}, try again later"
+            )
             return
 
         data = pd.DataFrame.from_records(reversed(data), columns=["timestamp", "sr"])
@@ -1427,12 +1439,16 @@ class Orisa(Plugin):
         if member.id == ctx.bot.user.id:
             logger.info(f"Seems like I was kicked from guild {member.guild}")
             with self.database.session() as session:
-                gc = session.query(GuildConfigJson).filter_by(id=member.guild.id).one_or_none()
+                gc = (
+                    session.query(GuildConfigJson)
+                    .filter_by(id=member.guild.id)
+                    .one_or_none()
+                )
                 if gc:
                     logger.info("That guild was configured")
                     session.delete(gc)
                 with suppress(KeyError):
-                    del self.guild_config[member.guild.id]                
+                    del self.guild_config[member.guild.id]
                 session.commit()
         else:
             with self.database.session() as session:
@@ -1501,8 +1517,8 @@ class Orisa(Plugin):
                 guild,
             )
             await guild.owner.send(
-                msg +
-                f"\n\n*Somebody (hopefully you) invited me to your server {guild.name}, but I couldn't find a "
+                msg
+                + f"\n\n*Somebody (hopefully you) invited me to your server {guild.name}, but I couldn't find a "
                 f"text channel I am allowed to send messages to, so I have to message you directly)*"
             )
 
@@ -1747,7 +1763,7 @@ class Orisa(Plugin):
         except KeyError as e:
             raise InvalidFormat(e.args[0]) from e
 
-    async def _update_nick(self, user, *, force=False):
+    async def _update_nick(self, user, *, force=False, raise_hierachy_error=False):
         user_id = user.discord_id
         exception = new_nn = None
 
@@ -1759,7 +1775,11 @@ class Orisa(Plugin):
             try:
                 formatted = self._format_nick(user)
                 new_nn = await self._update_nick_for_member(
-                    member, formatted, user, force=force
+                    member,
+                    formatted,
+                    user,
+                    force=force,
+                    raise_hierachy_error=raise_hierachy_error,
                 )
             except Exception as e:
                 exception = e
@@ -1771,7 +1791,13 @@ class Orisa(Plugin):
         return new_nn
 
     async def _update_nick_for_member(
-        self, member, formatted: str, user=None, *, force=False
+        self,
+        member,
+        formatted: str,
+        user=None,
+        *,
+        force=False,
+        raise_hierachy_error=False,
     ):
         nn = str(member.name)
 
@@ -1800,6 +1826,8 @@ class Orisa(Plugin):
                     nn,
                     new_nn,
                 )
+                if raise_hierachy_error:
+                    raise
             except Exception as e:
                 logger.exception("error while setting nick", exc_info=True)
                 raise
@@ -2220,16 +2248,26 @@ class Orisa(Plugin):
                 extra_text = ""
                 for guild in self.client.guilds.values():
                     if user_id in guild.members:
-                        extra_text = self.guild_config[guild.id].extra_register_text or ""
+                        extra_text = (
+                            self.guild_config[guild.id].extra_register_text or ""
+                        )
                         break
-
-                resp = (
-                    f"OK. People can now ask me for your BattleTag **{battle_tag}**, and I will keep track of your SR.\n"
-                    f"On some servers, I will only update your nick if you join a OW voice channel. If you want your nick to always show your SR, "
-                    f"use the `!ow alwaysshowsr` command. If you want me to show your rank instead of your SR, use `!ow format $rank`.\n"
-                    f"If you have more than one account, simply issue `!ow register` again.\n"
-                    + extra_text
+                embed = Embed(
+                    color=0x6DB76D,
+                    title="Registration successful",
+                    description=f"OK. People can now ask me for your BattleTag **{battle_tag}**, and I will keep track of your SR.",
                 )
+                embed.add_field(
+                    name=":information_source: Pro Tips",
+                    value="On some servers, I will only update your nick if you join a OW voice channel. If you want your nick to always show your SR, "
+                    "use the `!ow alwaysshowsr` command. If you want me to show your rank instead of your SR, use `!ow format $rank`.\n"
+                    "If you have more than one account, simply issue `!ow register` again.\n",
+                )
+                if extra_text:
+                    embed.add_field(
+                        name=f":envelope: A message from the *{guild.name}* staff",
+                        value=extra_text,
+                    )
             else:
                 existing_tag = None
                 for tag in user.battle_tags:
@@ -2237,23 +2275,31 @@ class Orisa(Plugin):
                         existing_tag = tag
                         break
                 if existing_tag and existing_tag.tag != battle_tag:
-                    resp = f"It seems like your BattleTag changed from *{existing_tag.tag}* to *{battle_tag}*. I have updated my database."
+                    embed = Embed(
+                        color=0x6DB76D,
+                        title="BattleTag updated",
+                        description=f"It seems like your BattleTag changed from *{existing_tag.tag}* to *{battle_tag}*. I have updated my database.",
+                    )
                     existing_tag.tag = battle_tag
                 elif any(tag.tag == battle_tag for tag in user.battle_tags):
                     embed = Embed(
-                        title=":information_source: Tip",
-                        description="Open the URL in a private/incognito tab next time, so you can enter the credentials of the account you want.",
+                        title="BattleTag already registered",
+                        color=0x6F0808,
+                        description=f"You already registered the BattleTag *{battle_tag}*, so there's nothing for me to do. *Sleep mode reactivated.*\n",
                     )
-                    await user_obj.send(
-                        f"You already registered the BattleTag *{battle_tag}*, so there's nothing for me to do. *Sleep mode reactivated.*\n",
-                        embed=embed,
+                    embed.add_field(
+                        name=":information_source: Tip",
+                        value="Open the URL in a private/incognito tab next time, so you can enter the credentials of the account you want.",
                     )
+                    await user_obj.send(content=None, embed=embed)
                     return
                 else:
                     user.battle_tags.append(new_tag)
-                    resp = (
-                        f"OK. I've added **{battle_tag}** to the list of your BattleTags. **Your primary BattleTag remains {user.battle_tags[0].tag}**. "
-                        f"To change your primary tag, use `!ow setprimary yourbattletag`, see help for more details."
+                    embed = Embed(
+                        color=0x6DB76D,
+                        title="BattleTag added",
+                        description=f"OK. I've added **{battle_tag}** to the list of your BattleTags. **Your primary BattleTag remains {user.battle_tags[0].tag}**. "
+                        f"To change your primary tag, use `!ow setprimary yourbattletag`, see help for more details.",
                     )
 
             try:
@@ -2270,7 +2316,10 @@ class Orisa(Plugin):
                 )
                 raise
             except UnableToFindSR:
-                resp += "\nYou don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your BattleTag."
+                embed.add_field(
+                    name=":warning: No SR",
+                    value="You don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your BattleTag.",
+                )
                 sr = None
 
             new_tag.update_sr(sr)
@@ -2281,25 +2330,36 @@ class Orisa(Plugin):
             session.commit()
 
             try:
-                await self._update_nick(user, force=True)
+                await self._update_nick(user, force=True, raise_hierachy_error=True)
             except NicknameTooLong as e:
-                resp += f"\n**Adding your SR to your nickname would result in '{e.nickname}' and with {len(e.nickname)} characters, be longer than Discord's maximum of 32.** Please shorten your nick to be no longer than 28 characters. I will regularly try to update it."
+                embed.add_field(
+                    name=":warning: Nickname too long!",
+                    value=f"Adding your SR to your nickname would result in '{e.nickname}' and with {len(e.nickname)} characters, be longer than Discord's maximum of 32."
+                    f"Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.",
+                )
             except HierarchyError as e:
-                resp += (
-                    '\n**I do not have enough permissions to update your nickname. The owner needs to move the "Orisa" role higher '
-                    "so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry.**"
+                embed.add_field(
+                    name=":warning: Cannot update nickname",
+                    value='I do not have enough permissions to update your nickname. The owner needs to move the "Orisa" role higher '
+                    "so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry.",
                 )
             except Exception as e:
                 logger.exception(f"unable to update nick for user {user}")
-                resp += (
-                    "\nHowever, right now I couldn't update your nickname, will try that again later."
-                    "People will still be able to ask for your BattleTag, though."
+                embed.add_field(
+                    name=":warning: Cannot update nickname",
+                    value="Right now I couldn't update your nickname, will try that again later."
+                    "People will still be able to ask for your BattleTag, though.",
                 )
             finally:
                 with suppress(Exception):
                     await self._update_nick(user)
 
-            await user_channel.messages.send(resp)
+            embed.add_field(
+                name=":thumbsup: Vote for Orisa",
+                value="If you find Orisa useful, consider voting for her [by clicking here](https://discordbots.org/bot/445905377712930817/vote) so more people can discover Orisa",
+            )
+
+            await user_channel.messages.send(content=None, embed=embed)
 
         finally:
             session.close()
