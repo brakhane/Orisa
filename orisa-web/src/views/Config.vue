@@ -94,7 +94,7 @@
               :state="val_state(validation_errors.extra_register_text)"
               v-model="guild_config.extra_register_text"
               placeholder="e.g.
-Don't forget to use `!ow roles` to set your roles; also don't play Genji."
+Don't forget to use `!ow setroles` to set your roles; also don't play Genji."
               :rows="2"
             ></b-form-textarea>
           </b-form-group>
