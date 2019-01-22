@@ -2355,8 +2355,8 @@ class Orisa(Plugin):
                     await self._update_nick(user)
 
             embed.add_field(
-                name=":thumbsup: Vote for Orisa on Discord Bot List",
-                value="If you find Orisa useful, consider voting for her [by clicking here](https://discordbots.org/bot/445905377712930817/vote) so more people can discover Orisa",
+                name=":thumbsup: Vote for me on Discord Bot List",
+                value="If you find me helpful, consider voting for me [by clicking here](https://discordbots.org/bot/445905377712930817/vote)",
             )
 
             await user_channel.messages.send(content=None, embed=embed)
