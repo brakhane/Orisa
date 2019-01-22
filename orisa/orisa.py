@@ -1501,11 +1501,11 @@ class Orisa(Plugin):
                 logger.debug("found hello channel %s", channel)
                 try:
                     await channel.messages.send(msg)
+                    logger.debug("message successfull sent")
                 except Exception:
-                    logger.error(
+                    logger.exception(
                         "Got exception when trying to send to channel %s, checking another one",
-                        channel,
-                        exc_info=True,
+                        channel
                     )
                     continue
                 else:
