@@ -11,7 +11,7 @@ trio = ">=0.9.0,<0.10.0"
 fuzzywuzzy = {extras = ["speedup"]}
 pyyaml = "*"
 pendulum = "*"
-"discord-curious" = {git = "https://github.com/brakhane/curious.git", ref="bugfixes-jan-19"}
+discord-curious = {ref = "bugfixes-jan-19",editable = true,git = "https://github.com/brakhane/curious.git"}
 cachetools = "*"
 wcwidth = "*"
 tabulate = "*"
