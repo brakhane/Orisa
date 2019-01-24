@@ -1046,15 +1046,16 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     async def help(self, ctx):
-        if (
-            ctx.channel.guild_id not in self.guild_config
-            or self.guild_config[ctx.channel.guild_id] == GuildConfig.default()
-        ):
-            await reply(
-                ctx,
-                "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!",
-            )
-            return
+        if not ctx.channel.private:
+            if (
+                ctx.channel.guild_id not in self.guild_config
+                or self.guild_config[ctx.channel.guild_id] == GuildConfig.default()
+            ):
+                await reply(
+                    ctx,
+                    "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!",
+                )
+                return
         forbidden = False
         for embed in self._create_help(ctx):
             try:
@@ -1423,7 +1424,7 @@ class Orisa(Plugin):
         # logger.debug(f"got message {msg.author} {msg.channel} {msg.content} {msg.snowflake_timestamp}")
         if msg.content.startswith("!ow"):
             logger.info(
-                f"{msg.author.name} in {msg.channel.type.name} issued {msg.content}"
+                f"{msg.author.name} in {msg.channel} issued {msg.content}"
             )
         if msg.content.startswith("!"):
             return
