@@ -491,7 +491,7 @@ class Orisa(Plugin):
         ):
             await reply(
                 ctx,
-                "This command can only be used by members with the `Orisa Admin` role",
+                "This command can only be used by members with the `Orisa Admin` role (only the name of the role is important, it doesn't need any permissions)",
             )
             logger.info(
                 f"user {ctx.author} tried to issue ow config without being in Orisa Admin"
