@@ -1407,11 +1407,13 @@ class Orisa(Plugin):
         parent = None
         if old_voice_state:
             parent = old_voice_state.channel.parent
-            await self._adjust_voice_channels(parent)
+            if parent:
+                await self._adjust_voice_channels(parent)
 
         if new_voice_state:
             if new_voice_state.channel.parent != parent:
-                await self._adjust_voice_channels(new_voice_state.channel.parent)
+                if new_voice_state_channel.parent:
+                    await self._adjust_voice_channels(new_voice_state.channel.parent)
 
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, member.id)
