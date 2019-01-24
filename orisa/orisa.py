@@ -267,6 +267,18 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner, bypass_owner=False)
+    async def messageserverowners(self, ctx, *, message: str):
+        for guild in ctx.bot.guilds.values():
+            try:
+                logger.info("working on guild %s with owner %s (%s)", guild, guild.owner, guild.owner.name)
+                await ctx.author.send(f"sending to {guild.owner.mention} ({guild.owner.name}) of {guild}")
+                await guild.owner.send(message)
+            except Exception:
+                logger.exception("unable to send to owner of guild %s", guild)
+
+
+    @command()
+    @condition(only_owner, bypass_owner=False)
     async def post(self, ctx, channel_id: str, *, message: str):
         await self._post(ctx, channel_id, message, glados=False)
 
