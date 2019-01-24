@@ -1412,7 +1412,7 @@ class Orisa(Plugin):
 
         if new_voice_state:
             if new_voice_state.channel.parent != parent:
-                if new_voice_state_channel.parent:
+                if new_voice_state.channel.parent:
                     await self._adjust_voice_channels(new_voice_state.channel.parent)
 
         with self.database.session() as session:
@@ -1495,7 +1495,7 @@ class Orisa(Plugin):
 
         # try to find a channel to post the first hello message to
         channels = sorted(guild.channels.values(), key=attrgetter("position"))
-        
+
         # if there is a welcome channel, try that first
         logger.debug("system channel is %r", guild.system_channel)
         if guild.system_channel:
