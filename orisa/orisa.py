@@ -1469,12 +1469,12 @@ class Orisa(Plugin):
 
     @event("guild_join")
     async def _guild_joined(self, ctx: Context, guild: Guild):
-        logger.info("Joined guild %s", guild)
+        logger.info("Joined guild %r", guild)
         await self._handle_new_guild(guild)
 
     @event("guild_streamed")
     async def _guild_streamed(self, ctx, guild):
-        logger.info("Streamed guild %s", guild)
+        logger.info("Streamed guild %r", guild)
         if guild.id not in self.guild_config:
             await self._handle_new_guild(guild)
 
@@ -1491,7 +1491,13 @@ class Orisa(Plugin):
         )
 
         # try to find a channel to post the first hello message to
-        for channel in sorted(guild.channels.values(), key=attrgetter("position")):
+        channels = sorted(guild.channels.values(), key=attrgetter("position"))
+        
+        # if there is a welcome channel, try that first
+        logger.debug("system channel is %r", guild.system_channel)
+        if guild.system_channel:
+            channels = [guild.system_channel] + list(channels)
+        for channel in channels:
             if (
                 channel.type == ChannelType.TEXT
                 # when read_messages is false, no messages can be sent even if send_messages is true
