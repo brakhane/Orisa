@@ -114,6 +114,7 @@ logger = logging.getLogger("orisa")
 
 oauth_serializer = URLSafeTimedSerializer(SIGNING_SECRET)
 
+SUPPORT_DISCORD="https://discord.gg/tsNxvFh"
 
 RANKS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grand Master")
 COLORS = (
@@ -445,27 +446,24 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def about(self, ctx):
         embed = Embed(
-            title="About Orisa",
+            title="About Me",
             description=(
-                "Orisa is an open source Discord bot to help manage Overwatch Discord communities.\n"
-                "She is written and maintained by Dennis Brakhane (Joghurt#2732 on Discord), and the development is done on Github: "
-                "https://github.com/brakhane/Orisa"
+                "I am an open source Discord bot to help manage Overwatch Discord communities.\n"
+                "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord), and the [development is done on Github](https://github.com/brakhane/Orisa)"
             ),
         )
 
         embed.add_field(
-            name="Invite Orisa to your own Discord",
+            name="Invite me to your own Discord",
             value=(
-                "To invite her to your server, simply click this link, she will message you with further instructions after she has joined your server:\n"
-                "https://wur.st/bot/ever/invite"
+                "To invite me to your server, simply [click here](https://wur.st/bot/ever/invite), I will post a message with more information in a channel after I have joined your server"
             ),
         )
         embed.add_field(
             name="Join the official Orisa Discord",
             value=(
-                "If you use Orisa in your Discord server, or generally have suggestions, join the official Orisa Discord. Updates and new features "
-                "will be discussed and announced there:\n"
-                "https://discord.gg/tsNxvFh"
+                f"If you use me in your Discord server, or generally have suggestions, [join the official Orisa Discord]({SUPPORT_DISCORD}). Updates and new features "
+                "will be discussed and announced there"
             ),
         )
         await ctx.author.send(content=None, embed=embed)
@@ -489,10 +487,18 @@ class Orisa(Plugin):
         if not is_owner and not any(
             role.name.lower() == "orisa admin" for role in ctx.author.roles
         ):
+            help_embed=Embed(
+                title=":thinking: Need help?",
+                description=f"Join the [Support Discord]({SUPPORT_DISCORD})"
+            )
             await reply(
                 ctx,
-                "This command can only be used by members with the `Orisa Admin` role (only the name of the role is important, it doesn't need any permissions)",
+                "This command can only be used by members with the `Orisa Admin` role (only the name of the role is important, it doesn't need any permissions)"
             )
+            try:
+                await ctx.channel.messages.send(content=None, embed=help_embed)
+            except Exception:
+                logger.exception("unable to send help embed")
             logger.info(
                 f"user {ctx.author} tried to issue ow config without being in Orisa Admin"
             )
@@ -506,9 +512,19 @@ class Orisa(Plugin):
         embed = Embed(
             title="Click here to configure me", url=f"{WEB_APP_PATH}config/{token}"
         )
+        embed.add_field(
+            name=":thinking: Need help?",
+            value=f"Join the [Support Discord]({SUPPORT_DISCORD})"
+        )
         embed.set_footer(text="This link will be valid for 30 minutes")
-        await ctx.author.send(content=None, embed=embed)
-        await reply(ctx, "I sent you a DM")
+        try:
+            await ctx.author.send(content=None, embed=embed)
+            await reply(ctx, "I sent you a DM")
+        except Forbidden:
+            await reply(ctx, 
+            "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. (I can't post the link here because "
+            "everybody who knows that link will be able to configure me for the next 30 minutes)")
+
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -1055,6 +1071,14 @@ class Orisa(Plugin):
                     ctx,
                     "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!",
                 )
+                try:
+                    await ctx.channel.messages.send(content=None, embed=Embed(
+                        title=":thinking: Need help?",
+                        description=f"Join the [Support Discord]({SUPPORT_DISCORD})"
+                    ))
+                except Exception:
+                    logger.exception("Unable to send help embed")
+
                 return
         forbidden = False
         for embed in self._create_help(ctx):
@@ -1519,6 +1543,13 @@ class Orisa(Plugin):
                     continue
                 else:
                     # found one
+                    try:
+                        await channel.messages.send(content=None, embed=Embed(
+                            title=":thinking: Need help?",
+                            description=f"Join the [Support Discord]({SUPPORT_DISCORD})"))
+                    except Exception:
+                        logger.exception("Unable to send support embed")
+
                     break
         else:
             logger.debug(
@@ -1530,6 +1561,13 @@ class Orisa(Plugin):
                 + f"\n\n*Somebody (hopefully you) invited me to your server {guild.name}, but I couldn't find a "
                 f"text channel I am allowed to send messages to, so I have to message you directly)*"
             )
+            try:
+                await channel.messages.send(content=None, embed=Embed(
+                    title=":thinking: Need help?",
+                    description=f"Join the [Support Discord]({SUPPORT_DISCORD})"))
+            except Exception:
+                logger.exception("Unable to send support embed")
+
 
     # Util
 
