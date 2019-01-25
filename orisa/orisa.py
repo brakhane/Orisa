@@ -2270,15 +2270,14 @@ class Orisa(Plugin):
 
     async def _web_server(self):
         config = hypercorn.config.Config()
-        config.application_path = "orisa.web:app"
-        config.debug = True
         config.access_logger = config.error_logger = logger
 
         web.send_ch = self.web_send_ch
         web.client = self.client
         web.orisa = self
 
-        await hypercorn.trio.run.run_single(config)
+        logger.info("Starting web server")
+        await hypercorn.trio.serve(web.app, config)
 
     async def _oauth_result_listener(self):
         async for uid, data in self.web_recv_ch:
