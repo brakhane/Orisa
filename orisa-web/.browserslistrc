@@ -1,3 +1,5 @@
-> 1%
-last 2 versions
+> 0.5%
+last 4 major versions
 not ie <= 8
+Firefox ESR
+Chrome >= 63
