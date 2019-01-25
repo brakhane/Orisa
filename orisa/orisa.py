@@ -533,7 +533,7 @@ class Orisa(Plugin):
             await ctx.author.send(content=None, embed=embed)
             await reply(ctx, "I sent you a DM")
         except Forbidden:
-            await reply(ctx, 
+            await reply(ctx,
             "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. (I can't post the link here because "
             "everybody who knows that link will be able to configure me for the next 30 minutes)")
 
@@ -1455,7 +1455,10 @@ class Orisa(Plugin):
             user = self.database.user_by_discord_id(session, member.id)
             if user:
                 formatted = self._format_nick(user)
-                await self._update_nick_for_member(member, formatted)
+                try:
+                    await self._update_nick_for_member(member, formatted)
+                except Exception:
+                    logger.exception("Unable to update nick for member %s", member)
 
     @event("message_create")
     async def _message_create(self, ctx, msg):
