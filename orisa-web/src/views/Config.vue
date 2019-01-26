@@ -86,9 +86,9 @@
           <hr class="hr-3">
           <b-form-group
             horizontal
-            label="Welcome text"
+            label="Register message"
             :invalid-feedback="validation_errors.extra_register_text"
-            description="Optional server specific text that should be added to the welcome message after registration is done. Can use <a target=&quot;_blank&quot; href=&quot;https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-&quot;>Discord Markdown</a>."
+            description="Optional server specific text that should be shown in the welcome message after a member registered with <code>!ow register</code>. This message is <em>not</em> shown when a user joins this server. Can use <a target=&quot;_blank&quot; href=&quot;https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-&quot;>Discord Markdown</a>."
           >
             <b-form-textarea
               :state="val_state(validation_errors.extra_register_text)"
