@@ -459,10 +459,11 @@ class Orisa(Plugin):
             title="About Me",
             description=(
                 "I am an open source Discord bot to help manage Overwatch Discord communities.\n"
-                "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord), and the [development is done on Github](https://github.com/brakhane/Orisa)"
+                "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord) and licensed under the "
+                "[GNU Affero General Public License 3.0](https://www.gnu.org/licenses/agpl-3.0.en.html); the "
+                "[development is done on Github](https://github.com/brakhane/Orisa)"
             ),
         )
-
         embed.add_field(
             name="Invite me to your own Discord",
             value=(
