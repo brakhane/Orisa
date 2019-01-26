@@ -115,6 +115,7 @@ logger = logging.getLogger("orisa")
 oauth_serializer = URLSafeTimedSerializer(SIGNING_SECRET)
 
 SUPPORT_DISCORD="https://discord.gg/tsNxvFh"
+VOTE_LINK="https://discordbots.org/bot/445905377712930817/vote"
 
 RANKS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grand Master")
 COLORS = (
@@ -426,6 +427,11 @@ class Orisa(Plugin):
 
                 if user.roles:
                     embed.add_field(name="Roles", value=format_roles(user.roles))
+
+                embed.add_field(
+                    name="Links",
+                    value=f'[Overwatch profile](https://playoverwatch.com/en-us/career/pc/{primary.tag.replace("#", "-")}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa Support Server]({SUPPORT_DISCORD})'
+                )
 
                 if multiple_tags:
                     footer_text = f"The SR of the primary BattleTag was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
@@ -2421,7 +2427,7 @@ class Orisa(Plugin):
 
             embed.add_field(
                 name=":thumbsup: Vote for me on Discord Bot List",
-                value="If you find me helpful, consider voting for me [by clicking here](https://discordbots.org/bot/445905377712930817/vote)",
+                value=f"If you find me helpful, consider voting for me [by clicking here]({VOTE_LINK})",
             )
 
             await user_channel.messages.send(content=None, embed=embed)
