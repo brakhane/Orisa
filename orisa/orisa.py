@@ -430,6 +430,7 @@ class Orisa(Plugin):
 
                 embed.add_field(
                     name="Links",
+                    inline=False,
                     value=f'[Overwatch profile](https://playoverwatch.com/en-us/career/pc/{primary.tag.replace("#", "-")}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa Support Server]({SUPPORT_DISCORD})'
                 )
 
