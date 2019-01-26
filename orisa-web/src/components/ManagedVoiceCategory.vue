@@ -94,7 +94,7 @@
               class="col-6 col-md-7 col-lg-8"
               :state="val_state(val_errors_prefixes(index).name)"
               :invalid-feedback="val_errors_prefixes(index).name"
-              label="Prefix"
+              label="Channel name prefix"
               description="The text before the number (and SR if &quot;Show SR&quot; is active)"
             >
               <b-form-input
