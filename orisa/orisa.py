@@ -1361,7 +1361,10 @@ class Orisa(Plugin):
 
         fig, ax = plt.subplots()
 
+        ax.xaxis_date()
+
         data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
+
 
         for is_max, ix in enumerate([data.sr.idxmin(), data.sr.idxmax()]):
             col = "C2" if is_max else "C1"
@@ -1378,9 +1381,9 @@ class Orisa(Plugin):
                 color=col,
             )
 
-        data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
+        # data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
 
-        if True:
+        if False:
             for ix in data.sr[pd.isna].index:
                 x = data.iloc[ix - 1 : ix]
                 x = x.append(data.iloc[ix + 1 : ix + 2])
