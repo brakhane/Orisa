@@ -1,8 +1,8 @@
 Orisa
 =====
 
-Orisa is a Discord bot that solves a problem an Overwatch community
-I'm a member of had: people who want to play as a team in a Quickplay or
+Orisa is a Discord bot that solves a problem [an Overwatch community
+I'm a member of](https://www.serenitygaming.eu) had: people who want to play as a team in a Quickplay or
 competitive match always had to ask for each other's BattleTags and - in
 case of competitive - rank.
 
