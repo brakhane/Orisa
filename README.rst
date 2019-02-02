@@ -1,3 +1,9 @@
+.. image:: https://discordbots.org/api/widget/status/445905377712930817.svg?noavatar=true
+   :target: https://discordbots.org/bot/445905377712930817
+   
+.. image:: https://discordbots.org/api/widget/servers/445905377712930817.svg?noavatar=true
+   :target: https://discordbots.org/bot/445905377712930817
+
 Orisa
 =====
 
@@ -45,7 +51,7 @@ Features
 Using Orisa on your Discord
 ---------------------------
 
-You can simply invite Orisa to your discord by visiting https://wur.st/bot/ever/invite. She will send your further information after she has joined your server.
+You can simply invite Orisa to your discord by visiting `this link <https://wur.st/bot/ever/invite>`_. She will send your further information after she has joined your server.
 
 Installation of your own instance
 ---------------------------------
