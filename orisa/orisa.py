@@ -61,7 +61,7 @@ from curious.commands.exc import ConversionFailedError
 from curious.commands.plugin import Plugin
 from curious.core.client import Client
 from curious.core.httpclient import HTTPClient
-from curious.exc import Forbidden, HierarchyError
+from curious.exc import Forbidden, HierarchyError, NotFound
 from curious.dataclasses.channel import ChannelType
 from curious.dataclasses.embed import Embed
 from curious.dataclasses.guild import Guild
@@ -293,7 +293,19 @@ class Orisa(Plugin):
             channel_id = int(channel_id)
         channel = self.client.find_channel(channel_id)
         with self.client.as_glados() if glados else nullcontext():
-            msg = await channel.messages.send(message)
+            logger.info(ctx.message.embeds)
+            logger.info(ctx.message.attachments)
+            try:
+                embed = ctx.message.embeds[0]
+            except IndexError:
+                embed = None
+            if ctx.message.attachments:
+                attachment = ctx.message.attachments[0]
+
+                data = await attachment.download()
+                msg = await channel.messages.upload(data, filename=attachment.filename, message_content=message, message_embed=embed)
+            else:
+                msg = await channel.messages.send(content=message, embed=embed)
         await ctx.channel.messages.send(f"created {msg.id}")
 
     @command()
@@ -1966,6 +1978,7 @@ class Orisa(Plugin):
             .join(BattleTag.current_sr)
             .order_by(desc(SR.value))
             .filter(SR.value != None)
+            .filter(BattleTag.position==0)
             .all()
         )
 
@@ -1975,15 +1988,7 @@ class Orisa(Plugin):
 
         guilds = self.client.guilds.values()
 
-        users_seen = set()
-
-        # Not the best runtime performance, we'll worry about that when we have
-        # hundreds of guilds with hundreds of members
         for tag, prev_sr in tags_and_prev:
-            if tag.user.id in users_seen:
-                continue
-            else:
-                users_seen.add(tag.user.id)
             found = False
 
             for guild in guilds:
@@ -2086,7 +2091,7 @@ class Orisa(Plugin):
             table_lines.insert(
                 0,
                 "Hello! Here are the current SR highscores. If a member has more than one "
-                "BattleTag, only the tag with the highest SR is considered. Players with  "
+                "BattleTag, only the primary BattleTag is considered. Players with  "
                 "private profiles, or those that didn't do their placements this season yet "
                 "are not shown.\n",
             )
