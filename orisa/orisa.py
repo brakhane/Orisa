@@ -2091,7 +2091,7 @@ class Orisa(Plugin):
             table_lines.insert(
                 0,
                 "Hello! Here are the current SR highscores. If a member has more than one "
-                "BattleTag, only the primary BattleTag is considered. Players with  "
+                "BattleTag, only the primary BattleTag is considered. Players with "
                 "private profiles, or those that didn't do their placements this season yet "
                 "are not shown.\n",
             )
