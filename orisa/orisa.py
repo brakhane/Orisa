@@ -1753,7 +1753,7 @@ class Orisa(Plugin):
 
             def channel_suffix(session, chan):
                 min, max = self.database.get_min_max_sr(
-                    session, [member.id for member in chan.voice_members]
+                    session, [member.id for member in chan.voice_members if member]
                 )
                 if min and max:
                     if min == max:
