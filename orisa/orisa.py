@@ -1980,7 +1980,7 @@ class Orisa(Plugin):
             except Exception:
                 logger.exception(f"Cannot send congrats for guild {guild}")
 
-    async def _top_players(self, session, prev_date, style="psql"):
+    async def _top_players(self, session, prev_date, style="fancy_grid"):
         def prev_sr(tag):
             for sr in tag.sr_history[:30]:
                 prev_sr = sr
