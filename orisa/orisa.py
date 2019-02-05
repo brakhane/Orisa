@@ -1295,9 +1295,7 @@ class Orisa(Plugin):
         embed.add_field(
             name="!ow usersrgraph *username* [from_date]",
             value="*This command can only be used by users with the Orisa Admin role!*\n"
-            "Like srgraph, but shows the graph for any user
-            "Shows a graph of your SR. If from_date (as DD.MM.YY or YYYY-MM-DD) is given, the graph starts at that date, otherwise it starts "
-            "as early as Orisa has data.",
+            "Like srgraph, but shows the graph for the given user"
         )
         embed.add_field(
             name="!ow unregister *battletag*",
