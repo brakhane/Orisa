@@ -1148,7 +1148,8 @@ class Orisa(Plugin):
                 f"*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{self.client.application_info.owner.id}>*\n"
                 f"\n**The commands only work in the <#{channel_id}> channel or by sending me a DM**\n"
                 "If you are new to Orisa, you are probably looking for `!ow register`\n"
-                "If you want to use Orisa on your own server or help developing it, enter `!ow about`"
+                "If you want to use Orisa on your own server or help developing it, enter `!ow about`\n"
+                "Parameters in [square brackets] are optional."
             ),
         )
         embed.add_field(
@@ -1292,6 +1293,13 @@ class Orisa(Plugin):
             "as early as Orisa has data.",
         )
         embed.add_field(
+            name="!ow usersrgraph *username* [from_date]",
+            value="*This command can only be used by users with the Orisa Admin role!*\n"
+            "Like srgraph, but shows the graph for any user
+            "Shows a graph of your SR. If from_date (as DD.MM.YY or YYYY-MM-DD) is given, the graph starts at that date, otherwise it starts "
+            "as early as Orisa has data.",
+        )
+        embed.add_field(
             name="!ow unregister *battletag*",
             value="If you have secondary BattleTags, you can remove the given BattleTag from the list. Unlike register, the search is performed fuzzy, so "
             "you normally only have to specify the first few letters of the BattleTag to remove.\n"
@@ -1323,7 +1331,7 @@ class Orisa(Plugin):
                 await self._srgraph(ctx, user, ctx.author.name, date)
 
     @ow.subcommand()
-    @author_has_roles("Admin")
+    @author_has_roles("Orisa Admin")
     async def usersrgraph(self, ctx, member: Member, date: str = None):
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, member.id)
@@ -1494,25 +1502,33 @@ class Orisa(Plugin):
             # single number, special case for newsr
             await self.newsr(Context(msg, ctx), msg.content.strip())
 
+
+    @event("guild_leave")
+    async def _guild_leave(self, ctx, guild):
+        logger.info("I was removed from guild %s", guild)
+        with self.database.session() as session:
+            gc = (
+                session.query(GuildConfigJson)
+                .filter_by(id=guild.id)
+                .one_or_none()
+            )
+            if gc:
+                logger.info("That guild was configured")
+                session.delete(gc)
+            with suppress(KeyError):
+                del self.guild_config[guild.id]
+            session.commit()
+
     @event("guild_member_remove")
     async def _guild_member_remove(self, ctx: Context, member: Member):
         logger.debug(
             f"Member {member.name}({member.id}) left the guild ({member.guild})"
         )
         if member.id == ctx.bot.user.id:
-            logger.info(f"Seems like I was kicked from guild {member.guild}")
-            with self.database.session() as session:
-                gc = (
-                    session.query(GuildConfigJson)
-                    .filter_by(id=member.guild.id)
-                    .one_or_none()
-                )
-                if gc:
-                    logger.info("That guild was configured")
-                    session.delete(gc)
-                with suppress(KeyError):
-                    del self.guild_config[member.guild.id]
-                session.commit()
+            # seems we got the remove_member event instead of the member_leave event?
+            logger.info("Seems like I was kicked from guild %s", member.guild)
+            await self._guild_leave(ctx, member.guild)
+            return
         else:
             with self.database.session() as session:
                 user = self.database.user_by_discord_id(session, member.id)
@@ -1595,10 +1611,10 @@ class Orisa(Plugin):
             await guild.owner.send(
                 msg
                 + f"\n\n*Somebody (hopefully you) invited me to your server {guild.name}, but I couldn't find a "
-                f"text channel I am allowed to send messages to, so I have to message you directly)*"
+                f"text channel I am allowed to send messages to, so I have to message you directly*"
             )
             try:
-                await channel.messages.send(content=None, embed=Embed(
+                await guild.owner.send(content=None, embed=Embed(
                     title=":thinking: Need help?",
                     description=f"Join the [Support Discord]({SUPPORT_DISCORD})"))
             except Exception:
