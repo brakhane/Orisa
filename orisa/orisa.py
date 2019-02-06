@@ -1503,7 +1503,7 @@ class Orisa(Plugin):
 
     @event("guild_leave")
     async def _guild_leave(self, ctx, guild):
-        logger.info("I was removed from guild %s", guild)
+        logger.info("I was removed from guild %s, I'm now in %d guilds", guild, len(self.client.guilds))
         with self.database.session() as session:
             gc = (
                 session.query(GuildConfigJson)
@@ -1556,7 +1556,7 @@ class Orisa(Plugin):
             await self._handle_new_guild(guild)
 
     async def _handle_new_guild(self, guild):
-        logger.info("We have a new guild %s \o/", guild)
+        logger.info("We have a new guild %s, I'm now on %d guilds \o/", guild, len(self.client.guilds))
         self.guild_config[guild.id] = GuildConfig.default()
 
         msg = (
@@ -2450,7 +2450,7 @@ class Orisa(Plugin):
 
             embed.add_field(
                 name=":thumbsup: Vote for me on Discord Bot List",
-                value=f"If you find me helpful, consider voting for me [by clicking here]({VOTE_LINK})",
+                value=f"If you find me useful, consider voting for me [by clicking here]({VOTE_LINK})",
             )
 
             await user_channel.messages.send(content=None, embed=embed)
