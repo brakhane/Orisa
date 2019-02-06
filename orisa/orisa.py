@@ -2094,8 +2094,6 @@ class Orisa(Plugin):
                 data, headers=headers, tablefmt=style
             ).split("\n")
 
-            table_lines = [f"`{line}`" for line in table_lines]
-
             # fancy_grid inserts a ├─────┼───────┤ after every line, let's get rid of it
             if style == "fancy_grid":
                 table_lines = [line for line in table_lines if not line.startswith("├─")]
@@ -2107,23 +2105,22 @@ class Orisa(Plugin):
             ix = 0
             lines = 20
 
-            table_lines.insert(
-                0,
-                "Hello! Here are the current SR highscores. If a member has more than one "
-                "BattleTag, only the primary BattleTag is considered. Players with "
-                "private profiles, or those that didn't do their placements this season yet "
-                "are not shown.\n",
-            )
             try:
                 chan = self.client.find_channel(
                     self.guild_config[guild_id].listen_channel_id
                 )
                 send = chan.messages.send
                 # send = self.client.application_info.owner.send
+                await send(
+                    "Hello! Here are the current SR highscores. If a member has more than one "
+                    "BattleTag, only the primary BattleTag is considered. Players with "
+                    "private profiles, or those that didn't do their placements this season yet "
+                    "are not shown."
+                )
                 while ix < len(table_lines):
                     # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
                     step = lines if ix else lines + 3
-                    await send_long(send, "\n".join(table_lines[ix : ix + step]))
+                    await send_long(send, "```" + ("\n".join(table_lines[ix : ix + step]) + "```"))
                     ix += step
 
                 await chan.messages.upload(
