@@ -340,7 +340,7 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
-    async def hs(self, ctx, style: str = "psql"):
+    async def hs(self, ctx, style: str = "fancy_grid"):
 
         prev_date = datetime.utcnow() - timedelta(days=1)
 
@@ -2095,6 +2095,11 @@ class Orisa(Plugin):
             ).split("\n")
 
             table_lines = [f"`{line}`" for line in table_lines]
+
+            # fancy_grid inserts a ├─────┼───────┤ after every line, let's get rid of it
+            if style == "fancy_grid":
+                table_lines = [line for line in table_lines if not line.startswith("├─")]
+
 
             # Split table into submessages, because a short "line" is visible after each message
             # we want it to be in "nice" multiples
