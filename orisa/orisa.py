@@ -918,13 +918,13 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     @condition(correct_channel)
-    async def setrole(self, ctx, *, roles_str: str):
+    async def setrole(self, ctx, *, roles_str: str=None):
         "Alias for setroles"
         return await self.setroles(ctx, roles_str=roles_str)
 
     @ow.subcommand()
     @condition(correct_channel)
-    async def setroles(self, ctx, *, roles_str: str):
+    async def setroles(self, ctx, *, roles_str: str=None):
         names = {
             "d": Role.DPS,
             "m": Role.MAIN_TANK,
@@ -933,6 +933,13 @@ class Orisa(Plugin):
         }
 
         roles = Role.NONE
+
+        if roles_str is None:
+            await reply(
+                ctx,
+                "Missing roles identifier. Valid role identifiers are: `d` (DPS), `m` (Main Tank), `o` (Off Tank), `s` (Support). They can be combined, eg. `ds` would mean DPS + Support."
+            )
+            return
 
         for role in roles_str.replace(" ", "").lower():
             try:
