@@ -208,8 +208,6 @@ Don't forget to use `!ow setroles` to set your roles; also don't play Genji."
 </template>
 
 <script>
-import ChannelSelector from '@/components/ChannelSelector.vue'
-import ManagedVoiceCategory from '@/components/ManagedVoiceCategory.vue'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
@@ -219,6 +217,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { isEqual, isEmpty, cloneDeep } from 'lodash'
+
+const ChannelSelector = () => import(/* webpackChunkName: "channel-selector" */'@/components/ChannelSelector')
+const ManagedVoiceCategory = () => import(/* webpackChunkName: "managed-voice-category" */'@/components/ManagedVoiceCategory')
 
 library.add(faSpinner, faFolderPlus, faQuestionCircle)
 

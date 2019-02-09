@@ -16,7 +16,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 import Vue from 'vue'
 import Router from 'vue-router'
-import Config from './views/Config.vue'
+
+const Config = () => import(/* webpackChunkName: "config" */'@/views/Config')
 
 Vue.use(Router)
 
@@ -28,7 +29,6 @@ export default new Router({
       path: '/config/:token',
       component: Config,
       props: true
-      // component: () => import(/* webpackChunkName: "config" */ './views/Config.vue')
     }
   ]
 })
