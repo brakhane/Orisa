@@ -1711,11 +1711,13 @@ class Orisa(Plugin):
                 if cat.remove_unknown:
                     for chan in chans:
                         # deleting a used channel is not cool
-                        if not chan.voice_members:
+                        # sometimes, voice_members contains [None], it's empty
+                        # then, so use any...
+                        if not any(member for member in chan.voice_members):
                             await delete_channel(chan)
                 continue
             logger.debug("voicemembers %s", [chan.voice_members for chan in chans])
-            empty_channels = [chan for chan in chans if not chan.voice_members]
+            empty_channels = [chan for chan in chans if not any(member for member in chan.voice_members)]
             logger.debug("empty channels %s", empty_channels)
 
             if create_all_channels:
