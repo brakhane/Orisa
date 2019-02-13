@@ -2084,12 +2084,13 @@ class Orisa(Plugin):
                         pos,
                         prev_str(ix + 1, tag, prev_sr),
                         member_name(member),
+                        member.id,
                         tag.sr,
                         delta_fmt(tag.sr, prev_sr),
                     )
                 )
 
-            headers = ["#", "prev", "Member", "SR", "ΔSR"]
+            headers = ["#", "prev", "Member", "Member ID", "SR", "ΔSR"]
             csv_file = StringIO()
             csv_writer = csv.writer(csv_file)
             csv_writer.writerow(headers)
@@ -2098,9 +2099,12 @@ class Orisa(Plugin):
             csv_file = BytesIO(csv_file.getvalue().encode("utf-8"))
             csv_file.seek(0)
 
+            def no_id(x):
+                return x[:3] + x[4:]
+
             tabulate.PRESERVE_WHITESPACE = True
             table_lines = tabulate.tabulate(
-                data, headers=headers, tablefmt=style
+                (no_id(e) for e in data), headers=no_id(headers), tablefmt=style
             ).split("\n")
 
             # fancy_grid inserts a ├─────┼───────┤ after every line, let's get rid of it
