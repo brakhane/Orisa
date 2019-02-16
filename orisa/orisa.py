@@ -2109,7 +2109,7 @@ class Orisa(Plugin):
 
             # fancy_grid inserts a ├─────┼───────┤ after every line, let's get rid of it
             if style == "fancy_grid":
-                table_lines = [line for line in table_lines if not line.startswith("├─")]
+                table_lines = [line for line in table_lines if not line.startswith("├")]
 
 
             # Split table into submessages, because a short "line" is visible after each message
