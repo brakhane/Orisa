@@ -311,17 +311,14 @@ async def handle_oauth():
             authorization_response=request_url,
             scope=[],
             redirect_url=f"{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}",
+            client_secret=OAUTH_CLIENT_SECRET,
         )
 
         logger.debug(f"got data {(url, headers, body)}")
 
-        # remove client_id and add scope, blizzard is a little bit picky...
-        body = re.sub(r"client_id=.*?&", "scope=&", body)
-
         resp = await asks.post(
             url,
             headers=headers,
-            auth=asks.BasicAuth((OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET)),
             data=body,
         )
 
