@@ -208,7 +208,6 @@ Don't forget to use `!ow setroles` to set your roles; also don't play Genji."
 </template>
 
 <script>
-
 import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faSpinner,
