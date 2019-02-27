@@ -18,6 +18,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 const Config = () => import(/* webpackChunkName: "config" */'@/views/Config')
+const DefaultContainer = () => import(/* webpackChunkName: "tournament" */'@/containers/DefaultContainer')
 
 Vue.use(Router)
 
@@ -29,6 +30,16 @@ export default new Router({
       path: '/config/:token',
       component: Config,
       props: true
+    },
+    {
+      path: '/',
+      component: DefaultContainer,
+      children: [
+        {
+          path: 'dashboard',
+          component: () => import('@/views/Foobar')
+        }
+      ]
     }
   ]
 })

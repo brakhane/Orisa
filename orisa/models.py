@@ -17,7 +17,7 @@ import random
 from bisect import bisect
 from contextlib import contextmanager
 from datetime import datetime, timedelta
-from enum import Flag, auto
+from enum import Flag, auto, Enum
 
 from sqlalchemy import (
     Boolean,
@@ -27,13 +27,15 @@ from sqlalchemy import (
     Integer,
     SmallInteger,
     String,
+    Table,
     ForeignKey,
     create_engine,
     func,
 )
+from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.orderinglist import ordering_list
-from sqlalchemy.orm import raiseload, relationship, sessionmaker
+from sqlalchemy.orm import backref, raiseload, relationship, sessionmaker
 import sqlalchemy.types as types
 
 from .config import DATABASE_URI
@@ -93,6 +95,8 @@ class User(Base):
     roles = Column(RoleType, nullable=False, default=Role.NONE)
 
     always_show_sr = Column(Boolean, nullable=False, default=False)
+
+    teams = association_proxy("team_memberships", "team")
 
     def __repr__(self):
         return f"<User(id={self.id}, discord_id={self.discord_id})>"
@@ -198,6 +202,91 @@ class GuildConfigJson(Base):
     id = Column(BigInteger, primary_key=True, index=True)
 
     config = Column(String, nullable=False)
+
+
+#### Tournament stuff ####
+
+
+class MemberType(Enum):
+    MEMBER = auto()
+    CAPTAIN = auto()
+
+
+class Team(Base):
+    __tablename__ = "teams"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+
+    members = association_proxy("memberships", "user")
+    matches = relationship("Match", primaryjoin="or_(Match.team_a_id==Team.id, Match.team_b_id==Team.id)", order_by="desc(Match.id)", lazy="dynamic")
+
+    def __repr__(self):
+        return f"<Team(id={self.id}, name={self.name})>"
+
+    def __str__(self):
+        return self.name
+
+class TeamMembership(Base):
+    __tablename__ = "team_memberships"
+
+    team_id = Column(Integer, ForeignKey("teams.id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+
+    position = Column(Integer, nullable=False)
+    member_type = types.Enum(MemberType)
+    roles = Column(RoleType, nullable=False, default=Role.NONE)
+
+    team = relationship("Team", backref=backref("memberships", order_by=lambda: TeamMembership.position, collection_class=ordering_list("position")))
+    user = relationship("User", backref=backref("team_memberships", cascade="all, delete-orphan"))
+
+    def __repr__(self):
+        return f"<TeamMembership(team={self.team}, user={self.user}, position={self.position}, member_type={self.member_type}, roles={self.roles})>"
+
+
+class Match(Base):
+    __tablename__ = "matches"
+
+    id = Column(Integer, primary_key=True, index=True)
+    date = Column(DateTime)
+    team_a_id = Column(Integer, ForeignKey("teams.id"), nullable=False, index=True)
+    team_b_id = Column(Integer, ForeignKey("teams.id"), nullable=False, index=True)
+    team_a = relationship("Team", foreign_keys=team_a_id)
+    team_b = relationship("Team", foreign_keys=team_b_id)
+    score_a = Column(Integer)
+    score_b = Column(Integer)
+    points_a = Column(Integer)
+    points_b = Column(Integer)
+
+    league_id = Column(Integer, ForeignKey("leagues.id"), nullable=True, index=True)
+    league = relationship("League", backref=backref("matches", lazy="dynamic"))
+
+    def __repr__(self):
+        return f"<Match({self.team_a} vs {self.team_b}, {self.score_a}:{self.score_b}, {self.points_a}-{self.points_b})>"
+
+
+team_league_assoc = Table("teams_leagues", Base.metadata,
+    Column("team_id", Integer, ForeignKey("teams.id"), primary_key=True),
+    Column("league_id", Integer, ForeignKey("leagues.id"), primary_key=True)
+)
+
+
+class League(Base):
+    __tablename__ = "leagues"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    teams = relationship(
+        "Team",
+        secondary=team_league_assoc,
+        backref="leagues"
+    )
+    guild_id = Column(BigInteger)
+    result_channel_id = Column(BigInteger)
+
+    def __repr__(self):
+        return f"<(League id={self.id}, name={self.name}, {len(self.teams)} teams)>"
+
 
 
 class Database:
