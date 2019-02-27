@@ -2143,6 +2143,10 @@ class Orisa(Plugin):
             except Exception:
                 logger.exception("unable to send top players to guild %i", guild_id)
 
+            # wait a bit before sending the next batch to avoid running into
+            # rate limiting and sending data twice due to "timeouts"
+            await trio.sleep(3)
+
     async def _message_new_guilds(self):
         for guild_id, guild in self.client.guilds.items():
             if guild_id not in self.guild_config:
