@@ -116,6 +116,7 @@ oauth_serializer = URLSafeTimedSerializer(SIGNING_SECRET)
 
 SUPPORT_DISCORD="https://discord.gg/tsNxvFh"
 VOTE_LINK="https://discordbots.org/bot/445905377712930817/vote"
+DONATE_LINK="https://ko-fi.com/R5R2PC36"
 
 RANKS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grand Master")
 COLORS = (
@@ -443,7 +444,10 @@ class Orisa(Plugin):
                 embed.add_field(
                     name="Links",
                     inline=False,
-                    value=f'[Overwatch profile](https://playoverwatch.com/en-us/career/pc/{primary.tag.replace("#", "-")}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa Support Server]({SUPPORT_DISCORD})'
+                    value=(
+                        f'[Overwatch profile](https://playoverwatch.com/en-us/career/pc/{primary.tag.replace("#", "-")}) | '
+                        f'[Upvote Orisa]({VOTE_LINK}) | [Orisa Support Server]({SUPPORT_DISCORD}) | [Donate `❤️`]({DONATE_LINK})'
+                    )
                 )
 
                 if multiple_tags:
