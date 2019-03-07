@@ -1478,12 +1478,18 @@ class Orisa(Plugin):
         if old_voice_state:
             parent = old_voice_state.channel.parent
             if parent:
-                await self._adjust_voice_channels(parent)
+                try:
+                    await self._adjust_voice_channels(parent)
+                except Exception:
+                    logger.exception(f"Can't adjust voice channel for parent {parent}")
 
         if new_voice_state:
             if new_voice_state.channel.parent != parent:
                 if new_voice_state.channel.parent:
-                    await self._adjust_voice_channels(new_voice_state.channel.parent)
+                    try:
+                        await self._adjust_voice_channels(new_voice_state.channel.parent)
+                    except Exception:
+                        logger.exception(f"Can't adjust voice channel for new state parent {new_voice_state.channel.parent}")
 
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, member.id)
@@ -2143,6 +2149,10 @@ class Orisa(Plugin):
             except Exception:
                 logger.exception("unable to send top players to guild %i", guild_id)
 
+            # wait a bit before sending the next batch to avoid running into
+            # rate limiting and sending data twice due to "timeouts"
+            await trio.sleep(3)
+
     async def _message_new_guilds(self):
         for guild_id, guild in self.client.guilds.items():
             if guild_id not in self.guild_config:
@@ -2415,6 +2425,7 @@ class Orisa(Plugin):
                 async with user_channel.typing:
                     sr, image = await get_sr(battle_tag)
             except InvalidBattleTag as e:
+                logger.exception(f"Got invalid battle tag for {battle_tag}")
                 await user_channel.messages.send(
                     f"Invalid BattleTag: {e.message}??? I got yours directly from Blizzard, but they claim it doesn't exist... Try again later, Blizzard have fucked up."
                 )
