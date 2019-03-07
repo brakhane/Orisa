@@ -2232,7 +2232,7 @@ class Orisa(Plugin):
             async for tag_id in channel:
                 logger.debug("got %s from channel %r", tag_id, channel)
                 if not first:
-                    delay = random.random() * 5.0
+                    delay = 3 + random.random() * 5.0
                     logger.debug(f"rate limiting: sleeping for {delay:.02}s")
                     await trio.sleep(delay)
                 else:
@@ -2276,7 +2276,7 @@ class Orisa(Plugin):
 
         async with trio.open_nursery() as nursery:
             async with receive_ch:
-                for _ in range(min(len(ids_to_sync), 5)):
+                for _ in range(min(len(ids_to_sync), 3)):
                     nursery.start_soon(self._sync_tags_from_channel, receive_ch.clone())
         logger.info("done syncing")
 
@@ -2481,6 +2481,11 @@ class Orisa(Plugin):
             embed.add_field(
                 name=":thumbsup: Vote for me on Discord Bot List",
                 value=f"If you find me useful, consider voting for me [by clicking here]({VOTE_LINK})",
+            )
+
+            embed.add_field(
+                name=":heart: Say thanks by buying a coffee",
+                value=f"Want to say thanks to the guy who wrote and maintains me? Why not [buy him a coffee?]({DONATE_LINK})"
             )
 
             await user_channel.messages.send(content=None, embed=embed)

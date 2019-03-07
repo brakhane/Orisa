@@ -70,7 +70,7 @@ async def get_sr(battletag):
                 headers={
                     "User-Agent": "Orisa/1.0 (+https://github.com/brakhane/Orisa)"
                 },
-                connection_timeout=20,
+                connection_timeout=30,
                 timeout=30,
             )
         except asks.errors.RequestTimeout:
