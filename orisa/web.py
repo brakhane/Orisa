@@ -29,8 +29,10 @@ from quart import Quart, request, render_template, jsonify, Response
 from .config import (
     DEVELOPMENT,
     SIGNING_SECRET,
-    OAUTH_CLIENT_ID,
-    OAUTH_CLIENT_SECRET,
+    OAUTH_BLIZZARD_CLIENT_ID,
+    OAUTH_BLIZZARD_CLIENT_SECRET,
+    OAUTH_DISCORD_CLIENT_ID,
+    OAUTH_DISCORD_CLIENT_SECRET,
     OAUTH_REDIRECT_PATH,
     OAUTH_REDIRECT_HOST,
 )
@@ -65,6 +67,68 @@ async def render_message(message, is_error=False):
 
 def create_token(guild_id):
     return serializer.dumps({"g": guild_id})
+
+
+from quart import request, jsonify
+
+@app.route(OAUTH_REDIRECT_PATH + "fetch") #/<string:code>")
+async def fetch():
+    code = request.args.get('code')
+    client = WebApplicationClient(OAUTH_DISCORD_CLIENT_ID)
+    url, headers, body = client.prepare_token_request(
+        "https://discordapp.com/api/oauth2/token",
+        code=code,
+        redirect_url="http://localhost:8000/fetch",
+        client_secret=OAUTH_DISCORD_CLIENT_SECRET,
+        scope=["email", "identify", "guilds"]
+    )
+
+    logger.debug(f"got data {(url, headers, body)}")
+
+    resp = await asks.post(
+        url,
+        headers=headers,
+        data=body,
+    )
+
+    client.parse_request_body_response(resp.text, scope=["email", "identify", "guilds"])
+
+    logger.debug("token is %s, access token is %s, refresh token is %s", client.token, client.access_token, client.refresh_token)
+
+
+    url, headers, body = client.add_token("https://discordapp.com/api/v6/users/@me")
+
+    logger.debug((url, headers, body))
+
+    me = (await asks.get(url, headers=headers)).json()
+
+
+    url, headers, body = client.add_token("https://discordapp.com/api/v6/users/@me/guilds")
+
+    logger.debug((url, headers, body))
+
+    guilds = (await asks.get(url, headers=headers)).json()
+
+
+
+    url, headers, body = client.prepare_token_revocation_request("https://discordapp.com/api/oauth2/token/revoke", client.access_token)
+
+    logger.debug((url, headers, body))
+
+    resp = await asks.post(url, headers=headers, data=body)
+
+    logger.debug(f"revoke response is {resp}, {resp.text}")
+
+    #url, headers, body = client.prepare_refresh_token_request("https://discordapp.com/api/oauth2/token", scope=["email", "identify", "guilds"], redirect_uri="http://localhost:8000/fetch", client_id=client.client_id, client_secret=OAUTH_DISCORD_CLIENT_SECRET)
+
+    #logger.debug((url, headers, body))
+
+    #resp = await asks.post(url, headers=headers, data=body)
+
+    #logger.debug(f"refresh response is {resp}, {resp.text}")
+
+    return jsonify({"guilds": guilds, "me": me})
+
 
 
 @app.route(OAUTH_REDIRECT_PATH + "config_data/<string:token>")
@@ -278,7 +342,7 @@ async def save(guild_id):
 
 @app.route(OAUTH_REDIRECT_PATH)
 async def handle_oauth():
-    client = WebApplicationClient(OAUTH_CLIENT_ID)
+    client = WebApplicationClient(OAUTH_BLIZZARD_CLIENT_ID)
     logger.debug(f"got OAuth auth URL {request.url}")
 
     # we are behind a proxy, and hypercorn doesn't support
@@ -311,7 +375,7 @@ async def handle_oauth():
             authorization_response=request_url,
             scope=[],
             redirect_url=f"{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}",
-            client_secret=OAUTH_CLIENT_SECRET,
+            client_secret=OAUTH_BLIZZARD_CLIENT_SECRET,
         )
 
         logger.debug(f"got data {(url, headers, body)}")
