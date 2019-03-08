@@ -84,7 +84,7 @@ from .config import (
     MASHERY_API_KEY,
     SENTRY_DSN,
     SIGNING_SECRET,
-    OAUTH_CLIENT_ID,
+    OAUTH_DISCORD_CLIENT_ID,
     OAUTH_REDIRECT_HOST,
     OAUTH_REDIRECT_PATH,
     PRIVACY_POLICY_PATH,
@@ -570,7 +570,7 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def register(self, ctx, *, ignored: str = None):
         user_id = ctx.message.author_id
-        client = WebApplicationClient(OAUTH_CLIENT_ID)
+        client = WebApplicationClient(OAUTH_DISCORD_CLIENT_ID)
         state = oauth_serializer.dumps(user_id)
         url, headers, body = client.prepare_authorization_request(
             "https://eu.battle.net/oauth/authorize",

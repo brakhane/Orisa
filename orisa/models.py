@@ -76,7 +76,7 @@ class Cron(Base):
 
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "user"
 
     id = Column(Integer, primary_key=True, index=True)
     discord_id = Column(BigInteger, unique=True, nullable=False, index=True)
@@ -96,21 +96,21 @@ class User(Base):
 
     always_show_sr = Column(Boolean, nullable=False, default=False)
 
-    teams = association_proxy("team_memberships", "team")
+    teams = association_proxy("team_membership", "team")
 
     def __repr__(self):
         return f"<User(id={self.id}, discord_id={self.discord_id})>"
 
 
 class BattleTag(Base):
-    __tablename__ = "battle_tags"
+    __tablename__ = "battle_tag"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=False, index=True)
     blizzard_id = Column(
         Integer, nullable=True, index=True
     )  # nullable for backwards compatibility
-    current_sr_id = Column(Integer, ForeignKey("srs.id"))
+    current_sr_id = Column(Integer, ForeignKey("sr.id"))
     position = Column(Integer, nullable=False)
 
     user = relationship("User", back_populates="battle_tags")
@@ -173,13 +173,13 @@ class BattleTag(Base):
 
 
 class SR(Base):
-    __tablename__ = "srs"
+    __tablename__ = "sr"
 
     RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
 
     id = Column(Integer, primary_key=True, index=True)
     battle_tag_id = Column(
-        Integer, ForeignKey("battle_tags.id"), nullable=False, index=True
+        Integer, ForeignKey("battle_tag.id"), nullable=False, index=True
     )
 
     battle_tag = relationship(
@@ -197,7 +197,7 @@ class SR(Base):
 
 
 class GuildConfigJson(Base):
-    __tablename__ = "guild_configs"
+    __tablename__ = "guild_config"
 
     id = Column(BigInteger, primary_key=True, index=True)
 
@@ -213,13 +213,13 @@ class MemberType(Enum):
 
 
 class Team(Base):
-    __tablename__ = "teams"
+    __tablename__ = "team"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
 
-    members = association_proxy("memberships", "user")
-    matches = relationship("Match", primaryjoin="or_(Match.team_a_id==Team.id, Match.team_b_id==Team.id)", order_by="desc(Match.id)", lazy="dynamic")
+    members = association_proxy("membership", "user")
+    pairings = relationship("Pairing", primaryjoin="or_(Pairing.team_a_id==Team.id, Pairing.team_b_id==Team.id)", order_by="desc(Pairing.id)", lazy="dynamic")
 
     def __repr__(self):
         return f"<Team(id={self.id}, name={self.name})>"
@@ -227,66 +227,244 @@ class Team(Base):
     def __str__(self):
         return self.name
 
-class TeamMembership(Base):
-    __tablename__ = "team_memberships"
 
-    team_id = Column(Integer, ForeignKey("teams.id"), primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+class TeamMembership(Base):
+    __tablename__ = "team_membership"
+
+    team_id = Column(Integer, ForeignKey("team.id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("user.id"), primary_key=True)
 
     position = Column(Integer, nullable=False)
     member_type = types.Enum(MemberType)
     roles = Column(RoleType, nullable=False, default=Role.NONE)
 
-    team = relationship("Team", backref=backref("memberships", order_by=lambda: TeamMembership.position, collection_class=ordering_list("position")))
-    user = relationship("User", backref=backref("team_memberships", cascade="all, delete-orphan"))
+    team = relationship("Team", backref=backref("membership", order_by=lambda: TeamMembership.position, collection_class=ordering_list("position")))
+    user = relationship("User", backref=backref("team_membership", cascade="all, delete-orphan"))
 
     def __repr__(self):
         return f"<TeamMembership(team={self.team}, user={self.user}, position={self.position}, member_type={self.member_type}, roles={self.roles})>"
 
 
-class Match(Base):
-    __tablename__ = "matches"
-
-    id = Column(Integer, primary_key=True, index=True)
-    date = Column(DateTime)
-    team_a_id = Column(Integer, ForeignKey("teams.id"), nullable=False, index=True)
-    team_b_id = Column(Integer, ForeignKey("teams.id"), nullable=False, index=True)
-    team_a = relationship("Team", foreign_keys=team_a_id)
-    team_b = relationship("Team", foreign_keys=team_b_id)
-    score_a = Column(Integer)
-    score_b = Column(Integer)
-    points_a = Column(Integer)
-    points_b = Column(Integer)
-
-    league_id = Column(Integer, ForeignKey("leagues.id"), nullable=True, index=True)
-    league = relationship("League", backref=backref("matches", lazy="dynamic"))
-
-    def __repr__(self):
-        return f"<Match({self.team_a} vs {self.team_b}, {self.score_a}:{self.score_b}, {self.points_a}-{self.points_b})>"
-
-
-team_league_assoc = Table("teams_leagues", Base.metadata,
-    Column("team_id", Integer, ForeignKey("teams.id"), primary_key=True),
-    Column("league_id", Integer, ForeignKey("leagues.id"), primary_key=True)
+team_tournament_assoc = Table("team_tournament", Base.metadata,
+    Column("team_id", Integer, ForeignKey("team.id"), primary_key=True),
+    Column("tournament_id", Integer, ForeignKey("tournament.id"), primary_key=True)
 )
 
-
-class League(Base):
-    __tablename__ = "leagues"
-
+class Tournament(Base):
+    __tablename__ = "tournament"
     id = Column(Integer, primary_key=True, index=True)
+
     name = Column(String, nullable=False)
     teams = relationship(
         "Team",
-        secondary=team_league_assoc,
-        backref="leagues"
+        secondary=team_tournament_assoc,
+        backref="tournaments"
     )
+
+    guild_id = Column(BigInteger, nullable=True)
+    info_channel_id = Column(BigInteger, nullable=True)
+
+    def __repr__(self):
+        return f"<Tournament id={self.id}, name={self.name}>"
+
+
+team_stage_assoc = Table("team_stage", Base.metadata,
+    Column("team_id", Integer, ForeignKey("team.id"), primary_key=True),
+    Column("stage_id", Integer, ForeignKey("stage.id"), primary_key=True)
+)
+
+class Stage(Base):
+    __tablename__ = "stage"
+    id = Column(Integer, primary_key=True, index=True)
+    type = Column(String, nullable=False)
+    name = Column(String)
+
+    position = Column(Integer)
+    tournament_id = Column(Integer, ForeignKey("tournament.id"), nullable=False, index=True)
+    tournament = relationship("Tournament", backref=backref("stages", lazy="dynamic", order_by=lambda: Stage.position, collection_class=ordering_list("position")))
+
+    teams = relationship(
+        "Team",
+        secondary=team_stage_assoc
+    )
+
     guild_id = Column(BigInteger)
     result_channel_id = Column(BigInteger)
 
-    def __repr__(self):
-        return f"<(League id={self.id}, name={self.name}, {len(self.teams)} teams)>"
+    __mapper_args__ = {
+        'polymorphic_identity': 'stage',
+        'polymorphic_on': type,
+        'with_polymorphic': '*',
+    }
 
+    def __repr__(self):
+        return f"<Stage id={self.id}, type={self.type}, {len(self.teams)} teams>"
+
+
+class GroupStage(Stage):
+    __tablename__ = "groupstage"
+
+    id = Column(Integer, ForeignKey('stage.id'), primary_key=True, index=True)
+
+    leagues = relationship("League", backref="stage")
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'G'
+    }
+
+    def __repr__(self):
+        return f"<GroupStage id={self.id}, name={self.name}, {len(self.teams)} teams>"
+
+
+class KnockoutStage(Stage):
+    __tablename__ = "knockoutstage"
+
+    id = Column(Integer, ForeignKey('stage.id'), primary_key=True, index=True)
+
+    pairings = relationship(
+        "Pairing",
+        backref="stage",
+        order_by="Pairing.position",
+        collection_class=ordering_list("position"),
+    )
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'K',
+    }
+
+    def __repr__(self):
+        return f"<KnockoutStage id={self.id}, name={self.name}>"
+
+
+team_league_assoc = Table("team_league", Base.metadata,
+    Column("team_id", Integer, ForeignKey("team.id"), primary_key=True),
+    Column("league_id", Integer, ForeignKey("league.id"), primary_key=True)
+)
+
+class League(Base):
+    __tablename__ = "league"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=True)
+    teams = relationship(
+        "Team",
+        secondary=team_league_assoc,
+    )
+    stage_id = Column(Integer, ForeignKey("stage.id"), nullable=False, index=True)
+    league_rounds = relationship("LeagueRound", backref="league")
+
+
+class LeagueRound(Base):
+    __tablename__ = "leagueround"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    league_id = Column(Integer, ForeignKey("league.id"), nullable=False, index=True)
+
+
+class Matchday(Base):
+    __tablename__ = "matchday"
+    id = Column(Integer, primary_key=True, index=True)
+    league_round_id = Column(Integer, ForeignKey("leagueround.id"), nullable=False, index=True)
+    league_round = relationship("LeagueRound", backref="matchdays")
+
+    position = Column(SmallInteger)
+    pairings = relationship(
+        "Pairing", 
+        backref="matchday",
+        order_by="Pairing.position",
+        collection_class=ordering_list("position"),
+    )   
+
+
+class Pairing(Base):
+    __tablename__ = "pairing"
+    id = Column(Integer, primary_key=True, index=True)
+    # pairings can yet be undecided in a knockout stage
+    team_a_id = Column(Integer, ForeignKey("team.id"), nullable=True, index=True)
+    team_b_id = Column(Integer, ForeignKey("team.id"), nullable=True, index=True)
+    team_a = relationship("Team", foreign_keys=team_a_id)
+    team_b = relationship("Team", foreign_keys=team_b_id)
+
+    stage_id  = Column(Integer, ForeignKey("stage.id"), index=True)
+    matchday_id = Column(Integer, ForeignKey("matchday.id"), index=True)
+
+    # position for match day or knockout stage
+    position = Column(SmallInteger)
+
+    score_a = Column(Integer)
+    score_b = Column(Integer)
+
+    # For leagues
+    points_a = Column(Integer)
+    points_b = Column(Integer)
+
+    def __repr__(self):
+        return f"<Pairing({self.team_a} vs {self.team_b}, {len(list(self.matches))} matches, {self.score_a}:{self.score_b}, {self.points_a}-{self.points_b})>"
+
+    def __str__(self):
+        if self.team_a is None:
+            if self.team_b is not None:
+                return f"({self.team_b} has a bye)"
+            else:
+                return "(No teams)"
+        elif self.team_b is None:
+            return f"({self.team_a} has a bye)"
+        else:
+            return f"{self.team_a} vs {self.team_b}"
+
+
+class Match(Base):
+    __tablename__ = "match"
+
+    id = Column(Integer, primary_key=True, index=True)
+    date = Column(DateTime, nullable=True, index=True)
+
+    position = Column(Integer, nullable=True)
+    pairing_id = Column(Integer, ForeignKey("pairing.id"), nullable=True, index=True)
+    pairing = relationship("Pairing", backref=backref("matches", lazy="dynamic"))
+    results = relationship("MapResult", backref="match")
+
+    score_a = Column(Integer)
+    score_b = Column(Integer)
+
+    def __repr__(self):
+        return f"<Match date={self.date}, position={self.position}, pairing={self.pairing}, results={self.results}, matchscore={self.score_a}:{self.score_b}>"
+
+
+class MapResult(Base):
+    __tablename__ = "mapresult"
+
+    id = Column(Integer, primary_key=True, index=True)
+    map_id = Column(Integer, ForeignKey("map.id"))
+    map = relationship("Map")
+    match_id = Column(Integer, ForeignKey("match.id"))
+
+    score_a = Column(Integer)
+    score_b = Column(Integer)
+
+    def __repr__(self):
+        return f"<MapResult map={self.map}, mapscore={self.score_a}:{self.score_b}>"
+
+
+class Map(Base):
+    __tablename__ = "map"
+   
+    class Type(Enum):
+        ASSAULT = auto()
+        CONTROL = auto()
+        ESCORT = auto()
+        HYBRID = auto()
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    
+    type = types.Enum(Type)
+
+    def __repr__(self):
+        return f"<Map {self.name}>"
+
+    def __str__(self):
+        return self.name
 
 
 class Database:
