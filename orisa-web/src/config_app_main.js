@@ -15,31 +15,23 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 import Vue from 'vue'
-import Router from 'vue-router'
+import App from './App.vue'
+import router from './config_app_router'
 
-const Config = () => import(/* webpackChunkName: "config" */'@/views/Config')
-const DefaultContainer = () => import(/* webpackChunkName: "tournament" */'@/containers/DefaultContainer')
+import BootstrapVue from 'bootstrap-vue'
+import axios from 'axios'
 
-Vue.use(Router)
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-export default new Router({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes: [
-    {
-      path: '/config/:token',
-      component: Config,
-      props: true
-    },
-    {
-      path: '/',
-      component: DefaultContainer,
-      children: [
-        {
-          path: 'dashboard',
-          component: () => import('@/views/Foobar')
-        }
-      ]
-    }
-  ]
-})
+Vue.config.productionTip = false
+
+Vue.use(BootstrapVue)
+
+Vue.prototype.$http = axios
+axios.defaults.baseURL = process.env.VUE_APP_BOT_BASE_URL
+
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app')

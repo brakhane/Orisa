@@ -15,23 +15,19 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
+import Router from 'vue-router'
 
-import BootstrapVue from 'bootstrap-vue'
-import axios from 'axios'
+const Test = () => import('@/ttt/views/Test')
 
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+Vue.use(Router)
 
-Vue.config.productionTip = false
-
-Vue.use(BootstrapVue)
-
-Vue.prototype.$http = axios
-axios.defaults.baseURL = process.env.VUE_APP_BOT_BASE_URL
-
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+export default new Router({
+//  mode: 'history',
+  base: `${process.env.BASE_URL}/test.html`,
+  routes: [
+    {
+      path: '/',
+      component: Test
+    }
+  ]
+})

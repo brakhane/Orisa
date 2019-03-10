@@ -71,6 +71,17 @@ def create_token(guild_id):
 
 from quart import request, jsonify
 
+@app.route("/foo")
+async def foo():
+    from .models import League, Database
+
+
+    with Database().session() as s:
+        l = s.query(League).offset(1).first()
+        return jsonify([{"name": x.Team.name, "points": x.points, "W": x.won, "L": x.lost} for x in l.standings(s)])
+
+
+
 @app.route(OAUTH_REDIRECT_PATH + "fetch") #/<string:code>")
 async def fetch():
     code = request.args.get('code')

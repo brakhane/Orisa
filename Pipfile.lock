@@ -82,8 +82,8 @@
         },
         "discord-curious": {
             "editable": true,
-            "git": "https://github.com/brakhane/curious.git",
-            "ref": "c9c93b63eece44dd793619e43f0568228a008d12"
+            "git": "https://github.com/Fuyukai/curious.git",
+            "ref": "a848d91d548761c3b2f3c447e95cc5eadea4b794"
         },
         "fuzzywuzzy": {
             "extras": [
@@ -557,10 +557,17 @@
         },
         "sqlalchemy": {
             "hashes": [
+<<<<<<< HEAD
                 "sha256:7dede29f121071da9873e7b8c98091874617858e790dc364ffaab4b09d81216c"
             ],
             "index": "pypi",
             "version": "==1.3.0b3"
+=======
+                "sha256:11ead7047ff3f394ed0d4b62aded6c5d970a9b718e1dc6add9f5e79442cc5b14"
+            ],
+            "index": "pypi",
+            "version": "==1.3.0"
+>>>>>>> WIP
         },
         "tabulate": {
             "hashes": [

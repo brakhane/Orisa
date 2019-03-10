@@ -31,6 +31,8 @@ from sqlalchemy import (
     ForeignKey,
     create_engine,
     func,
+    cast,
+    desc,
 )
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.ext.declarative import declarative_base
@@ -219,7 +221,7 @@ class Team(Base):
     name = Column(String, nullable=False)
 
     members = association_proxy("membership", "user")
-    pairings = relationship("Pairing", primaryjoin="or_(Pairing.team_a_id==Team.id, Pairing.team_b_id==Team.id)", order_by="desc(Pairing.id)", lazy="dynamic")
+    matches = relationship("Match", primaryjoin="or_(Match.team_a_id==Team.id, Match.team_b_id==Team.id)", order_by="desc(Match.id)", lazy="dynamic")
 
     def __repr__(self):
         return f"<Team(id={self.id}, name={self.name})>"
@@ -235,7 +237,7 @@ class TeamMembership(Base):
     user_id = Column(Integer, ForeignKey("user.id"), primary_key=True)
 
     position = Column(Integer, nullable=False)
-    member_type = types.Enum(MemberType)
+    member_type = Column(types.Enum(MemberType), nullable=False)
     roles = Column(RoleType, nullable=False, default=Role.NONE)
 
     team = relationship("Team", backref=backref("membership", order_by=lambda: TeamMembership.position, collection_class=ordering_list("position")))
@@ -301,30 +303,30 @@ class Stage(Base):
         return f"<Stage id={self.id}, type={self.type}, {len(self.teams)} teams>"
 
 
-class GroupStage(Stage):
-    __tablename__ = "groupstage"
+class RoundRobinStage(Stage):
+    __tablename__ = "roundrobin"
 
     id = Column(Integer, ForeignKey('stage.id'), primary_key=True, index=True)
 
     leagues = relationship("League", backref="stage")
 
     __mapper_args__ = {
-        'polymorphic_identity': 'G'
+        'polymorphic_identity': 'R'
     }
 
     def __repr__(self):
-        return f"<GroupStage id={self.id}, name={self.name}, {len(self.teams)} teams>"
+        return f"<RoundRobinStage id={self.id}, name={self.name}, {len(self.teams)} teams>"
 
 
 class KnockoutStage(Stage):
-    __tablename__ = "knockoutstage"
+    __tablename__ = "knockout"
 
     id = Column(Integer, ForeignKey('stage.id'), primary_key=True, index=True)
 
-    pairings = relationship(
-        "Pairing",
+    matches = relationship(
+        "Match",
         backref="stage",
-        order_by="Pairing.position",
+        order_by="Match.position",
         collection_class=ordering_list("position"),
     )
 
@@ -349,37 +351,68 @@ class League(Base):
     teams = relationship(
         "Team",
         secondary=team_league_assoc,
+        backref="leagues"
     )
     stage_id = Column(Integer, ForeignKey("stage.id"), nullable=False, index=True)
-    league_rounds = relationship("LeagueRound", backref="league")
+    matchdays = relationship("Matchday", backref=backref("league", order_by=lambda: Stage.position, collection_class=ordering_list("position")))
 
+    def standings(self, session, num_days=None):
 
-class LeagueRound(Base):
-    __tablename__ = "leagueround"
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String)
-    league_id = Column(Integer, ForeignKey("league.id"), nullable=False, index=True)
+        def points_query(a_or_b):
+            if a_or_b == "a":
+                t_id, p_for, p_against = Match.team_a_id, Match.points_a, Match.points_b
+            else:
+                t_id, p_for, p_against = Match.team_b_id, Match.points_b, Match.points_a
 
+            return (
+                session.query(
+                    t_id.label("t"), 
+                    func.sum(p_for).label("points"), 
+                    cast(func.total(p_for > p_against), Integer).label("won"), 
+                    cast(func.total(p_for == p_against), Integer).label("drawn"),
+                    cast(func.total(p_for < p_against), Integer).label("lost")
+                )
+                .filter(Match.matchday_id.in_(md.id for md in self.matchdays[:num_days]))
+                .filter(t_id.in_(t.id for t in self.teams))
+                .group_by("t")
+                .subquery())
+
+        def no_null(x):
+            return func.coalesce(x, 0)
+
+        qa, qb = map(points_query, "ab")
+
+        return (
+            session.query(
+                Team,
+                (no_null(qa.c.points) + no_null(qb.c.points)).label("points"),
+                (no_null(qa.c.won) + no_null(qb.c.won)).label("won"),
+                (no_null(qa.c.drawn) + no_null(qb.c.drawn)).label("drawn"),
+                (no_null(qa.c.lost) + no_null(qb.c.lost)).label("lost"),
+            )
+            .outerjoin(qa, qa.c.t==Team.id)
+            .outerjoin(qb, qb.c.t==Team.id)
+            .filter(Team.id.in_(x.id for x in self.teams))
+            .order_by(desc("points")))
 
 class Matchday(Base):
     __tablename__ = "matchday"
-    id = Column(Integer, primary_key=True, index=True)
-    league_round_id = Column(Integer, ForeignKey("leagueround.id"), nullable=False, index=True)
-    league_round = relationship("LeagueRound", backref="matchdays")
 
+    id = Column(Integer, primary_key=True, index=True)
+    league_id = Column(Integer, ForeignKey("league.id"), nullable=False, index=True)
     position = Column(SmallInteger)
-    pairings = relationship(
-        "Pairing", 
+    matches = relationship(
+        "Match", 
         backref="matchday",
-        order_by="Pairing.position",
+        order_by="Match.position",
         collection_class=ordering_list("position"),
     )   
 
 
-class Pairing(Base):
-    __tablename__ = "pairing"
+class Match(Base):
+    __tablename__ = "match"
     id = Column(Integer, primary_key=True, index=True)
-    # pairings can yet be undecided in a knockout stage
+    # teams can yet be undecided in a knockout stage
     team_a_id = Column(Integer, ForeignKey("team.id"), nullable=True, index=True)
     team_b_id = Column(Integer, ForeignKey("team.id"), nullable=True, index=True)
     team_a = relationship("Team", foreign_keys=team_a_id)
@@ -399,7 +432,7 @@ class Pairing(Base):
     points_b = Column(Integer)
 
     def __repr__(self):
-        return f"<Pairing({self.team_a} vs {self.team_b}, {len(list(self.matches))} matches, {self.score_a}:{self.score_b}, {self.points_a}-{self.points_b})>"
+        return f"<Match({self.team_a} vs {self.team_b}, {len(list(self.matches))} games, {self.score_a}:{self.score_b}, {self.points_a}-{self.points_b})>"
 
     def __str__(self):
         if self.team_a is None:
@@ -413,22 +446,22 @@ class Pairing(Base):
             return f"{self.team_a} vs {self.team_b}"
 
 
-class Match(Base):
-    __tablename__ = "match"
+class Game(Base):
+    __tablename__ = "game"
 
     id = Column(Integer, primary_key=True, index=True)
     date = Column(DateTime, nullable=True, index=True)
 
     position = Column(Integer, nullable=True)
-    pairing_id = Column(Integer, ForeignKey("pairing.id"), nullable=True, index=True)
-    pairing = relationship("Pairing", backref=backref("matches", lazy="dynamic"))
-    results = relationship("MapResult", backref="match")
+    match_id = Column(Integer, ForeignKey("match.id"), nullable=True, index=True)
+    match = relationship("Match", backref=backref("games", lazy="dynamic"))
+    results = relationship("MapResult", backref="game")
 
     score_a = Column(Integer)
     score_b = Column(Integer)
 
     def __repr__(self):
-        return f"<Match date={self.date}, position={self.position}, pairing={self.pairing}, results={self.results}, matchscore={self.score_a}:{self.score_b}>"
+        return f"<Game date={self.date}, position={self.position}, match={self.match}, results={self.results}, matchscore={self.score_a}:{self.score_b}>"
 
 
 class MapResult(Base):
@@ -437,7 +470,7 @@ class MapResult(Base):
     id = Column(Integer, primary_key=True, index=True)
     map_id = Column(Integer, ForeignKey("map.id"))
     map = relationship("Map")
-    match_id = Column(Integer, ForeignKey("match.id"))
+    game_id = Column(Integer, ForeignKey("game.id"))
 
     score_a = Column(Integer)
     score_b = Column(Integer)
@@ -458,7 +491,7 @@ class Map(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     
-    type = types.Enum(Type)
+    type = Column(types.Enum(Type), nullable=False)
 
     def __repr__(self):
         return f"<Map {self.name}>"
