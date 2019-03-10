@@ -14,24 +14,29 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import random
 
+from typing import List, Dict
+
 from .models import (
     Tournament,
     Team,
     TeamMembership,
     Match,
+    Game,
     Stage,
-    GroupStage,
+    RoundRobinStage,
     KnockoutStage,
     League,
-    LeagueRound,
-    Pairing,
     Matchday,
 )
 
 
 def create_round_robin_schedule(num_teams):
     """Create pairings for round robin tournaments/leagues
-    Uses the circle method."""
+    Uses the well-known circle method, and also home-away balancing using the method described in
+
+    "Balanced home–away assignments", Sigrid Knust, Michael von Thaden
+    Discrete Optimization 3 (2006) 354–365
+    """
     pool = list(range(num_teams))
 
     size = num_teams
@@ -45,7 +50,7 @@ def create_round_robin_schedule(num_teams):
 
         rounds.append([(pool[i], pool[size - 1 - i]) for i in range(size // 2)])
 
-        # rotate
+        # rotatevbc
         pool.insert(1, pool.pop())
 
     # Alternate home/away, gives better results (more H/A/H/A sequences) even when balancing later
@@ -55,43 +60,48 @@ def create_round_robin_schedule(num_teams):
     ]
 
 
-    # Balance Home/Away by using the method described in
-    # Sigrid Knust, Michael von Thaden, "Balanced home–away assignments"
-    # Discrete Optimization 3 (2006) 354–365
+    # now start the H/A balacing algorithm
     
     #Home/Away matrix 
-    ham = [[0]*num_teams for _ in range(num_teams)]
+    ham: List[List[int]] = [[0]*num_teams for _ in range(num_teams)]
 
     # lookup map to find pairing in rounds table
-    rounds_ix = {}
+    rounds_ix: Dict[Tuple[int, int], Tuple[int, int]] = {}
 
-    for ri, pairings in enumerate(rounds):
-        for pi, pairing  in enumerate(pairings):
+    for r, pairings in enumerate(rounds):
+        for p, pairing  in enumerate(pairings):
             home, away = pairing
             if home is None or away is None:
                 continue
             ham[home][away] = 1
             ham[away][home] = -1
-            rounds_ix[home, away] = rounds_ix[away, home] = ri, pi
+            rounds_ix[home, away] = rounds_ix[away, home] = r, p
 
     # imbalance of home/away games; +1 = one more home than away, -3 three more away than home, etc.
     delta = [sum(x) for x in ham]
 
 
     def swap_pairing(a, b):
-        r,p = rounds_ix[a, b]
+        nonlocal rounds_ix, rounds, delta, ham
+
+        r, p = rounds_ix[a, b]
         home, away = rounds[r][p]   
         assert (home == a and away == b) or (home == b and away == a)
 
-        rounds[r][p] = away, home
-        delta[home] -= 2
-        delta[away] += 2
-        ham[home][away] = -1
-        ham[away][home] = 1
+        home, away = away, home
 
+        rounds[r][p] = home, away
+        delta[home] += 2
+        delta[away] -= 2
+        ham[home][away] = 1
+        ham[away][home] = -1
 
     if num_teams % 2 == 0:
 
+        # Each team will have a home/away balance that is non-zero, since the number of matches is odd
+
+
+        # number of teams with more home games minus number of teams with away games
         theta = sum(x>0 for x in delta) - sum(x<0 for x in delta)
 
         if theta <= 0:
@@ -123,9 +133,11 @@ def create_round_robin_schedule(num_teams):
     
     else:  # num_teams is odd
 
+        # since the number of matches of each team is even, we can get the imbalance to zero
 
         while True:
-
+            # The sum of all imbalances (sum(delta)) is always zero, so if there exist a team with a positive
+            # imbalance, there exist at least one team with a negative imbalance
             i = j = None
             for n, d in enumerate(delta):
                 if d > 0:
@@ -138,58 +150,54 @@ def create_round_robin_schedule(num_teams):
 
             # i has more home games than away, j has more away
             if ham[i][j] == 1:
-                # easy case, just swap the two
+                # easy case, just swap home/away status for the match they play and we
+                # improve the overall situation
                 swap_pairing(i, j)
-            else:  # i is playing away, more difficult
-                # find team k that plays away on both i and j
+            else:  # i is playing away at j, more difficult
+                # find a team k that plays away on both i and j; This must exist, see paper for proof.
                 for k in range(num_teams):
                     if ham[i][k] == ham[j][k] == 1:
                         break
-                else:
-                    raise RuntimeError("This shouldn't happen")
-                # swap both
+                else:  # no break
+                    assert False, "This can't happen!"
+                # swap both, i will now play away at k, and j will play at home against k
                 swap_pairing(i, k)
                 swap_pairing(j, k)
                 
     return rounds
 
 
-
-
-
-def create_simple_league_tournament(name, teams, rounds):
+def create_simple_round_robin_tournament(name, teams, rounds):
     t = Tournament(name=name)
-    gs = GroupStage(tournament=t)
-    l = League(stage=gs)
-    l.teams = gs.teams = t.teams = teams
-    for round_id in range(rounds):
-        r = LeagueRound(name=f"{name} Round #{round_id+1}", league=l)
+    rrs = RoundRobinStage(tournament=t)
+    l = League(stage=rrs)
+    l.teams = rrs.teams = t.teams = teams
 
-        schedule = create_round_robin_schedule(len(teams))
 
-        shuffled_teams = teams.copy()
-        random.shuffle(shuffled_teams)
+    def team(x):
+        return shuffled_teams[x] if x is not None else None
 
-        def team(x):
-            if x is None:
-                return None
-            else:
-                return shuffled_teams[x]
+    num_teams = len(teams)
 
-        if round_id % 2 == 0:
+    shuffled_teams = teams.copy()
+    schedule = create_round_robin_schedule(num_teams)
+
+    for round in range(rounds):
+        if round % 2 == 0:
+            random.shuffle(shuffled_teams)
             day_pairings = [[(team(a), team(b)) for a, b in pairings] for pairings in schedule]
         else:
             day_pairings = [[(team(b), team(a)) for a, b in pairings] for pairings in schedule]
 
         for day_nr, pairings in enumerate(day_pairings):
-            md = Matchday(league_round=r, position=day_nr)
+            md = Matchday(league=l, position=day_nr + round * (num_teams - 1))
 
-            pairing_objs = []
+            matches = []
             for pairing in pairings:
-                p = Pairing(team_a=pairing[0], team_b=pairing[1])
-                m = Match(pairing=p)
-                pairing_objs.append(p)
+                m = Match(team_a=pairing[0], team_b=pairing[1])
+                g = Game(match=m)
+                matches.append(m)
 
-            md.pairings = pairing_objs
+            md.matches = matches
 
     return t
