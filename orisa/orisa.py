@@ -2158,7 +2158,7 @@ class Orisa(Plugin):
             await trio.sleep(3)
 
     async def _message_new_guilds(self):
-        for guild_id, guild in self.client.guilds.items():
+        for guild_id, guild in self.client.guilds.copy().items():
             if guild_id not in self.guild_config:
                 await self._handle_new_guild(guild)
 
