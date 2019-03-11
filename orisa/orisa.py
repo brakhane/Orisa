@@ -500,6 +500,12 @@ class Orisa(Plugin):
                 "will be discussed and announced there"
             ),
         )
+        embed.add_field(
+            name="Show your love :heart:",
+            value=(
+                f"If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
+            )
+        )
         await ctx.author.send(content=None, embed=embed)
         if not ctx.channel.private:
             await reply(ctx, "I've sent you a DM")
