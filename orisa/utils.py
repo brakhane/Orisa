@@ -70,8 +70,8 @@ async def get_sr(battletag):
                 headers={
                     "User-Agent": "Orisa/1.0 (+https://github.com/brakhane/Orisa)"
                 },
-                connection_timeout=30,
-                timeout=30,
+                connection_timeout=60,
+                timeout=60,
             )
         except asks.errors.RequestTimeout:
             raise BlizzardError("Timeout")

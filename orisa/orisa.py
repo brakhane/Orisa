@@ -256,7 +256,7 @@ class Orisa(Plugin):
             users = s.query(User).all()
             for user in users:
                 try:
-                    logger.debug(f"Sending messsage to {user.discord_id}")
+                    logger.debug(f"Sending message to {user.discord_id}")
                     u = await self.client.get_user(user.discord_id)
                     await u.send(message)
                 except:
@@ -1629,11 +1629,14 @@ class Orisa(Plugin):
                 "no valid hello channel found. Falling back to DM to owner for %s",
                 guild,
             )
-            await guild.owner.send(
-                msg
-                + f"\n\n*Somebody (hopefully you) invited me to your server {guild.name}, but I couldn't find a "
-                f"text channel I am allowed to send messages to, so I have to message you directly*"
-            )
+            try:
+                await guild.owner.send(
+                    msg
+                    + f"\n\n*Somebody (hopefully you) invited me to your server {guild.name}, but I couldn't find a "
+                    f"text channel I am allowed to send messages to, so I have to message you directly*"
+                )
+            except Exception:
+                logger.exception("Unable to send mail to owner, oh well...")
             try:
                 await guild.owner.send(content=None, embed=Embed(
                     title=":thinking: Need help?",
@@ -1668,7 +1671,11 @@ class Orisa(Plugin):
             return chan_name_no_sr(chan).rsplit("#", 1)[0].strip()
 
         def numberkey(chan):
-            return int(chan_name_no_sr(chan).rsplit("#", 1)[1])
+            try:
+                return int(chan_name_no_sr(chan).rsplit("#", 1)[1])
+            except (TypeError, ValueError):
+                logger.exception("Invalid numeric value")
+                return 255
 
         async def delete_channel(chan):
             nonlocal made_changes
@@ -2238,8 +2245,8 @@ class Orisa(Plugin):
             async for tag_id in channel:
                 logger.debug("got %s from channel %r", tag_id, channel)
                 if not first:
-                    delay = 3 + random.random() * 5.0
-                    logger.debug(f"rate limiting: sleeping for {delay:.02}s")
+                    delay = 30 + random.random() * 30.0
+                    logger.debug(f"rate limiting: sleeping for {delay:4.02}s")
                     await trio.sleep(delay)
                 else:
                     first = False
