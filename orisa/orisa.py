@@ -2245,7 +2245,7 @@ class Orisa(Plugin):
             async for tag_id in channel:
                 logger.debug("got %s from channel %r", tag_id, channel)
                 if not first:
-                    delay = 3 + random.random() * 10
+                    delay = 1 + random.random() * 5
                     logger.debug(f"rate limiting: sleeping for {delay:4.02}s")
                     await trio.sleep(delay)
                 else:
@@ -2289,7 +2289,7 @@ class Orisa(Plugin):
 
         async with trio.open_nursery() as nursery:
             async with receive_ch:
-                for _ in range(min(len(ids_to_sync), 3)):
+                for _ in range(min(len(ids_to_sync), 5)):
                     nursery.start_soon(self._sync_tags_from_channel, receive_ch.clone())
         logger.info("done syncing")
 
