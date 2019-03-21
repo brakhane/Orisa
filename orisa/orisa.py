@@ -2245,7 +2245,7 @@ class Orisa(Plugin):
             async for tag_id in channel:
                 logger.debug("got %s from channel %r", tag_id, channel)
                 if not first:
-                    delay = 30 + random.random() * 30.0
+                    delay = 3 + random.random() * 10
                     logger.debug(f"rate limiting: sleeping for {delay:4.02}s")
                     await trio.sleep(delay)
                 else:
