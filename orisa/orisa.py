@@ -862,7 +862,7 @@ class Orisa(Plugin):
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                raise reply(ctx, "You are not registered. Do `!ow register` first.")
+                await reply(ctx, "You are not registered. Do `!ow register` first.")
                 return
 
             if arg2 is None:
@@ -2444,7 +2444,8 @@ class Orisa(Plugin):
             except InvalidBattleTag as e:
                 logger.exception(f"Got invalid battle tag for {battle_tag}")
                 await user_channel.messages.send(
-                    f"Invalid BattleTag: {e.message}??? I got yours directly from Blizzard, but they claim it doesn't exist... Try again later, Blizzard have fucked up."
+                    f"Invalid BattleTag: {e.message}... Seems like you are using a console account. Those aren't supported right now, sorry."
+                    "If you're on PC: Blizzard claims that the BattleTag has no OW account. Play a QP or arcade game, close OW and try again, sometimes this helps."
                 )
                 return
             except BlizzardError as e:
