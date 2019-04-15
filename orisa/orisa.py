@@ -250,7 +250,7 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner, bypass_owner=False)
-    async def messageall(self, ctx, *, message: str):
+    async def messageallusers(self, ctx, *, message: str):
         s = self.database.Session()
         try:
             users = s.query(User).all()
@@ -264,6 +264,18 @@ class Orisa(Plugin):
             logger.debug("Done sending")
         finally:
             s.close()
+
+    @command()
+    @condition(only_owner, bypass_owner=False)
+    async def messageallservers(self, ctx, *, message: str):
+        for guild_config in self.guild_config.values():
+            try:
+                logger.debug(f"Sending message to {guild_config}")
+                ch = self.client.find_channel(guild_config.listen_channel_id)
+                await ch.messages.send(message)
+            except:
+                logger.exception(f"Error while sending to {guild_config}")
+        logger.debug("Done sending")
 
     @command()
     @condition(only_owner, bypass_owner=False)
