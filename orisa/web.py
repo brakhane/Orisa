@@ -29,8 +29,8 @@ from quart import Quart, request, render_template, jsonify, Response
 from .config import (
     DEVELOPMENT,
     SIGNING_SECRET,
-    OAUTH_CLIENT_ID,
-    OAUTH_CLIENT_SECRET,
+    OAUTH_BLIZZARD_CLIENT_ID,
+    OAUTH_BLIZZARD_CLIENT_SECRET,
     OAUTH_REDIRECT_PATH,
     OAUTH_REDIRECT_HOST,
 )
@@ -278,7 +278,7 @@ async def save(guild_id):
 
 @app.route(OAUTH_REDIRECT_PATH)
 async def handle_oauth():
-    client = WebApplicationClient(OAUTH_CLIENT_ID)
+    client = WebApplicationClient(OAUTH_BLIZZARD_CLIENT_ID)
     logger.debug(f"got OAuth auth URL {request.url}")
 
     # we are behind a proxy, and hypercorn doesn't support
@@ -311,7 +311,7 @@ async def handle_oauth():
             authorization_response=request_url,
             scope=[],
             redirect_url=f"{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}",
-            client_secret=OAUTH_CLIENT_SECRET,
+            client_secret=OAUTH_BLIZZARD_CLIENT_SECRET,
         )
 
         logger.debug(f"got data {(url, headers, body)}")
