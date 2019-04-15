@@ -1,14 +1,13 @@
 module.exports = {
-  baseUrl: process.env.MY_BASE_URL,
+  publicPath: process.env.MY_BASE_URL,
 
   pages: {
     config: {
-      entry: 'src/config_app_main.js',
+      entry: 'guild_config/main.js',
       filename: 'config.html'
     },
     test: {
-      entry: 'src/ttt/test.js',
-      template: 'src/ttt/public/index.html',
+      entry: 'tournament/main.js',
       filename: 'test.html'
     }
   }

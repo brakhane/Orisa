@@ -1,0 +1,23 @@
+README.rst
+setup.py
+orisa/SR names without perm.txt
+orisa/__init__.py
+orisa/__main__.py
+orisa/api.py
+orisa/config.py
+orisa/config.py.template
+orisa/config_classes.py
+orisa/exceptions.py
+orisa/models.py
+orisa/orisa.py
+orisa/privacy.md
+orisa/tournament.py
+orisa/utils.py
+orisa/web.py
+orisa.egg-info/PKG-INFO
+orisa.egg-info/SOURCES.txt
+orisa.egg-info/dependency_links.txt
+orisa.egg-info/requires.txt
+orisa.egg-info/top_level.txt
+orisa/templates/base.html
+orisa/templates/message.html

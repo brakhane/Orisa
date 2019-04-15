@@ -75,10 +75,12 @@ from quart import request, jsonify
 async def foo():
     from .models import League, Database
 
-
     with Database().session() as s:
         l = s.query(League).offset(1).first()
-        return jsonify([{"name": x.Team.name, "points": x.points, "W": x.won, "L": x.lost} for x in l.standings(s)])
+        return jsonify([{
+            "name": x.Team.name, "points": x.points, "W": x.won, "L": x.lost, 
+            "F": x.score_for, "A": x.score_against,
+            } for x in l.standings(s)])
 
 
 

@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "orisa"
+version = "0.1.0"
+description = ""
+authors = ["Dennis Brakhane <brakhane@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+"html5lib" = "^1.0.1"
+lxml = "*"
+sqlalchemy = ">=1.3.0"
+trio = "^0.10.0"
+fuzzywuzzy = {version = "*", extras = ["speedup"]}
+pyyaml = "*"
+pendulum = "*"
+discord-curious = {git = "https://github.com/brakhane/curious.git", rev = "10s-timeout"}
+cachetools = "*"
+wcwidth = "*"
+tabulate = "*"
+pandas = "*"
+seaborn = "*"
+raven = "*"
+quart-trio = "*"
+hypercorn = ">=0.5.0,<0.5.3"
+oauthlib = "*"
+itsdangerous = "*"
+"dataclasses-json" = "*"
+"asks" = "*"
+
+[tool.poetry.dev-dependencies]
+"black" = { version = "*", allows-prereleases = true }
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

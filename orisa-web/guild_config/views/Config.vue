@@ -217,8 +217,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { isEqual, isEmpty, cloneDeep } from 'lodash'
 
-const ChannelSelector = () => import(/* webpackChunkName: "channel-selector" */'@/components/ChannelSelector')
-const ManagedVoiceCategory = () => import(/* webpackChunkName: "managed-voice-category" */'@/components/ManagedVoiceCategory')
+const ChannelSelector = () => import(/* webpackChunkName: "channel-selector" */'../components/ChannelSelector')
+const ManagedVoiceCategory = () => import(/* webpackChunkName: "managed-voice-category" */'../components/ManagedVoiceCategory')
 
 library.add(faSpinner, faFolderPlus, faQuestionCircle)
 

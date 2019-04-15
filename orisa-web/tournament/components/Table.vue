@@ -2,7 +2,7 @@
   <div>
     <button :class="'button is-primary' + (load ? ' is-loading' : '')" @click="p">Jajajojo</button>
     <div class="container">
-      <b-table :data="data"  :loading="data.length == 0" :mobile-cards="false" :row-class="col">
+      <b-table v-sortable="sortableOptions" :data="data"  :loading="data.length == 0" :mobile-cards="false" :row-class="col">
         <template slot-scope="props" slot="header">
           <b-tooltip :active="!!props.column.meta" :label="props.column.meta" dashed>
             {{ props.column.label }}
@@ -13,17 +13,23 @@
             {{ props.row.pos }}
           </b-table-column>
           <b-table-column field="name" custom-key="Name">
-            <span class="icon">
-              <i class="mdi mdi-google-controller"  v-if="props.row.name.indexOf('1') == -1"></i>
-              <i class="mdi mdi-google" v-else></i>
+            <!-- div style="width: 32px; height: 32px; display:inline-block">I</div -->
+            <img src="https://bnetcmsus-a.akamaihd.net/cms/page_media/E9MU0AK0JIXT1507858876249.svg" width="32" height="32">
+            <span>
+              {{ props.row.name }}
             </span>
-            {{ props.row.name }}
           </b-table-column>
           <b-table-column field="W" label="W" numeric width="40" meta="Matches Won">
             {{ props.row.W }}
           </b-table-column>
           <b-table-column field="L" label="L" numeric width="40" meta="Matches Lost">
             {{ props.row.L }}
+          </b-table-column>
+          <b-table-column field="F" label="MS" numeric width="40" meta="Map Scores">
+            {{ props.row.F }}:{{ props.row.A }}
+          </b-table-column>
+          <b-table-column field="F" label="MD" numeric width="40" meta="Map Difference">
+            {{ (props.row.F > props.row.A ? "+" : "") + (props.row.F - props.row.A) }}
           </b-table-column>
           <b-table-column field="points" label="Pts" numeric width="40" meta="Points">
             {{ props.row.points }}
@@ -38,14 +44,59 @@
 <script>
 
 import axios from 'axios'
+import Sortable from 'sortablejs'
+
+const createSortable = (el, options, vnode) => {
+  return Sortable.create(el, {
+    ...options,
+    onEnd: function (evt) {
+      const data = vnode.context.data
+      const item = data[evt.oldIndex]
+      if (evt.newIndex > evt.oldIndex) {
+        for (let i = evt.oldIndex; i < evt.newIndex; i++) {
+          data[i] = data[i + 1]
+        }
+      } else {
+        for (let i = evt.oldIndex; i > evt.newIndex; i--) {
+          data[i] = data[i - 1]
+        }
+      }
+      data[evt.newIndex] = item
+      vnode.context.$toast.open(`Moved ${item.name} from row ${evt.oldIndex + 1} to ${evt.newIndex + 1}`)
+    }
+  })
+}
+
+
+const sortable = {
+  name: 'sortable',
+  bind (el, binding, vnode) {
+    const table = el.querySelector('table')
+    table._sortable = createSortable(table.querySelector('tbody'), binding.value, vnode)
+  },
+  update (el, binding, vnode) {
+    const table = el.querySelector('table')
+    table._sortable.destroy()
+    table._sortable = createSortable(table.querySelector('tbody'), binding.value, vnode)
+  },
+  unbind (el) {
+    const table = el.querySelector('table')
+    table._sortable.destroy()
+  }
+}
 
 export default {
   name: 'test',
+  directives: { sortable },
   props: [
     'foo'
   ],
   data () {
     return {
+      sortableOptions: {
+        chosenClass: 'is-selected',
+        animation: 75
+      },
       load: false,
       data: [],
       columns: [
@@ -100,7 +151,7 @@ export default {
       this.load = true
     },
     col (row, index) {
-      return  index < 1 ? "leader" : index < 4 ? "blubb" : ""
+      return index < 1 ? "leader" : index < 4 ? "blubb" : ""
     }
   }
 }

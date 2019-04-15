@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Buefy from 'buefy'
-import App from '@/ttt/App'
+import App from './App'
 
 import router from './router'
 

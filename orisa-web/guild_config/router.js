@@ -17,17 +17,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const Test = () => import('@/ttt/views/Test')
+const Config = () => import('./views/Config')
 
 Vue.use(Router)
 
 export default new Router({
-//  mode: 'history',
-  base: `${process.env.BASE_URL}/test.html`,
+  mode: 'history',
+  base: `${process.env.BASE_URL}/config.html`,
   routes: [
     {
-      path: '/',
-      component: Test
+      path: '/:token',
+      component: Config,
+      props: true
     }
   ]
 })

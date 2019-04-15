@@ -361,13 +361,16 @@ class League(Base):
         def points_query(a_or_b):
             if a_or_b == "a":
                 t_id, p_for, p_against = Match.team_a_id, Match.points_a, Match.points_b
+                m_for, m_against = Match.score_a, Match.score_b
             else:
                 t_id, p_for, p_against = Match.team_b_id, Match.points_b, Match.points_a
-
+                m_for, m_against = Match.score_b, Match.score_a
             return (
                 session.query(
                     t_id.label("t"), 
                     func.sum(p_for).label("points"), 
+                    func.sum(m_for).label("score_for"),
+                    func.sum(m_against).label("score_against"),
                     cast(func.total(p_for > p_against), Integer).label("won"), 
                     cast(func.total(p_for == p_against), Integer).label("drawn"),
                     cast(func.total(p_for < p_against), Integer).label("lost")
@@ -386,6 +389,8 @@ class League(Base):
             session.query(
                 Team,
                 (no_null(qa.c.points) + no_null(qb.c.points)).label("points"),
+                (no_null(qa.c.score_for) + no_null(qb.c.score_for)).label("score_for"),
+                (no_null(qa.c.score_against) + no_null(qb.c.score_against)).label("score_against"),
                 (no_null(qa.c.won) + no_null(qb.c.won)).label("won"),
                 (no_null(qa.c.drawn) + no_null(qb.c.drawn)).label("drawn"),
                 (no_null(qa.c.lost) + no_null(qb.c.lost)).label("lost"),
