@@ -196,7 +196,7 @@ class BattleTag(Handle):
         return self.blizzard_id
 
     def __str__(self):
-        return f"BT/{self.battle_tag} ({self.sr} SR)" if self.sr else f"{self.tag} (Unranked)"
+        return f"BT/{self.battle_tag} ({self.sr} SR)" if self.sr else f"{self.battle_tag} (Unranked)"
 
     def __repr__(self):
         return f"<BattleTag(id={self.id} tag={self.tag})>"
@@ -229,7 +229,7 @@ class Gamertag(Handle):
 
 
     def __str__(self):
-        return f"GT/{self.gamertag} ({self.sr} SR)" if self.sr else f"{self.tag} (Unranked)"
+        return f"GT/{self.gamertag} ({self.sr} SR)" if self.sr else f"{self.gamertag} (Unranked)"
 
     def __repr__(self):
         return f"<Gamertag(id={self.id} gamertag={self.gamertag})>"
