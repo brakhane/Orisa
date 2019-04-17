@@ -2375,8 +2375,13 @@ class Orisa(Plugin):
             elif type == "xbox":
                 handles = [
                     Gamertag(xbl_id=datum["id"], gamertag=datum["name"])
-                    for datum in data
+                    for datum in data if datum["type"] == "xbox"
                 ]
+
+                if not handles:
+                    await user_channel.messages.send(
+                        "I couldn't find a XBox account linked to your Discord. Please link your XBox account to Discord and try again. (Unfortunately, I cannot ask XBL directly for the information)"
+                    )
 
             user = self.database.user_by_discord_id(session, user_id)
 
