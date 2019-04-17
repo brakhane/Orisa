@@ -1149,7 +1149,7 @@ class Orisa(Plugin):
                 "It will also send a short message to the chat when you ranked up.\n"
                 f"*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{self.client.application_info.owner.id}>*\n"
                 f"\n**The commands only work in the <#{channel_id}> channel or by sending me a DM**\n"
-                "If you are new to Orisa, you are probably looking for `!ow register`\n"
+                "If you are new to Orisa, you are probably looking for `!ow register` or `!ow register xbox`\n"
                 "If you want to use Orisa on your own server or help developing it, enter `!ow about`\n"
                 "Parameters in [square brackets] are optional."
             ),
@@ -1256,10 +1256,12 @@ class Orisa(Plugin):
             ),
         )
         embed.add_field(
-            name="!ow register",
-            value="Create a link to your BattleNet account, or adds a secondary BattleTag to your account. "
+            name="!ow register [pc/xbox]",
+            value="Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. "
             "Your OW account will be checked periodically and your nick will be "
-            "automatically updated to show your SR or rank (see the *format* command for more info). ",
+            "automatically updated to show your SR or rank (see the *format* command for more info). "
+            "`!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. "
+            "If you register an XBL account, you have to link it to your Discord beforehand. PSN accounts are not supported yet.",
         )
         embed.add_field(name="!ow privacy", value="Show Orisa's Privacy Policy")
         embed.add_field(
