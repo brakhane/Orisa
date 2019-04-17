@@ -169,10 +169,10 @@ class Orisa(Plugin):
     SYMBOL_TANK = "\N{SHIELD}"
     SYMBOL_SUPPORT = (
         "\N{VERY HEAVY GREEK CROSS}"
-    )  
+    )
     SYMBOL_FLEX = (
         "\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}"
-    )  
+    )
 
     # dirty hack needed for correct_channel condition
     _instance = None
@@ -2382,6 +2382,7 @@ class Orisa(Plugin):
                     await user_channel.messages.send(
                         "I couldn't find a XBox account linked to your Discord. Please link your XBox account to Discord and try again. (Unfortunately, I cannot ask XBL directly for the information)"
                     )
+                    return
 
             user = self.database.user_by_discord_id(session, user_id)
 
@@ -2486,7 +2487,7 @@ class Orisa(Plugin):
                         logger.exception("Unable to delete check message")
 
                 handle.update_sr(sr)
-        
+
 
             sort_secondaries(user)
 
