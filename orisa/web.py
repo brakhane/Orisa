@@ -31,6 +31,8 @@ from .config import (
     SIGNING_SECRET,
     OAUTH_BLIZZARD_CLIENT_ID,
     OAUTH_BLIZZARD_CLIENT_SECRET,
+    OAUTH_DISCORD_CLIENT_ID,
+    OAUTH_DISCORD_CLIENT_SECRET,
     OAUTH_REDIRECT_PATH,
     OAUTH_REDIRECT_HOST,
 )
@@ -278,22 +280,9 @@ async def save(guild_id):
 
 @app.route(OAUTH_REDIRECT_PATH)
 async def handle_oauth():
-    client = WebApplicationClient(OAUTH_BLIZZARD_CLIENT_ID)
-    logger.debug(f"got OAuth auth URL {request.url}")
-
-    # we are behind a proxy, and hypercorn doesn't support
-    # proxy headers yet, so just fake https to avoid an exception
-    request_url = request.url.replace("http:", "https:")
-
-    if "error=access_denied" in request_url:
-        return await render_message(
-            "You didn't give me permission to access your BattleTag; registration cancelled.",
-            is_error=True,
-        )
-    data = client.parse_request_uri_response(request_url)
 
     try:
-        uid = serializer.loads(data["state"], max_age=600)
+        type, uid = serializer.loads(request.args["state"], max_age=600)
     except SignatureExpired:
         return await render_message(
             'The link has expired. Please request a new link with <p class="text-monospace">!ow register</p>',
@@ -305,13 +294,41 @@ async def handle_oauth():
             is_error=True,
         )
 
+    if type == "pc":
+        token_url = "https://eu.battle.net/oauth/token"
+        endpoint = "https://eu.battle.net/oauth/userinfo"
+        client_id = OAUTH_BLIZZARD_CLIENT_ID
+        client_secret = OAUTH_BLIZZARD_CLIENT_SECRET
+        scope = []
+    elif type == "xbox":
+        token_url = "https://discordapp.com/api/oauth2/token"
+        endpoint = "https://discordapp.com/api/v6/users/@me/connections"
+        scope = ["connections"]
+        client_id = OAUTH_DISCORD_CLIENT_ID
+        client_secret = OAUTH_DISCORD_CLIENT_SECRET
+    else:
+        return await render_message("I got invalid data. Please try registering again.", is_error=True)
+
+    client = WebApplicationClient(client_id)
+    logger.debug(f"got OAuth auth URL {request.url}")
+
+    # we are behind a proxy, and hypercorn doesn't support
+    # proxy headers yet, so just fake https to avoid an exception
+    request_url = request.url.replace("http:", "https:")
+
+    if "error=access_denied" in request_url:
+        return await render_message(
+            "You didn't give me permission to access your BattleTag; registration cancelled.",
+            is_error=True,
+        )
+
     try:
         url, headers, body = client.prepare_token_request(
-            "https://eu.battle.net/oauth/token",
+            token_url,
             authorization_response=request_url,
-            scope=[],
+            scope=scope,
             redirect_url=f"{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}",
-            client_secret=OAUTH_BLIZZARD_CLIENT_SECRET,
+            client_secret=client_secret,
         )
 
         logger.debug(f"got data {(url, headers, body)}")
@@ -322,11 +339,13 @@ async def handle_oauth():
             data=body,
         )
 
-        client.parse_request_body_response(resp.text, scope=[])
+        logger.debug("got response %s", resp.text)
+
+        client.parse_request_body_response(resp.text, scope=scope)
 
         logger.debug("token is %s", client.token)
 
-        url, headers, body = client.add_token("https://eu.battle.net/oauth/userinfo")
+        url, headers, body = client.add_token(endpoint)
 
         data = (await asks.get(url, headers=headers)).json()
     except Exception:
@@ -338,7 +357,7 @@ async def handle_oauth():
             'I\'m sorry. Something went wrong on my side. Try to reissue <p class="text-monospace">!ow register</p>',
             is_error=True,
         )
-    await send_ch.send((uid, data))
+    await send_ch.send((uid, type, data))
 
     return await render_message("Thank you! I have sent you a DM.")
 

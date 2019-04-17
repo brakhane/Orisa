@@ -27,6 +27,7 @@ itsdangerous = "*"
 "dataclasses-json" = "*"
 "asks" = "*"
 "wsproto" = "0.13.0"
+prospector = "^1.1"
 
 [tool.poetry.dev-dependencies]
 "black" = { version = "*", allows-prereleases = true }

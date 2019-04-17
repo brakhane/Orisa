@@ -41,29 +41,24 @@ SR_LOCKS = TTLCache(
 )  # if a request should be hanging for 60s, just try another
 
 
-async def get_sr(battletag):
+async def get_sr(handle):
     try:
-        lock = SR_LOCKS[battletag]
+        lock = SR_LOCKS[handle.handle]
     except KeyError:
         lock = trio.Lock()
-        SR_LOCKS[battletag] = lock
+        SR_LOCKS[handle.handle] = lock
 
     await lock.acquire()
     try:
-        if not re.match(r"\w+#[0-9]+", battletag):
-            raise InvalidBattleTag(
-                "Malformed BattleTag. BattleTags look like SomeName#1234: a name and a # sign followed by a number and contain no spaces. They are case-sensitive, too!"
-            )
-
         try:
-            res = SR_CACHE[battletag]
-            logger.info(f"got SR for {battletag} from cache")
+            res = SR_CACHE[handle.handle]
+            logger.info(f"got SR for {handle} from cache")
             return res
         except KeyError:
             pass
 
-        url = f'https://playoverwatch.com/en-us/career/pc/{battletag.replace("#", "-")}'
-        logger.debug(f"requesting {url}")
+        url = f'https://playoverwatch.com/en-us/career/{handle.blizzard_url_type}/{handle.handle.replace("#", "-")}'
+        logger.debug("requesting %s", url)
         try:
             result = await asks.get(
                 url,
@@ -85,7 +80,7 @@ async def get_sr(battletag):
         rank_image_elems = document.xpath('//div[@class="competitive-rank"]/img/@src')
         if not srs:
             if "Profile Not Found" in result.text:
-                raise InvalidBattleTag(f"No profile with BattleTag {battletag} found")
+                raise InvalidBattleTag(f"No profile with {handle.desc} {handle.handle} found")
             raise UnableToFindSR()
         sr = int(srs[0])
         if rank_image_elems:
@@ -93,15 +88,15 @@ async def get_sr(battletag):
         else:
             rank_image = None
 
-        res = SR_CACHE[battletag] = (sr, rank_image)
+        res = SR_CACHE[handle.handle] = (sr, rank_image)
         return res
     finally:
         lock.release()
 
 
 def sort_secondaries(user):
-    user.battle_tags[1:] = list(sorted(user.battle_tags[1:], key=attrgetter("tag")))
-    user.battle_tags.reorder()
+    user.handles[1:] = list(sorted(user.handles[1:], key=attrgetter("handle")))
+    user.handles.reorder()
 
 
 async def send_long(send_func, msg):
@@ -128,23 +123,23 @@ async def reply(ctx, msg):
     return await ctx.channel.messages.send(f"<@!{ctx.author.id}> {msg}")
 
 
-def resolve_tag_or_index(user, tag_or_index):
+def resolve_handle_or_index(user, handle_or_index):
     try:
-        index = int(tag_or_index)
+        index = int(handle_or_index)
     except ValueError:
         try:
-            tag, score, index = process.extractOne(
-                tag_or_index,
-                {t.position: t.tag for t in user.battle_tags},
+            handle, score, index = process.extractOne(
+                handle_or_index,
+                {h.position: h.handle for h in user.handles},
                 score_cutoff=50,
             )
         except (ValueError, TypeError):
             raise ValueError(
-                f'The BattleTag "{tag_or_index}" is not registered for your account '
+                f'The handle "{handle_or_index}" is not registered for your account '
                 "(I even did a fuzzy search), use `!ow register` first."
             )
     else:
-        if index >= len(user.battle_tags):
+        if index >= len(user.handles):
             raise ValueError("You don't even have that many secondary BattleTags")
     return index
 

@@ -23,6 +23,7 @@ import random
 import os
 import traceback
 import unicodedata
+import urllib.parse
 
 from contextlib import contextmanager, nullcontext, suppress
 from contextvars import ContextVar
@@ -85,12 +86,13 @@ from .config import (
     SENTRY_DSN,
     SIGNING_SECRET,
     OAUTH_BLIZZARD_CLIENT_ID,
+    OAUTH_DISCORD_CLIENT_ID,
     OAUTH_REDIRECT_HOST,
     OAUTH_REDIRECT_PATH,
     PRIVACY_POLICY_PATH,
     WEB_APP_PATH,
 )
-from .models import Cron, User, BattleTag, SR, Role, GuildConfigJson
+from .models import Cron, User, BattleTag, Gamertag, SR, Role, GuildConfigJson
 from .exceptions import (
     BlizzardError,
     InvalidBattleTag,
@@ -103,7 +105,7 @@ from .utils import (
     sort_secondaries,
     send_long,
     reply,
-    resolve_tag_or_index,
+    resolve_handle_or_index,
     format_roles,
 )
 from . import web
@@ -112,7 +114,7 @@ from . import web
 logger = logging.getLogger("orisa")
 
 
-oauth_serializer = URLSafeTimedSerializer(SIGNING_SECRET)
+OAUTH_SERIALIZER = URLSafeTimedSerializer(SIGNING_SECRET)
 
 SUPPORT_DISCORD="https://discord.gg/tsNxvFh"
 VOTE_LINK="https://discordbots.org/bot/445905377712930817/vote"
@@ -164,13 +166,13 @@ def only_owner_all_channels(ctx):
 class Orisa(Plugin):
 
     SYMBOL_DPS = "\N{CROSSED SWORDS}"
-    SYMBOL_TANK = "\N{SHIELD}"  # \N{VARIATION SELECTOR-16}'
+    SYMBOL_TANK = "\N{SHIELD}"
     SYMBOL_SUPPORT = (
         "\N{VERY HEAVY GREEK CROSS}"
-    )  #'\N{HEAVY PLUS SIGN}'   #\N{VERY HEAVY GREEK CROSS}'
+    )  
     SYMBOL_FLEX = (
         "\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}"
-    )  # '\N{FLEXED BICEPS}'   #'\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}'
+    )  
 
     # dirty hack needed for correct_channel condition
     _instance = None
@@ -198,7 +200,7 @@ class Orisa(Plugin):
 
         await self.spawn(self._message_new_guilds)
 
-        await self.spawn(self._sync_all_tags_task)
+        await self.spawn(self._sync_all_handles_task)
 
         await self.spawn(self._cron_task)
 
@@ -210,7 +212,6 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner, bypass_owner=False)
-    # @author_has_roles("Clan Administrator")
     async def shutdown(self, ctx, safety: str = None):
         if safety != "Orisa":
             await reply(
@@ -233,7 +234,7 @@ class Orisa(Plugin):
     async def createallchannels(self, ctx):
         logger.info("creating all channels")
 
-        for gi in self.guild_config.values():
+        for gi in self.guild_config.copy().values():
             for vc in gi.managed_voice_categories:
                 await self._adjust_voice_channels(
                     self.client.find_channel(vc.category_id), create_all_channels=True
@@ -242,7 +243,7 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner, bypass_owner=False)
     async def adjustallchannels(self, ctx):
-        for gi in self.guild_config.values():
+        for gi in self.guild_config.copy().values():
             for vc in gi.managed_voice_categories:
                 await self._adjust_voice_channels(
                     self.client.find_channel(vc.category_id)
@@ -353,12 +354,13 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
-    async def hs(self, ctx, style: str = "fancy_grid"):
+    async def hs(self, ctx, type_str = "pc", style: str = "fancy_grid"):
 
         prev_date = datetime.utcnow() - timedelta(days=1)
 
         with self.database.session() as session:
-            await self._top_players(session, prev_date, style)
+            t = BattleTag if type_str == "pc" else Gamertag
+            await self._top_players(session, prev_date, t, style)
 
     @command()
     @condition(only_owner)
@@ -412,10 +414,10 @@ class Orisa(Plugin):
     @command()
     @condition(correct_channel)
     async def ow(self, ctx, *, member: Member = None):
-        def format_sr(tag):
-            if not tag.sr:
+        def format_sr(handle):
+            if not handle.sr:
                 return "—"
-            return f"{tag.sr} ({RANKS[tag.rank]})"
+            return f"{handle.sr} ({RANKS[handle.rank]})"
 
         member_given = member is not None
         if not member_given:
@@ -430,21 +432,38 @@ class Orisa(Plugin):
                 embed = Embed(colour=0x659DBD)  # will be overwritten later if SR is set
                 embed.add_field(name="Nick", value=member.name)
 
-                primary, *secondary = user.battle_tags
-                tag_value = f"**{primary.tag}**\n"
-                tag_value += "\n".join(tag.tag for tag in secondary)
+                primary, *secondary = user.handles
 
                 sr_value = f"**{format_sr(primary)}**\n"
                 sr_value += "\n".join(format_sr(tag) for tag in secondary)
 
-                multiple_tags = len(user.battle_tags) > 1
+                multiple_handles = len(user.handles) > 1
+                multiple_handle_types = len(set(handle.type for handle in user.handles)) > 1
+
+                if multiple_handle_types:
+                    def fmt(handle):
+                        return f"{handle.handle} ({handle.blizzard_url_type.upper()})"
+                else:
+                    def fmt(handle):
+                        return handle.handle
+
+                handle_value = f"**{fmt(primary)}**\n"
+                handle_value += "\n".join(fmt(handle) for handle in secondary)
+
+                if multiple_handles:
+                    if multiple_handle_types:
+                        handle_name = "Handles"
+                    else:
+                        handle_name = f"{user.handles[0].desc}s"
+                else:
+                    handle_name = user.handles[0].desc
 
                 embed.add_field(
-                    name="BattleTags" if multiple_tags else "BattleTag", value=tag_value
+                    name=handle_name, value=handle_value
                 )
-                if any(tag.sr for tag in user.battle_tags):
+                if any(handle.sr for handle in user.handles):
                     embed.add_field(
-                        name="SRs" if multiple_tags else "SR", value=sr_value
+                        name="SRs" if multiple_handles else "SR", value=sr_value
                     )
 
                 if primary.rank is not None:
@@ -457,13 +476,13 @@ class Orisa(Plugin):
                     name="Links",
                     inline=False,
                     value=(
-                        f'[Overwatch profile](https://playoverwatch.com/en-us/career/pc/{primary.tag.replace("#", "-")}) | '
+                        f'[Overwatch profile](https://playoverwatch.com/en-us/career/{primary.blizzard_url_type}/{urllib.parse.quote(primary.handle.replace("#", "-"))}) | '
                         f'[Upvote Orisa]({VOTE_LINK}) | [Orisa Support Server]({SUPPORT_DISCORD}) | [Donate `❤️`]({DONATE_LINK})'
                     )
                 )
 
-                if multiple_tags:
-                    footer_text = f"The SR of the primary BattleTag was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
+                if multiple_handles:
+                    footer_text = f"The SR of the primary {user.handles[0].desc} was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
                 else:
                     footer_text = f"The SR was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
 
@@ -580,28 +599,52 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     @condition(correct_channel)
-    async def register(self, ctx, *, ignored: str = None):
+    async def register(self, ctx, *, type: str = "pc"):
         user_id = ctx.message.author_id
-        client = WebApplicationClient(OAUTH_BLIZZARD_CLIENT_ID)
-        state = oauth_serializer.dumps(user_id)
+
+        if type == "pc":
+            client = WebApplicationClient(OAUTH_BLIZZARD_CLIENT_ID)
+            oauth_url = "https://eu.battle.net/oauth/authorize"
+            scope = []
+            description=(
+                "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click "
+                "the link above and give me permission to access your data. I only need this permission once, you can remove it "
+                "later in your BattleNet account."
+            )
+        elif type == "xbox":
+            client = WebApplicationClient(OAUTH_DISCORD_CLIENT_ID)
+            oauth_url = "https://discordapp.com/oauth2/authorize"
+            scope = ["connections"]
+            description=(
+                "To complete your registration, I need your permission to ask Discord for your Gamertag. Please click "
+                "the link above and give me permission to access your data. Make sure you have linked your Xbox account to Discord."
+            )
+        else:
+            await reply(ctx, f'Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet.')
+            return
+
+        state = OAUTH_SERIALIZER.dumps((type, user_id))
         url, headers, body = client.prepare_authorization_request(
-            "https://eu.battle.net/oauth/authorize",
-            scope=[],
+            oauth_url,
+            scope=scope,
             redirect_url=f"{OAUTH_REDIRECT_HOST}{OAUTH_REDIRECT_PATH}",
             state=state,
         )
         embed = Embed(
             url=url,
-            title="Click here to register",
-            description="To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click "
-            "the link above and give me permission to access your data. I only need this permission once, you can remove it "
-            "later in your BattleNet account.",
+            title=f"Click here to register your {type.upper()} account",
+            description=description
         )
-        embed.add_field(
-            name=":information_source: Protip",
-            value="If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
-            "account data for that account instead.",
-        )
+        if type == "pc":
+            embed.add_field(
+                name=":information_source: Protip",
+                value="If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
+                "account data for that account instead.",
+            )
+            embed.add_field(
+                name=":video_game: Not on PC?",
+                value="If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future."
+            )
         embed.set_footer(
             text="By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy"
         )
@@ -612,7 +655,7 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     @condition(correct_channel)
-    async def unregister(self, ctx, tag_or_index: str):
+    async def unregister(self, ctx, handle_or_index: str):
         session = self.database.Session()
         try:
             user = self.database.user_by_discord_id(session, ctx.author.id)
@@ -623,21 +666,21 @@ class Orisa(Plugin):
                 return
 
             try:
-                index = resolve_tag_or_index(user, tag_or_index)
+                index = resolve_handle_or_index(user, handle_or_index)
             except ValueError as e:
                 await reply(ctx, e.args[0])
                 return
             if index == 0:
                 await reply(
                     ctx,
-                    "You cannot unregister your primary BattleTag. Use `!ow setprimary` to set a different primary first, or "
+                    "You cannot unregister your primary handle. Use `!ow setprimary` to set a different primary first, or "
                     "use `!ow forgetme` to delete all your data.",
                 )
                 return
 
-            removed = user.battle_tags.pop(index)
+            removed = user.handles.pop(index)
             session.commit()
-            await reply(ctx, f"Removed **{removed.tag}**")
+            await reply(ctx, f"Removed **{removed.handle}**")
             await self._update_nick_after_secondary_change(ctx, user)
 
         finally:
@@ -664,7 +707,7 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     @condition(correct_channel)
-    async def setprimary(self, ctx, tag_or_index: str):
+    async def setprimary(self, ctx, handle_or_index: str):
         session = self.database.Session()
         try:
             user = self.database.user_by_discord_id(session, ctx.author.id)
@@ -672,30 +715,30 @@ class Orisa(Plugin):
                 await reply(ctx, "You are not registered. Use `!ow register` first.")
                 return
             try:
-                index = resolve_tag_or_index(user, tag_or_index)
+                index = resolve_handle_or_index(user, handle_or_index)
             except ValueError as e:
                 await reply(ctx, e.args[0])
                 return
             if index == 0:
                 await reply(
                     ctx,
-                    f'"{user.battle_tags[0].tag}" already is your primary BattleTag. *Going back to sleep*',
+                    f'"{user.handles[0].handle}" already is your primary {user.handles[0].desc}. *Going back to sleep*',
                 )
                 return
 
-            p, s = user.battle_tags[0], user.battle_tags[index]
+            p, s = user.handles[0], user.handles[index]
             p.position = index
             s.position = 0
             session.commit()
 
-            for i, t in enumerate(sorted(user.battle_tags[1:], key=attrgetter("tag"))):
+            for i, t in enumerate(sorted(user.handles[1:], key=attrgetter("handle"))):
                 t.position = i + 1
 
             session.commit()
 
             await reply(
                 ctx,
-                f"Done. Your primary BattleTag is now **{user.battle_tags[0].tag}**.",
+                f"Done. Your primary {user.handles[0].desc} is now **{user.handles[0].handle}**.",
             )
             await self._update_nick_after_secondary_change(ctx, user)
 
@@ -801,13 +844,13 @@ class Orisa(Plugin):
             else:
                 fault = False
                 async with ctx.channel.typing:
-                    for tag in user.battle_tags:
+                    for handle in user.handles:
                         try:
-                            await self._sync_tag(session, tag)
+                            await self._sync_handle(session, handle)
                         except Exception as e:
                             if self.raven_client:
                                 self.raven_client.captureException()
-                            logger.exception(f"exception while syncing {tag}")
+                            logger.exception(f"exception while syncing {handle}")
                             fault = True
 
                 if fault:
@@ -818,7 +861,7 @@ class Orisa(Plugin):
                 else:
                     await reply(
                         ctx,
-                        f"OK, I have updated your data. Your (primary) SR is now {user.battle_tags[0].sr}. "
+                        f"OK, I have updated your data. Your (primary) SR is now {user.handles[0].sr}. "
                         "If that is not correct, you need to log out of Overwatch once and try again; your "
                         "profile also needs to be public for me to track your SR.",
                     )
@@ -867,76 +910,6 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def findallplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
         await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=True)
-
-    @ow.subcommand()
-    @condition(correct_channel)
-    async def newsr(self, ctx, arg1, arg2=None):
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
-            if not user:
-                await reply(ctx, "You are not registered. Do `!ow register` first.")
-                return
-
-            if arg2 is None:
-                sr_str = arg1
-                tag = user.battle_tags[0]
-            else:
-                tag_str, sr_str = arg1, arg2
-
-                try:
-                    _, score, index = process.extractOne(
-                        tag_str,
-                        {t.position: t.tag for t in user.battle_tags},
-                        score_cutoff=50,
-                    )
-                    tag = user.battle_tags[index]
-                except (ValueError, TypeError):
-                    tag = None
-
-                if not tag:
-                    await reply(
-                        ctx,
-                        f"I have no idea which of your BattleTags you mean by '{tag_str}'",
-                    )
-                    return
-            # check for fat fingering
-            force = False
-            if sr_str.strip().endswith("!"):
-                force = True
-                sr_str = sr_str[:-1]
-            try:
-                if sr_str.strip().lower() == "none":
-                    sr = None
-                else:
-                    sr = int(sr_str)
-            except ValueError:
-                await reply(
-                    ctx,
-                    "I don't know about you, but '{sr_str}' doesn't look like a number to me",
-                )
-                return
-
-            if sr is not None:
-                if not (500 <= sr <= 5000):
-                    await reply(ctx, "SR must be between 500 and 5000")
-                    return
-
-                # check for fat finger
-                if tag.sr and abs(tag.sr - sr) > 200 and not force:
-                    await reply(
-                        ctx,
-                        f"Whoa! {sr} looks like a big change compared to your previous SR of {tag.sr}. To avoid typos, I will only update it if you are sure."
-                        f"So, if that is indeed correct, reissue this command with a ! added to the SR, like `!ow newsr 1234!`",
-                    )
-                    return
-
-            tag.update_sr(sr)
-            rank = tag.rank
-            image = f"https://d1u1mce87gyfbn.cloudfront.net/game/rank-icons/season-2/rank-{rank+1}.png"
-
-            await self._handle_new_sr(session, tag, sr, image)
-            session.commit()
-            await reply(ctx, f"Done. The SR for *{tag.tag}* is now *{sr}*")
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -1014,11 +987,11 @@ class Orisa(Plugin):
                         )
                         return
 
-                base_sr = asker.battle_tags[0].sr
+                base_sr = asker.handles[0].sr
                 if not base_sr:
                     await reply(
                         ctx,
-                        "You primary BattleTag has no SR, please give a SR range you want to search for instead",
+                        "You primary {asker.handles[0].desc} has no SR, please give a SR range you want to search for instead",
                     )
                     return
 
@@ -1380,13 +1353,13 @@ class Orisa(Plugin):
     async def _srgraph(self, ctx, user, name, date: str = None):
         sns.set()
 
-        tag = user.battle_tags[0]
+        handle = user.handles[0]
 
-        data = [(sr.timestamp, sr.value) for sr in tag.sr_history]
+        data = [(sr.timestamp, sr.value) for sr in handle.sr_history]
 
         if not data:
             await ctx.channel.messages.send(
-                f"There is no data yet for {tag.tag}, try again later"
+                f"There is no data yet for {handle.handle}, try again later"
             )
             return
 
@@ -1472,7 +1445,7 @@ class Orisa(Plugin):
                 f"sleeping for 20s before syncing after OW close of {new_member.name}"
             )
             await trio.sleep(20)
-            await self._sync_tags(ids_to_sync)
+            await self._sync_handles(ids_to_sync)
             logger.debug(f"done syncing tags for {new_member.name} after OW close")
 
         if plays_overwatch(old_member) and (not plays_overwatch(new_member)):
@@ -1485,7 +1458,7 @@ class Orisa(Plugin):
                     )
                     return
 
-                ids_to_sync = [t.id for t in user.battle_tags]
+                ids_to_sync = [t.id for t in user.handles]
                 logger.info(
                     f"{new_member.name} stopped playing OW and has {len(ids_to_sync)} BattleTags that need to be checked"
                 )
@@ -1531,9 +1504,6 @@ class Orisa(Plugin):
             )
         if msg.content.startswith("!"):
             return
-        if msg.channel.private and re.match(r"^[0-9]{3,4}!?$", msg.content.strip()):
-            # single number, special case for newsr
-            await self.newsr(Context(msg, ctx), msg.content.strip())
 
 
     @event("guild_leave")
@@ -1837,7 +1807,7 @@ class Orisa(Plugin):
                     await chan.edit(position=pos)
 
     def _format_nick(self, user):
-        primary = user.battle_tags[0]
+        primary = user.handles[0]
 
         rankno = primary.rank
         rank = RANKS[rankno] if rankno is not None else "Unranked"
@@ -1855,7 +1825,7 @@ class Orisa(Plugin):
                     break
 
         try:
-            secondary_sr = user.battle_tags[1].sr
+            secondary_sr = user.handles[1].sr
         except IndexError:
             # no secondary accounts
             secondary_sr = None
@@ -1868,9 +1838,9 @@ class Orisa(Plugin):
             secondary_sr = "noSR"
             secondary_rank = "Unranked"
         else:
-            secondary_rank = RANKS[user.battle_tags[1].rank]
+            secondary_rank = RANKS[user.handles[1].rank]
 
-        srs = list(sorted(t.sr or -1 for t in user.battle_tags))
+        srs = list(sorted(t.sr or -1 for t in user.handles))
 
         while srs and srs[0] == -1:
             srs.pop(0)
@@ -1903,6 +1873,7 @@ class Orisa(Plugin):
             )
         except KeyError as e:
             raise InvalidFormat(e.args[0]) from e
+
 
     async def _update_nick(self, user, *, force=False, raise_hierachy_error=False):
         user_id = user.discord_id
@@ -2022,7 +1993,8 @@ class Orisa(Plugin):
             except Exception:
                 logger.exception(f"Cannot send congrats for guild {guild}")
 
-    async def _top_players(self, session, prev_date, style="fancy_grid"):
+
+    async def _top_players(self, session, prev_date, type_class, style="fancy_grid"):
         def prev_sr(tag):
             for sr in tag.sr_history[:30]:
                 prev_sr = sr
@@ -2030,33 +2002,34 @@ class Orisa(Plugin):
                     break
             return prev_sr
 
-        tags = (
-            session.query(BattleTag)
-            .options(joinedload(BattleTag.user))
-            .join(BattleTag.current_sr)
+        handles = (
+            session.query(type_class)
+            .options(joinedload(type_class.user))
+            .join(type_class.current_sr)
             .order_by(desc(SR.value))
             .filter(SR.value != None)
             .filter(BattleTag.position==0)
             .all()
         )
 
-        tags_and_prev = [(tag, prev_sr(tag)) for tag in tags]
+        print(handles)
+        handles_and_prev = [(handle, prev_sr(handle)) for handle in handles]
 
         top_per_guild = {}
 
         guilds = self.client.guilds.values()
 
-        for tag, prev_sr in tags_and_prev:
+        for handle, prev_sr in handles_and_prev:
             found = False
 
             for guild in guilds:
                 try:
-                    member = guild.members[tag.user.discord_id]
+                    member = guild.members[handle.user.discord_id]
                 except KeyError:
                     continue
 
                 top_per_guild.setdefault(guild.id, []).append(
-                    (member, tag, prev_sr.value)
+                    (member, handle, prev_sr.value)
                 )
                 found = True
 
@@ -2110,18 +2083,18 @@ class Orisa(Plugin):
 
             table_prev_sr = None
             data = []
-            for ix, (member, tag, prev_sr) in enumerate(tops):
-                if tag.sr != table_prev_sr:
+            for ix, (member, handle, prev_sr) in enumerate(tops):
+                if handle.sr != table_prev_sr:
                     pos = ix + 1
-                table_prev_sr = tag.sr
+                table_prev_sr = handle.sr
                 data.append(
                     (
                         pos,
-                        prev_str(ix + 1, tag, prev_sr),
+                        prev_str(ix + 1, handle, prev_sr),
                         member_name(member),
                         member.id,
-                        tag.sr,
-                        delta_fmt(tag.sr, prev_sr),
+                        handle.sr,
+                        delta_fmt(handle.sr, prev_sr),
                     )
                 )
 
@@ -2160,8 +2133,8 @@ class Orisa(Plugin):
                 send = chan.messages.send
                 # send = self.client.application_info.owner.send
                 await send(
-                    "Hello! Here are the current SR highscores. If a member has more than one "
-                    "BattleTag, only the primary BattleTag is considered. Players with "
+                    f"Hello! Here are the current SR highscores for {type_class.blizzard_url_type.upper()}. If a member has more than one "
+                    f"{type_class.desc}, only the primary {type_class.desc} is considered. Players with "
                     "private profiles, or those that didn't do their placements this season yet "
                     "are not shown."
                 )
@@ -2173,7 +2146,7 @@ class Orisa(Plugin):
 
                 await chan.messages.upload(
                     csv_file,
-                    filename=f"ranking {pendulum.now().to_iso8601_string()[:10]}.csv",
+                    filename=f"ranking {type_class.blizzard_url_type.upper()} {pendulum.now().to_iso8601_string()[:10]}.csv",
                 )
             except Exception:
                 logger.exception("unable to send top players to guild %i", guild_id)
@@ -2187,54 +2160,54 @@ class Orisa(Plugin):
             if guild_id not in self.guild_config:
                 await self._handle_new_guild(guild)
 
-    async def _sync_tag(self, session, tag):
+    async def _sync_handle(self, session, handle):
         try:
-            sr, image = await get_sr(tag.tag)
+            sr, image = await get_sr(handle)
         except UnableToFindSR:
-            logger.debug(f"No SR for {tag.tag}, oh well...")
+            logger.debug(f"No SR for {handle}, oh well...")
             sr = rank = image = None
         except Exception:
-            tag.error_count += 1
+            handle.error_count += 1
             # we need to update the last_update pseudo-column
-            tag.update_sr(tag.sr)
+            handle.update_sr(handle.sr)
             if self.raven_client:
                 self.raven_client.captureException()
             logger.exception(f"Got exception while requesting {tag.tag}")
             raise
-        tag.error_count = 0
-        tag.update_sr(sr)
-        await self._handle_new_sr(session, tag, sr, image)
+        handle.error_count = 0
+        handle.update_sr(sr)
+        await self._handle_new_sr(session, handle, sr, image)
 
-    async def _handle_new_sr(self, session, tag, sr, image):
+    async def _handle_new_sr(self, session, handle, sr, image):
         try:
-            await self._update_nick(tag.user)
+            await self._update_nick(handle.user)
         except HierarchyError:
             # not much we can do, just ignore
             pass
         except NicknameTooLong as e:
-            if tag.user.last_problematic_nickname_warning is None or tag.user.last_problematic_nickname_warning < datetime.utcnow() - timedelta(
+            if handle.user.last_problematic_nickname_warning is None or handle.user.last_problematic_nickname_warning < datetime.utcnow() - timedelta(
                 days=7
             ):
-                tag.user.last_problematic_nickname_warning = datetime.utcnow()
+                handle.user.last_problematic_nickname_warning = datetime.utcnow()
                 msg = "*To avoid spamming you, I will only send out this warning once per week*\n"
                 msg += f"Hi! I just tried to update your nickname, but the result '{e.nickname}' would be longer than 32 characters."
-                if tag.user.format == "%s":
+                if handle.user.format == "%s":
                     msg += "\nPlease shorten your nickname."
                 else:
                     msg += "\nTry to use the %s format (you can type `!ow format %s` into this DM channel, or shorten your nickname."
                 msg += "\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience."
-                discord_user = await self.client.get_user(tag.user.discord_id)
+                discord_user = await self.client.get_user(handle.user.discord_id)
                 await discord_user.send(msg)
 
             # we can still do the rest, no need to return here
-        rank = tag.rank
+        rank = handle.rank
         if rank is not None:
-            user = tag.user
+            user = handle.user
 
             # get highest SR, but exclude current_sr
             session.flush()
             prev_highest_sr_value = session.query(func.max(SR.value)).filter(
-                SR.battle_tag == tag, SR.id != tag.current_sr_id
+                SR.handle == handle, SR.id != handle.current_sr_id
             )
             prev_highest_sr = (
                 session.query(SR)
@@ -2243,7 +2216,7 @@ class Orisa(Plugin):
                 .first()
             )
 
-            logger.debug(f"prev_sr {prev_highest_sr} {tag.current_sr.value}")
+            logger.debug(f"prev_sr {prev_highest_sr} {handle.current_sr.value}")
             if prev_highest_sr and rank > prev_highest_sr.rank:
                 logger.debug(
                     f"user {user} old rank {prev_highest_sr.rank}, new rank {rank}, sending congrats..."
@@ -2251,11 +2224,11 @@ class Orisa(Plugin):
                 await self._send_congrats(user, rank, image)
                 user.highest_rank = rank
 
-    async def _sync_tags_from_channel(self, channel):
+    async def _sync_handles_from_channel(self, channel):
         first = True
         async with channel:
-            async for tag_id in channel:
-                logger.debug("got %s from channel %r", tag_id, channel)
+            async for handle_id in channel:
+                logger.debug("got %s from channel %r", handle_id, channel)
                 if not first:
                     delay = 1 + random.random() * 5
                     logger.debug(f"rate limiting: sleeping for {delay:4.02}s")
@@ -2264,15 +2237,15 @@ class Orisa(Plugin):
                     first = False
                 session = self.database.Session()
                 try:
-                    tag = self.database.tag_by_id(session, tag_id)
-                    if tag:
-                        await self._sync_tag(session, tag)
+                    handle = self.database.handle_by_id(session, handle_id)
+                    if handle:
+                        await self._sync_handle(session, handle)
                     else:
-                        logger.warn(f"No tag for id {tag_id} found, probably deleted")
+                        logger.warn(f"No handle for id {handle_id} found, probably deleted")
                     session.commit()
                 except Exception:
                     logger.exception(
-                        f"exception while syncing {tag.tag} for {tag.user.discord_id}"
+                        f"exception while syncing {handle} for {handle.user.discord_id}"
                     )
                 finally:
                     session.commit()
@@ -2282,18 +2255,18 @@ class Orisa(Plugin):
     async def _sync_check(self):
         session = self.database.Session()
         try:
-            ids_to_sync = self.database.get_tags_to_be_synced(session)
+            ids_to_sync = self.database.get_handles_to_be_synced(session)
         finally:
             session.close()
         if ids_to_sync:
-            logger.info(f"{len(ids_to_sync)} tags need to be synced")
-            await self._sync_tags(ids_to_sync)
+            logger.info(f"{len(ids_to_sync)} handles need to be synced")
+            await self._sync_handles(ids_to_sync)
         else:
             logger.debug("No tags need to be synced")
 
-    async def _sync_tags(self, ids_to_sync):
+    async def _sync_handles(self, ids_to_sync):
         send_ch, receive_ch = trio.open_memory_channel(len(ids_to_sync))
-        logger.debug("preparing to sync ids: %s into channel %r", ids_to_sync, send_ch)
+        logger.debug("preparing to sync handles: %s into channel %r", ids_to_sync, send_ch)
 
         async with send_ch:
             for tag_id in ids_to_sync:
@@ -2302,10 +2275,10 @@ class Orisa(Plugin):
         async with trio.open_nursery() as nursery:
             async with receive_ch:
                 for _ in range(min(len(ids_to_sync), 5)):
-                    nursery.start_soon(self._sync_tags_from_channel, receive_ch.clone())
+                    nursery.start_soon(self._sync_handles_from_channel, receive_ch.clone())
         logger.info("done syncing")
 
-    async def _sync_all_tags_task(self):
+    async def _sync_all_handles_task(self):
         await trio.sleep(10)
         logger.debug("started waiting...")
         while True:
@@ -2350,7 +2323,8 @@ class Orisa(Plugin):
         prev_date = datetime.utcnow() - timedelta(days=1)
 
         with self.database.session() as session:
-            await self._top_players(session, prev_date)
+            await self._top_players(session, prev_date, BattleTag)
+            await self._top_players(session, prev_date, Gamertag)
 
     async def _web_server(self):
         config = hypercorn.config.Config()
@@ -2364,34 +2338,50 @@ class Orisa(Plugin):
         await hypercorn.trio.serve(web.app, config)
 
     async def _oauth_result_listener(self):
-        async for uid, data in self.web_recv_ch:
-            logger.debug(f"got OAuth response data {data} for uid {uid}")
+        async for uid, type, data in self.web_recv_ch:
+            logger.debug(f"got OAuth response data {data} of type {type} for uid {uid}")
             try:
-                await self._handle_registration(uid, data.get("battletag"), data["id"])
+                await self._handle_registration(uid, type, data)
             except Exception:
                 logger.error(
-                    "Something went wrong when working with data %s", exc_info=True
+                    "Something went wrong when working with data %s", data, exc_info=True
                 )
 
-    async def _handle_registration(self, user_id, battle_tag, blizzard_id):
+    async def _handle_registration(self, user_id, type, data):
+
         session = self.database.Session()
+
+        handles_to_check = []
+
         try:
             user_obj = await self.client.get_user(user_id)
             user_channel = await user_obj.open_private_channel()
 
-            if battle_tag is None:
-                await user_channel.messages.send(
-                    "I'm sorry, it seems like you don't have a BattleTag. Orisa currently only works for PC accounts."
-                )
-                return
+            if type == "pc":
+                blizzard_id, battle_tag = data["id"], data.get("battletag")
+
+                if battle_tag is None:
+                    await user_channel.messages.send(
+                        "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` to register an XBOX account."
+                    )
+                    return
+
+                handles = [
+                    BattleTag(blizzard_id=blizzard_id, battle_tag=battle_tag)
+                ]
+
+            elif type == "xbox":
+                handles = [
+                    Gamertag(xbl_id=datum["id"], gamertag=datum["name"])
+                    for datum in data
+                ]
 
             user = self.database.user_by_discord_id(session, user_id)
-            resp = None
-            new_tag = BattleTag(tag=battle_tag, blizzard_id=blizzard_id)
 
             if user is None:
-                user = User(discord_id=user_id, battle_tags=[new_tag], format="$sr")
+                user = User(discord_id=user_id, handles=handles, format="$sr")
                 session.add(user)
+                handles_to_check = handles
 
                 extra_text = ""
                 for guild in self.client.guilds.values():
@@ -2400,10 +2390,15 @@ class Orisa(Plugin):
                             self.guild_config[guild.id].extra_register_text or ""
                         )
                         break
+                first, *others = handles
+                if others:
+                    desc = f"OK. People can now ask me for your {first.desc}s **{', '.join(h.handle for h in handles)}**, and I will keep track of your SR."
+                else:
+                    desc = f"OK. People can now ask me for your {first.desc} **{first.handle}**, and I will keep track of your SR."
                 embed = Embed(
                     color=0x6DB76D,
                     title="Registration successful",
-                    description=f"OK. People can now ask me for your BattleTag **{battle_tag}**, and I will keep track of your SR.",
+                    description=desc,
                 )
                 embed.add_field(
                     name=":information_source: Pro Tips",
@@ -2417,63 +2412,74 @@ class Orisa(Plugin):
                         value=extra_text,
                     )
             else:
-                existing_tag = None
-                for tag in user.battle_tags:
-                    if tag.blizzard_id == blizzard_id:
-                        existing_tag = tag
-                        break
-                if existing_tag and existing_tag.tag != battle_tag:
-                    embed = Embed(
-                        color=0x6DB76D,
-                        title="BattleTag updated",
-                        description=f"It seems like your BattleTag changed from *{existing_tag.tag}* to *{battle_tag}*. I have updated my database.",
+                for new_handle in handles:
+                    existing_handle = None
+                    for handle in user.handles:
+                        if handle.external_id == new_handle.external_id:
+                            existing_handle = handle
+                            break
+                    if existing_handle and existing_handle.handle != new_handle.handle:
+                        embed = Embed(
+                            color=0x6DB76D,
+                            title=f"{existing_handle.desc} updated",
+                            description=f"It seems like your {existing_handle.desc} changed from *{existing_handle.handle}* to *{new_handle.handle}*. I have updated my database.",
+                        )
+                        existing_handle.handle = new_handle.handle
+                        handles_to_check.append(existing_handle)
+                    elif existing_handle:
+                        embed = Embed(
+                            title=f"{existing_handle.desc} already registered",
+                            color=0x6F0808,
+                            description=f"You already registered the {existing_handle.desc} *{existing_handle.handle}*, so there's nothing for me to do. *Sleep mode reactivated.*\n",
+                        )
+                        if type == "pc":
+                            embed.add_field(
+                                name=":information_source: Tip",
+                                value="Open the URL in a private/incognito tab next time, so you can enter the credentials of the account you want.",
+                            )
+                        await user_obj.send(content=None, embed=embed)
+                        return
+                    else:
+                        user.handles.append(new_handle)
+                        handles_to_check.append(new_handle)
+                        embed = Embed(
+                            color=0x6DB76D,
+                            title=f"{new_handle.desc} added",
+                            description=f"OK. I've added **{new_handle.handle}** to the list of your {new_handle.desc}s. **Your primary {user.handles[0].desc} remains {user.handles[0].handle}**. "
+                            f"To change your primary tag, use `!ow setprimary`, see help for more details.",
+                        )
+
+            for handle in handles_to_check:
+                try:
+                    check_msg_obj = await user_channel.messages.send(f"Checking your {handle.desc} {handle.handle}…")
+                    async with user_channel.typing:
+                        sr, image = await get_sr(handle)
+                except InvalidBattleTag as e:
+                    logger.exception(f"Got invalid {handle.desc} for {handle.handle}")
+                    await user_channel.messages.send(
+                        f"Invalid {handle.desc}: {e.message}...Blizzard claims that the {handle.desc} {handle.handle} has no OW account. "
+                        "Play a QP or arcade game, close OW and try again, sometimes this helps."
                     )
-                    existing_tag.tag = battle_tag
-                elif any(tag.tag == battle_tag for tag in user.battle_tags):
-                    embed = Embed(
-                        title="BattleTag already registered",
-                        color=0x6F0808,
-                        description=f"You already registered the BattleTag *{battle_tag}*, so there's nothing for me to do. *Sleep mode reactivated.*\n",
-                    )
-                    embed.add_field(
-                        name=":information_source: Tip",
-                        value="Open the URL in a private/incognito tab next time, so you can enter the credentials of the account you want.",
-                    )
-                    await user_obj.send(content=None, embed=embed)
                     return
-                else:
-                    user.battle_tags.append(new_tag)
-                    embed = Embed(
-                        color=0x6DB76D,
-                        title="BattleTag added",
-                        description=f"OK. I've added **{battle_tag}** to the list of your BattleTags. **Your primary BattleTag remains {user.battle_tags[0].tag}**. "
-                        f"To change your primary tag, use `!ow setprimary yourbattletag`, see help for more details.",
+                except BlizzardError as e:
+                    await user_channel.messages.send(
+                        f"Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later"
                     )
+                    raise
+                except UnableToFindSR:
+                    embed.add_field(
+                        name=":warning: No SR",
+                        value=f"You don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your {handle.desc}.",
+                    )
+                    sr = None
+                finally:
+                    try:
+                        await check_msg_obj.delete()
+                    except Exception:
+                        logger.exception("Unable to delete check message")
 
-            try:
-                async with user_channel.typing:
-                    sr, image = await get_sr(battle_tag)
-            except InvalidBattleTag as e:
-                logger.exception(f"Got invalid battle tag for {battle_tag}")
-                await user_channel.messages.send(
-                    f"Invalid BattleTag: {e.message}... Seems like you are using a console account. Those aren't supported right now, sorry."
-                    "If you're on PC: Blizzard claims that the BattleTag has no OW account. Play a QP or arcade game, close OW and try again, sometimes this helps."
-                )
-                return
-            except BlizzardError as e:
-                await user_channel.messages.send(
-                    f"Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later"
-                )
-                raise
-            except UnableToFindSR:
-                embed.add_field(
-                    name=":warning: No SR",
-                    value="You don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your BattleTag.",
-                )
-                sr = None
-
-            new_tag.update_sr(sr)
-            rank = new_tag.rank
+                handle.update_sr(sr)
+        
 
             sort_secondaries(user)
 
@@ -2497,8 +2503,10 @@ class Orisa(Plugin):
                 logger.exception(f"unable to update nick for user {user}")
                 embed.add_field(
                     name=":warning: Cannot update nickname",
-                    value="Right now I couldn't update your nickname, will try that again later."
-                    "People will still be able to ask for your BattleTag, though.",
+                    value=(
+                        "Right now I couldn't update your nickname, I will try that again later. "
+                        f"People will still be able to ask for your {user.handles[0].desc}, though."
+                    ),
                 )
             finally:
                 with suppress(Exception):
