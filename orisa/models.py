@@ -292,11 +292,11 @@ class Database:
     def user_by_discord_id(self, session, discord_id):
         return session.query(User).filter_by(discord_id=discord_id).one_or_none()
 
-    def get_min_max_sr(self, session, handle_class, discord_ids):
+    def get_min_max_sr(self, session, discord_ids):
         return (
             session.query(func.min(SR.value), func.max(SR.value))
-            .join(handle_class.current_sr, User)
-            .filter(handle_class.position == 0)
+            .join(Handle.current_sr, User)
+            .filter(Handle.position == 0)
             .filter(User.discord_id.in_(discord_ids))
             .one()
         )
