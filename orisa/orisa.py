@@ -2174,7 +2174,7 @@ class Orisa(Plugin):
             handle.update_sr(handle.sr)
             if self.raven_client:
                 self.raven_client.captureException()
-            logger.exception(f"Got exception while requesting {tag.tag}")
+            logger.exception(f"Got exception while requesting {handle.handle}")
             raise
         handle.error_count = 0
         handle.update_sr(sr)
