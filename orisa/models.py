@@ -199,7 +199,7 @@ class BattleTag(Handle):
         return f"BT/{self.battle_tag} ({self.sr} SR)" if self.sr else f"{self.battle_tag} (Unranked)"
 
     def __repr__(self):
-        return f"<BattleTag(id={self.id} tag={self.tag})>"
+        return f"<BattleTag(id={self.id} tag={self.battle_tag})>"
 
 
 class Gamertag(Handle):
