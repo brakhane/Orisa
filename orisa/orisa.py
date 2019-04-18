@@ -2042,7 +2042,7 @@ class Orisa(Plugin):
             if not found:
                 # top_per_guild.setdefault(tag.user.discord_id%1, []).append((dummy(name=f"X{tag.user.discord_id}"), tag, prev_sr.value))
                 logger.warning(
-                    "User %i not found in any of the guilds", tag.user.discord_id
+                    "User %i not found in any of the guilds", handle.user.discord_id
                 )
 
         def member_name(member):
