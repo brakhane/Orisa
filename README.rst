@@ -47,6 +47,7 @@ Features
 * Can be configured via a web interface
 * Tries to be as user friendly as possible: has an extensive help and gives suggestions.
 * Uses fuzzy search whenever possible, ``!ow oirsa`` will still find and display the BattleTags of the user named "Orisa"
+* Supports PC and XBox accounts (PSN account will be supported when I figure out how to confirm a username really belongs to that user)
 * Has been called "the best Overwatch Discord bot I've seen" by at least 2 people
 * Might have been called "a stupid Omnic I do not trust" by Zarya
 * Is not evil; it won't even try to eat your cat
