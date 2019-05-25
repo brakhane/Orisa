@@ -653,9 +653,13 @@ class Orisa(Plugin):
             text="By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy"
         )
 
-        await ctx.author.send(content=None, embed=embed)
-        if not ctx.channel.private:
-            await reply(ctx, "I sent you a DM with instructions.")
+        try:
+            await ctx.author.send(content=None, embed=embed)
+        except Forbidden:
+            await reply(ctx, 'I\'m not allowed to send you a DM. Please right click on the Discord server, select Privacy Settings, and enable "Allow direct messages from server members." Then try again.')
+        else:
+            if not ctx.channel.private:
+                await reply(ctx, "I sent you a DM with instructions.")
 
     @ow.subcommand()
     @condition(correct_channel)
