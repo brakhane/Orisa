@@ -602,6 +602,10 @@ class Orisa(Plugin):
     async def register(self, ctx, *, type: str = "pc"):
         user_id = ctx.message.author_id
 
+        if "#" in type:
+            await reply(ctx, f"{type} looks like a BattleTag and not like pc/xbox, assuming you meant just `!ow register`...")
+            type = "pc"
+
         if type == "pc":
             client = WebApplicationClient(OAUTH_BLIZZARD_CLIENT_ID)
             oauth_url = "https://eu.battle.net/oauth/authorize"
@@ -2014,7 +2018,6 @@ class Orisa(Plugin):
             .all()
         )
 
-        print(handles)
         handles_and_prev = [(handle, prev_sr(handle)) for handle in handles]
 
         top_per_guild = {}
@@ -2155,7 +2158,7 @@ class Orisa(Plugin):
 
             # wait a bit before sending the next batch to avoid running into
             # rate limiting and sending data twice due to "timeouts"
-            await trio.sleep(3)
+            await trio.sleep(10)
 
     async def _message_new_guilds(self):
         for guild_id, guild in self.client.guilds.copy().items():
