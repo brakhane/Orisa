@@ -26,7 +26,7 @@ from curious.commands.manager import CommandsManager
 from curious.dataclasses.presence import Game, GameType, Status
 
 from . import web
-from .config import SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN, MASHERY_API_KEY
+from .config import SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN, MASHERY_API_KEY, DEVELOPMENT
 from .models import Database
 from .orisa import Orisa, OrisaClient
 
@@ -61,7 +61,7 @@ client = OrisaClient(BOT_TOKEN)
 
 database = Database()
 
-manager = CommandsManager.with_client(client, command_prefix="!")
+manager = CommandsManager.with_client(client, command_prefix="!" if not DEVELOPMENT else ",")
 
 
 @client.event("ready")
@@ -70,7 +70,7 @@ async def ready(ctx):
 
     await manager.load_plugin(Orisa, database, raven_client)
 
-    msg = "!ow help"
+    msg = "!ow help" if not DEVELOPMENT else ",ow help"
     await ctx.bot.change_status(game=Game(name=msg, type=GameType.LISTENING_TO))
     logger.info("Ready")
 
