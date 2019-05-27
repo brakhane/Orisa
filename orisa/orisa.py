@@ -358,6 +358,8 @@ class Orisa(Plugin):
 
         prev_date = datetime.utcnow() - timedelta(days=1)
 
+        logger.info("Triggered top_players")
+
         with self.database.session() as session:
             t = BattleTag if type_str == "pc" else Gamertag
             await self._top_players(session, prev_date, t, style)
@@ -2026,7 +2028,7 @@ class Orisa(Plugin):
 
         top_per_guild = {}
 
-        guilds = self.client.guilds.values()
+        guilds = [guild for guild in self.client.guilds.values() if self.guild_config[guild.id].post_highscores]
 
         for handle, prev_sr in handles_and_prev:
             found = False

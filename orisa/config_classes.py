@@ -14,6 +14,7 @@ from typing import List, Set, Optional, Sequence, Union, Dict
 @dataclass
 class GuildConfig:
     show_sr_in_nicks_by_default: bool
+    post_highscores: bool
     congrats_channel_id: int
     listen_channel_id: int
     managed_voice_categories: Sequence[VoiceCategoryInfo]
@@ -23,6 +24,7 @@ class GuildConfig:
     def default(cls):
         return cls(
             show_sr_in_nicks_by_default=True,
+            post_highscores=True,
             congrats_channel_id=None,
             listen_channel_id=None,
             extra_register_text=None,
