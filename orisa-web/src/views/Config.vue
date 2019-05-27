@@ -99,6 +99,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             </p>
             <p>If unsure, activate this setting, and only turn it off if people react negatively to it.</p>
           </b-popover>
+          <b-form-checkbox
+            class="custom-switch"
+            v-model="guild_config.post_highscores"
+          >Post a daily SR highscore table to the listen channel&nbsp;
+            <font-awesome-icon id="post-highscores-help" icon="question-circle"></font-awesome-icon>
+          </b-form-checkbox>
+          <b-popover target="post-highscores-help" triggers="hover click">
+            <p>
+              When this setting is on, Orisa will post a SR highscore table (separate for PC and XBOX) daily around 09:00 UTC. Only the
+              SR of the primary account will be considered, and only members that currently have an SR are shown. Also, a CSV file with
+              the same data will be posted.
+            </p>
+            <p>
+              If your members feel judged by the highscore table, you can disable it here.
+            </p>
+          </b-popover>
           <hr class="hr-3">
           <b-form-group
             horizontal
