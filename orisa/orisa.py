@@ -1699,12 +1699,15 @@ class Orisa(Plugin):
 
             made_changes = True
 
+        def is_managed(chan):
+            return bool(re.search(r" #\d+\s*$", chan.name))
+
         voice_channels = [
             chan for chan in parent.children if chan.type == ChannelType.VOICE
         ]
 
         sorted_channels = sorted(
-            filter(lambda chan: "#" in chan.name, parent.children),
+            filter(is_managed, parent.children),
             key=attrgetter("name"),
         )
 
@@ -1764,7 +1767,7 @@ class Orisa(Plugin):
             for chan in (
                 chan for chan in parent.children if chan.type == ChannelType.VOICE
             ):
-                if "#" in chan.name and prefixkey(chan) in prefix_map.keys():
+                if is_managed(chan) and prefixkey(chan) in prefix_map.keys():
                     managed_channels.append(chan)
                 else:
                     unmanaged_channels.append(chan)
