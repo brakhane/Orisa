@@ -13,13 +13,14 @@ trio = "^0.10.0"
 fuzzywuzzy = {version = "*", extras = ["speedup"]}
 pyyaml = "*"
 pendulum = "*"
-discord-curious = {git = "https://github.com/brakhane/curious.git", rev = "10s-timeout"}
+discord-curious = {git = "https://github.com/brakhane/curious.git", rev = "orisa"}
 cachetools = "*"
 wcwidth = "*"
 tabulate = "*"
 pandas = "*"
 seaborn = "*"
 raven = "*"
+quart = "0.8.1"
 quart-trio = "*"
 hypercorn = ">=0.5.0,<0.5.3"
 oauthlib = "*"
