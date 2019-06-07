@@ -498,7 +498,7 @@ class Match(Base):
     points_b = Column(Integer)
 
     def __repr__(self):
-        return f"<Match({self.team_a} vs {self.team_b}, {len(list(self.matches))} games, {self.score_a}:{self.score_b}, {self.points_a}-{self.points_b})>"
+        return f"<Match({self.team_a} vs {self.team_b}, {len(list(self.games))} games, {self.score_a}:{self.score_b}, {self.points_a}-{self.points_b})>"
 
     def __str__(self):
         if self.team_a is None:

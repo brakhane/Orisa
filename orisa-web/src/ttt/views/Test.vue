@@ -50,30 +50,30 @@ export default {
       data: [],
       columns: [
         {
-          field: "pos",
-          label: "#",
+          field: 'pos',
+          label: '#',
           numeric: true,
           width: 40
         },
         {
-          field: "name",
-          label: "Name",
+          field: 'name',
+          label: 'Name'
         },
         {
-          field: "points",
-          label: "Pts",
+          field: 'points',
+          label: 'Pts',
           numeric: true,
           width: 40
         },
         {
-          field: "W",
-          label: "W",
+          field: 'W',
+          label: 'W',
           numeric: true,
           width: 40
         },
         {
-          field: "L",
-          label: "L",
+          field: 'L',
+          label: 'L',
           numeric: true,
           width: 40
         }
@@ -83,13 +83,13 @@ export default {
   mounted () {
     setTimeout(() => {
       axios
-        .get("http://localhost:8000/foo")
+        .get('http://localhost:8000/foo')
         .then(resp => {
           var prevPoints = -1
           this.data = resp.data.map((row, i) => {
             row.pos = prevPoints !== row.points ? i + 1 : null
             prevPoints = row.points
-            
+
             return row
           })
         })
@@ -100,7 +100,7 @@ export default {
       this.load = true
     },
     col (row, index) {
-      return  index < 1 ? "leader" : index < 4 ? "blubb" : ""
+      return index < 1 ? 'leader' : index < 4 ? 'blubb' : ''
     }
   }
 }

@@ -77,7 +77,7 @@ async def foo():
 
 
     with Database().session() as s:
-        l = s.query(League).offset(1).first()
+        l = s.query(League).offset(0).first()
         return jsonify([{"name": x.Team.name, "points": x.points, "W": x.won, "L": x.lost} for x in l.standings(s)])
 
 
