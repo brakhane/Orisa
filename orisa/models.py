@@ -84,10 +84,10 @@ class User(Base):
     discord_id = Column(BigInteger, unique=True, nullable=False, index=True)
     format = Column(String, nullable=False)
 
-    battle_tags = relationship(
-        "BattleTag",
+    handles = relationship(
+        "Handle",
         back_populates="user",
-        order_by="BattleTag.position",
+        order_by="Handle.position",
         collection_class=ordering_list("position"),
         lazy="joined",
         cascade="all, delete-orphan",
@@ -104,27 +104,25 @@ class User(Base):
         return f"<User(id={self.id}, discord_id={self.discord_id})>"
 
 
-class BattleTag(Base):
-    __tablename__ = "battle_tag"
+class Handle(Base):
+    "Base class for gamer handles (BattleTag, Gamertag, PSN ID in the future)"
+    __tablename__ = "handle"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("user.id"), nullable=False, index=True)
-    blizzard_id = Column(
-        Integer, nullable=True, index=True
-    )  # nullable for backwards compatibility
+    type = Column(String, nullable=False)
+
     current_sr_id = Column(Integer, ForeignKey("sr.id"))
     position = Column(Integer, nullable=False)
 
-    user = relationship("User", back_populates="battle_tags")
-    tag = Column(String, nullable=False)
+    user = relationship("User", back_populates="handles")
 
     sr_history = relationship(
         "SR",
         order_by="desc(SR.timestamp)",
         cascade="all, delete-orphan",
         lazy="dynamic",
-        foreign_keys="SR.battle_tag_id",
-        back_populates="battle_tag",
+        foreign_keys="SR.handle_id",
+        back_populates="handle",
     )
     current_sr = relationship(
         "SR",
@@ -135,6 +133,11 @@ class BattleTag(Base):
     )
 
     error_count = Column(Integer, nullable=False, default=0)
+
+
+    __mapper_args__ = {
+        'polymorphic_on': type,
+    }
 
     @property
     def sr(self):
@@ -167,11 +170,74 @@ class BattleTag(Base):
 
         self.current_sr = sr_obj
 
-    def __str__(self):
-        return f"{self.tag} ({self.sr} SR)" if self.sr else f"{self.tag} (Unranked)"
 
     def __repr__(self):
-        return f"<BattleTag(id={self.id}, tag={repr(self.tag)})>"
+        return f"<Handle(id={self.id})>"
+
+
+class BattleTag(Handle):
+    blizzard_id = Column(
+        Integer, nullable=True, index=True
+    )  # nullable because of single table inheritance
+    battle_tag = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'battletag'
+    }
+
+    desc = "BattleTag"
+    blizzard_url_type = "pc"
+
+    @property
+    def handle(self):
+        return self.battle_tag
+
+    @handle.setter
+    def handle(self, value):
+        self.battletag = value
+
+    @property
+    def external_id(self):
+        return self.blizzard_id
+
+    def __str__(self):
+        return f"BT/{self.battle_tag} ({self.sr} SR)" if self.sr else f"{self.battle_tag} (Unranked)"
+
+    def __repr__(self):
+        return f"<BattleTag(id={self.id} tag={self.battle_tag})>"
+
+
+class Gamertag(Handle):
+    xbl_id = Column(
+        String, index=True
+    )
+    gamertag = Column(String)
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'gamertag'
+    }
+
+    desc = "Gamertag"
+    blizzard_url_type = "xbl"
+
+    @property
+    def handle(self):
+        return self.gamertag
+
+    @handle.setter
+    def handle(self, value):
+        self.gamertag = value
+
+    @property
+    def external_id(self):
+        return self.xbl_id
+
+
+    def __str__(self):
+        return f"GT/{self.gamertag} ({self.sr} SR)" if self.sr else f"{self.gamertag} (Unranked)"
+
+    def __repr__(self):
+        return f"<Gamertag(id={self.id} gamertag={self.gamertag})>"
 
 
 class SR(Base):
@@ -180,12 +246,12 @@ class SR(Base):
     RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
 
     id = Column(Integer, primary_key=True, index=True)
-    battle_tag_id = Column(
-        Integer, ForeignKey("battle_tag.id"), nullable=False, index=True
+    handle_id = Column(
+        Integer, ForeignKey("handle.id"), nullable=False, index=True
     )
 
-    battle_tag = relationship(
-        "BattleTag", back_populates="sr_history", foreign_keys=[battle_tag_id]
+    handle = relationship(
+        "Handle", back_populates="sr_history", foreign_keys=[handle_id]
     )
     timestamp = Column(DateTime, nullable=False)
     value = Column(SmallInteger)
@@ -519,8 +585,8 @@ class Database:
     def user_by_id(self, session, id):
         return session.query(User).filter_by(id=id).one_or_none()
 
-    def tag_by_id(self, session, id):
-        return session.query(BattleTag).filter_by(id=id).one_or_none()
+    def handle_by_id(self, session, id):
+        return session.query(Handle).filter_by(id=id).one_or_none()
 
     def user_by_discord_id(self, session, discord_id):
         return session.query(User).filter_by(discord_id=discord_id).one_or_none()
@@ -528,8 +594,8 @@ class Database:
     def get_min_max_sr(self, session, discord_ids):
         return (
             session.query(func.min(SR.value), func.max(SR.value))
-            .join(BattleTag.current_sr, User)
-            .filter(BattleTag.position == 0)
+            .join(Handle.current_sr, User)
+            .filter(Handle.position == 0)
             .filter(User.discord_id.in_(discord_ids))
             .one()
         )
@@ -539,25 +605,25 @@ class Database:
             # slight randomization to avoid having all
             # battletags update at the same time if Orisa didn't run
             # for a while
-            return timedelta(minutes=random.randint(50, 70))
+            return timedelta(minutes=random.randint(90, 100))
         elif 0 < error_count < 3:
             return timedelta(
                 minutes=5
             )  # we actually want to try again fast, in case it was a temporary problem
         elif 3 <= error_count < 5:
             return timedelta(
-                minutes=90
+                minutes=120
             )  # ok, the error's not going away, so wait longer
         elif 5 <= error_count < 10:
             # exponential backoff
-            return timedelta(minutes=100 + 20 * (error_count - 5) ** 2)
+            return timedelta(minutes=180 + 20 * (error_count - 5) ** 2)
         else:
             return timedelta(days=1)
 
-    def get_tags_to_be_synced(self, session):
+    def get_handles_to_be_synced(self, session):
         results = (
-            session.query(BattleTag)
-            .join(BattleTag.current_sr)
+            session.query(Handle)
+            .join(Handle.current_sr)
             .filter(SR.timestamp <= datetime.utcnow() - self._min_delay)
             .all()
         )
