@@ -25,12 +25,6 @@ them if they manage to increase their competitive rank (Silver -> Gold etc.)
 
 She also can manage voice channels and create them on demand, and show fancy SR graphs
 
-Why is it called Orisa?
------------------------
-
-Like Orisa, this bot is still quite young, "new at this", a bit clumsy at times,
-but wants to make people's life easier; it wants to be the hero the discord users need.
-
 Features
 --------
 
