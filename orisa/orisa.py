@@ -27,6 +27,7 @@ import urllib.parse
 
 from contextlib import contextmanager, nullcontext, suppress
 from contextvars import ContextVar
+from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from itertools import groupby, count
@@ -185,7 +186,7 @@ class Orisa(Plugin):
         self.web_send_ch, self.web_recv_ch = trio.open_memory_channel(0)
         self.raven_client = raven_client
 
-        self.guild_config = {}
+        self.guild_config = defaultdict(GuildConfig.default)
         logger.debug("Loading config")
         with database.session() as session:
             for config in session.query(GuildConfigJson).filter(
