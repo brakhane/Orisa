@@ -399,7 +399,7 @@ class Orisa(Plugin):
                         await ctx.channel.messages.send(f"{id} not found in DB???")
                     else:
                         session.delete(user)
-                        await ctx.channel.messages.send(f"{user} deleted")
+                await ctx.channel.messages.send(f"Deleted {stale_ids}")
                 session.commit()
             elif stale_ids:
                 await ctx.channel.messages.send("issue `!cleanup confirm` to delete.")
