@@ -642,12 +642,6 @@ class Orisa(Plugin):
             title=f"Click here to register your {type.upper()} account",
             description=description
         )
-        embed.add_field(
-                name=":warning: Profiles don't update at the moment",
-                value="Blizzard's playoverwatch.com site, from where I get your data doesn't update "
-                "currently, I will only get your SR as it was on the previous patch. There's nothing "
-                "I can do about that. SR will be tracked correctly again when Blizzard fixes it."
-        )
         if type == "pc":
             embed.add_field(
                 name=":information_source: Protip",
@@ -879,11 +873,8 @@ class Orisa(Plugin):
                     await reply(
                         ctx,
                         f"OK, I have updated your data. Your (primary) SR is now {user.handles[0].sr}. "
-                        "There are currently problems on Blizzard's end that might prevent me from getting your current SR. "
-                        "If your SR is incorrect, there's nothing I can do about it, you have to be patient and wait for Blizzard to "
-                        "fix it."
-                        #"If that is not correct, you need to log out of Overwatch once and try again; your "
-                        #"profile also needs to be public for me to track your SR.",
+                        "If that is not correct, you need to log out of Overwatch once and try again; your "
+                        "profile also needs to be public for me to track your SR.",
                     )
         finally:
             session.commit()
@@ -2157,7 +2148,6 @@ class Orisa(Plugin):
                 send = chan.messages.send
                 # send = self.client.application_info.owner.send
                 await send(
-                    "*Due to problems on Blizzard's end, the highscore table might be outdated and show stats from the previous patch*\n"    
                     f"Hello! Here are the current SR highscores for {type_class.blizzard_url_type.upper()}. If a member has more than one "
                     f"{type_class.desc}, only the primary {type_class.desc} is considered. Players with "
                     "private profiles, or those that didn't do their placements this season yet "
