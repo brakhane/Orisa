@@ -29,6 +29,7 @@ itsdangerous = "*"
 "asks" = "*"
 "wsproto" = "0.13.0"
 prospector = "^1.1"
+"openpyxl" = "*"
 
 [tool.poetry.dev-dependencies]
 "black" = { version = "*", allows-prereleases = true }

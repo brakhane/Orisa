@@ -21,6 +21,7 @@ import math
 import re
 import random
 import os
+import tempfile
 import traceback
 import unicodedata
 import urllib.parse
@@ -72,6 +73,7 @@ from curious.dataclasses.presence import Game, Status
 from fuzzywuzzy import process, fuzz
 from lxml import html
 from oauthlib.oauth2 import WebApplicationClient
+from pandas.plotting import register_matplotlib_converters
 from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql import func, desc, and_
@@ -1363,6 +1365,41 @@ class Orisa(Plugin):
         if not ctx.channel.private:
             await reply(ctx, "I sent you the privacy policy as DM.")
 
+    @ow.subcommand()
+    async def dumpsr(self, ctx):
+        with self.database.session() as session:
+            user = self.database.user_by_discord_id(session, ctx.author.id)
+            if not user:
+                await reply(ctx, "You are not registered.")
+                return
+
+            with tempfile.NamedTemporaryFile(suffix=".xls") as tmp:
+                with pd.ExcelWriter(tmp.name, engine="openpyxl") as xls_wr:
+                #with pd.ExcelWriter("xxx.xls", engine="openpyxl") as xls_wr:
+                    for handle in user.handles:
+                        df = pd.DataFrame.from_records(
+                            [(sr.timestamp, sr.value) for sr in handle.sr_history], 
+                            columns=["timestamp", "sr"]
+                        )
+                        df.to_excel(xls_wr, sheet_name=handle.handle, index=False)
+                        xls_wr.sheets[handle.handle].column_dimensions['A'].width = 25
+
+                tmp.file.seek(0)
+                data = tmp.file.read()
+            try:
+                if ctx.channel.private:
+                    chan = ctx.channel
+                else:
+                    chan = await ctx.author.user.open_private_channel()
+                await chan.messages.upload(
+                    data, filename="sr-history.xls", message_content="Here is your SR history of all your accounts as an Excel sheet."
+                )
+            except Forbidden:
+                await reply(ctx, "I'm not allowed to send you a DM, please make sure that you enabled \"Allow DM from server members\" in the server's privacy settings")
+            if not ctx.channel.private:
+                await reply(ctx, "I sent you a DM")
+        
+
     async def _srgraph(self, ctx, user, name, date: str = None):
         sns.set()
 
@@ -2610,6 +2647,7 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
 Context.add_converter(Member, fuzzy_nick_match)
 
 multio.init("trio")
+register_matplotlib_converters()
 
 GLaDOS: ContextVar[bool] = ContextVar("GLaDOS", default=False)
 
