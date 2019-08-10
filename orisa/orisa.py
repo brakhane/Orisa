@@ -692,8 +692,9 @@ class Orisa(Plugin):
                 return
 
             removed = user.handles.pop(index)
+            handle = removed.handle
             session.commit()
-            await reply(ctx, f"Removed **{removed.handle}**")
+            await reply(ctx, f"Removed **{handle}**")
             await self._update_nick_after_secondary_change(ctx, user)
 
         finally:
