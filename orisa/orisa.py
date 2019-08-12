@@ -1930,14 +1930,14 @@ class Orisa(Plugin):
                 fullsr = full_sr_str,
                 rank=rank_str,
                 fullrank=full_rank_str,
-                dps=val_str(all_sr.damage) + self.SYMBOL_DPS,
-                dpsrank=val_rank(all_sr.damage) + self.SYMBOL_DPS,
-                damage=val_str(all_sr.damage) + self.SYMBOL_DPS,
-                damagerank=val_rank(all_sr.damage) + self.SYMBOL_DPS,
-                tank=val_str(all_sr.tank) + self.SYMBOL_TANK,
-                tankrank=val_rank(all_sr.tank) + self.SYMBOL_TANK,
-                support=val_str(all_sr.support) + self.SYMBOL_SUPPORT,
-                supportrank=val_rank(all_sr.support) + self.SYMBOL_SUPPORT,
+                dps=self.SYMBOL_DPS + val_str(all_sr.damage),
+                dpsrank=self.SYMBOL_DPS + val_rank(all_sr.damage) ,
+                damage=self.SYMBOL_DPS + val_str(all_sr.damage),
+                damagerank=self.SYMBOL_DPS + val_rank(all_sr.damage),
+                tank=self.SYMBOL_TANK + val_str(all_sr.tank),
+                tankrank=self.SYMBOL_TANK + val_rank(all_sr.tank),
+                support=self.SYMBOL_SUPPORT + val_str(all_sr.support),
+                supportrank=self.SYMBOL_SUPPORT + val_rank(all_sr.support),
             ) + sec_mark
         except KeyError as e:
             raise InvalidFormat(e.args[0]) from e
