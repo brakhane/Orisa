@@ -15,6 +15,8 @@
 import logging
 import re
 
+from bisect import bisect
+from collections import namedtuple
 from operator import attrgetter
 
 import asks
@@ -31,7 +33,10 @@ from .exceptions import (
     NicknameTooLong,
     InvalidFormat,
 )
-from .models import Role
+
+class TDS(namedtuple('TDS', 'tank damage support')):
+    def __str__(self):
+        return f"{self.tank}-{self.damage}-{self.support}"
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +80,9 @@ async def get_sr(handle):
         if result.status_code != 200:
             raise BlizzardError(f"got status code {result.status_code} from Blizz")
 
+        logger.error("DUMMY")
+        return TDS(2000, 3000, 4000), ["https://img.inoio.de/pfudor.gif"] * 3
+
         document = html.fromstring(result.content)
         srs = document.xpath('//div[@class="competitive-rank"]/div/text()')
         rank_image_elems = document.xpath('//div[@class="competitive-rank"]/img/@src')
@@ -82,13 +90,9 @@ async def get_sr(handle):
             if "Profile Not Found" in result.text:
                 raise InvalidBattleTag(f"No profile with {handle.desc} {handle.handle} found")
             raise UnableToFindSR()
-        sr = int(srs[0])
-        if rank_image_elems:
-            rank_image = str(rank_image_elems[0])
-        else:
-            rank_image = None
 
-        res = SR_CACHE[handle.handle] = (sr, rank_image)
+        #res = SR_CACHE[handle.handle] = (TDS(int(srs[0])sr, rank_image)
+
         return res
     finally:
         lock.release()
@@ -144,11 +148,9 @@ def resolve_handle_or_index(user, handle_or_index):
     return index
 
 
-def format_roles(roles):
-    names = {
-        Role.DPS: "Damage",
-        Role.MAIN_TANK: "Main Tank",
-        Role.OFF_TANK: "Off Tank",
-        Role.SUPPORT: "Support",
-    }
-    return ", ".join(names[r] for r in Role if r and r in roles)
+RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
+
+def sr_to_rank(sr):
+    # there is no 0 SR, so if sr is false-ish, it's None
+    return sr and bisect(RANK_CUTOFF, sr)
+

@@ -13,8 +13,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import random
+import typing
 
-from bisect import bisect
 from contextlib import contextmanager
 from datetime import datetime, timedelta
 from enum import Flag, auto
@@ -32,11 +32,13 @@ from sqlalchemy import (
     func,
 )
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.orderinglist import ordering_list
 from sqlalchemy.orm import raiseload, relationship, sessionmaker
 import sqlalchemy.types as types
 
 from .config import DATABASE_URI
+from .utils import sr_to_rank, TDS
 
 Base = declarative_base()
 
@@ -47,6 +49,17 @@ class Role(Flag):
     MAIN_TANK = auto()
     OFF_TANK = auto()
     SUPPORT = auto()
+
+    _names = {
+        DPS: "Damage",
+        MAIN_TANK: "Main Tank",
+        OFF_TANK: "Off Tank",
+        SUPPORT: "Support",
+    }
+
+    def format(self):
+        return ", ".join(self.names[r] for r in Role if r and r in self)
+
 
 
 class RoleType(types.TypeDecorator):
@@ -136,29 +149,29 @@ class Handle(Base):
 
     @property
     def sr(self):
-        return self.current_sr.value if self.current_sr else None
+        return self.current_sr.values if self.current_sr else None
 
     @property
     def rank(self):
-        return self.current_sr.rank if self.current_sr else None
+        return self.current_sr.ranks if self.current_sr else None
 
     @property
     def last_update(self):
         return self.current_sr.timestamp if self.current_sr else None
 
-    def update_sr(self, new_sr, *, timestamp=None):
+    def update_sr(self, new_srs, *, timestamp=None):
         if timestamp is None:
             timestamp = datetime.utcnow()
 
         if (
             len(self.sr_history[:2]) > 1
-            and self.sr_history[0].value == self.sr_history[1].value
+            and self.sr_history[0].values == self.sr_history[1].values
         ):
             sr_obj = self.sr_history[0]
             sr_obj.timestamp = timestamp
-            sr_obj.value = new_sr
+            sr_obj.values = new_srs
         else:
-            sr_obj = SR(timestamp=timestamp, value=new_sr)
+            sr_obj = SR(timestamp=timestamp, tank=new_srs.tank, damage=new_srs.damage, support=new_srs.support)
             self.sr_history.append(
                 sr_obj
             )  # sqlalchemy dynamic wrapper does not support prepend
@@ -238,8 +251,6 @@ class Gamertag(Handle):
 class SR(Base):
     __tablename__ = "srs"
 
-    RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
-
     id = Column(Integer, primary_key=True, index=True)
     handle_id = Column(
         Integer, ForeignKey("handle.id"), nullable=False, index=True
@@ -249,14 +260,26 @@ class SR(Base):
         "Handle", back_populates="sr_history", foreign_keys=[handle_id]
     )
     timestamp = Column(DateTime, nullable=False)
-    value = Column(SmallInteger)
+    tank = Column(SmallInteger)
+    damage = Column(SmallInteger)
+    support = Column(SmallInteger)
 
     @property
-    def rank(self):
-        return bisect(self.RANK_CUTOFF, self.value) if self.value is not None else None
+    def values(self):
+        return TDS(tank=self.tank, damage=self.damage, support=self.support)
+
+    @values.setter
+    def values(self, values):
+        self.tank = values.tank
+        self.damage = values.damage
+        self.support = values.support
+
+    @property
+    def ranks(self):
+        return TDS(*[sr_to_rank(val) for val in self.values])
 
     def __repr__(self):
-        return f"<SR(id={self.id}, value={self.value})>"
+        return f"<SR(id={self.id}, values={self.values})>"
 
 
 class GuildConfigJson(Base):
@@ -292,13 +315,13 @@ class Database:
     def user_by_discord_id(self, session, discord_id):
         return session.query(User).filter_by(discord_id=discord_id).one_or_none()
 
-    def get_min_max_sr(self, session, discord_ids):
+    def get_srs(self, session, discord_ids):
         return (
-            session.query(func.min(SR.value), func.max(SR.value))
+            session.query(SR)
             .join(Handle.current_sr, User)
             .filter(Handle.position == 0)
             .filter(User.discord_id.in_(discord_ids))
-            .one()
+            .all()
         )
 
     def _sync_delay(self, error_count):

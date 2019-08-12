@@ -51,3 +51,9 @@ PRIVACY_POLICY_PATH = None
 
 # Only set to true when locally developing Orisa
 DEVELOPMENT = False
+
+# A list of emojis for the various ranks in Discord's <:name:id> format, or None
+RANK_EMOJI = None
+
+# Same but for roles, these must be defined (Tank, Damage, Support)
+ROLE_EMOJIS = ['T ', 'D' , 'S ']
