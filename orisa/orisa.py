@@ -986,6 +986,8 @@ class Orisa(Plugin):
     async def _findplayers(
         self, ctx, diff_or_min_sr: int = None, max_sr: int = None, *, findall
     ):
+        await reply(ctx, "Sorry, findplayers doesn't work with role based SR yet. Try later.")
+        return
         logger.info(
             f"{ctx.author.id} issued findplayers {diff_or_min_sr} {max_sr} {findall}"
         )
@@ -1417,7 +1419,7 @@ class Orisa(Plugin):
             )
             return
 
-        data = pd.DataFrame.from_records(reversed(data), columns=["timestamp", "tank", "damage", "support"])
+        data = pd.DataFrame.from_records(reversed(data), columns=["timestamp", "Tank", "Damage", "Support"], index="timestamp")
 
         if date:
             try:
@@ -1437,39 +1439,12 @@ class Orisa(Plugin):
 
         ax.xaxis_date()
 
-        data.set_index("timestamp").tank.plot(style="C0", ax=ax, drawstyle="steps-post")
-        data.set_index("timestamp").damage.plot(style="C1", ax=ax, drawstyle="steps-post")
-        data.set_index("timestamp").support.plot(style="C2", ax=ax, drawstyle="steps-post")
+        sns.lineplot(data=data, ax=ax, drawstyle="steps-post", dashes=True)
 
+        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%d.%m.%y"))
+        #ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(byhour=(0, 12)))
+        fig.autofmt_xdate()
 
-        # for is_max, ix in enumerate([data.sr.idxmin(), data.sr.idxmax()]):
-        #     col = "C2" if is_max else "C1"
-
-        #     val = data.iloc[ix].sr
-        #     ax.axhline(y=val, color=col, linestyle="--")
-
-        #     ax.annotate(
-        #         int(val),
-        #         xy=(1, val),
-        #         xycoords=("axes fraction", "data"),
-        #         xytext=(5, -3),
-        #         textcoords="offset points",
-        #         color=col,
-        #     )
-
-        # data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
-
-        if False:
-            for ix in data.sr[pd.isna].index:
-                x = data.iloc[ix - 1 : ix]
-                x = x.append(data.iloc[ix + 1 : ix + 2])
-                x.loc[0, "timestamp"] = data.iloc[ix].timestamp
-                x.set_index("timestamp").sr.plot(
-                    style="C0:", ax=ax
-                )  # drawstyle="steps-post")
-
-        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%d.%m."))
-        # ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(byhour=(0, 12)))
         plt.xlabel("Date")
         plt.ylabel("SR")
 
