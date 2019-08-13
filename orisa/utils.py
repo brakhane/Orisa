@@ -62,10 +62,8 @@ async def get_sr(handle):
         except KeyError:
             pass
 
-        raise UnableToFindSR()
 
         url = f'https://playoverwatch.com/en-us/career/{handle.blizzard_url_type}/{handle.handle.replace("#", "-")}'
-        
         
         logger.debug("requesting %s", url)
         try:

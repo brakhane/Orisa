@@ -393,7 +393,7 @@ class Orisa(Plugin):
         try:
             registered_ids = [x[0] for x in session.query(User.discord_id).all()]
             stale_ids = set(registered_ids) - set(member_ids)
-            ids = ", ".join(f"<@{id}>" for id in stale_ids)
+            ids = "\n".join(f"<@{id}>" for id in stale_ids)
             await send_long(
                 ctx.channel.messages.send, 
                 f"there are {len(stale_ids)} stale entries: {ids}"
@@ -405,7 +405,8 @@ class Orisa(Plugin):
                         await ctx.channel.messages.send(f"{id} not found in DB???")
                     else:
                         session.delete(user)
-                await send_long(ctx.channel.messages.send, f"Deleted {stale_ids}")
+                        logger.info(f"deleted {id}")
+                await send_long(ctx.channel.messages.send, f"Deleted {len(stale_ids)} entries")
                 session.commit()
             elif stale_ids:
                 await ctx.channel.messages.send("issue `!cleanup confirm` to delete.")
