@@ -1209,6 +1209,10 @@ class Orisa(Plugin):
             value='This command can only be used by members with the "Orisa Admin" role and allows them to configure Orisa for the specific Discord server',
         )
         embed.add_field(
+            name="!ow dumpsr",
+            value="Download your SR history as an Excel sheet"
+        )
+        embed.add_field(
             name="!ow findplayers [max diff] *or* !ow findplayers min max",
             value="*This command is still in beta and may change at any time!*\n"
             "This command is intended to find partners for your Competitive team and shows you all registered and online users within the specified range.\n"
@@ -1381,11 +1385,12 @@ class Orisa(Plugin):
                 return
 
             with tempfile.NamedTemporaryFile(suffix=".xls") as tmp:
-                with pd.ExcelWriter(tmp.name, engine="openpyxl") as xls_wr:
+                filename=tmp.name
+                with pd.ExcelWriter(filename, engine="openpyxl") as xls_wr:
                     for handle in user.handles:
                         df = pd.DataFrame.from_records(
-                            [(sr.timestamp, sr.value) for sr in handle.sr_history], 
-                            columns=["timestamp", "sr"]
+                            [(sr.timestamp, sr.tank, sr. damage, sr.support) for sr in handle.sr_history], 
+                            columns=["Timestamp", "Tank", "Damage", "Support"]
                         )
                         df.to_excel(xls_wr, sheet_name=handle.handle, index=False)
                         xls_wr.sheets[handle.handle].column_dimensions['A'].width = 25
