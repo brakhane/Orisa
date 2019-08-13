@@ -62,13 +62,15 @@ async def get_sr(handle):
         except KeyError:
             pass
 
+        raise UnableToFindSR()
+
         url = f'https://playoverwatch.com/en-us/career/{handle.blizzard_url_type}/{handle.handle.replace("#", "-")}'
         logger.debug("requesting %s", url)
         try:
             result = await asks.get(
                 url,
                 headers={
-                    "User-Agent": "Orisa/1.0 (+https://github.com/brakhane/Orisa)"
+                    "User-Agent": "Orisa/1.1 (+https://github.com/brakhane/Orisa)"
                 },
                 connection_timeout=60,
                 timeout=60,
@@ -79,8 +81,6 @@ async def get_sr(handle):
             raise BlizzardError("Something went wrong", e)
         if result.status_code != 200:
             raise BlizzardError(f"got status code {result.status_code} from Blizz")
-
-        raise UnableToFindSR()
 
         document = html.fromstring(result.content)
         srs = document.xpath('//div[@class="competitive-rank"]/div/text()')
