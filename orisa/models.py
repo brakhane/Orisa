@@ -58,7 +58,7 @@ class Role(Flag):
     }
 
     def format(self):
-        return ", ".join(self.names[r] for r in Role if r and r in self)
+        return ", ".join(self._names[r] for r in Role if r and r in self)
 
 
 
