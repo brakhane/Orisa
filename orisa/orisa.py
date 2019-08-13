@@ -209,7 +209,8 @@ class Orisa(Plugin):
 
     async def load(self):
 
-        await self.spawn(self._message_new_guilds)
+        logger.warn("TEMPORARILY NOT SENDING MESSAGES TO GUILDS!")
+        # await self.spawn(self._message_new_guilds)
 
         await self.spawn(self._sync_all_handles_task)
 
@@ -2514,7 +2515,7 @@ class Orisa(Plugin):
                 try:
                     check_msg_obj = await user_channel.messages.send(f"Checking your {handle.desc} {handle.handle}…")
                     async with user_channel.typing:
-                        sr, image = await get_sr(handle)
+                        srs, images = await get_sr(handle)
                 except InvalidBattleTag as e:
                     logger.exception(f"Got invalid {handle.desc} for {handle.handle}")
                     await user_channel.messages.send(
@@ -2532,14 +2533,14 @@ class Orisa(Plugin):
                         name=":warning: No SR",
                         value=f"You don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your {handle.desc}.",
                     )
-                    sr = None
+                    srs = TDS(None, None, None)
                 finally:
                     try:
                         await check_msg_obj.delete()
                     except Exception:
                         logger.exception("Unable to delete check message")
 
-                handle.update_sr(sr)
+                handle.update_sr(srs)
 
 
             sort_secondaries(user)

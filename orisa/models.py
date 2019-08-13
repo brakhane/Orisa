@@ -163,6 +163,9 @@ class Handle(Base):
         if timestamp is None:
             timestamp = datetime.utcnow()
 
+        if new_srs is None:
+            new_srs = TDS(None, None, None)
+
         if (
             len(self.sr_history[:2]) > 1
             and self.sr_history[0].values == self.sr_history[1].values
