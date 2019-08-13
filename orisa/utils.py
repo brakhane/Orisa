@@ -80,8 +80,7 @@ async def get_sr(handle):
         if result.status_code != 200:
             raise BlizzardError(f"got status code {result.status_code} from Blizz")
 
-        logger.error("DUMMY")
-        return TDS(2000, 3000, 4000), ["https://img.inoio.de/pfudor.gif"] * 3
+        raise UnableToFindSR()
 
         document = html.fromstring(result.content)
         srs = document.xpath('//div[@class="competitive-rank"]/div/text()')
