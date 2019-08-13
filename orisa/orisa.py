@@ -25,6 +25,7 @@ import tempfile
 import traceback
 import unicodedata
 import urllib.parse
+import warnings
 
 from contextlib import contextmanager, nullcontext, suppress
 from contextvars import ContextVar
@@ -93,6 +94,8 @@ from .config import (
     OAUTH_REDIRECT_HOST,
     OAUTH_REDIRECT_PATH,
     PRIVACY_POLICY_PATH,
+    RANK_EMOJIS,
+    ROLE_EMOJIS,
     WEB_APP_PATH,
 )
 from .models import Cron, User, BattleTag, Gamertag, SR, Role, GuildConfigJson
@@ -109,7 +112,8 @@ from .utils import (
     send_long,
     reply,
     resolve_handle_or_index,
-    format_roles,
+    sr_to_rank,
+    TDS,
 )
 from . import web
 
@@ -123,7 +127,11 @@ SUPPORT_DISCORD="https://discord.gg/tsNxvFh"
 VOTE_LINK="https://discordbots.org/bot/445905377712930817/vote"
 DONATE_LINK="https://ko-fi.com/R5R2PC36"
 
-RANKS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grand Master")
+RANKS = ("Br", "Si", "Go", "Pt", "Dm", "Ma", "GM")
+FULL_RANKS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grandmaster")
+
+ROLE_NAMES = 'Tank Damage Support'.split()
+
 COLORS = (
     0xCD7E32,  # Bronze
     0xC0C0C0,  # Silver
@@ -349,12 +357,6 @@ class Orisa(Plugin):
         await self.client.http.delete_message(channel_id, message_id)
         await ctx.channel.messages.send("deleted")
 
-    #    @command()
-    #    @condition(only_owner)
-    #    async def updatehelp(self, ctx, channel_id: int, message_id: int):
-    #        await self.client.http.edit_message(channel_id, message_id, embed=self._create_help().to_dict())
-    #        await ctx.channel.messages.send("done")
-
     @command()
     @condition(only_owner)
     async def hs(self, ctx, type_str = "pc", style: str = "fancy_grid"):
@@ -365,7 +367,8 @@ class Orisa(Plugin):
 
         with self.database.session() as session:
             t = BattleTag if type_str == "pc" else Gamertag
-            await self._top_players(session, prev_date, t, style)
+            for kind in "tank damage support".split():
+                await self._top_players(session, prev_date, t, kind, style)
 
     @command()
     @condition(only_owner)
@@ -391,7 +394,8 @@ class Orisa(Plugin):
             registered_ids = [x[0] for x in session.query(User.discord_id).all()]
             stale_ids = set(registered_ids) - set(member_ids)
             ids = ", ".join(f"<@{id}>" for id in stale_ids)
-            await ctx.channel.messages.send(
+            await send_long(
+                ctx.channel.messages.send, 
                 f"there are {len(stale_ids)} stale entries: {ids}"
             )
             if doit == "confirm":
@@ -401,7 +405,7 @@ class Orisa(Plugin):
                         await ctx.channel.messages.send(f"{id} not found in DB???")
                     else:
                         session.delete(user)
-                await ctx.channel.messages.send(f"Deleted {stale_ids}")
+                await send_long(ctx.channel.messages.send, f"Deleted {stale_ids}")
                 session.commit()
             elif stale_ids:
                 await ctx.channel.messages.send("issue `!cleanup confirm` to delete.")
@@ -420,9 +424,17 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def ow(self, ctx, *, member: Member = None):
         def format_sr(handle):
-            if not handle.sr:
+            sr = handle.sr
+            if not sr:
                 return "—"
-            return f"{handle.sr} ({RANKS[handle.rank]})"
+
+            def single_sr(symbol, sr):
+                if sr:
+                    return symbol + str(sr) + RANK_EMOJIS[sr_to_rank(sr)] if RANK_EMOJIS else symbol + str(sr)
+                else:
+                    return ""
+            
+            return "".join(single_sr(ROLE_EMOJIS[ix], val) for ix, val in enumerate(sr))
 
         member_given = member is not None
         if not member_given:
@@ -435,7 +447,7 @@ class Orisa(Plugin):
             user = self.database.user_by_discord_id(session, member.id)
             if user:
                 embed = Embed(colour=0x659DBD)  # will be overwritten later if SR is set
-                embed.add_field(name="Nick", value=member.name)
+                embed.add_field(name="Nick", value=member.name, inline=False)
 
                 primary, *secondary = user.handles
 
@@ -471,11 +483,11 @@ class Orisa(Plugin):
                         name="SRs" if multiple_handles else "SR", value=sr_value
                     )
 
-                if primary.rank is not None:
-                    embed.colour = COLORS[primary.rank]
+                if primary.sr is not None and primary.sr.tank and primary.sr.damage and primary.sr.support:
+                    embed.colour = COLORS[sr_to_rank((primary.sr.tank + primary.sr.damage + primary.sr.support)/3)]
 
                 if user.roles:
-                    embed.add_field(name="Roles", value=format_roles(user.roles))
+                    embed.add_field(name="Roles", value=user.roles.format())
 
                 embed.add_field(
                     name="Links",
@@ -551,7 +563,7 @@ class Orisa(Plugin):
         is_owner = ctx.author == ctx.bot.application_info.owner
         if ctx.channel.private and not is_owner:
             await ctx.channel.messages.send(
-                content="The config command must be issued from a channel of the guild to configure. "
+                content="The config command must be issued from a channel of the server you want to configure. "
                 "Don't worry, I will send you the config instructions as a DM, so others can't configure me just by watching you sending this command.",
                 embed=Embed(
                     title="Tip",
@@ -765,8 +777,8 @@ class Orisa(Plugin):
         if "]" in format:
             await reply(ctx, "format string may not contain square brackets")
             return
-        if not re.search(r"\$((sr|rank)(?!\w))|(\{(sr|rank)(?!\w)})", format):
-            await reply(ctx, "format string must contain at least a $sr or $rank")
+        if "$" not in format:
+            await reply(ctx, "format string must contain at least one $placeholder")
             return
         if not format:
             await reply(ctx, "format string missing")
@@ -820,7 +832,7 @@ class Orisa(Plugin):
                     await self._update_nick(user)
                     await reply(
                         ctx,
-                        f'Done. Henceforth, ye shall be knownst as "{new_nick}, {random.choice(titles)}."',
+                        f'Done. Henceforth, ye shall be knownst as "`{new_nick}`, {random.choice(titles)}."',
                     )
         finally:
             session.commit()
@@ -946,7 +958,7 @@ class Orisa(Plugin):
         if roles_str is None:
             await reply(
                 ctx,
-                "Missing roles identifier. Valid role identifiers are: `d` (DPS), `m` (Main Tank), `o` (Off Tank), `s` (Support). They can be combined, eg. `ds` would mean DPS + Support."
+                "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. `ds` would mean Damage + Support."
             )
             return
 
@@ -956,7 +968,7 @@ class Orisa(Plugin):
             except KeyError:
                 await reply(
                     ctx,
-                    f"Unknown role identifier '{role}'. Valid role identifiers are: `d` (DPS), `m` (Main Tank), `o` (Off Tank), `s` (Support). They can be combined, eg. `ds` would mean DPS + Support.",
+                    f"Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. `ds` would mean Damage + Support.",
                 )
                 return
 
@@ -968,13 +980,15 @@ class Orisa(Plugin):
                 return
             user.roles = roles
             session.commit()
-            await reply(ctx, f"Done. Your roles are now **{format_roles(roles)}**.")
+            await reply(ctx, f"Done. Your roles are now **{roles.format()}**.")
         finally:
             session.close()
 
     async def _findplayers(
         self, ctx, diff_or_min_sr: int = None, max_sr: int = None, *, findall
     ):
+        await reply(ctx, "Sorry, findplayers doesn't work with role based SR yet. Try later.")
+        return
         logger.info(
             f"{ctx.author.id} issued findplayers {diff_or_min_sr} {max_sr} {findall}"
         )
@@ -1196,6 +1210,10 @@ class Orisa(Plugin):
             value='This command can only be used by members with the "Orisa Admin" role and allows them to configure Orisa for the specific Discord server',
         )
         embed.add_field(
+            name="!ow dumpsr",
+            value="Download your SR history as an Excel sheet"
+        )
+        embed.add_field(
             name="!ow findplayers [max diff] *or* !ow findplayers min max",
             value="*This command is still in beta and may change at any time!*\n"
             "This command is intended to find partners for your Competitive team and shows you all registered and online users within the specified range.\n"
@@ -1228,32 +1246,25 @@ class Orisa(Plugin):
         embed.add_field(
             name="!ow format *format*",
             value="Lets you specify how your SR or rank is displayed. It will always be shown in [square\u00a0brackets] appended to your name.\n"
-            "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`. The second form is useful when there are no spaces "
-            "between the placeholder name and the text. For example, to get `[2000 SR]`, you *can* use just `$sr SR`, however, to get `[2000SR]`, you need "
-            "to use `${sr}SR`, because `$srSR` would refer to a nonexistant placeholder `srSR`.\n"
-            "Your format string needs to use at least either `$sr` or `$rank`.\n",
+            "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`."
         )
         embed.add_field(
-            name="\N{BLACK STAR} *ow format placeholders (prepend a $)*",
+            name="\N{BLACK STAR} *ow format placeholders*",
             value="*The following placeholders are defined:*\n"
-            f"`dps`, `tank`, `support`, `flex`\nSymbols for the respective roles: `{self.SYMBOL_DPS}`, `{self.SYMBOL_TANK}`, `{self.SYMBOL_SUPPORT}`, `{self.SYMBOL_FLEX}`\n\n"
-            "`sr`\nyour SR; if you have secondary accounts, an asterisk (\*) is added at the end.\n\n"
-            "`rank`\nyour Rank; if you have secondary accounts, an asterisk (\*) is added at the end.\n\n"
-            "`secondary_sr`\nThe SR of your secondary account, if you have registered one.\nIf you have more than one secondary account (you really like to "
-            "give Blizzard money, don't you), the first secondary account (sorted alphabetically) will be used; in that case, consider using `$sr_range` instead.\n\n"
-            "`secondary_rank`\nLike `secondary_sr`, but shows the rank instead.\n\n"
-            "`lowest_sr`, `highest_sr`\nthe lowest/highest SR of all your accounts, including your primary. Only useful if you have more than one secondary.\n\n"
-            "`lowest_rank`, `highest_rank`\nthe same, just for rank.\n\n"
-            "`sr_range`\nThe same as `${lowest_sr}–${highest_sr}`.\n\n"
-            "`rank_range`\nDito, but for rank.\n",
+            "`$sr`\nthe first two digits of your SR for all 3 roles in order Tank, Damage, Support; if you have secondary accounts, an asterisk (\*) is added at the end. A question mark is added if an old SR is shown\n\n"
+            "`$fullsr`\nLike `$sr` but all 4 digits are shown\n\n"
+            "`$rank`\nyour rank in shortened form for all 3 roles in order Tank, Damage, Support; asterisk and question marks work like in `$sr`\n\n"
+            "`$tank`, `$damage`, `$support`\nYour full SR for the respective role followed by its symbol. Asterisk and question mark have the same meaning like in `$sr`. "
+            f"For technical reasons the symbols for the respective roles are `{self.SYMBOL_TANK}`, `{self.SYMBOL_DPS}`, `{self.SYMBOL_SUPPORT}`\n\n"
+            "`$tankrank`, `$damagerank`, `$supportrank`\nlike above, but the rank is shown instead.\n\n"
+            "`$dps`, `$dpsrank`\nAlias for `$damage` and `$damagerank`, respectively"
         )
         embed.add_field(
             name="\N{BLACK STAR} *ow format examples*",
-            value="`!ow format test $sr SR` will result in [test 2345 SR]\n"
-            "`!ow format Potato/$rank` in [Potato/Gold].\n"
-            "`!ow format $sr (alt: $secondary_sr)` in [1234* (alt: 2345)]\n"
-            "`!ow format $sr ($sr_range)` in [1234* (600-4200)]\n"
-            "`!ow format $sr ($rank_range)` in [1234* (Bronze-Grand Master)]\n\n"
+            value=
+            "`!ow format hello $sr` will result in `[hello 12-34-45]`\n"
+            "`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
+            f"`!ow format $damage $support` in `[1234{self.SYMBOL_DPS} 2345{self.SYMBOL_SUPPORT}]`\n"
             "*By default, the format is `$sr`*",
         )
 
@@ -1375,12 +1386,12 @@ class Orisa(Plugin):
                 return
 
             with tempfile.NamedTemporaryFile(suffix=".xls") as tmp:
-                with pd.ExcelWriter(tmp.name, engine="openpyxl") as xls_wr:
-                #with pd.ExcelWriter("xxx.xls", engine="openpyxl") as xls_wr:
+                filename=tmp.name
+                with pd.ExcelWriter(filename, engine="openpyxl") as xls_wr:
                     for handle in user.handles:
                         df = pd.DataFrame.from_records(
-                            [(sr.timestamp, sr.value) for sr in handle.sr_history], 
-                            columns=["timestamp", "sr"]
+                            [(sr.timestamp, sr.tank, sr. damage, sr.support) for sr in handle.sr_history], 
+                            columns=["Timestamp", "Tank", "Damage", "Support"]
                         )
                         df.to_excel(xls_wr, sheet_name=handle.handle, index=False)
                         xls_wr.sheets[handle.handle].column_dimensions['A'].width = 25
@@ -1406,7 +1417,7 @@ class Orisa(Plugin):
 
         handle = user.handles[0]
 
-        data = [(sr.timestamp, sr.value) for sr in handle.sr_history]
+        data = [(sr.timestamp, *sr.values) for sr in handle.sr_history]
 
         if not data:
             await ctx.channel.messages.send(
@@ -1414,7 +1425,7 @@ class Orisa(Plugin):
             )
             return
 
-        data = pd.DataFrame.from_records(reversed(data), columns=["timestamp", "sr"])
+        data = pd.DataFrame.from_records(reversed(data), columns=["timestamp", "Tank", "Damage", "Support"], index="timestamp")
 
         if date:
             try:
@@ -1434,37 +1445,11 @@ class Orisa(Plugin):
 
         ax.xaxis_date()
 
-        data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
+        sns.lineplot(data=data, ax=ax, drawstyle="steps-post", dashes=True)
 
+        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%d.%m.%y"))
+        fig.autofmt_xdate()
 
-        for is_max, ix in enumerate([data.sr.idxmin(), data.sr.idxmax()]):
-            col = "C2" if is_max else "C1"
-
-            val = data.iloc[ix].sr
-            ax.axhline(y=val, color=col, linestyle="--")
-
-            ax.annotate(
-                int(val),
-                xy=(1, val),
-                xycoords=("axes fraction", "data"),
-                xytext=(5, -3),
-                textcoords="offset points",
-                color=col,
-            )
-
-        # data.set_index("timestamp").sr.plot(style="C0", ax=ax, drawstyle="steps-post")
-
-        if False:
-            for ix in data.sr[pd.isna].index:
-                x = data.iloc[ix - 1 : ix]
-                x = x.append(data.iloc[ix + 1 : ix + 2])
-                x.loc[0, "timestamp"] = data.iloc[ix].timestamp
-                x.set_index("timestamp").sr.plot(
-                    style="C0:", ax=ax
-                )  # drawstyle="steps-post")
-
-        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%d.%m."))
-        # ax.xaxis.set_major_locator(matplotlib.dates.HourLocator(byhour=(0, 12)))
         plt.xlabel("Date")
         plt.ylabel("SR")
 
@@ -1474,8 +1459,7 @@ class Orisa(Plugin):
         embed = Embed(
             title=f"SR History For {name}",
             description=f"Here is your SR history starting from "
-            f"{'when you registered' if not date else pendulum.instance(date).to_formatted_date_string()}.\n"
-            "A dotted line means that you had no SR during that time (probably due to off-season)",
+            f"{'when you registered' if not date else pendulum.instance(date).to_formatted_date_string()}."
         )
         embed.set_image(image_url="attachment://graph.png")
         await ctx.channel.messages.upload(
@@ -1820,16 +1804,27 @@ class Orisa(Plugin):
             final_list = []
 
             def channel_suffix(session, chan):
-                min, max = self.database.get_min_max_sr(
+                srs = self.database.get_srs(
                     session, [member.id for member in chan.voice_members if member]
                 )
-                if min and max:
-                    if min == max:
-                        return f" [~{min}]"
-                    else:
-                        return f" [{min}–{max}]"
-                else:
+
+                combined = np.array([sr.values for sr in srs], dtype=np.float)
+
+                if not any(x is not None for x in combined):
                     return ""
+
+                # hide useless warning in case we take the mean of an empty slice
+                with warnings.catch_warnings():
+                
+                    tds_filtered_mean = [
+                        0 if np.all(np.isnan(x)) else np.nanmean(x[np.abs(x - np.nanmean(x)) <= 750])
+                        for x in combined.T
+                    ]
+                
+                def val(x):
+                    return "xx" if np.isnan(x) else "??" if x == 0 else f"{int(x//100):02}"
+
+                return f" [{'-'.join(val(x) for x in tds_filtered_mean)}]"
 
             for prefix, prefix_info in prefix_map.items():
                 chans = managed_group[prefix]
@@ -1863,68 +1858,67 @@ class Orisa(Plugin):
     def _format_nick(self, user):
         primary = user.handles[0]
 
-        rankno = primary.rank
-        rank = RANKS[rankno] if rankno is not None else "Unranked"
         if primary.sr:
-            sr = primary.sr
+            all_sr = primary.sr
         else:
-            sr = "noSR"
+            all_sr = TDS(None, None, None)
+
+        if any(x is None for x in all_sr):
             # normally, we only save different values for SR, so if there is
             # a non null value, it should be the second or third, but just
             # to be sure, check the first 10...
+            # negative value means it's an old one
             for old_sr in primary.sr_history[:10]:
-                if old_sr.value:
-                    sr = f"{old_sr.value}?"
-                    rank = f"{RANKS[old_sr.rank]}?"
+                if old_sr.values:
+                    all_sr = TDS(*[av or (ov and -ov) for av, ov in zip(all_sr, old_sr.values)])
+                if all(x is not None for x in all_sr):
                     break
 
-        try:
-            secondary_sr = user.handles[1].sr
-        except IndexError:
-            # no secondary accounts
-            secondary_sr = None
+        has_secondaries = len(user.handles) > 1
+
+        def val_str(val, short=False):
+            if val is None:
+                return "∅"
+            elif val<0:
+                return f"{int(-val//100):02}?" if short else f"{-val:04}?"
+            else:
+                return f"{int(val//100,):02}" if short else f"{val:04}"
+
+        def val_rank(val, short=False):
+            if val is None:
+                return "∅"
+            elif val<0:
+                return (RANKS if short else FULL_RANKS)[sr_to_rank(-val)] + "?"
+            else:
+                return (RANKS if short else FULL_RANKS)[sr_to_rank(val)]
+    
+
+        sr_str = "-".join(val_str(x, short=True) for x in all_sr)
+        rank_str = "-".join(val_rank(x) for x in all_sr)
+        full_sr_str = "-".join(val_str(x, short=False) for x in all_sr)
+        full_rank_str = "-".join(val_rank(x) for x in all_sr)
+
+        if has_secondaries:
+            sec_mark = "*"
         else:
-            # secondary accounts, mark SR
-            sr = f"{sr}*"
-            rank = f"{rank}*"
-
-        if secondary_sr is None:
-            secondary_sr = "noSR"
-            secondary_rank = "Unranked"
-        else:
-            secondary_rank = RANKS[user.handles[1].rank]
-
-        srs = list(sorted(t.sr or -1 for t in user.handles))
-
-        while srs and srs[0] == -1:
-            srs.pop(0)
-
-        if srs:
-            lowest_sr, highest_sr = srs[0], srs[-1]
-            # FIXME: SR().rank is hacky
-            lowest_rank, highest_rank = (
-                sr and RANKS[SR(value=sr).rank] for sr in (srs[0], srs[-1])
-            )
-        else:
-            lowest_sr = highest_sr = "noSR"
-            lowest_rank = highest_rank = "Unranked"
+            sec_mark = ""
 
         t = Template(user.format)
         try:
             return t.substitute(
-                sr=sr,
-                rank=rank,
-                lowest_sr=lowest_sr,
-                highest_sr=highest_sr,
-                sr_range=f"{lowest_sr}–{highest_sr}",
-                rank_range=f"{lowest_rank}–{highest_rank}",
-                secondary_sr=secondary_sr,
-                secondary_rank=secondary_rank,
-                dps=self.SYMBOL_DPS,
-                tank=self.SYMBOL_TANK,
-                support=self.SYMBOL_SUPPORT,
-                flex=self.SYMBOL_FLEX,
-            )
+                sr=sr_str,
+                fullsr = full_sr_str,
+                rank=rank_str,
+                fullrank=full_rank_str,
+                dps=self.SYMBOL_DPS + val_str(all_sr.damage),
+                dpsrank=self.SYMBOL_DPS + val_rank(all_sr.damage) ,
+                damage=self.SYMBOL_DPS + val_str(all_sr.damage),
+                damagerank=self.SYMBOL_DPS + val_rank(all_sr.damage),
+                tank=self.SYMBOL_TANK + val_str(all_sr.tank),
+                tankrank=self.SYMBOL_TANK + val_rank(all_sr.tank),
+                support=self.SYMBOL_SUPPORT + val_str(all_sr.support),
+                supportrank=self.SYMBOL_SUPPORT + val_rank(all_sr.support),
+            ) + sec_mark
         except KeyError as e:
             raise InvalidFormat(e.args[0]) from e
 
@@ -2026,18 +2020,20 @@ class Orisa(Plugin):
 
         return False
 
-    async def _send_congrats(self, user, rank, image):
+    async def _send_congrats(self, handle, role_idx, sr, rank, image):
+        user = handle.user
         for guild in self.client.guilds.values():
             try:
                 if user.discord_id not in guild.members:
                     continue
                 embed = Embed(
                     title=f"For your own safety, get behind the barrier!",
-                    description=f"**{str(guild.members[user.discord_id].name)}** just advanced to **{RANKS[rank]}**. Congratulations!",
+                    description=f"**{str(guild.members[user.discord_id].name)}** just reached **{sr} SR** as **{ROLE_NAMES[role_idx]}** and advanced to **{FULL_RANKS[rank]}**. Congratulations!",
                     colour=COLORS[rank],
                 )
 
                 embed.set_thumbnail(url=image)
+                embed.set_footer(text=f"{handle.desc} {handle.handle}")
 
                 await self.client.find_channel(
                     self.guild_config[guild.id].congrats_channel_id
@@ -2048,7 +2044,10 @@ class Orisa(Plugin):
                 logger.exception(f"Cannot send congrats for guild {guild}")
 
 
-    async def _top_players(self, session, prev_date, type_class, style="fancy_grid"):
+    async def _top_players(self, session, prev_date, type_class, sr_kind: str, style="fancy_grid"):
+        def get_kind(obj):
+            return getattr(obj, sr_kind)
+
         def prev_sr(tag):
             for sr in tag.sr_history[:30]:
                 prev_sr = sr
@@ -2056,12 +2055,13 @@ class Orisa(Plugin):
                     break
             return prev_sr
 
+
         handles = (
             session.query(type_class)
             .options(joinedload(type_class.user))
             .join(type_class.current_sr)
-            .order_by(desc(SR.value))
-            .filter(SR.value != None)
+            .order_by(desc(get_kind(SR)))
+            .filter(get_kind(SR) != None)
             .filter(BattleTag.position==0)
             .all()
         )
@@ -2082,7 +2082,7 @@ class Orisa(Plugin):
                     continue
 
                 top_per_guild.setdefault(guild.id, []).append(
-                    (member, handle, prev_sr.value)
+                    (member, handle, get_kind(prev_sr))
                 )
                 found = True
 
@@ -2091,7 +2091,6 @@ class Orisa(Plugin):
                 name: str
 
             if not found:
-                # top_per_guild.setdefault(tag.user.discord_id%1, []).append((dummy(name=f"X{tag.user.discord_id}"), tag, prev_sr.value))
                 logger.warning(
                     "User %i not found in any of the guilds", handle.user.discord_id
                 )
@@ -2137,21 +2136,22 @@ class Orisa(Plugin):
             table_prev_sr = None
             data = []
             for ix, (member, handle, prev_sr) in enumerate(tops):
-                if handle.sr != table_prev_sr:
+                if get_kind(handle.sr) != table_prev_sr:
                     pos = ix + 1
-                table_prev_sr = handle.sr
+                sr = get_kind(handle.sr)
+                table_prev_sr = sr
                 data.append(
                     (
                         pos,
                         prev_str(ix + 1, handle, prev_sr),
                         member_name(member),
                         member.id,
-                        handle.sr,
-                        delta_fmt(handle.sr, prev_sr),
+                        sr,
+                        delta_fmt(sr, prev_sr),
                     )
                 )
 
-            headers = ["#", "prev", "Member", "Member ID", "SR", "ΔSR"]
+            headers = ["#", "prev", "Member", "Member ID", f"{sr_kind.capitalize()} SR", "ΔSR"]
             csv_file = StringIO()
             csv_writer = csv.writer(csv_file)
             csv_writer.writerow(headers)
@@ -2173,7 +2173,7 @@ class Orisa(Plugin):
                 table_lines = [line for line in table_lines if not line.startswith("├")]
 
 
-            # Split table into submessages, because a short "line" is visible after each message
+            # Split table into submessages, because a short gap is visible after each message
             # we want it to be in "nice" multiples
 
             ix = 0
@@ -2186,7 +2186,7 @@ class Orisa(Plugin):
                 send = chan.messages.send
                 # send = self.client.application_info.owner.send
                 await send(
-                    f"Hello! Here are the current SR highscores for {type_class.blizzard_url_type.upper()}. If a member has more than one "
+                    f"Hello! Here are the current SR highscores for **{sr_kind.capitalize()}** on {type_class.blizzard_url_type.upper()} . If a member has more than one "
                     f"{type_class.desc}, only the primary {type_class.desc} is considered. Players with "
                     "private profiles, or those that didn't do their placements this season yet "
                     "are not shown."
@@ -2199,7 +2199,7 @@ class Orisa(Plugin):
 
                 await chan.messages.upload(
                     csv_file,
-                    filename=f"ranking {type_class.blizzard_url_type.upper()} {pendulum.now().to_iso8601_string()[:10]}.csv",
+                    filename=f"ranking_{sr_kind}_{type_class.blizzard_url_type.upper()}_{pendulum.now().to_iso8601_string()[:10]}.csv",
                 )
             except Exception:
                 logger.exception("unable to send top players to guild %i", guild_id)
@@ -2215,10 +2215,11 @@ class Orisa(Plugin):
 
     async def _sync_handle(self, session, handle):
         try:
-            sr, image = await get_sr(handle)
+            srs, images = await get_sr(handle)
         except UnableToFindSR:
             logger.debug(f"No SR for {handle}, oh well...")
-            sr = rank = image = None
+            srs = TDS(None, None, None)
+            images = [None]*3
         except Exception:
             handle.error_count += 1
             # we need to update the last_update pseudo-column
@@ -2228,10 +2229,10 @@ class Orisa(Plugin):
             logger.exception(f"Got exception while requesting {handle.handle}")
             raise
         handle.error_count = 0
-        handle.update_sr(sr)
-        await self._handle_new_sr(session, handle, sr, image)
+        handle.update_sr(srs)
+        await self._handle_new_sr(session, handle, srs, images)
 
-    async def _handle_new_sr(self, session, handle, sr, image):
+    async def _handle_new_sr(self, session, handle, srs, images):
         try:
             await self._update_nick(handle.user)
         except HierarchyError:
@@ -2244,38 +2245,37 @@ class Orisa(Plugin):
                 handle.user.last_problematic_nickname_warning = datetime.utcnow()
                 msg = "*To avoid spamming you, I will only send out this warning once per week*\n"
                 msg += f"Hi! I just tried to update your nickname, but the result '{e.nickname}' would be longer than 32 characters."
-                if handle.user.format == "%s":
+                if handle.user.format == "$sr":
                     msg += "\nPlease shorten your nickname."
                 else:
-                    msg += "\nTry to use the %s format (you can type `!ow format %s` into this DM channel, or shorten your nickname."
+                    msg += "\nTry to use the $sr format (you can type `!ow format $sr` into this DM channel), or shorten your nickname."
                 msg += "\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience."
                 discord_user = await self.client.get_user(handle.user.discord_id)
                 await discord_user.send(msg)
 
             # we can still do the rest, no need to return here
-        rank = handle.rank
-        if rank is not None:
-            user = handle.user
 
-            # get highest SR, but exclude current_sr
-            session.flush()
-            prev_highest_sr_value = session.query(func.max(SR.value)).filter(
-                SR.handle == handle, SR.id != handle.current_sr_id
-            )
-            prev_highest_sr = (
-                session.query(SR)
-                .filter(SR.value == prev_highest_sr_value)
-                .order_by(desc(SR.timestamp))
-                .first()
-            )
+        for role_ix, rank, sr, type_to_check, image in zip(range(3), handle.rank, srs, [SR.tank, SR.damage, SR.support], images):
 
-            logger.debug(f"prev_sr {prev_highest_sr} {handle.current_sr.value}")
-            if prev_highest_sr and rank > prev_highest_sr.rank:
-                logger.debug(
-                    f"user {user} old rank {prev_highest_sr.rank}, new rank {rank}, sending congrats..."
+            if rank is not None:
+                # get highest SR, but exclude current_sr
+                session.flush()
+                prev_highest_sr_value = session.query(func.max(type_to_check)).filter(
+                    SR.handle == handle, SR.id != handle.current_sr_id
                 )
-                await self._send_congrats(user, rank, image)
-                user.highest_rank = rank
+                prev_highest_sr = (
+                    session.query(SR)
+                    .filter(type_to_check == prev_highest_sr_value)
+                    .order_by(desc(SR.timestamp))
+                    .first()
+                )
+
+                logger.debug(f"prev_sr {role_ix} {prev_highest_sr} {rank}")
+                if prev_highest_sr and rank > sr_to_rank(prev_highest_sr.values[role_ix]):
+                    logger.debug(
+                        f"handle {handle} role {role_ix} old SR {prev_highest_sr}, new rank {rank}, sending congrats..."
+                    )
+                    await self._send_congrats(handle, role_ix, sr, rank, image)
 
     async def _sync_handles_from_channel(self, channel):
         first = True
@@ -2376,8 +2376,9 @@ class Orisa(Plugin):
         prev_date = datetime.utcnow() - timedelta(days=1)
 
         with self.database.session() as session:
-            await self._top_players(session, prev_date, BattleTag)
-            await self._top_players(session, prev_date, Gamertag)
+            for type in [BattleTag, Gamertag]:
+                for kind in "tank damage support".split():
+                    await self._top_players(session, prev_date, type, kind)
 
     async def _web_server(self):
         config = hypercorn.config.Config()
