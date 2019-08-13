@@ -1393,7 +1393,7 @@ class Orisa(Plugin):
                     for handle in user.handles:
                         df = pd.DataFrame.from_records(
                             [(sr.timestamp, sr.tank, sr. damage, sr.support) for sr in handle.sr_history], 
-                            columns=["Timestamp", "Tank", "Damage", "Support"]
+                            columns=["Timestamp", "Tank", "Damage", "Support"],
                         )
                         df.to_excel(xls_wr, sheet_name=handle.handle, index=False)
                         xls_wr.sheets[handle.handle].column_dimensions['A'].width = 25
@@ -1428,6 +1428,14 @@ class Orisa(Plugin):
             return
 
         data = pd.DataFrame.from_records(reversed(data), columns=["timestamp", "Tank", "Damage", "Support"], index="timestamp")
+
+        for row in ["Tank", "Damage", "Support"]:
+            if data[row].isnull().all():
+                data.drop(row, axis=1, inplace=True)
+
+        if len(data.columns) == 0:
+            await reply(ctx, "I have no SR for your account stored yet.")
+            return
 
         if date:
             try:
