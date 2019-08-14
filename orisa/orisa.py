@@ -436,7 +436,7 @@ class Orisa(Plugin):
                 else:
                     return ""
             
-            return " | ".join(single_sr(ROLE_EMOJIS[ix], val) for ix, val in enumerate(sr))
+            return " | ".join(single_sr(ROLE_EMOJIS[ix], val) for ix, val in enumerate(sr) if val)
 
         member_given = member is not None
         if not member_given:
