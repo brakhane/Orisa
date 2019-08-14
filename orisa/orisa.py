@@ -427,7 +427,7 @@ class Orisa(Plugin):
     async def ow(self, ctx, *, member: Member = None):
         def format_sr(handle):
             sr = handle.sr
-            if not sr:
+            if not sr or not any(sr):
                 return "—"
 
             def single_sr(symbol, sr):
@@ -436,7 +436,7 @@ class Orisa(Plugin):
                 else:
                     return ""
             
-            return "".join(single_sr(ROLE_EMOJIS[ix], val) for ix, val in enumerate(sr))
+            return " | ".join(single_sr(ROLE_EMOJIS[ix], val) for ix, val in enumerate(sr))
 
         member_given = member is not None
         if not member_given:
@@ -485,8 +485,8 @@ class Orisa(Plugin):
                         name="SRs" if multiple_handles else "SR", value=sr_value
                     )
 
-                if primary.sr is not None and primary.sr.tank and primary.sr.damage and primary.sr.support:
-                    embed.colour = COLORS[sr_to_rank((primary.sr.tank + primary.sr.damage + primary.sr.support)/3)]
+                if primary.sr is not None:
+                    embed.colour = COLORS[sr_to_rank(np.nanmean(np.array([primary.sr.tank, primary.sr.damage, primary.sr.support], dtype=float)))]
 
                 if user.roles:
                     embed.add_field(name="Roles", value=user.roles.format())
