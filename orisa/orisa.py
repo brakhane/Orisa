@@ -2399,7 +2399,13 @@ class Orisa(Plugin):
         web.orisa = self
 
         logger.info("Starting web server")
-        await hypercorn.trio.serve(web.app, config)
+        while True:
+            try:
+                await hypercorn.trio.serve(web.app, config)
+            except Exception:
+                logger.exception("hypercorn crashed!")
+            logger.error("hypercorn serve stopped, restarting in 10s...")
+            await trio.sleep(10)
 
     async def _oauth_result_listener(self):
         async for uid, type, data in self.web_recv_ch:
