@@ -500,10 +500,13 @@ class Orisa(Plugin):
                     )
                 )
 
-                if multiple_handles:
-                    footer_text = f"The SR of the primary {user.handles[0].desc} was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
+                if primary.last_update:
+                    if multiple_handles:
+                        footer_text = f"The SR of the primary {user.handles[0].desc} was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
+                    else:
+                        footer_text = f"The SR was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
                 else:
-                    footer_text = f"The SR was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
+                    footer_text = ""
 
                 if member == ctx.author and member_given:
                     footer_text += "\nBTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough"
