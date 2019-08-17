@@ -117,6 +117,8 @@ from .utils import (
 )
 from . import web
 
+_ = lambda x: x
+N_ = lambda x: x
 
 logger = logging.getLogger("orisa")
 
@@ -127,10 +129,47 @@ SUPPORT_DISCORD="https://discord.gg/tsNxvFh"
 VOTE_LINK="https://discordbots.org/bot/445905377712930817/vote"
 DONATE_LINK="https://ko-fi.com/R5R2PC36"
 
-RANKS = ("Br", "Si", "Go", "Pt", "Dm", "Ma", "GM")
-FULL_RANKS = ("Bronze", "Silver", "Gold", "Platinum", "Diamond", "Master", "Grandmaster")
+RANKS = (
+    # 2 letter code for "Bronze" rank
+    N_("Br"), 
+    # 2 letter code for "Silver" rank
+    N_("Si"), 
+    # 2 letter code for "Gold" rank
+    N_("Go"), 
+    # 2 letter code for "Platinum" rank
+    N_("Pt"), 
+    # 2 letter code for "Diamond" rank
+    N_("Dm"), 
+    # 2 letter code for "Master" rank
+    N_("Ma"), 
+    # 2 letter code for "Grandmaster" rank
+    N_("GM")
+)
+FULL_RANKS = (
+    # SR rank
+    N_("Bronze"), 
+    # SR rank
+    N_("Silver"), 
+    # SR rank
+    N_("Gold"), 
+    # SR rank
+    N_("Platinum"), 
+    # SR rank
+    N_("Diamond"), 
+    # SR rank
+    N_("Master"), 
+    # SR rank
+    N_("Grandmaster")
+)
 
-ROLE_NAMES = 'Tank Damage Support'.split()
+ROLE_NAMES = [
+    # Role
+    N_('Tank'),
+    # Role
+    N_('Damage'),
+    # Role
+    N_('Support'),
+]
 
 COLORS = (
     0xCD7E32,  # Bronze
@@ -180,9 +219,6 @@ class Orisa(Plugin):
     SYMBOL_TANK = "\N{SHIELD}"
     SYMBOL_SUPPORT = (
         "\N{VERY HEAVY GREEK CROSS}"
-    )
-    SYMBOL_FLEX = (
-        "\N{ANTICLOCKWISE DOWNWARDS AND UPWARDS OPEN CIRCLE ARROWS}"
     )
 
     # dirty hack needed for correct_channel condition
@@ -533,46 +569,53 @@ class Orisa(Plugin):
     async def about(self, ctx):
         embed = Embed(
             title="About Me",
-            description=(
+            description=( _(
                 "I am an open source Discord bot to help manage Overwatch Discord communities.\n"
                 "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord) and licensed under the "
-                "[GNU Affero General Public License 3.0](https://www.gnu.org/licenses/agpl-3.0.en.html); the "
-                "[development is done on Github](https://github.com/brakhane/Orisa)"
+                "[GNU Affero General Public License 3.0]({AGPL_LINK}); the "
+                "[development is done on Github]({GH_LINK})").format(
+                    AGPL_LINK="https://www.gnu.org/licenses/agpl-3.0.en.html", 
+                    GH_LINK="https://github.com/brakhane/Orisa"
+                )
             ),
         )
         embed.add_field(
-            name="Invite me to your own Discord",
-            value=(
-                "To invite me to your server, simply [click here](https://wur.st/bot/ever/invite), I will post a message with more information in a channel after I have joined your server"
+            name=_("Invite me to your own Discord"),
+            value=( _(
+                "To invite me to your server, simply [click here]({LINK}), I will post a message with more "
+                "information in a channel after I have joined your server"
+                ).format(LINK="https://wur.st/bot/ever/invite")
             ),
         )
         embed.add_field(
-            name="Join the official Orisa Discord",
+            name=_("Join the official Orisa Discord"),
             value=(
-                f"If you use me in your Discord server, or generally have suggestions, [join the official Orisa Discord]({SUPPORT_DISCORD}). Updates and new features "
-                "will be discussed and announced there"
+                _("If you use me in your Discord server, or generally have suggestions, [join the official Orisa Discord]({SUPPORT_DISCORD}). Updates and new features "
+                "will be discussed and announced there").format(SUPPORT_DISCORD=SUPPORT_DISCORD)
             ),
         )
         embed.add_field(
-            name="Show your love :heart:",
+            name=_("Show your love :heart:"),
             value=(
-                f"If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
+                _("If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK}).").format(DONATE_LINK=DONATE_LINK)
             )
         )
         await ctx.author.send(content=None, embed=embed)
         if not ctx.channel.private:
-            await reply(ctx, "I've sent you a DM")
+            await reply(ctx, _("I've sent you a DM"))
 
     @ow.subcommand()
     async def config(self, ctx, guild_id: int = None):
         is_owner = ctx.author == ctx.bot.application_info.owner
         if ctx.channel.private and not is_owner:
             await ctx.channel.messages.send(
-                content="The config command must be issued from a channel of the server you want to configure. "
-                "Don't worry, I will send you the config instructions as a DM, so others can't configure me just by watching you sending this command.",
+                content= _(
+                    "The config command must be issued from a channel of the server you want to configure. "
+                    "Don't worry, I will send you the config instructions as a DM, so others can't configure me just by watching you sending this command."
+                ),
                 embed=Embed(
-                    title="Tip",
-                    description="`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin only channel",
+                    title=_("Tip"),
+                    description=_("`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin only channel"),
                 ),
             )
             return
@@ -581,12 +624,14 @@ class Orisa(Plugin):
             role.name.lower() == "orisa admin" for role in ctx.author.roles
         ):
             help_embed=Embed(
-                title=":thinking: Need help?",
-                description=f"Join the [Support Discord]({SUPPORT_DISCORD})"
+                #NOTE: :thinking: must remain as is, it's an emoji
+                title=_(":thinking: Need help?"),
+                description=_("Join the [Support Discord]({SUPPORT_DISCORD})").format(SUPPORT_DISCORD=SUPPORT_DISCORD)
             )
             await reply(
                 ctx,
-                "This command can only be used by members with the `Orisa Admin` role (only the name of the role is important, it doesn't need any permissions)"
+                #NOTE: "Orisa Admin" must not be translated; additionally explaining what the string "Orisa Admin" means is ok
+                _("This command can only be used by members with the `Orisa Admin` role (only the name of the role is important, it doesn't need any permissions)")
             )
             try:
                 await ctx.channel.messages.send(content=None, embed=help_embed)
@@ -603,20 +648,22 @@ class Orisa(Plugin):
             token = web.create_token(ctx.guild.id)
 
         embed = Embed(
-            title="Click here to configure me", url=f"{WEB_APP_PATH}config/{token}"
+            title=_("Click here to configure me"), url=f"{WEB_APP_PATH}config/{token}"
         )
         embed.add_field(
-            name=":thinking: Need help?",
-            value=f"Join the [Support Discord]({SUPPORT_DISCORD})"
+            # :thinking: is an emoji code
+            name=_(":thinking: Need help?"),
+            value=_("Join the [Support Discord]({SUPPORT_DISCORD})").format(SUPPORT_DISCORD=SUPPORT_DISCORD)
         )
-        embed.set_footer(text="This link will be valid for 30 minutes")
+        embed.set_footer(text=_("This link will be valid for 30 minutes"))
         try:
             await ctx.author.send(content=None, embed=embed)
-            await reply(ctx, "I sent you a DM")
+            await reply(ctx, _("I sent you a DM"))
         except Forbidden:
             await reply(ctx,
-            "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. (I can't post the link here because "
-            "everybody who knows that link will be able to configure me for the next 30 minutes)")
+                _("I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. (I can't post the link here because "
+                "everybody who knows that link will be able to configure me for the next 30 minutes)"
+            ))
 
 
     @ow.subcommand()
@@ -625,28 +672,30 @@ class Orisa(Plugin):
         user_id = ctx.message.author_id
 
         if "#" in type:
-            await reply(ctx, f"{type} looks like a BattleTag and not like pc/xbox, assuming you meant just `!ow register`...")
+            await reply(ctx, _("{type} looks like a BattleTag and not like pc/xbox, assuming you meant just `!ow register`...").format(type=type))
             type = "pc"
 
         if type == "pc":
             client = WebApplicationClient(OAUTH_BLIZZARD_CLIENT_ID)
             oauth_url = "https://eu.battle.net/oauth/authorize"
             scope = []
-            description=(
+            description=( _(
                 "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click "
                 "the link above and give me permission to access your data. I only need this permission once, you can remove it "
-                "later in your BattleNet account."
+                "later in your BattleNet account." 
+                )
             )
         elif type == "xbox":
             client = WebApplicationClient(OAUTH_DISCORD_CLIENT_ID)
             oauth_url = "https://discordapp.com/oauth2/authorize"
             scope = ["connections"]
-            description=(
+            description=( _(
                 "To complete your registration, I need your permission to ask Discord for your Gamertag. Please click "
                 "the link above and give me permission to access your data. Make sure you have linked your Xbox account to Discord."
+                )
             )
         else:
-            await reply(ctx, f'Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet.')
+            await reply(ctx, _('Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet.').format(type=type))
             return
 
         state = OAUTH_SERIALIZER.dumps((type, user_id))
@@ -658,30 +707,37 @@ class Orisa(Plugin):
         )
         embed = Embed(
             url=url,
-            title=f"Click here to register your {type.upper()} account",
+            title=_("Click here to register your {type} account").format(type=type.upper()),
             description=description
         )
         if type == "pc":
             embed.add_field(
-                name=":information_source: Protip",
-                value="If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
-                "account data for that account instead.",
+                # :information_source: is an emoji
+                name=_(":information_source: Protip"),
+                value=_("If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
+                "account data for that account instead."),
             )
             embed.add_field(
-                name=":video_game: Not on PC?",
-                value="If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future."
+                # :video_game: is an emoji
+                name=_(":video_game: Not on PC?"),
+                value=_("If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future.")
             )
         embed.set_footer(
-            text="By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy"
+            # The privacy policy is currently only available in English
+            text=_("By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy")
         )
 
         try:
             await ctx.author.send(content=None, embed=embed)
         except Forbidden:
-            await reply(ctx, 'I\'m not allowed to send you a DM. Please right click on the Discord server, select Privacy Settings, and enable "Allow direct messages from server members." Then try again.')
+            await reply(ctx, 
+                # Check how Discord translates "Allow direct messages from server members" in your local language and use the same term
+                _('I\'m not allowed to send you a DM. Please right click on the Discord server, '
+                  'select Privacy Settings, and enable "Allow direct messages from server members." Then try again.')
+            )
         else:
             if not ctx.channel.private:
-                await reply(ctx, "I sent you a DM with instructions.")
+                await reply(ctx, _("I sent you a DM with instructions."))
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -691,7 +747,7 @@ class Orisa(Plugin):
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(
-                    ctx, "You are not registered, there's nothing for me to do."
+                    ctx, _("You are not registered, there's nothing for me to do.")
                 )
                 return
 
@@ -702,16 +758,17 @@ class Orisa(Plugin):
                 return
             if index == 0:
                 await reply(
-                    ctx,
-                    "You cannot unregister your primary handle. Use `!ow setprimary` to set a different primary first, or "
-                    "use `!ow forgetme` to delete all your data.",
+                    ctx, _(
+                        "You cannot unregister your primary handle. Use `!ow setprimary` to set a different primary first, or "
+                        "use `!ow forgetme` to delete all your data."
+                    )
                 )
                 return
 
             removed = user.handles.pop(index)
             handle = removed.handle
             session.commit()
-            await reply(ctx, f"Removed **{handle}**")
+            await reply(ctx, _("Removed **{handle}**").format(handle=handle))
             await self._update_nick_after_secondary_change(ctx, user)
 
         finally:
@@ -725,13 +782,13 @@ class Orisa(Plugin):
         except NicknameTooLong as e:
             await reply(
                 ctx,
-                f'However, your new nickname "{e.nickname}" is now longer than 32 characters, which Discord doesn\'t allow. '
-                "Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards.",
+                _('However, your new nickname "{nickname}" is now longer than 32 characters, which Discord doesn\'t allow. '
+                "Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards.").format(nickname=e.nickname),
             )
         except:
             await reply(
                 ctx,
-                "However, there was an error updating your nickname. I will try that again later.",
+                _("However, there was an error updating your nickname. I will try that again later."),
             )
         with suppress(HierarchyError):
             await self._update_nick(user)
@@ -743,7 +800,7 @@ class Orisa(Plugin):
         try:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, "You are not registered. Use `!ow register` first.")
+                await reply(ctx, _("You are not registered. Use `!ow register` first."))
                 return
             try:
                 index = resolve_handle_or_index(user, handle_or_index)
@@ -753,6 +810,7 @@ class Orisa(Plugin):
             if index == 0:
                 await reply(
                     ctx,
+### CONTINUE HERE I18N                    
                     f'"{user.handles[0].handle}" already is your primary {user.handles[0].desc}. *Going back to sleep*',
                 )
                 return
@@ -813,31 +871,40 @@ class Orisa(Plugin):
                     )
                     session.rollback()
                 else:
-                    titles = [
-                        "Smarties Expert",
-                        "Bread Scientist",
-                        "Eternal Bosom of Hot Love",
-                        "Sith Lord of Security",
-                        "Namer of Clouds",
-                        "Scourge of Beer Cans",
-                        "Muse of Jeff Kaplan",
-                        "Shredded Cheese Authority",
-                        "MILF Commander",
-                        "Cunning Linguist",
-                        "Pork Rind Expert",
-                        "Dinosaur Supervisor",
-                        "Galactic Viceroy of C9",
-                        "Earl of Bacon",
-                        "Dean of Pizza",
-                        "Duke of Tacos",
-                        "Retail Jedi",
-                        "Pornography Historian",
-                    ]
+                    # A list of random silly titles that will be shown in the confirmation message when a user changed his nickname format. 
+                    # Most of them were found on the Internet, for example
+                    # "Eternal Bosom of Hot Love" is one of Kim Jong-Il's official titles.
+                    # One title per line, you can replace it with different titles, the number of
+                    # titles can be different than the english one, but must contain at least one entry.
+                    # Keep the titles funny and not insulting! Nobody wants to be called an asshole when he used ow format.
+                    # You can also leave the list untranslated.
+                    titles = _("""\
+Smarties Expert
+Bread Scientist
+Eternal Bosom of Hot Love
+Sith Lord of Security
+Namer of Clouds
+Scourge of Beer Cans
+Muse of Jeff Kaplan
+Shredded Cheese Authority
+MILF Commander
+Cunning Linguist
+Pork Rind Expert
+Dinosaur Supervisor
+Galactic Viceroy of C9
+Earl of Bacon
+Dean of Pizza
+Duke of Tacos
+Retail Jedi
+Pornography Historian""").split("\n")
                     # reset if SR should not be shown normally
                     await self._update_nick(user)
                     await reply(
                         ctx,
-                        f'Done. Henceforth, ye shall be knownst as "`{new_nick}`, {random.choice(titles)}."',
+                        # Unlike other messages, keep this message overly formal and archaic sounding to keep a funny contrast to the silly title that will be "given" to the user. 
+                        # So, unlike in all the other messages, if your language has a concept of "formal" vs "familiar" you, use the formal you here.
+                        # {title} is taken from the list of random titles
+                        _('Done. Henceforth, ye shall be knownst as "`{new_nick}`, {title}').format(new_nick=new_nick, title=random.choice(titles))
                     )
         finally:
             session.commit()
@@ -849,7 +916,7 @@ class Orisa(Plugin):
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, "you are not registered")
+                await reply(ctx, _("you are not registered"))
                 return
             new_setting = param != "off"
             user.always_show_sr = new_setting
@@ -858,9 +925,9 @@ class Orisa(Plugin):
 
         msg = "Done. "
         if new_setting:
-            msg += "Your nick will be updated even when you are not in an OW voice channel. Use `!ow alwaysshowsr off` to turn it off again"
+            msg += _("Your nick will be updated even when you are not in an OW voice channel. Use `!ow alwaysshowsr off` to turn it off again.")
         else:
-            msg += "Your nick will only be updated when you are in an OW voice channel. Use `!ow alwaysshowsr on` to always update your nick"
+            msg += _("Your nick will only be updated when you are in an OW voice channel. Use `!ow alwaysshowsr on` to always update your nick.")
         await reply(ctx, msg)
 
     @ow.subcommand()
@@ -871,7 +938,7 @@ class Orisa(Plugin):
             logger.info(f"{ctx.author.id} used forceupdate")
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, "you are not registered")
+                await reply(ctx, _("you are not registered"))
             else:
                 fault = False
                 async with ctx.channel.typing:
@@ -887,14 +954,14 @@ class Orisa(Plugin):
                 if fault:
                     await reply(
                         ctx,
-                        "There were some problems updating your SR. Try again later.",
+                        _("There were some problems updating your SR. Try again later."),
                     )
                 else:
                     await reply(
                         ctx,
-                        f"OK, I have updated your data. Your (primary) SR is now {user.handles[0].sr}. "
+                        _("OK, I have updated your data. Your (primary) SR is now {sr}. "
                         "If that is not correct, you need to log out of Overwatch once and try again; your "
-                        "profile also needs to be public for me to track your SR.",
+                        "profile also needs to be public for me to track your SR.").format(sr=user.handles[0].sr)
                     )
         finally:
             session.commit()
@@ -922,12 +989,12 @@ class Orisa(Plugin):
                 except Exception:
                     logger.exception("Some problems while resetting nicks")
                 session.delete(user)
-                await reply(ctx, f"OK, deleted {ctx.author.name} from database")
+                await reply(ctx, _("OK, deleted {name} from database").format(name=ctx.author.name))
                 session.commit()
             else:
                 await reply(
                     ctx,
-                    "you are not registered anyway, so there's nothing for me to forget...",
+                    _("you are not registered anyway, so there's nothing for me to forget..."),
                 )
         finally:
             session.close()
@@ -959,7 +1026,7 @@ class Orisa(Plugin):
         }
 
         roles = Role.NONE
-
+# I18N CONT
         if roles_str is None:
             await reply(
                 ctx,
