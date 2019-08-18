@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
-"PO-Revision-Date: 2019-08-18 12:40+0000\n"
-"Last-Translator: AIERKUCHEN <xaierkuchenx@gmail.com>\n"
+"PO-Revision-Date: 2019-08-18 14:51+0000\n"
+"Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -113,7 +113,7 @@ msgstr "Tank"
 #. Short for Discord Nickname
 #: orisa/orisa.py:489
 msgid "Nick"
-msgstr "Nick"
+msgstr "Nickname"
 
 #. When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
 #: orisa/orisa.py:513
@@ -159,8 +159,8 @@ msgid ""
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough"
 msgstr ""
 "\n"
-"Übrigens, Sie brauchen ihren Discordnamen nicht anzugeben, wenn Sie ihren "
-"eigenen BattleTag meinen; einfach !ow reicht"
+"Übrigens, Du brauchst deinen Discordnamen nicht anzugeben, wenn Du deinen "
+"eigenen BattleTag meinst; !ow alleine reicht aus"
 
 #. "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:562
@@ -443,7 +443,7 @@ msgstr "Formatzeichenfolge fehlt"
 
 #: orisa/orisa.py:873
 msgid "you must register first"
-msgstr "Sie müssen sich zuerst registrieren"
+msgstr "Du musst dich zuerst registrieren"
 
 #: orisa/orisa.py:881
 #, python-brace-format
@@ -919,7 +919,7 @@ msgstr ""
 #. header for highscore table: position (keep it short)
 #: orisa/orisa.py:2289
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #. header for highscore table: previous position (keep it short)
 #: orisa/orisa.py:2291
@@ -929,32 +929,40 @@ msgstr ""
 #. header for highscore table: member name
 #: orisa/orisa.py:2293
 msgid "Member"
-msgstr ""
+msgstr "Mitglied"
 
 #. header for highscore table: member discord id
 #: orisa/orisa.py:2295
 msgid "Member ID"
-msgstr ""
+msgstr "Mitglieds-ID"
 
 #. header for highscore table: SR
 #: orisa/orisa.py:2297
 #, python-brace-format
 msgid "{role} SR"
-msgstr ""
+msgstr "{role} SR"
 
 #. header for highscore table: SR difference
 #: orisa/orisa.py:2299
+#, fuzzy
 msgid "ΔSR"
-msgstr ""
+msgstr "ΔSR"
 
 #: orisa/orisa.py:2335
 #, python-brace-format
 msgid "Hello! Here are the current SR highscores for **{role}** on {platform} . If a member has more than one {handle_type}, only the primary {handle_type} is considered. Players with private profiles, or those that didn't do their placements this season yet are not shown."
 msgstr ""
+"Hallo! Hier ist die aktuelle SR Tabelle für **{role}** auf **{platform}**. "
+"Wenn ein Mitglied mehr als ein {handle_type} hat, wird nur der "
+"Haupt-{handle_type} berücksichtigt. Nicht auf dieser Liste sind Spieler mit "
+"privaten Profilen, oder solche, die noch nicht ihre Platzierungsspiele für "
+"diese Saison abgeschlossen haben."
 
 #: orisa/orisa.py:2392
 msgid "*To avoid spamming you, I will only send out this warning once per week*\n"
 msgstr ""
+"*Um Dich nicht zuzuspammen, sende ich dir diese Warnung nur einmal pro Woche*"
+"\n"
 
 #: orisa/orisa.py:2393
 #, python-brace-format
@@ -982,66 +990,90 @@ msgid ""
 "\n"
 "Your nickname cannot be updated until this is done. I'm sorry for the inconvenience."
 msgstr ""
+"\n"
+"Ich kann deinen Nickname nicht aktualisieren, solange dies not noch nicht "
+"getan ist. Ich entschuldige mich für die Unannehmlichkeiten."
 
 #: orisa/orisa.py:2571
 msgid "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` to register an XBOX account."
 msgstr ""
+"Es tut mir leid, es sieht so aus, als ob du kein BattleTag hast. Benutze `"
+"!ow register xbox`, um einen XBOX Account zu registrieren."
 
 #: orisa/orisa.py:2587
 msgid "I couldn't find a XBox account linked to your Discord. Please link your XBox account to Discord and try again. (Unfortunately, I cannot ask XBL directly for the information)"
 msgstr ""
+"Leider konnte ich keinen mit Discord verknüften XBox-Account finden. Bitte "
+"verknüpfe deinen XBox-Account mit Discord und versuche es erneut. (Leider "
+"kann ich XBL nicht direkt nach deinem Accountnamen fragen)"
 
 #. type will be BattleTag or GamerTag, and it must be transformed into plural
 #: orisa/orisa.py:2609
 #, python-brace-format
 msgid "OK. People can now ask me for your {type}s **{handles}**, and I will keep track of your SR."
 msgstr ""
+"OK. Leute können mich jetzt nach deinen {type}s **{handles}** fragen, und "
+"ich werde deine SR im Auge behalten."
 
 #: orisa/orisa.py:2613
 #, python-brace-format
 msgid "OK. People can now ask me for your {type} **{handle}**, and I will keep track of your SR."
 msgstr ""
+"OK. Leute können mich jetzt nach deinem {type} **{handle}** fragen und ich "
+"werde deine SR im Auge behalten."
 
 #: orisa/orisa.py:2619
 msgid "Registration successful"
-msgstr ""
+msgstr "Registrierung erfolgreich"
 
 #: orisa/orisa.py:2623
 msgid ":information_source: Pro Tips"
-msgstr ""
+msgstr ":information_source: Pro-Tipps"
 
 #: orisa/orisa.py:2624
 msgid ""
 "On some servers, I will only update your nick if you join a OW voice channel. If you want your nick to always show your SR, use the `!ow alwaysshowsr` command. If you want me to show your rank instead of your SR, use `!ow format $rank`.\n"
 "If you have more than one account, simply issue `!ow register` again.\n"
 msgstr ""
+"Auf einigen Servern werde ich deinen Nicknamen nur aktualieren, solange du "
+"dich in einem OW Sprachkanal des Servers befindest. Wenn du auch auf diesen "
+"Servern dein SR immer im Nicknamen haben möchtest, kannst du den `!ow "
+"alwaysshowsr` Befehl nutzen. Wenn du lieber deinen Rang als SR im Nick haben "
+"willst, nutzt `!ow format $rank`.\n"
+"Wenn du mehr als einen Account hast, wiederhole einfach`!ow register`.\n"
 
 #: orisa/orisa.py:2630
 #, python-brace-format
 msgid ":envelope: A message from the *{guild_name}* staff"
 msgstr ""
+":envelope: Eine Nachricht von den Moderatoren des *{guild_name}* Servers"
 
 #. type is battletag or gamertag
 #: orisa/orisa.py:2644
 #, python-brace-format
 msgid "{type} updated"
-msgstr ""
+msgstr "{type} aktualisiert"
 
 #: orisa/orisa.py:2645
 #, python-brace-format
 msgid "It seems like your {type} changed from *{old_handle}* to *{new_handle}*. I have updated my database."
 msgstr ""
+"Es sieht so aus, als ob sich dein {type} von *{old_handle}* auf "
+"*{new_handle}* geändert hat. Ich habe meine Datenbank entsprechend "
+"aktualisiert."
 
 #. type is GamerTag or BattleTag
 #: orisa/orisa.py:2654
 #, python-brace-format
 msgid "{type} already registered"
-msgstr ""
+msgstr "Dieser {type} ist bereits registriert"
 
 #: orisa/orisa.py:2656
 #, python-brace-format
 msgid "You already registered the {type} *{handle}*, so there's nothing for me to do. *Sleep mode reactivated.*\n"
 msgstr ""
+"Du hast bereits den {type} *{handle}* bei mir registriert, somit gibt es "
+"nichts für mich zu tun. *Schlafmodus reaktiviert.*\n"
 
 #: orisa/orisa.py:2662
 msgid ":information_source: Tip"
@@ -1050,6 +1082,8 @@ msgstr ""
 #: orisa/orisa.py:2663
 msgid "Open the URL in a private/incognito tab next time, so you can enter the credentials of the account you want."
 msgstr ""
+"Öffne die URL nächstes Mal in einem privaten/inkognito Tab, damit du die "
+"Zugangsdaten für den Account, den du meinst eingeben kannst."
 
 #. type is GamerTag/BattleTag
 #: orisa/orisa.py:2673
@@ -1073,6 +1107,8 @@ msgstr ""
 #, python-brace-format
 msgid "Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later"
 msgstr ""
+"Es tut mir leid, aber es sieht so aus, als ob Blizzards Webseite aktuell ein "
+"paar Probleme hat ({e}), versuche es später noch einmal"
 
 #. :warning: is an emoji code
 #: orisa/orisa.py:2705
