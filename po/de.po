@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
 "PO-Revision-Date: 2019-08-18 12:40+0000\n"
-"Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
+"Last-Translator: AIERKUCHEN <xaierkuchenx@gmail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -209,7 +209,7 @@ msgid "To invite me to your server, simply [click here]({LINK}), I will post a m
 msgstr ""
 "Um mich zu deinem Server einzuladen, [klicke hier]({LINK}). Ich werde eine "
 "Nachricht mit mehr Informationen in einen Channel posten, nachdem ich deinem "
-"Server beigetreten bin."
+"Server beigetreten bin"
 
 #: orisa/orisa.py:605
 msgid "Join the official Orisa Discord"
@@ -304,8 +304,8 @@ msgstr ""
 #, python-brace-format
 msgid "{type} looks like a BattleTag and not like pc/xbox, assuming you meant just `!ow register`..."
 msgstr ""
-"{type} sieht aus wie ein BattleTag und nicht wie eine pc / xbox, "
-"vorausgesetzt du meinst nur \"! ow register\" ..."
+"{type} sieht wie ein BattleTag aus und nicht wie PC/XBOX, ich gehe davon aus "
+"das du `!ow register` meintest ..."
 
 #: orisa/orisa.py:698
 msgid "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click the link above and give me permission to access your data. I only need this permission once, you can remove it later in your BattleNet account."
