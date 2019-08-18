@@ -184,8 +184,9 @@ msgstr ""
 msgid "About Me"
 msgstr ""
 
+#. Feel free to add "the <language> translation was done by <name>"
 #: orisa/orisa.py:587
-#, python-brace-format
+#, python-brace-format, md-text
 msgid ""
 "I am an open source Discord bot to help manage Overwatch Discord "
 "communities.\n"
@@ -994,7 +995,7 @@ msgstr ""
 msgid "Member ID"
 msgstr ""
 
-#. header fdor highscore table: SR
+#. header for highscore table: SR
 #: orisa/orisa.py:2297
 #, python-brace-format
 msgid "{role} SR"
