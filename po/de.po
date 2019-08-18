@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
-"PO-Revision-Date: 2019-08-18 01:45+0000\n"
+"PO-Revision-Date: 2019-08-18 10:09+0000\n"
 "Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -156,25 +156,32 @@ msgid ""
 "\n"
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough"
 msgstr ""
+"\n"
+"Übrigens, Du brauchst deinen Discordnamen nicht anzugeben, wenn du dein "
+"eigenes BattleTag meinst; einfach !ow reicht"
 
 #. "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:562
 #, python-brace-format
 msgid "{member_name} not found in database! *Do you need a hug?*"
 msgstr ""
+"{member_name} wurde in der Datenbank nicht gefunden! *Möchtest Du, dass ich "
+"dich drücke?*"
 
 #. A headline for a tip for the user
 #: orisa/orisa.py:566
 msgid "Hint"
-msgstr ""
+msgstr "Tipp"
 
 #: orisa/orisa.py:567
 msgid "use `!ow register` to register, or `!ow help` for more info"
 msgstr ""
+"Schreib `!ow register` um Dich zu registrieren, oder `!ow help` für mehr "
+"Informationen"
 
 #: orisa/orisa.py:583
 msgid "About Me"
-msgstr ""
+msgstr "Über Mich"
 
 #. Feel free to add "the <language> translation was done by <name>"
 #: orisa/orisa.py:587
@@ -183,10 +190,16 @@ msgid ""
 "I am an open source Discord bot to help manage Overwatch Discord communities.\n"
 "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord) and licensed under the [GNU Affero General Public License 3.0]({AGPL_LINK}); the [development is done on Github]({GH_LINK})"
 msgstr ""
+"Ich bin ein Open Source Discord-Bot, der dabei hilft, Overwatch Discord "
+"Gemeinschaften zu managen.\n"
+"Ich werde entwickelt und gewartet von Dennis Brakhane (Joghurt#2732 in "
+"Discord) und bin under der [GNU Affero General Public License "
+"3.0]({AGPL_LINK}) lizenziert; die [Entwicklung findet auf GitHub "
+"statt]({GH_LINK})"
 
 #: orisa/orisa.py:597
 msgid "Invite me to your own Discord"
-msgstr ""
+msgstr "Lade mich zu Deinem Discord ein"
 
 #: orisa/orisa.py:599
 #, python-brace-format
