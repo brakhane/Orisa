@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
-"PO-Revision-Date: 2019-08-18 10:15+0000\n"
+"PO-Revision-Date: 2019-08-18 10:17+0000\n"
 "Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -426,7 +426,7 @@ msgstr "\"{handle}\" ist schon dein primärer {type}. *Ich leg mich wieder hin*"
 #: orisa/orisa.py:847
 #, python-brace-format
 msgid "Done. Your primary {type} is now **{handle}**."
-msgstr "Fertig. Ihr primärer {type} ist jetzt **{handle}**."
+msgstr "Fertig. Dein primärer {type} ist jetzt **{handle}**."
 
 #: orisa/orisa.py:858
 msgid "format string may not contain square brackets"
