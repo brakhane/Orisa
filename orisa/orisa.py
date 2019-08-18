@@ -1452,7 +1452,7 @@ class Orisa(Plugin):
                     "the format DD.MM.YY or YYYY-MM-DD",
                 )
 
-            data = data[data.timestamp >= date].reset_index(drop=True)
+            data = data[data.index >= date]
 
         fig, ax = plt.subplots()
 
