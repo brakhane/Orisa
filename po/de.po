@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
 "PO-Revision-Date: 2019-08-18 10:31+0000\n"
-"Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
+"Last-Translator: AIERKUCHEN <xaierkuchenx@gmail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -151,7 +151,7 @@ msgstr "Das SR von dem primären {type} wurde zuletzt {when} aktualisiert ."
 #: orisa/orisa.py:553
 #, python-brace-format
 msgid "The SR was last updated {when}."
-msgstr ""
+msgstr "Das SR wurde zuletzt am {when} aktualisiert."
 
 #: orisa/orisa.py:558
 msgid ""
