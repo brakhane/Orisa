@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
 "PO-Revision-Date: 2019-08-18 10:15+0000\n"
-"Last-Translator: AIERKUCHEN <xaierkuchenx@gmail.com>\n"
+"Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -250,13 +250,13 @@ msgstr ""
 #. A tip/information for a user
 #: orisa/orisa.py:632
 msgid "Tip"
-msgstr "Trinkgeld"
+msgstr "Tipp"
 
 #: orisa/orisa.py:633
 msgid "`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin only channel"
 msgstr ""
 "`! ow config` funktioniert in * jedem * Kanal (in dem ich natürlich "
-"Nachrichten lesen darf), Sie können also auch einen Nur-Administrator-Kanal "
+"Nachrichten lesen darf), Du kannst also auch einen Nur-Administrator-Kanal "
 "verwenden"
 
 #. :thinking: must remain as is, it's an emoji
@@ -295,10 +295,10 @@ msgstr "Ich habe dir eine PN gesendet"
 #: orisa/orisa.py:679
 msgid "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. (I can't post the link here because everybody who knows that link will be able to configure me for the next 30 minutes)"
 msgstr ""
-"Ich habe versucht, Ihnen einen PN mit dem Link zu senden, aber Sie haben DM "
-"von Servermitgliedern nicht zugelassen. Bitte erlauben Sie das und versuchen "
-"Sie es erneut. (Ich kann den Link hier nicht posten, da jeder, der diesen "
-"Link kennt, mich für die nächsten 30 Minuten konfigurieren kann.)"
+"Ich habe versucht, Dir einen PN mit dem Link zu senden, aber Du haben PN von "
+"Servermitgliedern nicht zugelassen. Bitte erlaube das und versuche es "
+"erneut. (Ich kann den Link hier nicht posten, da jeder, der diesen Link "
+"kennt, mich für die nächsten 30 Minuten konfigurieren kann.)"
 
 #: orisa/orisa.py:690
 #, python-brace-format
@@ -341,7 +341,7 @@ msgstr "Klicke hier um dein {type} Konto zu registrieren"
 #. :information_source: is an emoji
 #: orisa/orisa.py:732
 msgid ":information_source: Protip"
-msgstr ""
+msgstr ":information_source: Protipp"
 
 #: orisa/orisa.py:733
 msgid "If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the account data for that account instead."
@@ -374,10 +374,9 @@ msgstr ""
 #: orisa/orisa.py:751
 msgid "I'm not allowed to send you a DM. Please right click on the Discord server, select Privacy Settings, and enable \"Allow direct messages from server members.\" Then try again."
 msgstr ""
-"Ich darf dir keine PN schicken. Klicken Sie mit der rechten Maustaste auf "
-"den Discord-Server, wählen Sie \"Datenschutzeinstellungen\" und aktivieren "
-"Sie \"persönliche Nachrichten von Servermitgliedern zulassen\". Dann "
-"versuche es nochmal."
+"Ich darf dir keine DN schicken. Klicke mit der rechten Maustaste auf den "
+"Discord-Server, wähle \"Datenschutzeinstellungen\" und aktiviere \""
+"Direktnachrichten von Servermitgliedern erlauben\". Dann versuche es nochmal."
 
 #: orisa/orisa.py:756 orisa/orisa.py:1252
 msgid "I sent you a DM with instructions."
@@ -397,7 +396,7 @@ msgstr ""
 #: orisa/orisa.py:787
 #, python-brace-format
 msgid "Removed **{handle}**"
-msgstr "Entfernt**{handle}**"
+msgstr "Habe **{handle}** gelöscht"
 
 #: orisa/orisa.py:801
 #, python-brace-format
@@ -415,13 +414,13 @@ msgstr ""
 
 #: orisa/orisa.py:819
 msgid "You are not registered. Use `!ow register` first."
-msgstr "Sie sind nicht registriert. Benutzen sie `!ow register` zuerst."
+msgstr "Du bist nicht registriert. Benutze zuerst `!ow register`."
 
 #. handle will be the battletag/gamertag the user tried to register, type will be BattleTag or GamerTag
 #: orisa/orisa.py:830
 #, python-brace-format
 msgid "\"{handle}\" already is your primary {type}. *Going back to sleep*"
-msgstr "\"{handle}\" ist schon dein primärer {type}. *Geh wieder schlafen*"
+msgstr "\"{handle}\" ist schon dein primärer {type}. *Ich leg mich wieder hin*"
 
 #. handle will be the battletag/gamertag the user registered, type will be BattleTag or GamerTag
 #: orisa/orisa.py:847
