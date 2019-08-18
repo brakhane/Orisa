@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
-"PO-Revision-Date: 2019-08-18 01:10+0000\n"
+"PO-Revision-Date: 2019-08-18 01:45+0000\n"
 "Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -21,11 +21,11 @@ msgstr "Schaden"
 
 #: orisa/models.py:56
 msgid "Main Tank"
-msgstr ""
+msgstr "Main-Tank"
 
 #: orisa/models.py:57
 msgid "Off Tank"
-msgstr ""
+msgstr "Off-Tank"
 
 #. Role
 #: orisa/models.py:58 orisa/orisa.py:171 orisa/orisa.py:1502
@@ -137,9 +137,11 @@ msgid "Links"
 msgstr "Links"
 
 #: orisa/orisa.py:540
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})"
 msgstr ""
+"[Overwatch-Profil]({PROFILE_LINK}) | [Orisa liken]({VOTE_LINK}) | [Orisa "
+"Supportserver]({SUPPORT_DISCORD}) | [Spenden `{HEART}`]({DONATE_LINK})"
 
 #: orisa/orisa.py:551
 #, python-brace-format
