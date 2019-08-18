@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
-"PO-Revision-Date: 2019-08-18 14:51+0000\n"
-"Last-Translator: AIERKUCHEN <xaierkuchenx@gmail.com>\n"
+"PO-Revision-Date: 2019-08-18 15:28+0000\n"
+"Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -512,14 +512,15 @@ msgstr "Du bist nicht registriert"
 #: orisa/orisa.py:946
 msgid "Your nick will be updated even when you are not in an OW voice channel. Use `!ow alwaysshowsr off` to turn it off again."
 msgstr ""
-"Ihr Nickname wird aktualisiert sogar wenn Sie nicht in einem OW Sprachkanal "
-"sind. Nutze `!ow alwaysshowsr off` um es wieder auszuschalten."
+"Dein Nickname wird aktualisiert sogar wenn Du nicht in einem OW Sprachkanal "
+"befindest. Nutze `!ow alwaysshowsr off` um es wieder auszuschalten."
 
 #: orisa/orisa.py:948
 msgid "Your nick will only be updated when you are in an OW voice channel. Use `!ow alwaysshowsr on` to always update your nick."
 msgstr ""
-"Ihr Nickname wird aktualisiert nur wenn Sie in einem OW Sprachkanal sind. "
-"Nutze `!ow alwaysshowsr off` damit dein Nickname immer aktualisiert wird."
+"Dein Nickname wird nur aktualisiert, wenn du Dich in einem OW Sprachkanal "
+"befindest. Nutze `!ow alwaysshowsr off` damit dein Nickname immer "
+"aktualisiert wird."
 
 #: orisa/orisa.py:975
 msgid "There were some problems updating your SR. Try again later."
@@ -531,10 +532,10 @@ msgstr ""
 #, python-brace-format
 msgid "OK, I have updated your data. Your (primary) SR is now {sr}. If that is not correct, you need to log out of Overwatch once and try again; your profile also needs to be public for me to track your SR."
 msgstr ""
-"OK, ich habe Ihre Daten aktualisiert. Ihre (primäre) SR ist jetzt {sr}. Wenn "
-"dies nicht korrekt ist, müssen Sie sich einmal von Overwatch abmelden und es "
-"erneut versuchen. Ihr Profil muss auch öffentlich sein, damit ich Ihre SR "
-"nachverfolgen kann."
+"OK, ich habe Deine Daten aktualisiert. Dein (primäre) SR ist jetzt {sr}. "
+"Wenn dies nicht korrekt ist, musst Du dich einmal von Overwatch abmelden und "
+"es erneut versuchen. Dein Profil muss auch öffentlich sein, damit ich deine "
+"SR nachverfolgen kann."
 
 #: orisa/orisa.py:1010
 #, python-brace-format
@@ -676,7 +677,7 @@ msgid "Orisa's purpose"
 msgstr "Orisa's Zweck"
 
 #: orisa/orisa.py:1266
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "When joining a QP or Comp channel, you need to know the BattleTag of a channel member, or they need yours to add you. In competitive channels it also helps to know which SR the channel members have. To avoid having to ask for this information again and again when joining a channel, this bot was created. When you register with your BattleTag, your nick will automatically be updated to show your current SR and it will be kept up to date. You can also ask for other member's BattleTag, or request your own so others can easily add you in OW.\n"
 "It will also send a short message to the chat when you ranked up.\n"
@@ -687,28 +688,28 @@ msgid ""
 "If you want to use Orisa on your own server or help developing it, enter `!ow about`\n"
 "Parameters in [square brackets] are optional."
 msgstr ""
-"Wenn Sie einem QP- oder Comp-Kanal beitreten, müssen Sie den BattleTag eines "
-"Kanalmitglieds kennen, oder Sie müssen von Ihrem Mitglied hinzugefügt "
-"werden. In Competetive Kanälen hilft es auch zu wissen, welche SR die "
-"Kanalmitglieder haben. Um zu vermeiden, dass Sie beim Beitritt zu einem "
-"Kanal immer wieder nach diesen Informationen fragen müssen, wurde dieser Bot "
-"erstellt. Wenn Sie sich bei Ihrem BattleTag registrieren, wird Ihr Nick "
-"automatisch aktualisiert und zeigt Ihre aktuelle SR an und wird auf dem "
-"neuesten Stand gehalten. Sie können auch nach dem BattleTag eines anderen "
-"Mitglieds fragen oder Ihren eigenen anfordern, damit andere Sie ganz einfach "
+"Wenn Du einem Schnellsuche- oder Rangliste-Kanal beitreten willst, musst Du "
+"den BattleTag eines Kanalmitglieds kennen, oder Du musst von einem Mitglied "
+"hinzugefügt werden. In Rangliste-Kanälen hilft es auch zu wissen, welche SR "
+"die Kanalmitglieder haben. Um zu vermeiden, dass Du beim Beitritt zu einem "
+"Kanal immer wieder nach diesen Informationen fragen muss, wurde dieser Bot "
+"erstellt. Wenn Du dich mit Deinem BattleTag registrierst, wird Ihr Nickname "
+"automatisch aktualisiert und zeigt Deine aktuelle SR an und wird auf dem "
+"neuesten Stand gehalten. Du kannst auch nach dem BattleTag eines anderen "
+"Mitglieds fragen oder Dein eigenes anfragen, damit andere Dich anz einfach "
 "zu OW hinzufügen können.\n"
-"Es wird auch eine kurze Nachricht an den Chat gesendet, wenn Sie ein Ranking "
-"erstellt haben.\n"
-"*Wie Orisa von Overwatch ist dieser Bot noch recht jung und in dieser "
-"Hinsicht noch neu. Melden Sie Probleme an <@!{OWNER}>*\n"
+"Orisa wird auch eine kurze Nachricht an den Chat senden, wenn Du einen Rang "
+"aufsteigst.\n"
+"*Wie Orisa von Overwatch ist dieser Bot noch recht jung und in unerfahren. "
+"Melden Sie Probleme an <@!{OWNER}>*\n"
 "\n"
-"**Die Befehle funktionieren nur in den <#{channel_id}> Kanal oder indem du "
+"**Die Befehle funktionieren nur in den <#{channel_id}> Kanal oder indem Du "
 "mir eine PN schickst**\n"
-"Wenn Sie neu bei Orisa sind, suchen Sie wahrscheinlich  `!ow register` oder `"
+"Wenn Du neu bei Orisa bist, suchst Du wahrscheinlich  `!ow register` oder `"
 "!ow register xbox`\n"
-"Wenn Sie Orisa auf Ihrem eigenen Server verwenden oder bei der Entwicklung "
-"helfen möchten, sind die Eingaben von `!ow about`\n"
-"Parametern in [eckigen Klammern] optional."
+"Wenn Du Orisa auf Deinem eigenen Server verwenden oder bei der Entwicklung "
+"helfen möchtest, gib`!ow about`ein.\n"
+"Parameter in sind [eckigen Klammern] optional."
 
 #: orisa/orisa.py:1285
 msgid ""
@@ -790,7 +791,7 @@ msgstr ""
 
 #: orisa/orisa.py:1355
 msgid "\\N{BLACK STAR} *ow format placeholders*"
-msgstr ""
+msgstr "\\N{BLACK STAR} *ow format $Platzhalter*"
 
 #. $fullsr, $rank, etc. cannot be translated
 #: orisa/orisa.py:1357
@@ -818,7 +819,7 @@ msgstr ""
 
 #: orisa/orisa.py:1368
 msgid "\\N{BLACK STAR} *ow format examples*"
-msgstr ""
+msgstr "\\N{BLACK STAR} *ow format Beispiele*"
 
 #: orisa/orisa.py:1370
 #, python-brace-format
@@ -828,11 +829,17 @@ msgid ""
 "`!ow format $damage $support` in `[1234{SYMBOL_DPS} 2345{SYMBOL_SUPPORT}]`\n"
 "*By default, the format is `$sr`*"
 msgstr ""
+"`!ow format Hallo $sr` ergibt `[Hallo 12-34-45]`\n"
+"`!ow format Kartoffel/$fullrank` ergibt `[Kartoffel/Bronze-Gold-Diamant]`.\n"
+"`!ow format $damage $support` ergibt `[1234{SYMBOL_DPS} "
+"2345{SYMBOL_SUPPORT}]`\n"
+"*Die Standardeinstellung ist `$sr`*"
 
 #. headline of second help page
 #: orisa/orisa.py:1378
+#, fuzzy
 msgid "help cont'd"
-msgstr ""
+msgstr "Hilfe fortgesetzt"
 
 #: orisa/orisa.py:1384
 msgid ""
@@ -840,6 +847,10 @@ msgid ""
 "*Example:*\n"
 "`!ow get register` will search for the nick \"register\""
 msgstr ""
+"Das selbe wie `!ow [nick]`, (nur) nützlich, wenn der gewünschte Nickname "
+"identisch mit einem Befehl ist\n"
+"*Beispiel:*\n"
+"`!ow get register` sucht nach dem Nicknamen \"register\""
 
 #: orisa/orisa.py:1391
 msgid "Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. Your OW account will be checked periodically and your nick will be automatically updated to show your SR or rank (see the *format* command for more info). `!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. If you register an XBL account, you have to link it to your Discord beforehand. PSN accounts are not supported yet."
@@ -1175,7 +1186,7 @@ msgstr ""
 #: orisa/orisa.py:2673
 #, python-brace-format
 msgid "{type} added"
-msgstr ""
+msgstr "{type} hinzugefügt"
 
 #. {new_type}s is plural. type is BattleTag/GamerTag
 #: orisa/orisa.py:2675
@@ -1199,12 +1210,15 @@ msgstr ""
 #. :warning: is an emoji code
 #: orisa/orisa.py:2705
 msgid ":warning: No SR"
-msgstr ""
+msgstr ":warning: Kein SR"
 
 #: orisa/orisa.py:2706
 #, python-brace-format
 msgid "You don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your {type}."
 msgstr ""
+"Du scheinst allerdings keinen SR zu haben; dein Profil muss öffentlich sein, "
+"damit ich deinen SR ermitteln kann... Deinen {type} habe ich aber "
+"gespeichert."
 
 #. :warning: is emoji code
 #: orisa/orisa.py:2727
@@ -1218,7 +1232,7 @@ msgstr ""
 
 #: orisa/orisa.py:2734 orisa/orisa.py:2741
 msgid ":warning: Cannot update nickname"
-msgstr ""
+msgstr ":warning: Kann Nicknamen nicht aktualisieren"
 
 #: orisa/orisa.py:2735
 msgid "I do not have enough permissions to update your nickname. The owner needs to move the \"Orisa\" role higher so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry."
