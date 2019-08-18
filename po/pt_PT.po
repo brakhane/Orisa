@@ -8,20 +8,22 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2019-08-18 15:28+0000\n"
+"Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
+"Language-Team: Portuguese (Portugal) <https://weblate.wur.st/projects/orisa/"
+"bot/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.8\n"
 
 #. Role
 #: orisa/models.py:55 orisa/orisa.py:169 orisa/orisa.py:1502
 #: orisa/orisa.py:1540 orisa/orisa.py:1542
 msgid "Damage"
-msgstr ""
+msgstr "Dano"
 
 #: orisa/models.py:56
 msgid "Main Tank"
@@ -35,77 +37,77 @@ msgstr ""
 #: orisa/models.py:58 orisa/orisa.py:171 orisa/orisa.py:1502
 #: orisa/orisa.py:1540 orisa/orisa.py:1542
 msgid "Support"
-msgstr ""
+msgstr "Suporte"
 
 #. 2 letter code for "Bronze" rank
 #: orisa/orisa.py:134
 msgid "Br"
-msgstr ""
+msgstr "Br"
 
 #. 2 letter code for "Silver" rank
 #: orisa/orisa.py:136
 msgid "Si"
-msgstr ""
+msgstr "Si"
 
 #. 2 letter code for "Gold" rank
 #: orisa/orisa.py:138
 msgid "Go"
-msgstr ""
+msgstr "Go"
 
 #. 2 letter code for "Platinum" rank
 #: orisa/orisa.py:140
 msgid "Pt"
-msgstr ""
+msgstr "Pt"
 
 #. 2 letter code for "Diamond" rank
 #: orisa/orisa.py:142
 msgid "Dm"
-msgstr ""
+msgstr "Dm"
 
 #. 2 letter code for "Master" rank
 #: orisa/orisa.py:144
 msgid "Ma"
-msgstr ""
+msgstr "Ma"
 
 #. 2 letter code for "Grandmaster" rank
 #: orisa/orisa.py:146
 msgid "GM"
-msgstr ""
+msgstr "GM"
 
 #. SR rank
 #: orisa/orisa.py:150
 msgid "Bronze"
-msgstr ""
+msgstr "Bronze"
 
 #. SR rank
 #: orisa/orisa.py:152
 msgid "Silver"
-msgstr ""
+msgstr "Prata"
 
 #. SR rank
 #: orisa/orisa.py:154
 msgid "Gold"
-msgstr ""
+msgstr "Ouro"
 
 #. SR rank
 #: orisa/orisa.py:156
 msgid "Platinum"
-msgstr ""
+msgstr "Platina"
 
 #. SR rank
 #: orisa/orisa.py:158
 msgid "Diamond"
-msgstr ""
+msgstr "Diamante"
 
 #. SR rank
 #: orisa/orisa.py:160
 msgid "Master"
-msgstr ""
+msgstr "Masters"
 
 #. SR rank
 #: orisa/orisa.py:162
 msgid "Grandmaster"
-msgstr ""
+msgstr "Grandmaster"
 
 #. Role
 #: orisa/orisa.py:167 orisa/orisa.py:1502 orisa/orisa.py:1540
@@ -127,8 +129,8 @@ msgstr ""
 #: orisa/orisa.py:524
 msgid "SR"
 msgid_plural "SRs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "SR"
+msgstr[1] "SRs"
 
 #. The roles a user has set with setroles (Main Tank, Damage, etc.)
 #: orisa/orisa.py:532
@@ -155,7 +157,7 @@ msgstr ""
 #: orisa/orisa.py:553
 #, python-brace-format
 msgid "The SR was last updated {when}."
-msgstr ""
+msgstr "O SR foi atualizado pela última vez há {when}."
 
 #: orisa/orisa.py:558
 msgid ""
