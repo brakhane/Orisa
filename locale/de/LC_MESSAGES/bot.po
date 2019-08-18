@@ -1,4 +1,7 @@
-# Dennis Brakhane <brakhane@googlemail.com>, 2019.
+# Translation files for Orisa
+# Copyright (C) 2019 Dennis Brakhane and contributors
+# This file is distributed under the same license as Orisa, the AGPLv3
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
