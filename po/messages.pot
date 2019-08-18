@@ -142,7 +142,7 @@ msgid "Links"
 msgstr ""
 
 #: orisa/orisa.py:540
-#, python-brace-format
+#, python-brace-format, md-text
 msgid ""
 "[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa "
 "Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})"

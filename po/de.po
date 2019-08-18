@@ -139,8 +139,8 @@ msgstr "Links"
 #: orisa/orisa.py:540
 #, python-brace-format
 msgid ""
-"[Overwatch profile]({PROFILE_LINK} | [Upvote Orisa]({VOTE_LINK}) | [Orisa "
-"Support Server]({SUPPORT_DISCORD}) | [Donate ``]({DONATE_LINK})"
+"[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa "
+"Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})"
 msgstr ""
 
 #: orisa/orisa.py:551
