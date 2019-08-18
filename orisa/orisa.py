@@ -537,11 +537,11 @@ class Orisa(Plugin):
                     inline=False,
                     value=(
                         _(
-                            '[Overwatch profile]({PROFILE_LINK} | [Upvote Orisa]({VOTE_LINK}) | '
-                            '[Orisa Support Server]({SUPPORT_DISCORD}) | [Donate `❤️`]({DONATE_LINK})'
+                            '[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | '
+                            '[Orisa Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})'
                         ).format(
                             PROFILE_LINK=f'https://playoverwatch.com/en-us/career/{primary.blizzard_url_type}/{urllib.parse.quote(primary.handle.replace("#", "-"))}',
-                            VOTE_LINK=VOTE_LINK, SUPPORT_DISCORD=SUPPORT_DISCORD, DONATE_LINK=DONATE_LINK
+                            VOTE_LINK=VOTE_LINK, SUPPORT_DISCORD=SUPPORT_DISCORD, DONATE_LINK=DONATE_LINK, HEART="❤️"
                         )
                     )
                 )
