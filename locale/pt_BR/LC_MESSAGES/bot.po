@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
-"PO-Revision-Date: 2019-08-18 15:28+0000\n"
+"PO-Revision-Date: 2019-08-18 16:36+0000\n"
 "Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/"
 "bot/pt_BR/>\n"
@@ -205,8 +205,8 @@ msgstr ""
 "de Overwatch presentes no Discord.\n"
 "Estou escrito e mantido por Dennis Brakhane (Joghurt# 2732 no Discord) e "
 "licenciado sob [GNU Affero General Public License 3.0]({AGPL_LINK}); o ["
-"desenvolvimento é feito no Github]({GH_LINK}); a tradução em português foi "
-"feita por Kodivli#0155"
+"desenvolvimento é feito no Github]({GH_LINK}); a tradução em português "
+"(Brasil) foi feita por Kodivli#0155"
 
 #: orisa/orisa.py:597
 msgid "Invite me to your own Discord"
@@ -239,19 +239,17 @@ msgstr ""
 
 #: orisa/orisa.py:612
 msgid "Show your love :heart:"
-msgstr "Mostra o seu amor :heart:"
+msgstr "Demonstre o seu amor :heart:"
 
 #: orisa/orisa.py:614
 #, python-brace-format
 msgid ""
 "If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
-msgstr ""
-"Se você me acha útil, [ajude meu administrador com uma xícara de "
-"café]({DONATE_LINK})."
+msgstr "Se você me acha útil, [ajude com uma xícara de café]({DONATE_LINK})."
 
 #: orisa/orisa.py:619
 msgid "I've sent you a DM"
-msgstr ""
+msgstr "Enviei uma mensagem direta para você"
 
 #: orisa/orisa.py:627
 msgid ""
@@ -259,30 +257,37 @@ msgid ""
 "configure. Don't worry, I will send you the config instructions as a DM, so "
 "others can't configure me just by watching you sending this command."
 msgstr ""
+"O comando config deve ser emitido a partir de um canal do servidor que você "
+"deseja configurar. Não se preocupe, vou enviar-lhe as instruções de "
+"configuração via mensagem direta, para que os outros não possam me "
+"configurar apenas observando você enviando este comando."
 
 #. A tip/information for a user
 #: orisa/orisa.py:632
 msgid "Tip"
-msgstr ""
+msgstr "Dica"
 
 #: orisa/orisa.py:633
 msgid ""
 "`!ow config` works in *any* channel (that I'm allowed to read messages in, "
 "of course), so you can also use an admin only channel"
 msgstr ""
+"`!ow config` funciona em *qualquer* canal (que eu tenha permissão para ler "
+"mensagens, é claro), portanto você também pode usá-lo em um canal restrito à "
+"administração"
 
 #. :thinking: must remain as is, it's an emoji
 #. :thinking: is an emoji code
 #: orisa/orisa.py:643 orisa/orisa.py:670 orisa/orisa.py:1763
 #: orisa/orisa.py:1784
 msgid ":thinking: Need help?"
-msgstr ""
+msgstr ":thinking: Precisa de ajuda?"
 
 #: orisa/orisa.py:644 orisa/orisa.py:671 orisa/orisa.py:1231
 #: orisa/orisa.py:1764 orisa/orisa.py:1785
 #, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})"
-msgstr ""
+msgstr "Junte-se ao [Servidor de Suporte]({SUPPORT_DISCORD})"
 
 #. "Orisa Admin" must not be translated; additionally explaining what the string "Orisa Admin" means is ok
 #: orisa/orisa.py:649
@@ -290,18 +295,20 @@ msgid ""
 "This command can only be used by members with the `Orisa Admin` role (only "
 "the name of the role is important, it doesn't need any permissions)"
 msgstr ""
+"Este comando só pode ser usado por membros com o cargo `Orisa Admin` ("
+"somente o nome do cargo é importante, não é preciso atribuir permissões)"
 
 #: orisa/orisa.py:666
 msgid "Click here to configure me"
-msgstr ""
+msgstr "Clique aqui para me configurar"
 
 #: orisa/orisa.py:673
 msgid "This link will be valid for 30 minutes"
-msgstr ""
+msgstr "Este link será válido por 30 minutos"
 
 #: orisa/orisa.py:676
 msgid "I sent you a DM"
-msgstr ""
+msgstr "Enviei a você uma mensagem direta"
 
 #: orisa/orisa.py:679
 msgid ""
@@ -310,6 +317,10 @@ msgid ""
 "everybody who knows that link will be able to configure me for the next 30 "
 "minutes)"
 msgstr ""
+"Eu tentei te mandar um mensagem direta com o link, mas você desabilitou "
+"mensagens diretas dos membros do servidor. Por favor, reverta isso e tente "
+"novamente. (Eu não posso enviar o link aqui, pois qualquer um com acesso a "
+"ele poderá me configurar pelos próximos 30 minutos)"
 
 #: orisa/orisa.py:690
 #, python-brace-format

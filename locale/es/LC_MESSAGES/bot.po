@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
-"PO-Revision-Date: 2019-08-18 15:28+0000\n"
-"Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
+"PO-Revision-Date: 2019-08-18 16:36+0000\n"
+"Last-Translator: Adrián Hernández González "
+"<adrianhernandezgonzalez24@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.wur.st/projects/orisa/bot/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -360,17 +361,19 @@ msgid ""
 "Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
 "pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet."
 msgstr ""
+"Tipo de registro no válido\"{type}\". Usa `!ow register` o `!ow register pc` "
+"para PC; `!ow register xbox` para XBOX. PlayStation no es soportado aún."
 
 #. type will be PC, XBOX or PSN
 #: orisa/orisa.py:726
 #, python-brace-format
 msgid "Click here to register your {type} account"
-msgstr ""
+msgstr "Haz clic aquí para registrar tu cuenta de {type}"
 
 #. :information_source: is an emoji
 #: orisa/orisa.py:732
 msgid ":information_source: Protip"
-msgstr ""
+msgstr ":information_source: Protip"
 
 #: orisa/orisa.py:733
 msgid ""
@@ -378,17 +381,22 @@ msgid ""
 "in a private/incognito tab (try right clicking the link) and enter the "
 "account data for that account instead."
 msgstr ""
+"Si quieres registrarte con un BattleTag secundario, puedes abrir el enlace "
+"en una pestaña privada/de incógnito (prueba a darle clic derecho al enlace) "
+"y introduce los datos de la cuenta secundaria."
 
 #. :video_game: is an emoji
 #: orisa/orisa.py:738
 msgid ":video_game: Not on PC?"
-msgstr ""
+msgstr ":video_game: ¿No estás en PC?"
 
 #: orisa/orisa.py:739
 msgid ""
 "If you have an XBL account, use `!ow register xbox`. PSN accounts are "
 "currently not supported, but will be in the future."
 msgstr ""
+"Si tienes una cuenta de XBL, usa `!ow register xbox`. Las cuentas de PSN no "
+"están soportadas, pero lo estarán en un futuro."
 
 #. The translation should mention that the privacy policy is currently only available in English
 #: orisa/orisa.py:743
@@ -396,6 +404,8 @@ msgid ""
 "By registering, you agree to Orisa's Privacy Policy; you can read it by "
 "entering !ow privacy"
 msgstr ""
+"Registrándote aceptas la Política de Privacidad de Orisa; puedes leerla "
+"introduciendo !ow privacy"
 
 #. Check how Discord translates "Allow direct messages from server members" in your local language and use the same term
 #: orisa/orisa.py:751
@@ -404,25 +414,30 @@ msgid ""
 "select Privacy Settings, and enable \"Allow direct messages from server "
 "members.\" Then try again."
 msgstr ""
+"No tengo permitido enviarte un Mensaje Privado. Haz clic derecho en el "
+"servidor de Discord, haz clic en Ajustes de Privacidad, y activa \"Activar "
+"mensajes directos de miembros del servidor.\" Luego, inténtalo de nuevo."
 
 #: orisa/orisa.py:756 orisa/orisa.py:1252
 msgid "I sent you a DM with instructions."
-msgstr ""
+msgstr "Te he enviado un mensaje privado con instrucciones."
 
 #: orisa/orisa.py:766
 msgid "You are not registered, there's nothing for me to do."
-msgstr ""
+msgstr "No estás registrado, no hay nada que pueda hacer."
 
 #: orisa/orisa.py:778
 msgid ""
 "You cannot unregister your primary handle. Use `!ow setprimary` to set a "
 "different primary first, or use `!ow forgetme` to delete all your data."
 msgstr ""
+"No puedes eliminar tu cuenta primaria. Usa `!ow setprimary` para seleccionar "
+"una cuenta primaria, o usa `!ow forgetme` para eliminar todos tus datos."
 
 #: orisa/orisa.py:787
 #, python-brace-format
 msgid "Removed **{handle}**"
-msgstr ""
+msgstr "Eliminado **{handle}**"
 
 #: orisa/orisa.py:801
 #, python-brace-format
@@ -431,50 +446,55 @@ msgid ""
 "which Discord doesn't allow. Please choose a different format, or shorten "
 "your nickname and do a `!ow forceupdate` afterwards."
 msgstr ""
+"Sin embargo, tu nuevo nombre de usuario \"{nickname}\" es más largo que 32 "
+"carácteres, y esto Discord no lo permite. Por favor, selecciona un formato "
+"diferente, o acorta tu nombre y haz luego un `!ow forceupdate`."
 
 #: orisa/orisa.py:807
 msgid ""
 "However, there was an error updating your nickname. I will try that again "
 "later."
 msgstr ""
+"Sin embargo, hubo un error actualizando tu nombre de usuario. Lo intentaré "
+"de nuevo más tarde."
 
 #: orisa/orisa.py:819
 msgid "You are not registered. Use `!ow register` first."
-msgstr ""
+msgstr "No estás registrado. Usa `!ow register` primero."
 
 #. handle will be the battletag/gamertag the user tried to register, type will be BattleTag or GamerTag
 #: orisa/orisa.py:830
 #, python-brace-format
 msgid "\"{handle}\" already is your primary {type}. *Going back to sleep*"
-msgstr ""
+msgstr "\"{handle}\" ya es tu {type} primario. *Volviendo a dormir*"
 
 #. handle will be the battletag/gamertag the user registered, type will be BattleTag or GamerTag
 #: orisa/orisa.py:847
 #, python-brace-format
 msgid "Done. Your primary {type} is now **{handle}**."
-msgstr ""
+msgstr "Hecho. Tu {type} primario es ahora **{handle}**."
 
 #: orisa/orisa.py:858
 msgid "format string may not contain square brackets"
-msgstr ""
+msgstr "el formato de la cadena no puede contener corchetes"
 
 #. keep the $ to remind the user that placeholders start with a $ sign
 #: orisa/orisa.py:862
 msgid "format string must contain at least one $placeholder"
-msgstr ""
+msgstr "el formato de la cadena debe contener al menos un $placeholder"
 
 #: orisa/orisa.py:865
 msgid "format string missing"
-msgstr ""
+msgstr "falta un formato de cadena"
 
 #: orisa/orisa.py:873
 msgid "you must register first"
-msgstr ""
+msgstr "primero debes registrarte"
 
 #: orisa/orisa.py:881
 #, python-brace-format
 msgid "Invalid format string: unknown placeholder \"{key}\""
-msgstr ""
+msgstr "Formato de cadena no válido: placeholder desconocido \"{key}\""
 
 #: orisa/orisa.py:887
 #, python-brace-format
@@ -483,6 +503,9 @@ msgid ""
 "characters ({len} to be exact).\n"
 "Please choose a shorter format or shorten your nickname"
 msgstr ""
+"Lo sentimos, usando este formato tu nombre de usuario sería más largo que 32 "
+"carácteres ({len} para ser exactos).\n"
+"Por favor, selecciona un formato más corto o acorta tu nombre de usuario"
 
 #. A list of random silly titles that will be shown in the confirmation message when a user changed his nickname format.
 #. Most of them were found on the Internet, for example
@@ -519,11 +542,11 @@ msgstr ""
 #: orisa/orisa.py:925
 #, python-brace-format
 msgid "Done. Henceforth, ye shall be knownst as \"`{new_nick}`, {title}"
-msgstr ""
+msgstr "Hecho. Azi pueh, todoh te conoserá por \"`{new_nick}`, {title}"
 
 #: orisa/orisa.py:937 orisa/orisa.py:959 orisa/orisa.py:1092
 msgid "you are not registered"
-msgstr ""
+msgstr "no estás registrado"
 
 #: orisa/orisa.py:946
 msgid ""
