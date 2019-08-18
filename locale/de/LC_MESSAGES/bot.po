@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
-"PO-Revision-Date: 2019-08-18 18:24+0000\n"
+"PO-Revision-Date: 2019-08-18 18:53+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -242,11 +242,7 @@ msgstr "Ich habe dir eine PN geschickt"
 
 #: orisa/orisa.py:627
 msgid "The config command must be issued from a channel of the server you want to configure. Don't worry, I will send you the config instructions as a DM, so others can't configure me just by watching you sending this command."
-msgstr ""
-"Der Befehl config muss von einem Kanal des Servers ausgegeben werden, den "
-"Sie konfigurieren möchten. Keine Sorge, ich sende Ihnen die "
-"Konfigurationsanweisungen als PN. Andere können mich also nicht "
-"konfigurieren, indem sie Ihnen beim Senden dieses Befehls zusehen."
+msgstr "Der Befehl config muss von einem Kanal des Servers ausgegeben werden, den Du konfigurieren möchtest. Keine Sorge, ich sende dir die Konfigurationsanweisungen als DN. Andere können mich also nicht konfigurieren, indem sie Dir beim Senden dieses Befehls zusehen."
 
 #. A tip/information for a user
 #: orisa/orisa.py:632
@@ -310,28 +306,16 @@ msgstr ""
 
 #: orisa/orisa.py:698
 msgid "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click the link above and give me permission to access your data. I only need this permission once, you can remove it later in your BattleNet account."
-msgstr ""
-"Um deine Registrierung abzuschließen, benötige ich deine Erlaubnis, um "
-"Blizzard um deinen BattleTag zu bitten. Bitte klicken Sie auf den obigen "
-"Link und erteilen Sie mir die Erlaubnis, auf Ihre Daten zuzugreifen. Ich "
-"benötige diese Berechtigung nur einmal. Sie können sie später in Ihrem "
-"BattleNet-Konto entfernen."
+msgstr "Um deine Registrierung abzuschließen, benötige ich deine Erlaubnis, um Blizzard um deinen BattleTag zu bitten. Bitte klicke  auf den obigen Link und erteile mir die Erlaubnis, auf Deine Daten zuzugreifen. Ich benötige diese Berechtigung nur einmal. Du kannst sie später in deinem BattleNet-Konto widerrufen."
 
 #: orisa/orisa.py:708
 msgid "To complete your registration, I need your permission to ask Discord for your Gamertag. Please click the link above and give me permission to access your data. Make sure you have linked your Xbox account to Discord."
-msgstr ""
-"Um deine Registrierung abzuschließen, benötige ich deine Erlaubnis, Discord "
-"nach deinem Gamertag zu fragen. Bitte klicken Sie auf den obigen Link und "
-"erteilen Sie mir die Erlaubnis, auf Ihre Daten zuzugreifen. Stellen Sie "
-"sicher, dass Sie Ihr Xbox-Konto mit Discord verknüpft haben."
+msgstr "Um deine Registrierung abzuschließen, benötige ich deine Erlaubnis, Discord nach deinem Gamertag zu fragen. Bitte klicke auf den obigen Link und erteile mir die Erlaubnis, auf Deine Daten zuzugreifen. Stelle sicher, dass Du Dein Xbox-Konto mit Discord verknüpft hast."
 
 #: orisa/orisa.py:713
 #, python-brace-format
 msgid "Invalid registration type \"{type}\". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet."
-msgstr ""
-"Ungültiger Registrierungstyp \"{type}\". Verwenden Sie `!ow register` oder `"
-"!ow register pc` für den PC. `! ow registriere xbox` für XBOX. PlayStation "
-"wird noch nicht unterstützt."
+msgstr "Ungültiger Registrierungstyp \"{type}\". Verwende `!ow register` oder `!ow register pc` für einen PC Account. `! ow registrier xbox` für XBOX. PlayStation wird noch nicht unterstützt."
 
 #. type will be PC, XBOX or PSN
 #: orisa/orisa.py:726
@@ -346,11 +330,7 @@ msgstr ":information_source: Protipp"
 
 #: orisa/orisa.py:733
 msgid "If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the account data for that account instead."
-msgstr ""
-"Wenn Sie einen sekundären / smurf BattleTag registrieren möchten, können Sie "
-"den Link in einem privaten / inkognito-Tab öffnen (versuchen Sie es mit "
-"einem Rechtsklick auf den Link) und stattdessen die Kontodaten für dieses "
-"Konto eingeben."
+msgstr "Wenn Du ein sekundäres/smurf BattleTag registrieren möchtest, kannst du den Link in einem privaten / inkognito-Tab öffnen (versuchen es mit einem Rechtsklick auf den Link) und stattdessen die Kontodaten für dieses Konto eingeben."
 
 #. :video_game: is an emoji
 #: orisa/orisa.py:738
@@ -359,17 +339,12 @@ msgstr ":video_game: Nicht am PC?"
 
 #: orisa/orisa.py:739
 msgid "If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future."
-msgstr ""
-"Wenn Sie ein XBL-Konto haben, verwenden Sie `!ow register xbox`. PSN-Konten "
-"werden derzeit nicht unterstützt, werden aber in Zukunft unterstützt."
+msgstr "Wenn Du ein XBL-Konto hast, verwende `!ow register xbox`. PSN-Konten werden derzeit nicht unterstützt, zukünftig aber schon."
 
 #. The translation should mention that the privacy policy is currently only available in English
 #: orisa/orisa.py:743
 msgid "By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy"
-msgstr ""
-"Mit Ihrer Registrierung stimmen Sie den Datenschutzbestimmungen von Orisa "
-"zu. Sie können es lesen, indem Sie !ow privacy eingeben. Die "
-"Datenschutzbestimmungen sind momentan nur in englisch verfügbar"
+msgstr "Mit Deiner Registrierung stimmst Du den Datenschutzbestimmungen von Orisa zu. Diese kannst du lesen, wenn du !ow privacy eingibst. Die Datenschutzbestimmungen sind momentan nur in Englisch verfügbar"
 
 #. Check how Discord translates "Allow direct messages from server members" in your local language and use the same term
 #: orisa/orisa.py:751
@@ -385,14 +360,11 @@ msgstr "Ich habe dir eine PN mit Anweisungen geschickt."
 
 #: orisa/orisa.py:766
 msgid "You are not registered, there's nothing for me to do."
-msgstr "Sie sind nicht registriert, ich habe nichts zu tun."
+msgstr "Du bist nicht registriert, es gibt nichts für mich zu tun."
 
 #: orisa/orisa.py:778
 msgid "You cannot unregister your primary handle. Use `!ow setprimary` to set a different primary first, or use `!ow forgetme` to delete all your data."
-msgstr ""
-"Sie können die Registrierung Ihres primären Handles nicht aufheben. "
-"Verwenden Sie `!ow setprimary`, um zuerst eine andere Primary festzulegen, "
-"oder `!ow forgetme`, um alle Ihre Daten zu löschen."
+msgstr "Du kannst die Registrierung Deines primären Handles nicht aufheben. Verwende `!ow setprimary`, um zuerst ein anderes Primary festzulegen, oder `!ow forgetme`, um alle Deine Daten zu löschen."
 
 #: orisa/orisa.py:787
 #, python-brace-format
@@ -402,10 +374,7 @@ msgstr "Habe **{handle}** gelöscht"
 #: orisa/orisa.py:801
 #, python-brace-format
 msgid "However, your new nickname \"{nickname}\" is now longer than 32 characters, which Discord doesn't allow. Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards."
-msgstr ""
-"Ihr neuer Nickname \"{nickname}\"ist jetzt länger als 32 Zeichen, was "
-"Discord nicht erlaubt. Bitte wählen Sie ein anderes Format oder kürzen Sie "
-"Ihren Spitznamen und führen Sie anschließend ein `!ow forceupdate` durch."
+msgstr "Dein neuer Nickname \"{nickname}\"ist jetzt länger als 32 Zeichen, was Discord nicht erlaubt. Bitte wähle ein anderes Format oder kürzen Deinen Spitznamen und führe anschließend ein `!ow forceupdate` durch."
 
 #: orisa/orisa.py:807
 msgid "However, there was an error updating your nickname. I will try that again later."
@@ -457,9 +426,8 @@ msgid ""
 "Sorry, using this format would make your nickname be longer than 32 characters ({len} to be exact).\n"
 "Please choose a shorter format or shorten your nickname"
 msgstr ""
-"Bei Verwendung dieses Formats ist Ihr Spitzname leider länger als 32 Zeichen "
-"({len}um genau zu sein).\n"
-"Bitte wählen Sie ein kürzeres Format oder kürzen Sie Ihren Spitznamen"
+"Bei Verwendung dieses Formats ist Dein Nickname leider länger als 32 Zeichen ({len}um genau zu sein).\n"
+"Bitte wähle ein kürzeres Format oder kürze Deinen Nickname"
 
 #. A list of random silly titles that will be shown in the confirmation message when a user changed his nickname format.
 #. Most of them were found on the Internet, for example
@@ -502,8 +470,7 @@ msgstr ""
 #: orisa/orisa.py:925
 #, python-brace-format
 msgid "Done. Henceforth, ye shall be knownst as \"`{new_nick}`, {title}"
-msgstr ""
-"Fertig. Von nun an sollen sie als \"`{new_nick}`, {title}\" bekannt sein"
+msgstr "Fertig. Von nun an sollen Sie als \"`{new_nick}`, {title}\" bekannt sein"
 
 #: orisa/orisa.py:937 orisa/orisa.py:959 orisa/orisa.py:1092
 msgid "you are not registered"
@@ -524,9 +491,7 @@ msgstr ""
 
 #: orisa/orisa.py:975
 msgid "There were some problems updating your SR. Try again later."
-msgstr ""
-"Bei der Aktualisierung Ihres SR sind einige Probleme aufgetreten. Versuchen "
-"Sie es später noch einmal."
+msgstr "Bei der Aktualisierung Deines SR sind Probleme aufgetreten. Versuche es später noch einmal."
 
 #: orisa/orisa.py:980
 #, python-brace-format
@@ -544,8 +509,7 @@ msgstr "OK, ich habe {name} aus meiner Datenbank gelöscht"
 
 #: orisa/orisa.py:1015
 msgid "you are not registered anyway, so there's nothing for me to forget..."
-msgstr ""
-"Sie sind sowieso nicht registriert, also gibt es nichts zu vergessen ..."
+msgstr "Du bist sowieso nicht registriert, also gibt es nichts zu vergessen ..."
 
 #. the identifiers m o d s must not be translated
 #: orisa/orisa.py:1051
@@ -565,7 +529,7 @@ msgstr ""
 
 #: orisa/orisa.py:1071
 msgid "You are not registered! Do `!ow register` first."
-msgstr "Sie sind nicht registriert! Nutzen Sie `!ow register`zuerst."
+msgstr "Du bist nicht registriert! Nutze zuerst `!ow register`."
 
 #: orisa/orisa.py:1075
 #, python-brace-format
@@ -574,9 +538,7 @@ msgstr "Fertig. Ihre Rollen sind jetzt **{roles}**"
 
 #: orisa/orisa.py:1082
 msgid "Sorry, findplayers doesn't work with role based SR yet. Try later."
-msgstr ""
-"Entschuldigung, findplayer funktioniert noch nicht mit rollenbasiertem SR. "
-"Versuchen Sie es später."
+msgstr "Entschuldigung, findplayer funktioniert noch nicht mit rollenbasiertem SR. Versuchen es später nochmal."
 
 #: orisa/orisa.py:1101
 msgid "SR difference must be positive"
@@ -585,17 +547,13 @@ msgstr "SR Differenz muss positiv sein"
 #. used when Orisa is asked to find players that are more than 5000 SR below or above them
 #: orisa/orisa.py:1107
 msgid "You just had to try ridiculous values, didn't you?"
-msgstr ""
-"Sie mussten es einfach versuchen lächerliche Werte auszuprobieren, nicht "
-"wahr?"
+msgstr "Du musstest es einfach versuchen, lächerliche Werte einzugeben, nicht wahr?"
 
 #. type is BattleTag or GamerTag
 #: orisa/orisa.py:1116
 #, python-brace-format
 msgid "You primary {type} has no SR, please give a SR range you want to search for instead"
-msgstr ""
-"Ihr primärer {type} hat keine SR, bitte geben Sie stattdessen einen SR-"
-"Bereich an, nach dem Sie suchen möchten"
+msgstr "Dein primärer {type} hat keine SR, bitte gebe stattdessen einen SR-Bereich an, nach dem Du suchen möchten"
 
 #: orisa/orisa.py:1138
 msgid "min and max must be between 500 and 5000, and min must not be larger than max."
@@ -651,8 +609,7 @@ msgid ""
 "There are also {len} offline players within that range. Use the `findallplayers` command to show them as well."
 msgstr ""
 "\n"
-"Es gibt auch {len} Offline-Spieler in diesem Bereich. Verwenden Sie den "
-"`findallplayers` Befehl um sie auch zu zeigen."
+"Es gibt auch {len} Offline-Spieler in diesem Bereich. Verwende den `findallplayers` Befehl um sie auch zu zeigen."
 
 #: orisa/orisa.py:1211
 msgid "I sent you a DM with the results."
@@ -688,27 +645,13 @@ msgid ""
 "If you want to use Orisa on your own server or help developing it, enter `!ow about`\n"
 "Parameters in [square brackets] are optional."
 msgstr ""
-"Wenn Du einem Schnellsuche- oder Rangliste-Kanal beitreten willst, musst Du "
-"den BattleTag eines Kanalmitglieds kennen, oder Du musst von einem Mitglied "
-"hinzugefügt werden. In Rangliste-Kanälen hilft es auch zu wissen, welche SR "
-"die Kanalmitglieder haben. Um zu vermeiden, dass Du beim Beitritt zu einem "
-"Kanal immer wieder nach diesen Informationen fragen muss, wurde dieser Bot "
-"erstellt. Wenn Du dich mit Deinem BattleTag registrierst, wird Ihr Nickname "
-"automatisch aktualisiert und zeigt Deine aktuelle SR an und wird auf dem "
-"neuesten Stand gehalten. Du kannst auch nach dem BattleTag eines anderen "
-"Mitglieds fragen oder Dein eigenes anfragen, damit andere Dich anz einfach "
-"zu OW hinzufügen können.\n"
-"Orisa wird auch eine kurze Nachricht an den Chat senden, wenn Du einen Rang "
-"aufsteigst.\n"
-"*Wie Orisa von Overwatch ist dieser Bot noch recht jung und in unerfahren. "
-"Melden Sie Probleme an <@!{OWNER}>*\n"
+"Wenn Du einem Schnellsuche- oder Rangliste-Kanal beitreten willst, musst Du den BattleTag eines Kanalmitglieds kennen, oder Du musst von einem Mitglied hinzugefügt werden. In Rangliste-Kanälen hilft es auch zu wissen, welche SR die Kanalmitglieder haben. Um zu vermeiden, dass Du beim Beitritt zu einem Kanal immer wieder nach diesen Informationen fragen muss, wurde dieser Bot erstellt. Wenn Du dich mit Deinem BattleTag registrierst, wird Ihr Nickname automatisch aktualisiert und zeigt Deine aktuelle SR an und wird auf dem neuesten Stand gehalten. Du kannst auch nach dem BattleTag eines anderen Mitglieds fragen oder Dein eigenes anfragen, damit andere Dich anz einfach zu OW hinzufügen können.\n"
+"Orisa wird auch eine kurze Nachricht an den Chat senden, wenn Du einen Rang aufsteigst.\n"
+"*Wie Orisa von Overwatch ist dieser Bot noch recht jung und in unerfahren. Melde Probleme an <@!{OWNER}>*\n"
 "\n"
-"**Die Befehle funktionieren nur in den <#{channel_id}> Kanal oder indem Du "
-"mir eine PN schickst**\n"
-"Wenn Du neu bei Orisa bist, suchst Du wahrscheinlich  `!ow register` oder `"
-"!ow register xbox`\n"
-"Wenn Du Orisa auf Deinem eigenen Server verwenden oder bei der Entwicklung "
-"helfen möchtest, gib`!ow about`ein.\n"
+"**Die Befehle funktionieren nur in den <#{channel_id}> Kanal oder indem Du mir eine PN schickst**\n"
+"Wenn Du neu bei Orisa bist, suchst Du wahrscheinlich  `!ow register` oder `!ow register xbox`\n"
+"Wenn Du Orisa auf Deinem eigenen Server verwenden oder bei der Entwicklung helfen möchtest, gib`!ow about`ein.\n"
 "Parameter in sind [eckigen Klammern] optional."
 
 #: orisa/orisa.py:1285
@@ -733,9 +676,7 @@ msgstr ""
 
 #: orisa/orisa.py:1297
 msgid "Shows information about Orisa, and how you can add her to your own Discord server, or help supporting her"
-msgstr ""
-"Zeigt Informationen zu Orisa an und wie Sie sie zu Ihrem eigenen Discord-"
-"Server hinzufügen oder sie unterstützen können"
+msgstr "Zeigt Informationen zu Orisa an und wie Du sie zu Deinem eigenen Discord-Server hinzufügen oder sie unterstützen kannst"
 
 #: orisa/orisa.py:1301
 msgid ""
@@ -743,9 +684,7 @@ msgid ""
 "*Example:*\n"
 "`!ow alwaysshowsr on`"
 msgstr ""
-"Auf einigen Servern zeigt Orisa nur dann Ihren SR oder Rang in Ihrem Nick "
-"an, wenn Sie sich in einem OW-Sprachkanal befinden. Wenn Sie möchten, dass "
-"Ihr Nick immer Ihre SR oder Ihren Rang anzeigt, setzen Sie dies auf on.\n"
+"Auf einigen Servern zeigt Orisa nur dann Deinen SR oder Rang in Deinem Nickname an, wenn Du dich in einem OW-Sprachkanal befindest. Wenn Du möchtest, dass Dein Nickname immer Deinen SR oder Deinen Rang anzeigt, setzen dies auf \"on\".\n"
 "*Beispiel:*\n"
 "`!ow alwaysshowsr on`"
 
@@ -760,7 +699,7 @@ msgstr ""
 #. help for !ow dumpsr
 #: orisa/orisa.py:1314
 msgid "Download your SR history as an Excel sheet"
-msgstr "Laden Sie Ihren SR-Verlauf als Excel-Tabelle herunter"
+msgstr "Laden Deinen SR-Verlauf als Excel-Tabelle herunter"
 
 #. help !ow forceupdate
 #: orisa/orisa.py:1337
@@ -768,18 +707,13 @@ msgid ""
 "Immediately checks your account data and updates your nick accordingly.\n"
 "*Checks and updates are done automatically, use this command only if you want your nick to be up to date immediately!*"
 msgstr ""
-"Überprüfe sofort deine Kontodaten und aktualisiere deinen Nick entsprechend."
-"\n"
-"* Überprüfungen und Aktualisierungen erfolgen automatisch. Verwenden Sie "
-"diesen Befehl nur, wenn Sie möchten, dass Ihr Nickname sofort auf dem "
-"neuesten Stand ist. *"
+"Überprüft sofort deine Kontodaten und aktualisiert deinen Nickname entsprechend.\n"
+"*Überprüfungen und Aktualisierungen erfolgen automatisch. Verwenden diesen Befehl nur, wenn Du möchtest, dass Dein Nickname sofort auf dem neuesten Stand ist.*"
 
 #. help !ow forgetme
 #: orisa/orisa.py:1344
 msgid "All your BattleTags will be removed from the database and your nick will not be updated anymore. You can re-register at any time."
-msgstr ""
-"Alle deine BattleTags werden aus der Datenbank entfernt und dein Nick wird "
-"nicht mehr aktualisiert. Sie können sich jederzeit neu registrieren."
+msgstr "Alle deine BattleTags werden aus der Datenbank entfernt und dein Nickname wird nicht mehr aktualisiert. Du kannst dich jederzeit neu registrieren."
 
 #. help !ow format. $placeholder can be translated, as can ${placeholder}
 #: orisa/orisa.py:1351
@@ -921,7 +855,14 @@ msgid ""
 "`!ow setroles d`: you only play DPS\n"
 "`!ow setroles so`: you play Support and Off Tanks\n"
 "`!ow setroles dmos`: you are a true Flex and play everything."
-msgstr "Legt die Rollen fest, welche du spielen kannst und willst. Sie werden im `!ow`Bildschirm angezeigt"
+msgstr ""
+"Legt die Rollen fest, welche du spielen kannst und willst. Sie werden im `!ow`Bildschirm angezeigt.\n"
+"*roles* ist eine Code aus einem oder mehreren der folgenden Buchstaben (sowohl Groß- als auch Kleinschreibung funktioniert):\n"
+"`d` für Schaden (Damage), `m` für Main-Tank, `o` für Off-Tank, `s` für Unterstützer (Support) \n"
+"*Beispiele:*\n"
+"`!ow setroles d`: du spielst nur Schaden\n"
+"`!ow setroles so`: du spielst Unterstützer und Off-Tanks\n"
+"`!ow setroles dmos`: du bist ein echter Flex und spielst alle Rollen."
 
 #: orisa/orisa.py:1427
 msgid ""
