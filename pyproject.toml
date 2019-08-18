@@ -13,8 +13,8 @@ trio = "^0.12.1"
 fuzzywuzzy = {version = "*", extras = ["speedup"]}
 pyyaml = "*"
 pendulum = "*"
-# discord-curious = {git = "https://github.com/brakhane/curious.git", rev = "orisa"}
-discord-curious = {path="../curious"}
+discord-curious = {git = "https://github.com/brakhane/curious.git", rev = "orisa"}
+# discord-curious = {path="../curious"}
 cachetools = "*"
 wcwidth = "*"
 tabulate = "*"

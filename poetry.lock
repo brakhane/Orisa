@@ -147,7 +147,7 @@ description = "An async library for the Discord API"
 name = "discord-curious"
 optional = false
 python-versions = ">=3.6.2"
-version = "0.8.0a1.dev14+dirty"
+version = "0.7.8.dev95"
 
 [package.dependencies]
 asks = ">=1.3.0,<1.4.0"
@@ -161,10 +161,9 @@ pytz = ">=2017.3"
 typing_inspect = ">=0.2.0"
 
 [package.source]
-reference = ""
-type = "directory"
-url = "../curious"
-
+reference = "orisa"
+type = "git"
+url = "https://github.com/brakhane/curious.git"
 [[package]]
 category = "main"
 description = "Dodgy: Searches for dodgy looking lines in Python code"
@@ -906,7 +905,7 @@ version = "0.15.0"
 h11 = ">=0.8.1"
 
 [metadata]
-content-hash = "da193c7f67b09d88a5dbf68fe8955d37b6cd8277f2a9af3ccf66eb780041d551"
+content-hash = "bdda95626476a64181598d1ea24034922bf5033ae2d4bd016c0a168b3b2b6504"
 python-versions = "^3.7"
 
 [metadata.hashes]
