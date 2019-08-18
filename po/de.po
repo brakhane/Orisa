@@ -998,7 +998,7 @@ msgstr ""
 
 #. header for highscore table: SR difference
 #: orisa/orisa.py:2299
-msgid "SR"
+msgid "ΔSR"
 msgstr ""
 
 #: orisa/orisa.py:2335
