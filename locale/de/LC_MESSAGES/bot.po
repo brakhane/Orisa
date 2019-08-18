@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 20:52+0200\n"
-"PO-Revision-Date: 2019-08-18 18:53+0000\n"
+"PO-Revision-Date: 2019-08-18 23:11+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -119,7 +119,7 @@ msgstr "Nickname"
 #. When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
 #: orisa/orisa.py:511
 msgid "Handles"
-msgstr "Handles"
+msgstr "Tags"
 
 #: orisa/orisa.py:522
 msgid "SR"
@@ -145,7 +145,7 @@ msgstr "[Overwatch-Profil]({PROFILE_LINK}) | [Orisa liken]({VOTE_LINK}) | [Orisa
 #: orisa/orisa.py:549
 #, python-brace-format
 msgid "The SR of the primary {type} was last updated {when}."
-msgstr "Das SR von dem primären {type} wurde zuletzt {when} aktualisiert ."
+msgstr "Das SR von dem primären {type} wurde zuletzt {when} aktualisiert."
 
 #: orisa/orisa.py:551
 #, python-brace-format
@@ -741,7 +741,7 @@ msgstr "Verbindet Orisa mit deinem BattleNet oder Gamertag, oder fügt sekundär
 
 #: orisa/orisa.py:1395
 msgid "Show Orisa's Privacy Policy"
-msgstr ""
+msgstr "Zeige Orisa's Datenschutzbestimmungen (momentan nur in Englischer Sprache)"
 
 #: orisa/orisa.py:1398
 msgid ""
@@ -802,7 +802,7 @@ msgid ""
 "Like srgraph, but shows the graph for the given user"
 msgstr ""
 "*Dieser Befehl kann nur von Benutzern genutzt werden, die der Rolle \"Orisa Admin\" angehören!*\n"
-"Wie srgraph, nur zeigt es die Historie des angegebenen Nutzers."
+"Wie srgraph, nur zeigt es die Historie des angegebenen Nutzers"
 
 #: orisa/orisa.py:1436
 msgid ""
@@ -901,6 +901,10 @@ msgid ""
 "Then, write `!ow config` in this channel and I will send you a link to configure me via DM.\n"
 "*I will ignore all commands except `!ow help` and `!ow config` until I'm configured for this Discord!*"
 msgstr ""
+"*Seit gegrüßt!* Ich freue mich, hier zu sein :smiley:\n"
+"Bevor es losgeht, erstelle eine neue Rolle names `Orisa Admin`(nur der Name ist wichtig, die Rolle braucht keine besonderen Rechte) und füge dich hinzu sowie jeden, dem es erlaubt sein soll, mich zu konfigurieren.\n"
+"Dann, schreib `!ow config` in diesen Kanel und ich werde dir eine PN mit einem Link senden, über den du mich konfigurieren kannst.\n"
+"*Solange ich nicht konfiguriert bin, werde ich alle Befehle ignorieren (außer `!ow help` und `!ow config`)*"
 
 #: orisa/orisa.py:1775
 #, python-brace-format
@@ -909,11 +913,14 @@ msgid ""
 "\n"
 "*Somebody (hopefully you) invited me to your server {guild_name}, but I couldn't find a text channel I am allowed to send messages to, so I have to message you directly*"
 msgstr ""
+"\n"
+"\n"
+"Jemand (und ich hoffe, das warst du) hat mich zu deinem Server {guild_name} eingeladen, aber ich konnte keinen Textkanal finden, wohin ich Nachrichten senden darf, daher muss ich dich direkt anschreiben*"
 
 #. Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
 #: orisa/orisa.py:2154
 msgid "For your own safety, get behind the barrier!"
-msgstr "Bitte bleiben sie zu ihrer eigenen Sicherheit hinter der Barriere!"
+msgstr "Bitte bleiben Sie zu ihrer eigenen Sicherheit hinter der Barriere!"
 
 #: orisa/orisa.py:2156
 #, python-brace-format
@@ -924,7 +931,7 @@ msgstr "**{name}** hat gerade **{sr} SR** als **{role}** erreicht und ist zu **{
 #: orisa/orisa.py:2172
 #, python-brace-format
 msgid "Let's hear it for <@!{discord_id}>!"
-msgstr "Ein Hoch auf <@!{discord_id>!"
+msgstr "Ein Hoch auf <@!{discord_id}>!"
 
 #. header for highscore table: position (keep it short)
 #: orisa/orisa.py:2287
@@ -954,7 +961,6 @@ msgstr "{role} SR"
 
 #. header for highscore table: SR difference
 #: orisa/orisa.py:2297
-#, fuzzy
 msgid "ΔSR"
 msgstr "ΔSR"
 
@@ -1138,4 +1144,4 @@ msgstr ":heart: Sag Danke, indem du einen Kaffee ausgibst"
 #: orisa/orisa.py:2756
 #, python-brace-format
 msgid "Want to say thanks to the guy who wrote and maintains me? Why not [buy him a coffee?]({DONATE_LINK})"
-msgstr "Möchtest du dich bei dem Typen, der mich geschrieben hat und mich wartet bedanken? Warum [spendest du ihm nicht einen Kaffe?]({DONATE_LINK})"
+msgstr "Möchtest du dich bei dem Typen, der mich geschrieben hat und mich wartet bedanken? Warum [spendest du ihm nicht eine Tasse Kaffe?]({DONATE_LINK})"
