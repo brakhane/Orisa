@@ -1559,7 +1559,7 @@ Pornography Historian""").split("\n")
                     "the format DD.MM.YY or YYYY-MM-DD").format(date=date),
                 )
 
-            data = data[data.timestamp >= date].reset_index(drop=True)
+            data = data[data.index >= date]
 
         fig, ax = plt.subplots()
 
