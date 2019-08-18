@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
 "PO-Revision-Date: 2019-08-18 10:17+0000\n"
-"Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
+"Last-Translator: AIERKUCHEN <xaierkuchenx@gmail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -435,20 +435,20 @@ msgstr "Formatzeichenfolge darf keine eckigen Klammern enthalten"
 #. keep the $ to remind the user that placeholders start with a $ sign
 #: orisa/orisa.py:862
 msgid "format string must contain at least one $placeholder"
-msgstr ""
+msgstr "Formatzeichenfolge muss mindestens einen $ Platzhalter enthalten"
 
 #: orisa/orisa.py:865
 msgid "format string missing"
-msgstr ""
+msgstr "Formatzeichenfolge fehlt"
 
 #: orisa/orisa.py:873
 msgid "you must register first"
-msgstr ""
+msgstr "Sie müssen sich zuerst registrieren"
 
 #: orisa/orisa.py:881
 #, python-brace-format
 msgid "Invalid format string: unknown placeholder \"{key}\""
-msgstr ""
+msgstr "Ungültige Formatzeichenfolge: unbekannter Platzhalter \"{key}\""
 
 #: orisa/orisa.py:887
 #, python-brace-format
