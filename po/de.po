@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
 "PO-Revision-Date: 2019-08-18 10:31+0000\n"
-"Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
+"Last-Translator: AIERKUCHEN <xaierkuchenx@gmail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -146,7 +146,7 @@ msgstr ""
 #: orisa/orisa.py:551
 #, python-brace-format
 msgid "The SR of the primary {type} was last updated {when}."
-msgstr ""
+msgstr "Das SR von dem primären {type}  wurde zuletzt aktualisiert am {when}."
 
 #: orisa/orisa.py:553
 #, python-brace-format
@@ -456,6 +456,9 @@ msgid ""
 "Sorry, using this format would make your nickname be longer than 32 characters ({len} to be exact).\n"
 "Please choose a shorter format or shorten your nickname"
 msgstr ""
+"Bei Verwendung dieses Formats ist Ihr Spitzname leider länger als 32 Zeichen "
+"({len}um genau zu sein).\n"
+"Bitte wählen Sie ein kürzeres Format oder kürzen Sie Ihren Spitznamen"
 
 #. A list of random silly titles that will be shown in the confirmation message when a user changed his nickname format.
 #. Most of them were found on the Internet, for example
