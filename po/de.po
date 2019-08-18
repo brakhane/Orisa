@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
-"PO-Revision-Date: 2019-08-18 10:09+0000\n"
-"Last-Translator: Max K <xaierkuchenx@gmail.com>\n"
+"PO-Revision-Date: 2019-08-18 10:15+0000\n"
+"Last-Translator: AIERKUCHEN <xaierkuchenx@gmail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -159,8 +159,8 @@ msgid ""
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough"
 msgstr ""
 "\n"
-"Übrigens, Du brauchst deinen Discordnamen nicht anzugeben, wenn du dein "
-"eigenes BattleTag meinst; einfach !ow reicht"
+"Übrigens, Sie brauchen ihren Discordnamen nicht anzugeben, wenn Sie ihren "
+"eigenen BattleTag meinen; einfach !ow reicht"
 
 #. "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:562
@@ -427,11 +427,11 @@ msgstr "\"{handle}\" ist schon dein primärer {type}. *Geh wieder schlafen*"
 #: orisa/orisa.py:847
 #, python-brace-format
 msgid "Done. Your primary {type} is now **{handle}**."
-msgstr ""
+msgstr "Fertig. Ihr primärer {type} ist jetzt **{handle}**."
 
 #: orisa/orisa.py:858
 msgid "format string may not contain square brackets"
-msgstr ""
+msgstr "Formatzeichenfolge darf keine eckigen Klammern enthalten"
 
 #. keep the $ to remind the user that placeholders start with a $ sign
 #: orisa/orisa.py:862
