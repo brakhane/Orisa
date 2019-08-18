@@ -147,7 +147,7 @@ description = "An async library for the Discord API"
 name = "discord-curious"
 optional = false
 python-versions = ">=3.6.2"
-version = "0.7.8.dev93"
+version = "0.8.0a1.dev14+dirty"
 
 [package.dependencies]
 asks = ">=1.3.0,<1.4.0"
@@ -161,9 +161,10 @@ pytz = ">=2017.3"
 typing_inspect = ">=0.2.0"
 
 [package.source]
-reference = "orisa"
-type = "git"
-url = "https://github.com/brakhane/curious.git"
+reference = ""
+type = "directory"
+url = "../curious"
+
 [[package]]
 category = "main"
 description = "Dodgy: Searches for dodgy looking lines in Python code"
@@ -197,7 +198,7 @@ description = "A pure-Python, bring-your-own-I/O implementation of HTTP/1.1"
 name = "h11"
 optional = false
 python-versions = "*"
-version = "0.8.1"
+version = "0.9.0"
 
 [[package]]
 category = "main"
@@ -205,7 +206,7 @@ description = "HTTP/2 State-Machine based protocol implementation"
 name = "h2"
 optional = false
 python-versions = "*"
-version = "3.1.0"
+version = "3.1.1"
 
 [package.dependencies]
 hpack = ">=2.3,<4"
@@ -236,15 +237,15 @@ category = "main"
 description = "A ASGI Server based on Hyper libraries and inspired by Gunicorn."
 name = "hypercorn"
 optional = false
-python-versions = ">=3.6.1"
-version = "0.5.2"
+python-versions = ">=3.7"
+version = "0.7.2"
 
 [package.dependencies]
 h11 = "*"
 h2 = ">=3.1.0"
-pytoml = "*"
+toml = "*"
 typing-extensions = "*"
-wsproto = ">=0.13.0"
+wsproto = ">=0.14.0"
 
 [[package]]
 category = "main"
@@ -644,14 +645,6 @@ setuptools = "*"
 
 [[package]]
 category = "main"
-description = "A parser for TOML-0.4.0"
-name = "pytoml"
-optional = false
-python-versions = "*"
-version = "0.1.21"
-
-[[package]]
-category = "main"
 description = "World timezone definitions, modern and historical"
 name = "pytz"
 optional = false
@@ -680,13 +673,13 @@ description = "A Python ASGI web microframework with the same API as Flask"
 name = "quart"
 optional = false
 python-versions = ">=3.7.0"
-version = "0.8.1"
+version = "0.9.1"
 
 [package.dependencies]
 aiofiles = "*"
 blinker = "*"
 click = "*"
-hypercorn = ">=0.5.0"
+hypercorn = ">=0.6.0"
 itsdangerous = "*"
 jinja2 = "*"
 multidict = "*"
@@ -698,11 +691,11 @@ description = "A Quart extension to provide trio support."
 name = "quart-trio"
 optional = false
 python-versions = ">=3.7.0"
-version = "0.2.0"
+version = "0.3.0"
 
 [package.dependencies]
-hypercorn = ">=0.5.0"
-quart = ">=0.8.0"
+hypercorn = ">=0.6.0"
+quart = ">=0.9.0"
 trio = ">=0.9.0"
 
 [[package]]
@@ -814,7 +807,7 @@ python-versions = "*"
 version = "0.8.3"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Python Library for Tom's Obvious, Minimal Language"
 name = "toml"
 optional = false
@@ -823,16 +816,16 @@ version = "0.10.0"
 
 [[package]]
 category = "main"
-description = "An async/await-native I/O library for humans and snake people"
+description = "A friendly Python library for async concurrency and I/O"
 name = "trio"
 optional = false
 python-versions = ">=3.5"
-version = "0.10.0"
+version = "0.12.1"
 
 [package.dependencies]
-async_generator = ">=1.9"
-attrs = ">=18.1.0"
-cffi = "*"
+async-generator = ">=1.9"
+attrs = ">=18.2.0"
+cffi = ">=1.12"
 idna = "*"
 outcome = "*"
 sniffio = "*"
@@ -906,14 +899,14 @@ category = "main"
 description = "WebSockets state-machine based protocol implementation"
 name = "wsproto"
 optional = false
-python-versions = "*"
-version = "0.13.0"
+python-versions = ">=3.6.1"
+version = "0.15.0"
 
 [package.dependencies]
-h11 = ">=0.8.0,<0.9.0"
+h11 = ">=0.8.1"
 
 [metadata]
-content-hash = "e46745f8479c6aebe92bdf536d22ee7efcecd9d3fbdf783d752544fb6e3abdbf"
+content-hash = "da193c7f67b09d88a5dbf68fe8955d37b6cd8277f2a9af3ccf66eb780041d551"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -935,11 +928,11 @@ discord-curious = []
 dodgy = ["65e13cf878d7aff129f1461c13cb5fd1bb6dfe66bb5327e09379c3877763280c"]
 et-xmlfile = ["614d9722d572f6246302c4491846d2c393c199cfa4edc9af593437691683335b"]
 fuzzywuzzy = ["5ac7c0b3f4658d2743aa17da53a55598144edbc5bee3c6863840636e6926f254", "6f49de47db00e1c71d40ad16da42284ac357936fa9b66bea1df63fed07122d62"]
-h11 = ["acca6a44cb52a32ab442b1779adf0875c443c689e9e028f8d831a3769f9c5208", "f2b1ca39bfed357d1f19ac732913d5f9faa54a5062eca7d2ec3a916cfb7ae4c7"]
-h2 = ["c8f387e0e4878904d4978cd688a3195f6b169d49b1ffa572a3d347d7adc5e09f", "fd07e865a3272ac6ef195d8904de92dc7b38dc28297ec39cfa22716b6d62e6eb"]
+h11 = ["33d4bca7be0fa039f4e84d50ab00531047e53d6ee8ffbc83501ea602c169cae1", "4bc6d6a1238b7615b266ada57e0618568066f57dd6fa967d1290ec9309b2f2f1"]
+h2 = ["ac377fcf586314ef3177bfd90c12c7826ab0840edeb03f0f24f511858326049e", "b8a32bd282594424c0ac55845377eea13fa54fe4a8db012f3a198ed923dc3ab4"]
 hpack = ["0edd79eda27a53ba5be2dfabf3b15780928a0dff6eb0c60a3d6767720e970c89", "8eec9c1f4bfae3408a3f30500261f7e6a65912dc138526ea054f9ad98892e9d2"]
 html5lib = ["20b159aa3badc9d5ee8f5c647e5efd02ed2a66ab8d354930bd9ff139fc1dc0a3", "66cb0dcfdbbc4f9c3ba1a63fdb511ffdbd4f513b2b6d81b80cd26ce6b3fb3736"]
-hypercorn = ["63646155724c605dfb67411cbf8000c5a791d82277bb4c7d0e5e8517603dd101", "d35853214408b31bce3220847fd3d16847086ec083123e725acbf36fdcf39fde"]
+hypercorn = ["110f534cb98131ed5c21cc3896772fc46597f67295116022ef5c1ef9bd180d4e", "f3ab33ee77d3ea68bf75a94ca5633a5a01134aedf1a6c9d05a70339022d6c8a3"]
 hyperframe = ["5187962cb16dcc078f23cb5a4b110098d546c3f41ff2d4038a9896893bbd0b40", "a9f5c17f2cc3c719b917c4f33ed1c61bd1f8dfac4b1bd23b7c80b3400971b41f"]
 idna = ["c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407", "ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"]
 isort = ["54da7e92468955c4fceacd0c86bd0ec997b0e1ee80d97f67c35a78b719dccab1", "6e811fcb295968434526407adb8796944f1988c5b65e8139058f2014cbe100fd"]
@@ -979,12 +972,11 @@ pylru = ["71376192671f0ad1690b2a7427d39a29b1df994c8469a9b46b03ed7e28c0172c"]
 pyparsing = ["6f98a7b9397e206d78cc01df10131398f1c8b8510a2f4d97d9abd82e1aacdd80", "d9338df12903bbf5d65a0e4e87c2161968b10d2e489652bb47001d82a9b028b4"]
 python-dateutil = ["7e6584c74aeed623791615e26efd690f29817a27c73085b78e4bad02493df2fb", "c89805f6f4d64db21ed966fda138f8a5ed7a4fdbc1a8ee329ce1b74e3c74da9e"]
 python-levenshtein = ["033a11de5e3d19ea25c9302d11224e1a1898fe5abd23c61c7c360c25195e3eb1"]
-pytoml = ["57a21e6347049f73bfb62011ff34cd72774c031b9828cb628a752225136dfc33", "8eecf7c8d0adcff3b375b09fe403407aa9b645c499e5ab8cac670ac4a35f61e7"]
 pytz = ["26c0b32e437e54a18161324a2fca3c4b9846b74a8dccddd843113109e1116b32", "c894d57500a4cd2d5c71114aaab77dbab5eabd9022308ce5ac9bb93a60a6f0c7"]
 pytzdata = ["c0c8316eaf6c25ba45816390a1a45c39790767069b3275c5f7de3ddf773eb810", "e8a91952afd853642a49f0713caac3e15a5306855ff4a47af4ddec5b7dd23a09"]
 pyyaml = ["0113bc0ec2ad727182326b61326afa3d1d8280ae1122493553fd6f4397f33df9", "01adf0b6c6f61bd11af6e10ca52b7d4057dd0be0343eb9283c878cf3af56aee4", "5124373960b0b3f4aa7df1707e63e9f109b5263eca5976c66e08b1c552d4eaf8", "5ca4f10adbddae56d824b2c09668e91219bb178a1eee1faa56af6f99f11bf696", "7907be34ffa3c5a32b60b95f4d95ea25361c951383a894fec31be7252b2b6f34", "7ec9b2a4ed5cad025c2278a1e6a19c011c80a3caaac804fd2d329e9cc2c287c9", "87ae4c829bb25b9fe99cf71fbb2140c448f534e24c998cc60f39ae4f94396a73", "9de9919becc9cc2ff03637872a440195ac4241c80536632fffeb6a1e25a74299", "a5a85b10e450c66b49f98846937e8cfca1db3127a9d5d1e31ca45c3d0bef4c5b", "b0997827b4f6a7c286c01c5f60384d218dca4ed7d9efa945c3e1aa623d5709ae", "b631ef96d3222e62861443cc89d6563ba3eeb816eeb96b2629345ab795e53681", "bf47c0607522fdbca6c9e817a6e81b08491de50f3766a7a0e6a5be7905961b41", "f81025eddd0327c7d4cfe9b62cf33190e1e736cc6e97502b3ec425f574b3e7a8"]
-quart = ["4df12c7909e25e5d7adeab936a173efb4e7ff3da7a907004f3234d3e8350c0c4", "bbf6ead887aeca9af053b59c3072cbf9dd68ec6681320ff72107ad2cd4e02ab0"]
-quart-trio = ["5caa1f93bd4955b82a6c7ee28ef60ee37043b5d9b1a4c9ab9982666cc49ba1ef", "cc8ceed5abaecf34f2c07d5eec1ea348658f7167fff46894cb923cf03b2cdb45"]
+quart = ["3122d7dd3535301d0f4075657b71842bbef9044a3086091e82637eade72c2f2a", "3b3e1207bdecbbae35b9aeef137abcf273768034423df77c9ad1034a105ddde3"]
+quart-trio = ["d420492740ec06fd1874fb7e2d44252fd87f9050658d9b9b45106fd70136b23a", "e0abfb97600ebf6fa70ab6fdaaec7209e00ebd9ccd74183b57782434ce1099bc"]
 raven = ["3fa6de6efa2493a7c827472e984ce9b020797d0da16f1db67197bcc23c8fae54", "44a13f87670836e153951af9a3c80405d36b43097db869a36e92809673692ce4"]
 requirements-detector = ["9fbc4b24e8b7c3663aff32e3eba34596848c6b91bd425079b386973bd8d08931"]
 scipy = ["0baa64bf42592032f6f6445a07144e355ca876b177f47ad8d0612901c9375bef", "243b04730d7223d2b844bda9500310eecc9eda0cba9ceaf0cde1839f8287dfa8", "2643cfb46d97b7797d1dbdb6f3c23fe3402904e3c90e6facfe6a9b98d808c1b5", "396eb4cdad421f846a1498299474f0a3752921229388f91f60dc3eda55a00488", "3ae3692616975d3c10aca6d574d6b4ff95568768d4525f76222fb60f142075b9", "435d19f80b4dcf67dc090cc04fde2c5c8a70b3372e64f6a9c58c5b806abfa5a8", "46a5e55850cfe02332998b3aef481d33f1efee1960fe6cfee0202c7dd6fc21ab", "75b513c462e58eeca82b22fc00f0d1875a37b12913eee9d979233349fce5c8b2", "7ccfa44a08226825126c4ef0027aa46a38c928a10f0a8a8483c80dd9f9a0ad44", "89dd6a6d329e3f693d1204d5562dd63af0fd7a17854ced17f9cbc37d5b853c8d", "a81da2fe32f4eab8b60d56ad43e44d93d392da228a77e229e59b51508a00299c", "a9d606d11eb2eec7ef893eb825017fbb6eef1e1d0b98a5b7fc11446ebeb2b9b1", "ac37eb652248e2d7cbbfd89619dce5ecfd27d657e714ed049d82f19b162e8d45", "cbc0611699e420774e945f6a4e2830f7ca2b3ee3483fca1aa659100049487dd5", "d02d813ec9958ed63b390ded463163685af6025cb2e9a226ec2c477df90c6957", "dd3b52e00f93fd1c86f2d78243dfb0d02743c94dd1d34ffea10055438e63b99d"]
@@ -998,7 +990,7 @@ sqlalchemy = ["0459bf0ea6478f3e904de074d65769a11d74cdc34438ab3159250c96d089aef0"
 stringcase = ["48a06980661908efe8d9d34eab2b6c13aefa2163b3ced26972902e3bdfd87008"]
 tabulate = ["8af07a39377cee1103a5c8b3330a421c2d99b9141e9cc5ddd2e3263fea416943"]
 toml = ["229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c", "235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e", "f1db651f9657708513243e61e6cc67d101a39bad662eaa9b5546f789338e07a3"]
-trio = ["d323cc15f6406d15954af91e5e34af2001cc24163fdde29e3f88a227a1b53ab0"]
+trio = ["149a280a4c66ef08d058626e3f48bf979e6e079777d1fc5cae71676586ced672", "d2c7dfd60e4b2a87a8ba6e106e5c5bd743df729cff444e532a76c410b22d6658"]
 typed-ast = ["18511a0b3e7922276346bcb47e2ef9f38fb90fd31cb9223eed42c85d1312344e", "262c247a82d005e43b5b7f69aff746370538e176131c32dda9cb0f324d27141e", "2b907eb046d049bcd9892e3076c7a6456c93a25bebfe554e931620c90e6a25b0", "354c16e5babd09f5cb0ee000d54cfa38401d8b8891eefa878ac772f827181a3c", "4e0b70c6fc4d010f8107726af5fd37921b666f5b31d9331f0bd24ad9a088e631", "630968c5cdee51a11c05a30453f8cd65e0cc1d2ad0d9192819df9978984529f4", "66480f95b8167c9c5c5c87f32cf437d585937970f3fc24386f313a4c97b44e34", "71211d26ffd12d63a83e079ff258ac9d56a1376a25bc80b1cdcdf601b855b90b", "95bd11af7eafc16e829af2d3df510cecfd4387f6453355188342c3e79a2ec87a", "bc6c7d3fa1325a0c6613512a093bc2a2a15aeec350451cbdf9e1d4bffe3e3233", "cc34a6f5b426748a507dd5d1de4c1978f2eb5626d51326e43280941206c209e1", "d755f03c1e4a51e9b24d899561fec4ccaf51f210d52abdf8c07ee2849b212a36", "d7c45933b1bdfaf9f36c579671fec15d25b06c8398f113dab64c18ed1adda01d", "d896919306dd0aa22d0132f62a1b78d11aaf4c9fc5b3410d3c666b818191630a", "ffde2fbfad571af120fcbfbbc61c72469e72f550d676c3342492a9dfdefb8f12"]
 typing = ["38566c558a0a94d6531012c8e917b1b8518a41e418f7f15f00e129cc80162ad3", "53765ec4f83a2b720214727e319607879fec4acde22c4fbb54fa2604e79e44ce", "84698954b4e6719e912ef9a42a2431407fe3755590831699debda6fba92aac55"]
 typing-extensions = ["2ed632b30bb54fc3941c382decfd0ee4148f5c591651c9272473fea2c6397d95", "b1edbbf0652660e32ae780ac9433f4231e7339c7f9a8057d0f042fcbcea49b87", "d8179012ec2c620d3791ca6fe2bf7979d979acdbef1fca0bc56b37411db682ed"]
@@ -1006,4 +998,4 @@ typing-inspect = ["a7cb36c4a47d034766a67ea6467b39bd995cd00db8d4db1aa40001bf2d674
 wcwidth = ["3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e", "f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c"]
 webencodings = ["a0af1213f3c2226497a97e2b3aa01a7e4bee4f403f95be16fc9acd2947514a78", "b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923"]
 wrapt = ["565a021fd19419476b9362b05eeaa094178de64f8361e44468f9e9d7843901e1"]
-wsproto = ["c013342d7a9180486713c6c986872e4fe24e18a21ccbece314939d8b58312e0e", "fd6020d825022247053400306448e161d8740bdd52e328e5553cd9eee089f705"]
+wsproto = ["614798c30e5dc2b3f65acc03d2d50842b97621487350ce79a80a711229edfa9d", "e3d190a11d9307112ba23bbe60055604949b172143969c8f641318476a9b6f1d"]
