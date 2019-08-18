@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
 "PO-Revision-Date: 2019-08-18 15:28+0000\n"
-"Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
+"Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/"
 "bot/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -233,16 +233,21 @@ msgid ""
 "the official Orisa Discord]({SUPPORT_DISCORD}). Updates and new features "
 "will be discussed and announced there"
 msgstr ""
+"Se você me usa no seu servidor de Discord, ou possui sugestões em geral, "
+"[junte-se ao Discord oficial da Orisa]({SUPPORT_DISCORD}). Atualizações e "
+"novos recursos serão discutidos e anunciados por lá"
 
 #: orisa/orisa.py:612
 msgid "Show your love :heart:"
-msgstr ""
+msgstr "Mostra o seu amor :heart:"
 
 #: orisa/orisa.py:614
 #, python-brace-format
 msgid ""
 "If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
 msgstr ""
+"Se você me acha útil, [ajude meu administrador com uma xícara de "
+"café]({DONATE_LINK})."
 
 #: orisa/orisa.py:619
 msgid "I've sent you a DM"
