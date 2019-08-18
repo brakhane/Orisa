@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 20:52+0200\n"
-"PO-Revision-Date: 2019-08-18 16:36+0000\n"
+"PO-Revision-Date: 2019-08-18 23:11+0000\n"
 "Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/bot/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -272,31 +272,31 @@ msgstr "Eu tentei te mandar um mensagem direta com o link, mas você desabilitou
 #: orisa/orisa.py:688
 #, python-brace-format
 msgid "{type} looks like a BattleTag and not like pc/xbox, assuming you meant just `!ow register`..."
-msgstr ""
+msgstr "{type} parece que você tentou registrar usando sua BattleTag e não a plataforma, assumindo que você quis dizer apenas `!ow registro`..."
 
 #: orisa/orisa.py:696
 msgid "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click the link above and give me permission to access your data. I only need this permission once, you can remove it later in your BattleNet account."
-msgstr ""
+msgstr "Para completar o seu registro, eu preciso da sua permissão para pedir à Blizzard a sua BattleTag. Por favor, clique no link acima e me dê permissão para acessar seus dados. Eu só preciso dessa permissão uma vez, você pode removê-la mais tarde na sua conta do BattleNet."
 
 #: orisa/orisa.py:706
 msgid "To complete your registration, I need your permission to ask Discord for your Gamertag. Please click the link above and give me permission to access your data. Make sure you have linked your Xbox account to Discord."
-msgstr ""
+msgstr "Para completar o seu registro, eu preciso da sua permissão para pedir ao Discord sua Gamertag. Por favor, clique no link acima e me dê permissão para acessar seus dados. Certifique-se de ter vinculado sua conta do Xbox ao Discord."
 
 #: orisa/orisa.py:711
 #, python-brace-format
 msgid "Invalid registration type \"{type}\". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet."
-msgstr ""
+msgstr "Tipo de registro inválido \"{type}\". Use `!ow registro` ou`!ow registro pc` para PC; `!ow registro xbox` para Xbox. PlayStation ainda não é suportado."
 
 #. type will be PC, XBOX or PSN
 #: orisa/orisa.py:724
 #, python-brace-format
 msgid "Click here to register your {type} account"
-msgstr ""
+msgstr "Clique aqui para registrar sua conta {type}"
 
 #. :information_source: is an emoji
 #: orisa/orisa.py:730
 msgid ":information_source: Protip"
-msgstr ""
+msgstr ":information_source: Super dica"
 
 #: orisa/orisa.py:731
 msgid "If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the account data for that account instead."
