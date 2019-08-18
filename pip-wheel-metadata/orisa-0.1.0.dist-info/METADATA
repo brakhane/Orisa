@@ -1,0 +1,34 @@
+Metadata-Version: 2.1
+Name: orisa
+Version: 0.1.0
+Summary: 
+Author: Dennis Brakhane
+Author-email: brakhane@gmail.com
+Requires-Python: >=3.7,<4.0
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Requires-Dist: asks
+Requires-Dist: cachetools
+Requires-Dist: dataclasses-json
+Requires-Dist: discord-curious @ git+https://github.com/brakhane/curious.git@orisa
+Requires-Dist: fuzzywuzzy[speedup]
+Requires-Dist: h2 (>=3.1.0)
+Requires-Dist: html5lib (>=1.0.1,<2.0.0)
+Requires-Dist: hypercorn (>=0.7.2,<0.8.0)
+Requires-Dist: itsdangerous
+Requires-Dist: lxml
+Requires-Dist: oauthlib
+Requires-Dist: openpyxl
+Requires-Dist: pandas
+Requires-Dist: pendulum
+Requires-Dist: prospector (>=1.1,<2.0)
+Requires-Dist: pyyaml
+Requires-Dist: quart
+Requires-Dist: quart-trio
+Requires-Dist: raven
+Requires-Dist: seaborn
+Requires-Dist: sqlalchemy (>=1.3.0)
+Requires-Dist: tabulate
+Requires-Dist: trio (>=0.12.1,<0.13.0)
+Requires-Dist: wcwidth
+Requires-Dist: wsproto (>=0.14.0)
