@@ -8,20 +8,22 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2019-08-18 02:09+0000\n"
+"Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
+"Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/"
+"bot/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 3.8\n"
 
 #. Role
 #: orisa/models.py:55 orisa/orisa.py:169 orisa/orisa.py:1502
 #: orisa/orisa.py:1540 orisa/orisa.py:1542
 msgid "Damage"
-msgstr ""
+msgstr "Dano"
 
 #: orisa/models.py:56
 msgid "Main Tank"
