@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 03:15+0200\n"
-"PO-Revision-Date: 2019-08-18 02:09+0000\n"
+"PO-Revision-Date: 2019-08-18 02:49+0000\n"
 "Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/"
 "bot/pt_BR/>\n"
@@ -27,120 +27,120 @@ msgstr "Dano"
 
 #: orisa/models.py:56
 msgid "Main Tank"
-msgstr ""
+msgstr "Main Tanque"
 
 #: orisa/models.py:57
 msgid "Off Tank"
-msgstr ""
+msgstr "Off-tanque"
 
 #. Role
 #: orisa/models.py:58 orisa/orisa.py:171 orisa/orisa.py:1502
 #: orisa/orisa.py:1540 orisa/orisa.py:1542
 msgid "Support"
-msgstr ""
+msgstr "Suporte"
 
 #. 2 letter code for "Bronze" rank
 #: orisa/orisa.py:134
 msgid "Br"
-msgstr ""
+msgstr "Br"
 
 #. 2 letter code for "Silver" rank
 #: orisa/orisa.py:136
 msgid "Si"
-msgstr ""
+msgstr "Pr"
 
 #. 2 letter code for "Gold" rank
 #: orisa/orisa.py:138
 msgid "Go"
-msgstr ""
+msgstr "Ou"
 
 #. 2 letter code for "Platinum" rank
 #: orisa/orisa.py:140
 msgid "Pt"
-msgstr ""
+msgstr "Pt"
 
 #. 2 letter code for "Diamond" rank
 #: orisa/orisa.py:142
 msgid "Dm"
-msgstr ""
+msgstr "Dm"
 
 #. 2 letter code for "Master" rank
 #: orisa/orisa.py:144
 msgid "Ma"
-msgstr ""
+msgstr "Mt"
 
 #. 2 letter code for "Grandmaster" rank
 #: orisa/orisa.py:146
 msgid "GM"
-msgstr ""
+msgstr "Gm"
 
 #. SR rank
 #: orisa/orisa.py:150
 msgid "Bronze"
-msgstr ""
+msgstr "Bronze"
 
 #. SR rank
 #: orisa/orisa.py:152
 msgid "Silver"
-msgstr ""
+msgstr "Prata"
 
 #. SR rank
 #: orisa/orisa.py:154
 msgid "Gold"
-msgstr ""
+msgstr "Ouro"
 
 #. SR rank
 #: orisa/orisa.py:156
 msgid "Platinum"
-msgstr ""
+msgstr "Platina"
 
 #. SR rank
 #: orisa/orisa.py:158
 msgid "Diamond"
-msgstr ""
+msgstr "Diamante"
 
 #. SR rank
 #: orisa/orisa.py:160
 msgid "Master"
-msgstr ""
+msgstr "Mestre"
 
 #. SR rank
 #: orisa/orisa.py:162
 msgid "Grandmaster"
-msgstr ""
+msgstr "Grão-mestre"
 
 #. Role
 #: orisa/orisa.py:167 orisa/orisa.py:1502 orisa/orisa.py:1540
 #: orisa/orisa.py:1542
 msgid "Tank"
-msgstr ""
+msgstr "Tanque"
 
 #. will be overwritten later if SR is set
 #. Short for Discord Nickname
 #: orisa/orisa.py:489
 msgid "Nick"
-msgstr ""
+msgstr "Apelido"
 
 #. When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
 #: orisa/orisa.py:513
 msgid "Handles"
-msgstr ""
+msgstr "BattleTag"
 
 #: orisa/orisa.py:524
 msgid "SR"
 msgid_plural "SRs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "SR"
+msgstr[1] "SRs"
 
 #. The roles a user has set with setroles (Main Tank, Damage, etc.)
 #: orisa/orisa.py:532
 msgid "Roles"
-msgstr ""
+msgstr "Funções"
 
 #. Weblinks
 #: orisa/orisa.py:536
 msgid "Links"
-msgstr ""
+msgstr "Links"
 
 #: orisa/orisa.py:540
 #, python-brace-format, md-text
