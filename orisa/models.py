@@ -50,12 +50,12 @@ class Role(Flag):
     OFF_TANK = auto()
     SUPPORT = auto()
 
-    def format(self):
+    def format(self, ctx):
         names = {
-            Role.DPS: "Damage",
-            Role.MAIN_TANK: "Main Tank",
-            Role.OFF_TANK: "Off Tank",
-            Role.SUPPORT: "Support",
+            Role.DPS: _("Damage"),
+            Role.MAIN_TANK: _("Main Tank"),
+            Role.OFF_TANK: _("Off Tank"),
+            Role.SUPPORT: _("Support"),
         }
     
         return ", ".join(names[r] for r in Role if r and r in self)

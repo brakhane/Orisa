@@ -485,14 +485,16 @@ class Orisa(Plugin):
             user = self.database.user_by_discord_id(session, member.id)
             if user:
                 embed = Embed(colour=0x659DBD)  # will be overwritten later if SR is set
-                embed.add_field(name="Nick", value=member.name, inline=False)
+                # Short for Discord Nickname
+                embed.add_field(name=_("Nick"), value=member.name, inline=False)
 
                 primary, *secondary = user.handles
 
                 sr_value = f"**{format_sr(primary)}**\n"
                 sr_value += "\n".join(format_sr(tag) for tag in secondary)
 
-                multiple_handles = len(user.handles) > 1
+                num_handles = len(user.handles)
+                multiple_handles = num_handles > 1
                 multiple_handle_types = len(set(handle.type for handle in user.handles)) > 1
 
                 if multiple_handle_types:
@@ -507,7 +509,8 @@ class Orisa(Plugin):
 
                 if multiple_handles:
                     if multiple_handle_types:
-                        handle_name = "Handles"
+                        # When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
+                        handle_name = _("Handles")
                     else:
                         handle_name = f"{user.handles[0].desc}s"
                 else:
@@ -518,41 +521,50 @@ class Orisa(Plugin):
                 )
                 if any(handle.sr for handle in user.handles):
                     embed.add_field(
-                        name="SRs" if multiple_handles else "SR", value=sr_value
+                        name=gettext.ngettext("SR", "SRs", num_handles), value=sr_value
                     )
 
                 if primary.sr is not None:
                     embed.colour = COLORS[sr_to_rank(np.nanmean(np.array([primary.sr.tank, primary.sr.damage, primary.sr.support], dtype=float)))]
 
                 if user.roles:
-                    embed.add_field(name="Roles", value=user.roles.format())
+                    # The roles a user has set with setroles (Main Tank, Damage, etc.)
+                    embed.add_field(name=_("Roles"), value=user.roles.format(ctx))
 
                 embed.add_field(
-                    name="Links",
+                    # Weblinks
+                    name=_("Links"),
                     inline=False,
                     value=(
-                        f'[Overwatch profile](https://playoverwatch.com/en-us/career/{primary.blizzard_url_type}/{urllib.parse.quote(primary.handle.replace("#", "-"))}) | '
-                        f'[Upvote Orisa]({VOTE_LINK}) | [Orisa Support Server]({SUPPORT_DISCORD}) | [Donate `❤️`]({DONATE_LINK})'
+                        _(
+                            '[Overwatch profile]({PROFILE_LINK} | [Upvote Orisa]({VOTE_LINK}) | '
+                            '[Orisa Support Server]({SUPPORT_DISCORD}) | [Donate `❤️`]({DONATE_LINK})'
+                        ).format(
+                            PROFILE_LINK=f'https://playoverwatch.com/en-us/career/{primary.blizzard_url_type}/{urllib.parse.quote(primary.handle.replace("#", "-"))}',
+                            VOTE_LINK=VOTE_LINK, SUPPORT_DISCORD=SUPPORT_DISCORD, DONATE_LINK=DONATE_LINK
+                        )
                     )
                 )
 
                 if primary.last_update:
                     if multiple_handles:
-                        footer_text = f"The SR of the primary {user.handles[0].desc} was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
+                        footer_text = _("The SR of the primary {type} was last updated {when}.").format(type=user.handles[0].desc, when=pendulum.instance(primary.last_update).diff_for_humans())
                     else:
-                        footer_text = f"The SR was last updated {pendulum.instance(primary.last_update).diff_for_humans()}."
+                        footer_text = _("The SR was last updated {when}.").format(when=pendulum.instance(primary.last_update).diff_for_humans())
                 else:
                     footer_text = ""
 
                 if member == ctx.author and member_given:
-                    footer_text += "\nBTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough"
+                    footer_text += _("\nBTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough")
                 embed.set_footer(text=footer_text)
             else:
-                content = f"{member.name} not found in database! *Do you need a hug?*"
+                # "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
+                content = _("{member_name} not found in database! *Do you need a hug?*").format(member_name=member.name)
                 if member == ctx.author:
                     embed = Embed(
-                        title="Hint",
-                        description="use `!ow register` to register, or `!ow help` for more info",
+                        # A headline for a tip for the user
+                        title=_("Hint"),
+                        description=_("use `!ow register` to register, or `!ow help` for more info"),
                     )
         finally:
             session.close()
@@ -568,12 +580,14 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def about(self, ctx):
         embed = Embed(
-            title="About Me",
-            description=( _(
-                "I am an open source Discord bot to help manage Overwatch Discord communities.\n"
-                "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord) and licensed under the "
-                "[GNU Affero General Public License 3.0]({AGPL_LINK}); the "
-                "[development is done on Github]({GH_LINK})").format(
+            title=_("About Me"),
+            description=( 
+                # feel free to add "and the translation for this language was done by name"
+                _(
+                    "I am an open source Discord bot to help manage Overwatch Discord communities.\n"
+                    "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord) and licensed under the "
+                    "[GNU Affero General Public License 3.0]({AGPL_LINK}); the "
+                    "[development is done on Github]({GH_LINK})").format(
                     AGPL_LINK="https://www.gnu.org/licenses/agpl-3.0.en.html", 
                     GH_LINK="https://github.com/brakhane/Orisa"
                 )
@@ -614,6 +628,7 @@ class Orisa(Plugin):
                     "Don't worry, I will send you the config instructions as a DM, so others can't configure me just by watching you sending this command."
                 ),
                 embed=Embed(
+                    # A tip/information for a user
                     title=_("Tip"),
                     description=_("`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin only channel"),
                 ),
@@ -624,13 +639,13 @@ class Orisa(Plugin):
             role.name.lower() == "orisa admin" for role in ctx.author.roles
         ):
             help_embed=Embed(
-                #NOTE: :thinking: must remain as is, it's an emoji
+                # :thinking: must remain as is, it's an emoji
                 title=_(":thinking: Need help?"),
                 description=_("Join the [Support Discord]({SUPPORT_DISCORD})").format(SUPPORT_DISCORD=SUPPORT_DISCORD)
             )
             await reply(
                 ctx,
-                #NOTE: "Orisa Admin" must not be translated; additionally explaining what the string "Orisa Admin" means is ok
+                # "Orisa Admin" must not be translated; additionally explaining what the string "Orisa Admin" means is ok
                 _("This command can only be used by members with the `Orisa Admin` role (only the name of the role is important, it doesn't need any permissions)")
             )
             try:
@@ -662,8 +677,8 @@ class Orisa(Plugin):
         except Forbidden:
             await reply(ctx,
                 _("I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. (I can't post the link here because "
-                "everybody who knows that link will be able to configure me for the next 30 minutes)"
-            ))
+                "everybody who knows that link will be able to configure me for the next 30 minutes)")
+            )
 
 
     @ow.subcommand()
@@ -707,6 +722,7 @@ class Orisa(Plugin):
         )
         embed = Embed(
             url=url,
+            # type will be PC, XBOX or PSN
             title=_("Click here to register your {type} account").format(type=type.upper()),
             description=description
         )
@@ -723,7 +739,7 @@ class Orisa(Plugin):
                 value=_("If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future.")
             )
         embed.set_footer(
-            # The privacy policy is currently only available in English
+            # The translation should mention that the privacy policy is currently only available in English
             text=_("By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy")
         )
 
@@ -810,8 +826,8 @@ class Orisa(Plugin):
             if index == 0:
                 await reply(
                     ctx,
-### CONTINUE HERE I18N                    
-                    f'"{user.handles[0].handle}" already is your primary {user.handles[0].desc}. *Going back to sleep*',
+                    # handle will be the battletag/gamertag the user tried to register, type will be BattleTag or GamerTag                   
+                    _('"{handle}" already is your primary {type}. *Going back to sleep*').format(handle=user.handles[0].handle, type=user.handles[0].desc)
                 )
                 return
 
@@ -827,7 +843,8 @@ class Orisa(Plugin):
 
             await reply(
                 ctx,
-                f"Done. Your primary {user.handles[0].desc} is now **{user.handles[0].handle}**.",
+                # handle will be the battletag/gamertag the user registered, type will be BattleTag or GamerTag                   
+                _("Done. Your primary {type} is now **{handle}**.").format(handle=user.handles[0].handle, type=user.handles[0].desc)
             )
             await self._update_nick_after_secondary_change(ctx, user)
 
@@ -838,13 +855,14 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def format(self, ctx, *, format: str):
         if "]" in format:
-            await reply(ctx, "format string may not contain square brackets")
+            await reply(ctx, _("format string may not contain square brackets"))
             return
         if "$" not in format:
-            await reply(ctx, "format string must contain at least one $placeholder")
+            # keep the $ to remind the user that placeholders start with a $ sign
+            await reply(ctx, _("format string must contain at least one $placeholder"))
             return
         if not format:
-            await reply(ctx, "format string missing")
+            await reply(ctx, _("format string missing"))
             return
 
         session = self.database.Session()
@@ -852,7 +870,7 @@ class Orisa(Plugin):
         try:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, "you must register first")
+                await reply(ctx, _("you must register first"))
                 return
             else:
                 user.format = format
@@ -860,14 +878,14 @@ class Orisa(Plugin):
                     new_nick = await self._update_nick(user, force=True)
                 except InvalidFormat as e:
                     await reply(
-                        ctx, f'Invalid format string: unknown placeholder "{e.key}"'
+                        ctx, _('Invalid format string: unknown placeholder "{key}"').format(key=e.key)
                     )
                     session.rollback()
                 except NicknameTooLong as e:
                     await reply(
                         ctx,
-                        f"Sorry, using this format would make your nickname be longer than 32 characters ({len(e.nickname)} to be exact).\n"
-                        f"Please choose a shorter format or shorten your nickname",
+                        _("Sorry, using this format would make your nickname be longer than 32 characters ({len} to be exact).\n"
+                          "Please choose a shorter format or shorten your nickname").format(len=len(e.nickname)
                     )
                     session.rollback()
                 else:
@@ -1026,11 +1044,12 @@ Pornography Historian""").split("\n")
         }
 
         roles = Role.NONE
-# I18N CONT
         if roles_str is None:
             await reply(
                 ctx,
-                "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. `ds` would mean Damage + Support."
+                # the identifiers m o d s must not be translated
+                _("Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). "
+                  "They can be combined, eg. `ds` would mean Damage + Support.")
             )
             return
 
@@ -1040,7 +1059,8 @@ Pornography Historian""").split("\n")
             except KeyError:
                 await reply(
                     ctx,
-                    f"Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. `ds` would mean Damage + Support.",
+                    _("Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), "
+                      "`d` (Damage), `s` (Support). They can be combined, eg. `ds` would mean Damage + Support.").format(role=role),
                 )
                 return
 
@@ -1048,18 +1068,18 @@ Pornography Historian""").split("\n")
         try:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, "You are not registered! Do `!ow register` first.")
+                await reply(ctx, _("You are not registered! Do `!ow register` first."))
                 return
             user.roles = roles
             session.commit()
-            await reply(ctx, f"Done. Your roles are now **{roles.format()}**.")
+            await reply(ctx, _("Done. Your roles are now **{roles}**").format(roles=roles.format(ctx)))
         finally:
             session.close()
 
     async def _findplayers(
         self, ctx, diff_or_min_sr: int = None, max_sr: int = None, *, findall
     ):
-        await reply(ctx, "Sorry, findplayers doesn't work with role based SR yet. Try later.")
+        await reply(ctx, _("Sorry, findplayers doesn't work with role based SR yet. Try later."))
         return
         logger.info(
             f"{ctx.author.id} issued findplayers {diff_or_min_sr} {max_sr} {findall}"
@@ -1069,7 +1089,7 @@ Pornography Historian""").split("\n")
         try:
             asker = self.database.user_by_discord_id(session, ctx.author.id)
             if not asker:
-                await reply(ctx, "you are not registered")
+                await reply(ctx, _("you are not registered"))
                 return
 
             if max_sr is None:
@@ -1078,12 +1098,13 @@ Pornography Historian""").split("\n")
 
                 if sr_diff is not None:
                     if sr_diff <= 0:
-                        await reply(ctx, "SR difference must be positive")
+                        await reply(ctx, _("SR difference must be positive"))
                         return
 
                     if sr_diff > 5000:
                         await reply(
-                            ctx, "You just had to try ridiculous values, didn't you?"
+                            # used when Orisa is asked to find players that are more than 5000 SR below or above them
+                            ctx, _("You just had to try ridiculous values, didn't you?")
                         )
                         return
 
@@ -1091,7 +1112,8 @@ Pornography Historian""").split("\n")
                 if not base_sr:
                     await reply(
                         ctx,
-                        "You primary {asker.handles[0].desc} has no SR, please give a SR range you want to search for instead",
+                        # type is BattleTag or GamerTag
+                        _("You primary {type} has no SR, please give a SR range you want to search for instead").format(type=asker.handles[0].desc)
                     )
                     return
 
@@ -1113,11 +1135,11 @@ Pornography Historian""").split("\n")
                 ):
                     await reply(
                         ctx,
-                        "min and max must be between 500 and 5000, and min must not be larger than max.",
+                        _("min and max must be between 500 and 5000, and min must not be larger than max."),
                     )
                     return
-
-                type_msg = f"between {min_sr} and {max_sr} SR"
+                # used as part of the string "Here is a list of players <between min_sr and max_sr SR>" or "there are no players <between...>"
+                type_msg = _("between {min_sr} and {max_sr} SR").format(min_sr=min_sr, max_sr=max_sr)
 
             candidates = (
                 session.query(BattleTag)
@@ -1163,9 +1185,9 @@ Pornography Historian""").split("\n")
             msg = ""
 
             if not online:
-                msg += f"There are no players currently online {type_msg}\n\n"
+                msg += _("There are no players currently online {type_msg}\n\n").format(type_msg=type_msg)
             else:
-                msg += f"**The following players are currently online and {type_msg}:**\n\n"
+                msg += _("**The following players are currently online and {type_msg}:**\n\n").format(type_msg=type_msg)
                 msg += "\n".join(format_member(m) for m in online)
                 msg += "\n"
 
@@ -1173,21 +1195,20 @@ Pornography Historian""").split("\n")
 
                 if not offline:
                     if online:
-                        msg += "There are no offline players within that range."
+                        msg += _("There are no offline players within that range.")
                     else:
-                        msg += "There are also no offline players within that range. :("
+                        msg += _("There are also no offline players within that range. :(")
                 else:
-                    msg += "**The following players are within that range, but currently offline:**\n\n"
+                    msg += _("**The following players are within that range, but currently offline:**\n\n")
                     msg += "\n".join(format_member(m) for m in offline)
 
             else:
                 if offline:
-                    msg += f"\nThere are also {len(offline)} offline players within that range. Use the `findallplayers` "
-                    msg += "command to show them as well."
+                    msg += _("\nThere are also {len} offline players within that range. Use the `findallplayers` command to show them as well.").format(len=len(offline))
 
             await send_long(ctx.author.send, msg)
             if not ctx.channel.private:
-                await reply(ctx, "I sent you a DM with the results.")
+                await reply(ctx, _("I sent you a DM with the results."))
 
         finally:
             session.close()
@@ -1201,12 +1222,13 @@ Pornography Historian""").split("\n")
             ):
                 await reply(
                     ctx,
-                    "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!",
+                    # Orisa Admin must not be translated
+                    _("I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!"),
                 )
                 try:
                     await ctx.channel.messages.send(content=None, embed=Embed(
                         title=":thinking: Need help?",
-                        description=f"Join the [Support Discord]({SUPPORT_DISCORD})"
+                        description=_("Join the [Support Discord]({SUPPORT_DISCORD})").format(SUPPORT_DISCORD=SUPPORT_DISCORD)
                     ))
                 except Exception:
                     logger.exception("Unable to send help embed")
@@ -1223,11 +1245,11 @@ Pornography Historian""").split("\n")
         if forbidden:
             await reply(
                 ctx,
-                "I tried to send you a DM with help, but you don't allow DM from server members. "
-                "I can't post it here, because it's rather long. Please allow DMs and try again.",
+                _("I tried to send you a DM with help, but you don't allow DM from server members. "
+                  "I can't post it here, because it's rather long. Please allow DMs and try again."),
             )
         elif not ctx.channel.private:
-            await reply(ctx, "I sent you a DM with instructions.")
+            await reply(ctx, _("I sent you a DM with instructions."))
 
     def _create_help(self, ctx):
         channel_id = None
@@ -1238,8 +1260,9 @@ Pornography Historian""").split("\n")
                 break
 
         embed = Embed(
-            title="Orisa's purpose",
-            description=(
+            title=_("Orisa's purpose"),
+            # <@!> and <#> are discord codes and must be kept
+            description=( _(
                 "When joining a QP or Comp channel, you need to know the BattleTag of a channel member, or they need "
                 "yours to add you. In competitive channels it also helps to know which SR the channel members have. "
                 "To avoid having to ask for this information again and again when joining a channel, this bot was created. "
@@ -1247,43 +1270,48 @@ Pornography Historian""").split("\n")
                 "current SR and it will be kept up to date. You can also ask for other member's BattleTag, or request "
                 "your own so others can easily add you in OW.\n"
                 "It will also send a short message to the chat when you ranked up.\n"
-                f"*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{self.client.application_info.owner.id}>*\n"
-                f"\n**The commands only work in the <#{channel_id}> channel or by sending me a DM**\n"
+                "*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{OWNER}>*\n"
+                "\n**The commands only work in the <#{channel_id}> channel or by sending me a DM**\n"
                 "If you are new to Orisa, you are probably looking for `!ow register` or `!ow register xbox`\n"
                 "If you want to use Orisa on your own server or help developing it, enter `!ow about`\n"
-                "Parameters in [square brackets] are optional."
+                "Parameters in [square brackets] are optional." 
+                ).format(OWNER=self.client.application_info.owner.id, channel_id=channel_id)
             ),
         )
         embed.add_field(
             name="!ow [nick]",
+            # help text for !ow <some nickname>
             value=(
-                "Shows the BattleTag for the given nickname, or your BattleTag "
+                _("Shows the BattleTag for the given nickname, or your BattleTag "
                 "if no nickname is given. `nick` can contain spaces. A fuzzy search for the nickname is performed.\n"
                 "*Examples:*\n"
                 "`!ow` will show your BattleTag\n"
                 '`!ow the chosen one` will show the BattleTag of "tHE ChOSeN ONe"\n'
                 '`!ow orisa` will show the BattleTag of "SG | Orisa", "Orisa", or "Orisad"\n'
                 '`!ow oirsa` and `!ow ori` will probably also show the BattleTag of "Orisa"'
+                )
             ),
         )
         embed.add_field(
             name="!ow about",
-            value="Shows information about Orisa, and how you can add her to your own Discord server, or help supporting her",
+            value=_("Shows information about Orisa, and how you can add her to your own Discord server, or help supporting her"),
         )
         embed.add_field(
             name="!ow alwaysshowsr [on/off]",
-            value="On some servers, Orisa will only show your SR or rank in your nick when you are in an OW voice channel. If you want your nick to always show your SR or rank, "
+            value=_("On some servers, Orisa will only show your SR or rank in your nick when you are in an OW voice channel. If you want your nick to always show your SR or rank, "
             "set this to on.\n"
             "*Example:*\n"
-            "`!ow alwaysshowsr on`",
+            "`!ow alwaysshowsr on`"),
         )
         embed.add_field(
             name="!ow config",
-            value='This command can only be used by members with the "Orisa Admin" role and allows them to configure Orisa for the specific Discord server',
+            # don't translate "Orisa Admin"
+            value=_('This command can only be used by members with the "Orisa Admin" role and allows them to configure Orisa for the specific Discord server'),
         )
         embed.add_field(
             name="!ow dumpsr",
-            value="Download your SR history as an Excel sheet"
+            # help for !ow dumpsr
+            value=_("Download your SR history as an Excel sheet")
         )
         embed.add_field(
             name="!ow findplayers [max diff] *or* !ow findplayers min max",
@@ -1305,114 +1333,121 @@ Pornography Historian""").split("\n")
         )
         embed.add_field(
             name="!ow forceupdate",
-            value="Immediately checks your account data and updates your nick accordingly.\n"
+            # help !ow forceupdate
+            value=_("Immediately checks your account data and updates your nick accordingly.\n"
             "*Checks and updates are done automatically, use this command only if "
-            "you want your nick to be up to date immediately!*",
+            "you want your nick to be up to date immediately!*"),
         )
         embed.add_field(
             name="!ow forgetme",
-            value="All your BattleTags will be removed from the database and your nick "
-            "will not be updated anymore. You can re-register at any time.",
+            # help !ow forgetme
+            value=_("All your BattleTags will be removed from the database and your nick "
+            "will not be updated anymore. You can re-register at any time."),
         )
 
         embed.add_field(
             name="!ow format *format*",
-            value="Lets you specify how your SR or rank is displayed. It will always be shown in [square\u00a0brackets] appended to your name.\n"
-            "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`."
+            # help !ow format. $placeholder can be translated, as can ${placeholder}
+            value=_("Lets you specify how your SR or rank is displayed. It will always be shown in [square\u00a0brackets] appended to your name.\n"
+            "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`.")
         )
         embed.add_field(
-            name="\N{BLACK STAR} *ow format placeholders*",
-            value="*The following placeholders are defined:*\n"
+            name=_("\N{BLACK STAR} *ow format placeholders*"),
+            # $fullsr, $rank, etc. cannot be translated
+            value=_("*The following placeholders are defined:*\n"
             "`$sr`\nthe first two digits of your SR for all 3 roles in order Tank, Damage, Support; if you have secondary accounts, an asterisk (\*) is added at the end. A question mark is added if an old SR is shown\n\n"
             "`$fullsr`\nLike `$sr` but all 4 digits are shown\n\n"
             "`$rank`\nyour rank in shortened form for all 3 roles in order Tank, Damage, Support; asterisk and question marks work like in `$sr`\n\n"
             "`$tank`, `$damage`, `$support`\nYour full SR for the respective role followed by its symbol. Asterisk and question mark have the same meaning like in `$sr`. "
-            f"For technical reasons the symbols for the respective roles are `{self.SYMBOL_TANK}`, `{self.SYMBOL_DPS}`, `{self.SYMBOL_SUPPORT}`\n\n"
+            "For technical reasons the symbols for the respective roles are `{SYMBOL_TANK}`, `{SYMBOL_DPS}`, `{SYMBOL_SUPPORT}`\n\n"
             "`$tankrank`, `$damagerank`, `$supportrank`\nlike above, but the rank is shown instead.\n\n"
             "`$dps`, `$dpsrank`\nAlias for `$damage` and `$damagerank`, respectively"
+            ).format(SYMBOL_TANK=self.SYMBOL_TANK, SYMBOL_DPS=self.SYMBOL_DPS, SYMBOL_SUPPORT=self.SYMBOL_SUPPORT)
         )
         embed.add_field(
-            name="\N{BLACK STAR} *ow format examples*",
-            value=
+            name=_("\N{BLACK STAR} *ow format examples*"),
+            value= _(
             "`!ow format hello $sr` will result in `[hello 12-34-45]`\n"
             "`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
-            f"`!ow format $damage $support` in `[1234{self.SYMBOL_DPS} 2345{self.SYMBOL_SUPPORT}]`\n"
-            "*By default, the format is `$sr`*",
+            "`!ow format $damage $support` in `[1234{SYMBOL_DPS} 2345{SYMBOL_SUPPORT}]`\n"
+            "*By default, the format is `$sr`*").format(SYMBOL_DPS=self.SYMBOL_DPS, SYMBOL_SUPPORT=self.SYMBOL_SUPPORT),
         )
 
         embeds = [embed]
-        embed = Embed(title="help cont'd")
+        # headline of second help page
+        embed = Embed(title=_("help cont'd"))
         embeds.append(embed)
 
         embed.add_field(
             name="!ow get nick",
             value=(
-                "Same as `!ow [nick]`, (only) useful when the nick is the same as a command.\n"
+                _("Same as `!ow [nick]`, (only) useful when the nick is the same as a command.\n"
                 "*Example:*\n"
-                '`!ow get register` will search for the nick "register"'
+                '`!ow get register` will search for the nick "register"')
             ),
         )
         embed.add_field(
             name="!ow register [pc/xbox]",
-            value="Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. "
+            value=_("Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. "
             "Your OW account will be checked periodically and your nick will be "
             "automatically updated to show your SR or rank (see the *format* command for more info). "
             "`!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. "
-            "If you register an XBL account, you have to link it to your Discord beforehand. PSN accounts are not supported yet.",
+            "If you register an XBL account, you have to link it to your Discord beforehand. PSN accounts are not supported yet.")
         )
         embed.add_field(name="!ow privacy", value="Show Orisa's Privacy Policy")
         embed.add_field(
             name="!ow setprimary *battletag*",
-            value="Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using, the its SR is shown in your nick\n"
+            value=_("Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using, the its SR is shown in your nick\n"
             "Unlike `register`, the search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n"
             "The given BattleTag must already be registered as one of your BattleTags.\n"
             "*Example:*\n"
-            "`!ow setprimary jjonak`",
+            "`!ow setprimary jjonak`"),
         )
         embed.add_field(
             name="!ow setprimary *index*",
-            value="Like `!ow setprimary battletag`, but uses numbers, 1 is your first secondary, 2 your seconds etc. The order is shown by `!ow` (alphabetical)\n"
+            value=_("Like `!ow setprimary battletag`, but uses numbers, 1 is your first secondary, 2 your seconds etc. The order is shown by `!ow` (alphabetical)\n"
             "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
             "*Example:*\n"
-            "`!ow setprimary 1`",
+            "`!ow setprimary 1`"),
         )
         embed.add_field(
             name="!ow setroles *roles*",
-            value="Sets the role you can/want to play. It will be shown in `!ow` and will also be used to update the number of roles "
+            # the role codes d, m, o, s cannot be translated
+            value=_("Sets the role you can/want to play. It will be shown in `!ow` and will also be used to update the number of roles "
             "in voice channels you join.\n"
             '*roles* is a single "word" consisting of one or more of the following identifiers (both upper and lower case work):\n'
             "`d` for DPS, `m` for Main Tank, `o` for Off Tank, `s` for Support\n"
             "*Examples:*\n"
             "`!ow setroles d`: you only play DPS\n"
             "`!ow setroles so`: you play Support and Off Tanks\n"
-            "`!ow setroles dmos`: you are a true Flex and play everything.",
+            "`!ow setroles dmos`: you are a true Flex and play everything."),
         )
         embed.add_field(
             name="!ow srgraph [from_date]",
-            value="*This command is in beta and can change at any time; it might also have bugs, report them please*\n"
+            value=_("*This command is in beta and can change at any time; it might also have bugs, report them please*\n"
             "Shows a graph of your SR. If from_date (as DD.MM.YY or YYYY-MM-DD) is given, the graph starts at that date, otherwise it starts "
-            "as early as Orisa has data.",
+            "as early as Orisa has data."),
         )
         embed.add_field(
             name="!ow usersrgraph *username* [from_date]",
-            value="*This command can only be used by users with the Orisa Admin role!*\n"
-            "Like srgraph, but shows the graph for the given user"
+            value=_("*This command can only be used by users with the Orisa Admin role!*\n"
+            "Like srgraph, but shows the graph for the given user")
         )
         embed.add_field(
             name="!ow unregister *battletag*",
-            value="If you have secondary BattleTags, you can remove the given BattleTag from the list. Unlike register, the search is performed fuzzy, so "
+            value=_("If you have secondary BattleTags, you can remove the given BattleTag from the list. Unlike register, the search is performed fuzzy, so "
             "you normally only have to specify the first few letters of the BattleTag to remove.\n"
             "You cannot remove your primary BattleTag, you have to choose a different primary BattleTag first.\n"
             "*Example:*\n"
-            "`!ow unregister foo`",
+            "`!ow unregister foo`"),
         )
         embed.add_field(
             name="!ow unregister *index*",
-            value="Like `unregister battletag`, but removes the battletag by number. Your first secondary is 1, your second 2, etc.\n"
+            value=_("Like `unregister battletag`, but removes the battletag by number. Your first secondary is 1, your second 2, etc.\n"
             "The order is shown by the `!ow` command (it's alphabetical).\n"
             "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
             "*Example:*\n"
-            "`!ow unregister 1`",
+            "`!ow unregister 1`"),
         )
 
         return embeds
@@ -1424,7 +1459,7 @@ Pornography Historian""").split("\n")
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, "You are not registered. Do `!ow register` first.")
+                await reply(ctx, _("You are not registered. Do `!ow register` first."))
                 return
             else:
                 await self._srgraph(ctx, user, ctx.author.name, date)
@@ -1435,7 +1470,7 @@ Pornography Historian""").split("\n")
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, member.id)
             if not user:
-                await reply(ctx, f"{member.name} not registered")
+                await reply(ctx, _("{member_name} is not registered").format(member_name=member.name)
                 return
             else:
                 await self._srgraph(ctx, user, member.name, date)
@@ -1447,14 +1482,15 @@ Pornography Historian""").split("\n")
         text = text.replace("OWNER_ID", f"<@!{self.client.application_info.owner.id}>")
         await send_long(ctx.author.send, text)
         if not ctx.channel.private:
-            await reply(ctx, "I sent you the privacy policy as DM.")
+            # privacy policy is currently only availabe in English
+            await reply(ctx, _("I sent you the privacy policy as DM."))
 
     @ow.subcommand()
     async def dumpsr(self, ctx):
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, "You are not registered.")
+                await reply(ctx, _("You are not registered."))
                 return
 
             with tempfile.NamedTemporaryFile(suffix=".xls") as tmp:
@@ -1463,7 +1499,7 @@ Pornography Historian""").split("\n")
                     for handle in user.handles:
                         df = pd.DataFrame.from_records(
                             [(sr.timestamp, sr.tank, sr. damage, sr.support) for sr in handle.sr_history], 
-                            columns=["Timestamp", "Tank", "Damage", "Support"],
+                            columns=[_("Timestamp"), _("Tank"), _("Damage"), _("Support")],
                         )
                         df.to_excel(xls_wr, sheet_name=handle.handle, index=False)
                         xls_wr.sheets[handle.handle].column_dimensions['A'].width = 25
@@ -1476,10 +1512,14 @@ Pornography Historian""").split("\n")
                 else:
                     chan = await ctx.author.user.open_private_channel()
                 await chan.messages.upload(
-                    data, filename="sr-history.xls", message_content="Here is your SR history of all your accounts as an Excel sheet."
+                    data, 
+                    # file name of the sr history excel file to download
+                    filename=_("sr-history.xls"), 
+                    message_content=_("Here is your SR history of all your accounts as an Excel sheet.")
                 )
             except Forbidden:
-                await reply(ctx, "I'm not allowed to send you a DM, please make sure that you enabled \"Allow DM from server members\" in the server's privacy settings")
+                # check how Discord translated "Allow DM from server members"
+                await reply(ctx, _("I'm not allowed to send you a DM, please make sure that you enabled \"Allow DM from server members\" in the server's privacy settings"))
             if not ctx.channel.private:
                 await reply(ctx, "I sent you a DM")
         
@@ -1493,18 +1533,18 @@ Pornography Historian""").split("\n")
 
         if not data:
             await ctx.channel.messages.send(
-                f"There is no data yet for {handle.handle}, try again later"
+                _("There is no data yet for {handle}, try again later").format(handle=handle.handle)
             )
             return
 
-        data = pd.DataFrame.from_records(reversed(data), columns=["timestamp", "Tank", "Damage", "Support"], index="timestamp")
+        data = pd.DataFrame.from_records(reversed(data), columns=["timestamp", _("Tank"), _("Damage"), _("Support")], index="timestamp")
 
-        for row in ["Tank", "Damage", "Support"]:
+        for row in [_("Tank"), _("Damage"), _("Support")]:
             if data[row].isnull().all():
                 data.drop(row, axis=1, inplace=True)
 
         if len(data.columns) == 0:
-            await reply(ctx, "I have no SR for your account stored yet.")
+            await reply(ctx, _("I have no SR for your account stored yet."))
             return
 
         if date:
@@ -1515,8 +1555,8 @@ Pornography Historian""").split("\n")
             except ValueError:
                 await reply(
                     ctx,
-                    f"I don't know what date {date} is supposed to mean. Please use "
-                    "the format DD.MM.YY or YYYY-MM-DD",
+                    _("I don't know what date {date} is supposed to mean. Please use "
+                    "the format DD.MM.YY or YYYY-MM-DD").format(date=date),
                 )
 
             data = data[data.timestamp >= date].reset_index(drop=True)
@@ -1537,9 +1577,11 @@ Pornography Historian""").split("\n")
         plt.savefig(format="png", fname=image, transparent=False)
         image.seek(0)
         embed = Embed(
-            title=f"SR History For {name}",
-            description=f"Here is your SR history starting from "
-            f"{'when you registered' if not date else pendulum.instance(date).to_formatted_date_string()}."
+            title=_("SR History For {name}").format(name=name),
+            description=_("Here is your SR history starting from {date}").format(
+                # used instead of a date when user requested a SR history from the beginning (which is the usual case)
+                date=_('when you registered') if not date else pendulum.instance(date).to_formatted_date_string()
+            )
         )
         embed.set_image(image_url="attachment://graph.png")
         await ctx.channel.messages.upload(
@@ -1680,11 +1722,14 @@ Pornography Historian""").split("\n")
         self.guild_config[guild.id] = GuildConfig.default()
 
         msg = (
-            "*Greetings*! I am excited to be here :smiley:\n"
-            "To get started, create a new role named `Orisa Admin` (only the name is important, it doesn't need any special permissions) and add yourself "
-            "and everybody that should be allowed to configure me.\n"
-            "Then, write `!ow config` in this channel and I will send you a link to configure me via DM.\n"
-            "*I will ignore all commands except `!ow help` and `!ow config` until I'm configured for this Discord!*"
+            # sent by Orisa when she joins a new server
+            _(
+                "*Greetings*! I am excited to be here :smiley:\n"
+                "To get started, create a new role named `Orisa Admin` (only the name is important, it doesn't need any special permissions) and add yourself "
+                "and everybody that should be allowed to configure me.\n"
+                "Then, write `!ow config` in this channel and I will send you a link to configure me via DM.\n"
+                "*I will ignore all commands except `!ow help` and `!ow config` until I'm configured for this Discord!*"
+            )
         )
 
         # try to find a channel to post the first hello message to
@@ -1715,8 +1760,8 @@ Pornography Historian""").split("\n")
                     # found one
                     try:
                         await channel.messages.send(content=None, embed=Embed(
-                            title=":thinking: Need help?",
-                            description=f"Join the [Support Discord]({SUPPORT_DISCORD})"))
+                            title=_(":thinking: Need help?"),
+                            description=_("Join the [Support Discord]({SUPPORT_DISCORD})").format(SUPPORT_DISCORD=SUPPORT_DISCORD))
                     except Exception:
                         logger.exception("Unable to send support embed")
 
@@ -1729,15 +1774,15 @@ Pornography Historian""").split("\n")
             try:
                 await guild.owner.send(
                     msg
-                    + f"\n\n*Somebody (hopefully you) invited me to your server {guild.name}, but I couldn't find a "
-                    f"text channel I am allowed to send messages to, so I have to message you directly*"
+                    + _("\n\n*Somebody (hopefully you) invited me to your server {guild_name}, but I couldn't find a "
+                    "text channel I am allowed to send messages to, so I have to message you directly*").format(guild_name=guild.name)
                 )
             except Exception:
                 logger.exception("Unable to send mail to owner, oh well...")
             try:
                 await guild.owner.send(content=None, embed=Embed(
-                    title=":thinking: Need help?",
-                    description=f"Join the [Support Discord]({SUPPORT_DISCORD})"))
+                    title=_(":thinking: Need help?"),
+                    description=_("Join the [Support Discord]({SUPPORT_DISCORD})").format(SUPPORT_DISCORD=SUPPORT_DISCORD))
             except Exception:
                 logger.exception("Unable to send support embed")
 
@@ -2107,8 +2152,15 @@ Pornography Historian""").split("\n")
                 if user.discord_id not in guild.members:
                     continue
                 embed = Embed(
-                    title=f"For your own safety, get behind the barrier!",
-                    description=f"**{str(guild.members[user.discord_id].name)}** just reached **{sr} SR** as **{ROLE_NAMES[role_idx]}** and advanced to **{FULL_RANKS[rank]}**. Congratulations!",
+                    # Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
+                    title=_("For your own safety, get behind the barrier!"),
+                    description= _(
+                        _("**{name}** just reached **{sr} SR** as **{role}** and advanced to **{rank}**. Congratulations!").format(
+                            name=str(guild.members[user.discord_id].name),
+                            sr=sr,
+                            role=_(ROLE_NAMES[role_idx]),
+                            rank=_(FULL_RANKS[rank])
+                        ),
                     colour=COLORS[rank],
                 )
 
@@ -2118,7 +2170,8 @@ Pornography Historian""").split("\n")
                 await self.client.find_channel(
                     self.guild_config[guild.id].congrats_channel_id
                 ).messages.send(
-                    content=f"Let's hear it for <@!{user.discord_id}>!", embed=embed
+                    # <@!> is discord markup and needs to be preserved
+                    content=_("Let's hear it for <@!{discord_id}>!"),format(discord_id=user.discord_id), embed=embed
                 )
             except Exception:
                 logger.exception(f"Cannot send congrats for guild {guild}")
@@ -2231,7 +2284,20 @@ Pornography Historian""").split("\n")
                     )
                 )
 
-            headers = ["#", "prev", "Member", "Member ID", f"{sr_kind.capitalize()} SR", "ΔSR"]
+            headers = [
+                # header for highscore table: position (keep it short)
+                _("#"), 
+                # header for highscore table: previous position (keep it short)
+                _("prev"), 
+                # header for highscore table: member name
+                _("Member"), 
+                # header for highscore table: member discord id
+                _("Member ID"), 
+                # header fdor highscore table: SR
+                _("{role} SR").format(role=sr_kind.capitalize()),
+                # header for highscore table: SR difference
+                _("ΔSR")
+            ]
             csv_file = StringIO()
             csv_writer = csv.writer(csv_file)
             csv_writer.writerow(headers)
@@ -2266,10 +2332,10 @@ Pornography Historian""").split("\n")
                 send = chan.messages.send
                 # send = self.client.application_info.owner.send
                 await send(
-                    f"Hello! Here are the current SR highscores for **{sr_kind.capitalize()}** on {type_class.blizzard_url_type.upper()} . If a member has more than one "
-                    f"{type_class.desc}, only the primary {type_class.desc} is considered. Players with "
+                    _("Hello! Here are the current SR highscores for **{role}** on {platform} . If a member has more than one "
+                    "{handle_type}, only the primary {handle_type} is considered. Players with "
                     "private profiles, or those that didn't do their placements this season yet "
-                    "are not shown."
+                    "are not shown.").format(role=_(sr_kind.capitalize()), platform=type_class.blizzard_url_type.upper(), handle_type=type_class.desc)
                 )
                 while ix < len(table_lines):
                     # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
@@ -2323,13 +2389,13 @@ Pornography Historian""").split("\n")
                 days=7
             ):
                 handle.user.last_problematic_nickname_warning = datetime.utcnow()
-                msg = "*To avoid spamming you, I will only send out this warning once per week*\n"
-                msg += f"Hi! I just tried to update your nickname, but the result '{e.nickname}' would be longer than 32 characters."
+                msg = _("*To avoid spamming you, I will only send out this warning once per week*\n")
+                msg += _("Hi! I just tried to update your nickname, but the result '{nick}' would be longer than 32 characters.").format(nick=e.nickname)
                 if handle.user.format == "$sr":
-                    msg += "\nPlease shorten your nickname."
+                    msg += _("\nPlease shorten your nickname.")
                 else:
-                    msg += "\nTry to use the $sr format (you can type `!ow format $sr` into this DM channel), or shorten your nickname."
-                msg += "\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience."
+                    msg += _("\nTry to use the $sr format (you can type `!ow format $sr` into this DM channel), or shorten your nickname.")
+                msg += _("\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience.")
                 discord_user = await self.client.get_user(handle.user.discord_id)
                 await discord_user.send(msg)
 
@@ -2502,7 +2568,7 @@ Pornography Historian""").split("\n")
 
                 if battle_tag is None:
                     await user_channel.messages.send(
-                        "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` to register an XBOX account."
+                        _("I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` to register an XBOX account.")
                     )
                     return
 
@@ -2518,7 +2584,8 @@ Pornography Historian""").split("\n")
 
                 if not handles:
                     await user_channel.messages.send(
-                        "I couldn't find a XBox account linked to your Discord. Please link your XBox account to Discord and try again. (Unfortunately, I cannot ask XBL directly for the information)"
+                        _("I couldn't find a XBox account linked to your Discord. Please link your XBox account to Discord and try again. "
+                        "(Unfortunately, I cannot ask XBL directly for the information)")
                     )
                     return
 
@@ -2538,23 +2605,29 @@ Pornography Historian""").split("\n")
                         break
                 first, *others = handles
                 if others:
-                    desc = f"OK. People can now ask me for your {first.desc}s **{', '.join(h.handle for h in handles)}**, and I will keep track of your SR."
+                    # type will be BattleTag or GamerTag, and it must be transformed into plural
+                    desc = _("OK. People can now ask me for your {type}s **{handles}**, and I will keep track of your SR.").format(
+                        type=first.desc, handles=', '.join(h.handle for h in handles)
+                    )
                 else:
-                    desc = f"OK. People can now ask me for your {first.desc} **{first.handle}**, and I will keep track of your SR."
+                    desc = _("OK. People can now ask me for your {type} **{handle}**, and I will keep track of your SR.").format(
+                        type=first.desc,
+                        handle=first.handle
+                    )
                 embed = Embed(
                     color=0x6DB76D,
-                    title="Registration successful",
+                    title=_("Registration successful"),
                     description=desc,
                 )
                 embed.add_field(
-                    name=":information_source: Pro Tips",
-                    value="On some servers, I will only update your nick if you join a OW voice channel. If you want your nick to always show your SR, "
+                    name=_(":information_source: Pro Tips"),
+                    value=_("On some servers, I will only update your nick if you join a OW voice channel. If you want your nick to always show your SR, "
                     "use the `!ow alwaysshowsr` command. If you want me to show your rank instead of your SR, use `!ow format $rank`.\n"
-                    "If you have more than one account, simply issue `!ow register` again.\n",
+                    "If you have more than one account, simply issue `!ow register` again.\n")
                 )
                 if extra_text:
                     embed.add_field(
-                        name=f":envelope: A message from the *{guild.name}* staff",
+                        name=_(":envelope: A message from the *{guild_name}* staff").format(guild_name=guild.name),
                         value=extra_text,
                     )
             else:
@@ -2567,21 +2640,27 @@ Pornography Historian""").split("\n")
                     if existing_handle and existing_handle.handle != new_handle.handle:
                         embed = Embed(
                             color=0x6DB76D,
-                            title=f"{existing_handle.desc} updated",
-                            description=f"It seems like your {existing_handle.desc} changed from *{existing_handle.handle}* to *{new_handle.handle}*. I have updated my database.",
+                            # type is battletag or gamertag
+                            title=_("{type} updated").format(type=existing_handle.desc),
+                            description=_("It seems like your {type} changed from *{old_handle}* to *{new_handle}*. I have updated my database.").format(
+                                type=existing_handle.desc, old_handle=existing_handle.handle, new_handle=new_handle.handle
+                            ),
                         )
                         existing_handle.handle = new_handle.handle
                         handles_to_check.append(existing_handle)
                     elif existing_handle:
                         embed = Embed(
-                            title=f"{existing_handle.desc} already registered",
+                            # type is GamerTag or BattleTag
+                            title=_("{type} already registered").format(type=existing_handle.desc),
                             color=0x6F0808,
-                            description=f"You already registered the {existing_handle.desc} *{existing_handle.handle}*, so there's nothing for me to do. *Sleep mode reactivated.*\n",
+                            description=_("You already registered the {type} *{handle}*, so there's nothing for me to do. *Sleep mode reactivated.*\n").format(
+                                type=existing_handle.desc, handle=existing_handle.handle
+                            ),
                         )
                         if type == "pc":
                             embed.add_field(
-                                name=":information_source: Tip",
-                                value="Open the URL in a private/incognito tab next time, so you can enter the credentials of the account you want.",
+                                name=_(":information_source: Tip"),
+                                value=_("Open the URL in a private/incognito tab next time, so you can enter the credentials of the account you want."),
                             )
                         await user_obj.send(content=None, embed=embed)
                         return
@@ -2590,9 +2669,13 @@ Pornography Historian""").split("\n")
                         handles_to_check.append(new_handle)
                         embed = Embed(
                             color=0x6DB76D,
-                            title=f"{new_handle.desc} added",
-                            description=f"OK. I've added **{new_handle.handle}** to the list of your {new_handle.desc}s. **Your primary {user.handles[0].desc} remains {user.handles[0].handle}**. "
-                            f"To change your primary tag, use `!ow setprimary`, see help for more details.",
+                            # type is GamerTag/BattleTag
+                            title=_("{type} added").format(type=new_handle.desc),
+                            # {new_type}s is plural. type is BattleTag/GamerTag
+                            description=_("OK. I've added **{new_handle}** to the list of your {new_type}s. **Your primary {primary_type} remains {primary_handle}**. "
+                                "To change your primary tag, use `!ow setprimary`, see help for more details.").format(
+                                    new_handle=new_handle.handle, new_type=new_handle.desc, primary_type = user.handles[0].desc, primary_handle=user.handles[0].handle
+                                )
                         )
 
             for handle in handles_to_check:
@@ -2603,19 +2686,24 @@ Pornography Historian""").split("\n")
                 except InvalidBattleTag as e:
                     logger.exception(f"Got invalid {handle.desc} for {handle.handle}")
                     await user_channel.messages.send(
-                        f"Invalid {handle.desc}: {e.message}...Blizzard claims that the {handle.desc} {handle.handle} has no OW account. "
-                        "Play a QP or arcade game, close OW and try again, sometimes this helps."
+                        _(
+                            "Invalid {type}: {message}...Blizzard claims that the {type} {handle} has no OW account. "
+                            "Play a QP or arcade game, close OW and try again, sometimes this helps.").format(
+                                type=handle.desc, handle=handle.handle, message=e.message
+                        )
                     )
                     return
                 except BlizzardError as e:
                     await user_channel.messages.send(
-                        f"Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later"
+                        # e is some error message
+                        _("Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later").format(e=e)
                     )
                     raise
                 except UnableToFindSR:
                     embed.add_field(
-                        name=":warning: No SR",
-                        value=f"You don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your {handle.desc}.",
+                        # :warning: is an emoji code
+                        name=_(":warning: No SR"),
+                        value=_("You don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your {type}.").format(type=handle.desc),
                     )
                     srs = TDS(None, None, None)
                 finally:
@@ -2635,23 +2723,25 @@ Pornography Historian""").split("\n")
                 await self._update_nick(user, force=True, raise_hierachy_error=True)
             except NicknameTooLong as e:
                 embed.add_field(
-                    name=":warning: Nickname too long!",
-                    value=f"Adding your SR to your nickname would result in '{e.nickname}' and with {len(e.nickname)} characters, be longer than Discord's maximum of 32."
-                    f"Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.",
+                    # :warning: is emoji code
+                    name=_(":warning: Nickname too long!"),
+                    value=_(
+                        "Adding your SR to your nickname would result in '{nickname}' and with {len} characters, be longer than Discord's maximum of 32. "
+                        "Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.").format(nickname=e.nickname, len=len(e.nickname))
                 )
             except HierarchyError as e:
                 embed.add_field(
-                    name=":warning: Cannot update nickname",
-                    value='I do not have enough permissions to update your nickname. The owner needs to move the "Orisa" role higher '
-                    "so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry.",
+                    name=_(":warning: Cannot update nickname"),
+                    value=_('I do not have enough permissions to update your nickname. The owner needs to move the "Orisa" role higher '
+                    "so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry."),
                 )
             except Exception as e:
                 logger.exception(f"unable to update nick for user {user}")
                 embed.add_field(
-                    name=":warning: Cannot update nickname",
+                    name=_(":warning: Cannot update nickname"),
                     value=(
-                        "Right now I couldn't update your nickname, I will try that again later. "
-                        f"People will still be able to ask for your {user.handles[0].desc}, though."
+                        _("Right now I couldn't update your nickname, I will try that again later. "
+                          "People will still be able to ask for your {type}, though.").format(type=user.handles[0].desc)
                     ),
                 )
             finally:
@@ -2659,13 +2749,13 @@ Pornography Historian""").split("\n")
                     await self._update_nick(user)
 
             embed.add_field(
-                name=":thumbsup: Vote for me on Discord Bot List",
-                value=f"If you find me useful, consider voting for me [by clicking here]({VOTE_LINK})",
+                name=_(":thumbsup: Vote for me on Discord Bot List"),
+                value=_("If you find me useful, consider voting for me [by clicking here]({VOTE_LINK})").format(VOTE_LINK=VOTE_LINK),
             )
 
             embed.add_field(
-                name=":heart: Say thanks by buying a coffee",
-                value=f"Want to say thanks to the guy who wrote and maintains me? Why not [buy him a coffee?]({DONATE_LINK})"
+                name=_(":heart: Say thanks by buying a coffee"),
+                value=_("Want to say thanks to the guy who wrote and maintains me? Why not [buy him a coffee?]({DONATE_LINK})").format(DONATE_LINK=DONATE_LINK)
             )
 
             await user_channel.messages.send(content=None, embed=embed)
