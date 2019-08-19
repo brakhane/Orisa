@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 20:52+0200\n"
-"PO-Revision-Date: 2019-08-19 23:02+0000\n"
+"PO-Revision-Date: 2019-08-19 23:26+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/bot/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -332,7 +332,7 @@ msgstr "Você não está registrado, não há nada que eu possa fazer."
 
 #: orisa/orisa.py:776
 msgid "You cannot unregister your primary handle. Use `!ow setprimary` to set a different primary first, or use `!ow forgetme` to delete all your data."
-msgstr "Você não pode cancelar o registro da sua tag principal. Antes, use `!ow setarprimaria` para definir uma tag primária diferente, ou comande `!ow esquecer` para excluir todos os seus dados."
+msgstr "Você não pode cancelar o registro da sua tag principal. Antes, use `!ow setprimary` para definir uma tag primária diferente, ou comande `!ow forgetme` para excluir todos os seus dados."
 
 #: orisa/orisa.py:785
 #, python-brace-format
@@ -350,7 +350,7 @@ msgstr "Ocorreu um erro ao atualizar seu apelido. Eu tentarei isso novamente mai
 
 #: orisa/orisa.py:817
 msgid "You are not registered. Use `!ow register` first."
-msgstr "Você não está registrado. Use `!ow registrar` primeiro."
+msgstr "Você não está registrado. Use `!ow register` primeiro."
 
 #. handle will be the battletag/gamertag the user tried to register, type will be BattleTag or GamerTag
 #: orisa/orisa.py:828
