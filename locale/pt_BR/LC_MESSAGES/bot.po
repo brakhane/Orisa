@@ -2,13 +2,14 @@
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Jean Lucas <jeanlucastg@gmail.com>, 2019.
+# Dennis Brakhane <brakhane@googlemail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 20:52+0200\n"
-"PO-Revision-Date: 2019-08-19 13:50+0000\n"
-"Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
+"PO-Revision-Date: 2019-08-19 23:02+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/bot/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -176,7 +177,7 @@ msgstr "Dica"
 
 #: orisa/orisa.py:565
 msgid "use `!ow register` to register, or `!ow help` for more info"
-msgstr "use `!ow registrar` para registrar, ou`!ow ajuda` para mais informações"
+msgstr "use `!ow register` para registrar, ou`!ow help` para mais informações"
 
 #: orisa/orisa.py:581
 msgid "About Me"
@@ -272,7 +273,7 @@ msgstr "Eu tentei te mandar um mensagem direta com o link, mas você desabilitou
 #: orisa/orisa.py:688
 #, python-brace-format
 msgid "{type} looks like a BattleTag and not like pc/xbox, assuming you meant just `!ow register`..."
-msgstr "{type} parece que você tentou registrar usando sua BattleTag e não a plataforma, assumindo que você quis dizer apenas `!ow registrar`..."
+msgstr "{type} parece que você tentou registrar usando sua BattleTag e não a plataforma, assumindo que você quis dizer apenas `!ow register`..."
 
 #: orisa/orisa.py:696
 msgid "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click the link above and give me permission to access your data. I only need this permission once, you can remove it later in your BattleNet account."
@@ -285,7 +286,7 @@ msgstr "Para completar o seu registro, eu preciso da sua permissão para pedir a
 #: orisa/orisa.py:711
 #, python-brace-format
 msgid "Invalid registration type \"{type}\". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet."
-msgstr "Tipo de registro inválido \"{type}\". Use `!ow registro` ou`!ow registro pc` para PC; `!ow registro xbox` para Xbox. PlayStation ainda não é suportado."
+msgstr "Tipo de registro inválido \"{type}\". Use `!ow register` ou`!ow register pc` para PC; `!ow register xbox` para Xbox. PlayStation ainda não é suportado."
 
 #. type will be PC, XBOX or PSN
 #: orisa/orisa.py:724
@@ -309,63 +310,63 @@ msgstr "Não é para PC?"
 
 #: orisa/orisa.py:737
 msgid "If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future."
-msgstr "Se você tiver uma conta XBL, use `!ow registrar xbox`. Atualmente as contas da PSN não são suportadas, mas serão futuramente."
+msgstr "Se você tiver uma conta XBL, use `!ow register xbox`. Atualmente as contas da PSN não são suportadas, mas serão futuramente."
 
 #. The translation should mention that the privacy policy is currently only available in English
 #: orisa/orisa.py:741
 msgid "By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy"
-msgstr ""
+msgstr "Ao se registrar, você concorda com a Política de Privacidade da Orisa; você pode consultá-la inserindo !ow privacy"
 
 #. Check how Discord translates "Allow direct messages from server members" in your local language and use the same term
 #: orisa/orisa.py:749
 msgid "I'm not allowed to send you a DM. Please right click on the Discord server, select Privacy Settings, and enable \"Allow direct messages from server members.\" Then try again."
-msgstr ""
+msgstr "Não estou autorizado a enviar-lhe uma mensagem direta. Por favor, clique com o botão direito do mouse no servidor de Discord, selecione Configurações de Privacidade e ative \"Permitir mensagens diretas de membros do servidor\". Após isso, tente novamente."
 
 #: orisa/orisa.py:754 orisa/orisa.py:1250
 msgid "I sent you a DM with instructions."
-msgstr ""
+msgstr "Eu te mandei uma mensagem direta com as instruções."
 
 #: orisa/orisa.py:764
 msgid "You are not registered, there's nothing for me to do."
-msgstr ""
+msgstr "Você não está registrado, não há nada que eu possa fazer."
 
 #: orisa/orisa.py:776
 msgid "You cannot unregister your primary handle. Use `!ow setprimary` to set a different primary first, or use `!ow forgetme` to delete all your data."
-msgstr ""
+msgstr "Você não pode cancelar o registro da sua tag principal. Antes, use `!ow setarprimaria` para definir uma tag primária diferente, ou comande `!ow esquecer` para excluir todos os seus dados."
 
 #: orisa/orisa.py:785
 #, python-brace-format
 msgid "Removed **{handle}**"
-msgstr ""
+msgstr "**{handle}** removida"
 
 #: orisa/orisa.py:799
 #, python-brace-format
 msgid "However, your new nickname \"{nickname}\" is now longer than 32 characters, which Discord doesn't allow. Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards."
-msgstr ""
+msgstr "Seu novo apelido \"{nickname}\" agora tem mais de 32 caracteres, tal façanha o Discord não permite. Por favor, escolha um formato diferente, ou diminua o seu apelido e use `!ow forceupdate`depois."
 
 #: orisa/orisa.py:805
 msgid "However, there was an error updating your nickname. I will try that again later."
-msgstr ""
+msgstr "Ocorreu um erro ao atualizar seu apelido. Eu tentarei isso novamente mais tarde."
 
 #: orisa/orisa.py:817
 msgid "You are not registered. Use `!ow register` first."
-msgstr ""
+msgstr "Você não está registrado. Use `!ow registrar` primeiro."
 
 #. handle will be the battletag/gamertag the user tried to register, type will be BattleTag or GamerTag
 #: orisa/orisa.py:828
 #, python-brace-format
 msgid "\"{handle}\" already is your primary {type}. *Going back to sleep*"
-msgstr ""
+msgstr "\"{handle}\" já é sua {type} principal. * Voltando a dormir *"
 
 #. handle will be the battletag/gamertag the user registered, type will be BattleTag or GamerTag
 #: orisa/orisa.py:845
 #, python-brace-format
 msgid "Done. Your primary {type} is now **{handle}**."
-msgstr ""
+msgstr "Feito. Sua {type} principal agora é **{handle} **."
 
 #: orisa/orisa.py:856
 msgid "format string may not contain square brackets"
-msgstr ""
+msgstr "A sequência de caracteres não pode conter colchetes"
 
 #. keep the $ to remind the user that placeholders start with a $ sign
 #: orisa/orisa.py:860
