@@ -1,13 +1,13 @@
 # Translation files for Orisa
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
-#
+# Jean Lucas <jeanlucastg@gmail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 20:52+0200\n"
-"PO-Revision-Date: 2019-08-18 23:11+0000\n"
+"PO-Revision-Date: 2019-08-19 13:35+0000\n"
 "Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/bot/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -300,7 +300,7 @@ msgstr ":information_source: Super dica"
 
 #: orisa/orisa.py:731
 msgid "If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the account data for that account instead."
-msgstr ""
+msgstr "Se você quiser registrar uma BattleTag secundária/smurf, abra o link em uma aba anônima (tente clicando com o botão direito do mouse no link) e em seguida insira os dados da conta."
 
 #. :video_game: is an emoji
 #: orisa/orisa.py:736
