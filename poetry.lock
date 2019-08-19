@@ -7,6 +7,18 @@ python-versions = "*"
 version = "0.4.0"
 
 [[package]]
+category = "main"
+description = "High level compatibility layer for multiple asynchronous event loop implementations"
+name = "anyio"
+optional = false
+python-versions = ">= 3.5.3"
+version = "1.0.0"
+
+[package.dependencies]
+async-generator = "*"
+sniffio = ">=1.1"
+
+[[package]]
 category = "dev"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 name = "appdirs"
@@ -20,12 +32,12 @@ description = "asks - async http"
 name = "asks"
 optional = false
 python-versions = "*"
-version = "1.3.11"
+version = "2.3.5"
 
 [package.dependencies]
+anyio = "*"
 async_generator = "*"
 h11 = "*"
-multio = "*"
 
 [[package]]
 category = "main"
@@ -147,10 +159,10 @@ description = "An async library for the Discord API"
 name = "discord-curious"
 optional = false
 python-versions = ">=3.6.2"
-version = "0.7.8.dev95"
+version = "0.7.8.dev96"
 
 [package.dependencies]
-asks = ">=1.3.0,<1.4.0"
+asks = ">=2.3.0,<2.4.0"
 async_generator = ">=1.9,<2.0"
 lomond = "0.1.13"
 multidict = ">=4.1.0,<4.2.0"
@@ -431,7 +443,7 @@ description = "A Python library to read/write Excel 2010 xlsx/xlsm files"
 name = "openpyxl"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-version = "2.6.2"
+version = "2.6.3"
 
 [package.dependencies]
 et_xmlfile = "*"
@@ -910,8 +922,9 @@ python-versions = "^3.7"
 
 [metadata.hashes]
 aiofiles = ["021ea0ba314a86027c166ecc4b4c07f2d40fc0f4b3a950d1868a0f2571c2bbee", "1e644c2573f953664368de28d2aa4c89dfd64550429d0c27c4680ccd3aa4985d"]
+anyio = ["0f47b5ea774cc9d403935c617ff27c7673f87cda0688cd1aab3137ac86283a68", "49059434c06dbfa472d972edb366497e2400ada668643c3ae89e450ce114334e"]
 appdirs = ["9e5896d1372858f8dd3344faf4e5014d21849c756c8d5701f78f8a103b372d92", "d8b24664561d0d34ddfaec54636d502d7cea6e29c3eaf68f3df6180863e2166e"]
-asks = ["d76a6314ecd7d2f920d2e94b8d7bcbb7a0941aa4c915874869c503c757088df2"]
+asks = ["b0cbfaac83383ada2c1d22044d22797bc7b4cbedf8d0518dfa53203603812733"]
 astroid = ["6560e1e1749f68c64a4b5dee4e091fce798d2f0d84ebe638cf0e0585a343acf4", "b65db1bbaac9f9f4d190199bb8680af6f6f84fd3769a5ea883df8a91fe68b4c4"]
 async-generator = ["01c7bf666359b4967d2cda0000cc2e4af16a0ae098cbffcb8472fb9e8ad6585b", "6ebb3d106c12920aaae42ccb6f787ef5eefdcdd166ea3d628fa8476abe712144"]
 attrs = ["69c0dbf2ed392de1cb5ec704444b08a5ef81680a61cb899dc08127123af36a79", "f0b870f674851ecbfbbbd364d6b5cbdff9dcedbc7f3f5e18a6891057f21fe399"]
@@ -952,7 +965,7 @@ multio = ["fdcd9bd48d053da9f44b1ca56c2f7cf0902d4eb76b41cf16b684166d7180f79f"]
 mypy-extensions = ["37e0e956f41369209a3d5f34580150bcacfabaa57b33a15c0b25f4b5725e0812", "b16cabe759f55e3409a7d231ebd2841378fb0c27a5d1994719e340e4f429ac3e"]
 numpy = ["03e311b0a4c9f5755da7d52161280c6a78406c7be5c5cc7facfbcebb641efb7e", "0cdd229a53d2720d21175012ab0599665f8c9588b3b8ffa6095dd7b90f0691dd", "312bb18e95218bedc3563f26fcc9c1c6bfaaf9d453d15942c0839acdd7e4c473", "464b1c48baf49e8505b1bb754c47a013d2c305c5b14269b5c85ea0625b6a988a", "5adfde7bd3ee4864536e230bcab1c673f866736698724d5d28c11a4d63672658", "7724e9e31ee72389d522b88c0d4201f24edc34277999701ccd4a5392e7d8af61", "8d36f7c53ae741e23f54793ffefb2912340b800476eb0a831c6eb602e204c5c4", "910d2272403c2ea8a52d9159827dc9f7c27fb4b263749dca884e2e4a8af3b302", "951fefe2fb73f84c620bec4e001e80a80ddaa1b84dce244ded7f1e0cbe0ed34a", "9588c6b4157f493edeb9378788dcd02cb9e6a6aeaa518b511a1c79d06cbd8094", "9ce8300950f2f1d29d0e49c28ebfff0d2f1e2a7444830fbb0b913c7c08f31511", "be39cca66cc6806652da97103605c7b65ee4442c638f04ff064a7efd9a81d50a", "c3ab2d835b95ccb59d11dfcd56eb0480daea57cdf95d686d22eff35584bc4554", "eb0fc4a492cb896346c9e2c7a22eae3e766d407df3eb20f4ce027f23f76e4c54", "ec0c56eae6cee6299f41e780a0280318a93db519bbb2906103c43f3e2be1206c", "f4e4612de60a4f1c4d06c8c2857cdcb2b8b5289189a12053f37d3f41f06c60d0"]
 oauthlib = ["09d438bcac8f004ae348e721e9d8a7792a9e23cd574634e973173344046287f5", "909665297635fa11fe9914c146d875f2ed41c8c2d78e21a529dd71c0ba756508"]
-openpyxl = ["1d2af392cef8c8227bd2ac3ebe3a28b25aba74fd4fa473ce106065f0b73bfe2e"]
+openpyxl = ["72d1ed243972cad0b3c236230083cac00d9c72804e64a2ae93d7901aec1a8f1c"]
 outcome = ["7357af9ba2a08fdff8c742818909c5d146fc1fe75aee4bddadaa4f8ad726d262", "9d58c05db36a900ce60c6da0167d76e28869f64b338d60fa3a61841cfa54ac71"]
 pandas = ["074a032f99bb55d178b93bd98999c971542f19317829af08c99504febd9e9b8b", "20f1728182b49575c2f6f681b3e2af5fac9e84abdf29488e76d569a7969b362e", "2745ba6e16c34d13d765c3657bb64fa20a0e2daf503e6216a36ed61770066179", "32c44e5b628c48ba17703f734d59f369d4cdcb4239ef26047d6c8a8bfda29a6b", "3b9f7dcee6744d9dcdd53bce19b91d20b4311bf904303fa00ef58e7df398e901", "544f2033250980fb6f069ce4a960e5f64d99b8165d01dc39afd0b244eeeef7d7", "58f9ef68975b9f00ba96755d5702afdf039dea9acef6a0cfd8ddcde32918a79c", "9023972a92073a495eba1380824b197ad1737550fe1c4ef8322e65fe58662888", "914341ad2d5b1ea522798efa4016430b66107d05781dbfe7cf05eba8f37df995", "9d151bfb0e751e2c987f931c57792871c8d7ff292bcdfcaa7233012c367940ee", "b932b127da810fef57d427260dde1ad54542c136c44b227a1e367551bb1a684b", "cfb862aa37f4dd5be0730731fdb8185ac935aba8b51bf3bd035658111c9ee1c9", "de7ecb4b120e98b91e8a2a21f186571266a8d1faa31d92421e979c7ca67d8e5c", "df7e1933a0b83920769611c5d6b9a1bf301e3fa6a544641c6678c67621fe9843"]
 pendulum = ["1cde6e3c6310fb882c98f373795f807cb2bd6af01f34d2857e6e283b5ee91e09", "485aef2089defee88607d37d5bc238934d0b90993d7bf9ceb36e481af41e9c66", "57801754e05f30e8a7e4d24734c9fad82c6c3ec489151555f0fc66bb32ba6d6d", "7ee344bc87cb425b04717b90d14ffde14c1dd64eaa73060b3772edcf57f3e866", "c460f4d8dc41ec3c4377ac1807678cd72fe5e973cc2943c104ffdeaac32dacb7", "d3078e007315a959989c41cee5cfd63cfeeca21dd3d8295f4bc24199489e9b6c"]

@@ -214,6 +214,7 @@ class Orisa(Plugin):
 
         await self.spawn(self._sync_all_handles_task)
 
+        logger.info("spawning cron")
         await self.spawn(self._cron_task)
 
         await self.spawn(self._web_server)
@@ -2120,6 +2121,7 @@ class Orisa(Plugin):
             )
 
         for guild_id, tops in top_per_guild.items():
+            logger.debug(f"Processing guild {guild_id} for top_players")
 
             # FIXME: wrong if there is a tie
             prev_top_tags = [
@@ -2164,6 +2166,7 @@ class Orisa(Plugin):
                     )
                 )
 
+            logger.debug("creating table...")
             headers = ["#", "prev", "Member", "Member ID", f"{sr_kind.capitalize()} SR", "ΔSR"]
             csv_file = StringIO()
             csv_writer = csv.writer(csv_file)
@@ -2193,9 +2196,11 @@ class Orisa(Plugin):
             lines = 20
 
             try:
+                logger.debug("trying to send highscore to %i", guild_id)
                 chan = self.client.find_channel(
                     self.guild_config[guild_id].listen_channel_id
                 )
+                logger.debug("found channel %s", chan)
                 send = chan.messages.send
                 # send = self.client.application_info.owner.send
                 await send(
@@ -2204,22 +2209,29 @@ class Orisa(Plugin):
                     "private profiles, or those that didn't do their placements this season yet "
                     "are not shown."
                 )
+                logger.debug("sent message")
                 while ix < len(table_lines):
                     # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
                     step = lines if ix else lines + 3
+                    logger.debug("sending long...")
                     await send_long(send, "```" + ("\n".join(table_lines[ix : ix + step]) + "```"))
+                    logger.debug("sending long done")
                     ix += step
 
+                logger.debug("trying to upload")
                 await chan.messages.upload(
                     csv_file,
                     filename=f"ranking_{sr_kind}_{type_class.blizzard_url_type.upper()}_{pendulum.now().to_iso8601_string()[:10]}.csv",
                 )
+                logger.debug("upload done")
             except Exception:
                 logger.exception("unable to send top players to guild %i", guild_id)
 
             # wait a bit before sending the next batch to avoid running into
             # rate limiting and sending data twice due to "timeouts"
+            logger.debug("sleeping for 10s")
             await trio.sleep(10)
+            logger.debug("done sleeping")
 
     async def _message_new_guilds(self):
         for guild_id, guild in self.client.guilds.copy().items():
