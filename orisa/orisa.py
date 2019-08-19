@@ -485,6 +485,7 @@ class Orisa(Plugin):
             user = self.database.user_by_discord_id(session, member.id)
             if user:
                 embed = Embed(colour=0x659DBD)  # will be overwritten later if SR is set
+
                 # Short for Discord Nickname
                 embed.add_field(name=_("Nick"), value=member.name, inline=False)
 
@@ -1329,7 +1330,7 @@ Pornography Historian""").split("\n")
         )
         embed.add_field(
             name="!ow findallplayers [max diff] *or* !ow findplayers min max",
-            value="Same as `findplayers`, but also includes offline players",
+            value=_("Same as `!ow findplayers`, but also includes offline players"),
         )
         embed.add_field(
             name="!ow forceupdate",
@@ -1394,7 +1395,7 @@ Pornography Historian""").split("\n")
             "`!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. "
             "If you register an XBL account, you have to link it to your Discord beforehand. PSN accounts are not supported yet.")
         )
-        embed.add_field(name="!ow privacy", value="Show Orisa's Privacy Policy")
+        embed.add_field(name="!ow privacy", value=_("Show Orisa's Privacy Policy"))
         embed.add_field(
             name="!ow setprimary *battletag*",
             value=_("Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using, the its SR is shown in your nick\n"
