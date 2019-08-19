@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-18 20:52+0200\n"
-"PO-Revision-Date: 2019-08-19 13:35+0000\n"
+"PO-Revision-Date: 2019-08-19 13:50+0000\n"
 "Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/bot/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -176,7 +176,7 @@ msgstr "Dica"
 
 #: orisa/orisa.py:565
 msgid "use `!ow register` to register, or `!ow help` for more info"
-msgstr "use `!ow registro` para registrar, ou`!ow ajuda` para mais informações"
+msgstr "use `!ow registrar` para registrar, ou`!ow ajuda` para mais informações"
 
 #: orisa/orisa.py:581
 msgid "About Me"
@@ -272,7 +272,7 @@ msgstr "Eu tentei te mandar um mensagem direta com o link, mas você desabilitou
 #: orisa/orisa.py:688
 #, python-brace-format
 msgid "{type} looks like a BattleTag and not like pc/xbox, assuming you meant just `!ow register`..."
-msgstr "{type} parece que você tentou registrar usando sua BattleTag e não a plataforma, assumindo que você quis dizer apenas `!ow registro`..."
+msgstr "{type} parece que você tentou registrar usando sua BattleTag e não a plataforma, assumindo que você quis dizer apenas `!ow registrar`..."
 
 #: orisa/orisa.py:696
 msgid "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click the link above and give me permission to access your data. I only need this permission once, you can remove it later in your BattleNet account."
@@ -305,11 +305,11 @@ msgstr "Se você quiser registrar uma BattleTag secundária/smurf, abra o link e
 #. :video_game: is an emoji
 #: orisa/orisa.py:736
 msgid ":video_game: Not on PC?"
-msgstr ""
+msgstr "Não é para PC?"
 
 #: orisa/orisa.py:737
 msgid "If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future."
-msgstr ""
+msgstr "Se você tiver uma conta XBL, use `!ow registrar xbox`. Atualmente as contas da PSN não são suportadas, mas serão futuramente."
 
 #. The translation should mention that the privacy policy is currently only available in English
 #: orisa/orisa.py:741
