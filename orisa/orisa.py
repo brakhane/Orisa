@@ -1908,7 +1908,7 @@ class Orisa(Plugin):
     
 
         sr_str = "-".join(val_str(x, short=True) for x in all_sr)
-        rank_str = "-".join(val_rank(x), short=True for x in all_sr)
+        rank_str = "-".join(val_rank(x, short=True) for x in all_sr)
         full_sr_str = "-".join(val_str(x) for x in all_sr)
         full_rank_str = "-".join(val_rank(x) for x in all_sr)
 
