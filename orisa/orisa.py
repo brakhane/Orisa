@@ -1124,7 +1124,7 @@ Pornography Historian""").split("\n")
 
                 min_sr, max_sr = base_sr - sr_diff, base_sr + sr_diff
 
-                type_msg = f"within {sr_diff} of {base_sr} SR"
+                type_msg = _("within {sr_diff} of {base_sr} SR").format(sr_diff=sr_diff, base_sr=base_sr)
 
             else:
                 # we are looking at a range

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-20 21:08+0200\n"
+"POT-Creation-Date: 2019-08-20 21:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -559,6 +559,11 @@ msgstr ""
 msgid ""
 "You primary {type} has no SR, please give a SR range you want to search for "
 "instead"
+msgstr ""
+
+#: orisa/orisa.py:1127
+#, python-brace-format
+msgid "within {sr_diff} of {base_sr} SR"
 msgstr ""
 
 #: orisa/orisa.py:1140
