@@ -1104,8 +1104,9 @@ Pornography Historian""").split("\n")
 
                     if sr_diff > 5000:
                         await reply(
-                            # used when Orisa is asked to find players that are more than 5000 SR below or above them
-                            ctx, _("You just had to try ridiculous values, didn't you?")
+                            # used when Orisa is asked to find players that are more than 5000 SR below or above them, use the equivalent Orisa voiceline
+                            # in your language
+                            ctx, _("That does not compute!")
                         )
                         return
 
