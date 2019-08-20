@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-20 21:45+0200\n"
-"PO-Revision-Date: 2019-08-20 19:42+0000\n"
+"PO-Revision-Date: 2019-08-21 23:33+0000\n"
 "Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/bot/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -177,7 +177,7 @@ msgstr "Dica"
 
 #: orisa/orisa.py:568
 msgid "use `!ow register` to register, or `!ow help` for more info"
-msgstr "use `!ow register` para registrar, ou`!ow help` para mais informações"
+msgstr "use `!ow registrar` para registrar, ou`!ow ajuda` para mais informações"
 
 #: orisa/orisa.py:584
 msgid "About Me"
@@ -199,7 +199,7 @@ msgstr "Convide-me para o seu servidor no Discord"
 #: orisa/orisa.py:600
 #, python-brace-format
 msgid "To invite me to your server, simply [click here]({LINK}), I will post a message with more information in a channel after I have joined your server"
-msgstr "Para me convidar para o seu servidor, simplesmente [clique aqui]({LINK}), irei enviar uma mensagem contendo mais informações em um canal depois de ter entrado no seu servidor"
+msgstr "Para me convidar para o seu servidor, apenas [clique aqui]({LINK}), irei enviar uma mensagem contendo mais informações em um canal depois de ter entrado no seu servidor"
 
 #: orisa/orisa.py:606
 msgid "Join the official Orisa Discord"
@@ -225,7 +225,7 @@ msgstr "Enviei uma mensagem direta para você"
 
 #: orisa/orisa.py:628
 msgid "The config command must be issued from a channel of the server you want to configure. Don't worry, I will send you the config instructions as a DM, so others can't configure me just by watching you sending this command."
-msgstr "O comando config deve ser emitido a partir de um canal do servidor que você deseja configurar. Não se preocupe, vou enviar-lhe as instruções de configuração via mensagem direta, para que os outros não possam me configurar apenas observando você enviando este comando."
+msgstr "O comando config deve ser emitido a partir de um canal do servidor que você deseja configurar. Não se preocupe, vou enviar-lhe as instruções de configuração por mensagem direta, desta forma os outros não poderão me configurar apenas observando você enviando este comando."
 
 #. A tip/information for a user
 #: orisa/orisa.py:633
@@ -366,16 +366,16 @@ msgstr "Feito. Sua {type} principal agora é **{handle} **."
 
 #: orisa/orisa.py:859
 msgid "format string may not contain square brackets"
-msgstr "A sequência de caracteres não pode conter colchetes"
+msgstr "A cadeia de formatação não pode conter colchetes"
 
 #. keep the $ to remind the user that placeholders start with a $ sign
 #: orisa/orisa.py:863
 msgid "format string must contain at least one $placeholder"
-msgstr ""
+msgstr "A cadeia de formatação deve conter pelo menos um $placeholder"
 
 #: orisa/orisa.py:866
 msgid "format string missing"
-msgstr ""
+msgstr "cadeia de caracteres ausente"
 
 #: orisa/orisa.py:874
 msgid "you must register first"
@@ -384,7 +384,7 @@ msgstr "você deve se registrar primeiro"
 #: orisa/orisa.py:882
 #, python-brace-format
 msgid "Invalid format string: unknown placeholder \"{key}\""
-msgstr ""
+msgstr "Cadeia de formatação inválida: placeholder desconhecido \"{key}\""
 
 #: orisa/orisa.py:888
 #, python-brace-format
@@ -392,6 +392,8 @@ msgid ""
 "Sorry, using this format would make your nickname be longer than 32 characters ({len} to be exact).\n"
 "Please choose a shorter format or shorten your nickname"
 msgstr ""
+"Desculpe, usar este formato faria seu apelido ter mais de 32 caracteres ({len} para ser exato).\n"
+"Por favor, escolha um formato mais curto ou diminua o seu apelido"
 
 #. A list of random silly titles that will be shown in the confirmation message when a user changed his nickname format.
 #. Most of them were found on the Internet, for example
@@ -421,6 +423,23 @@ msgid ""
 "Retail Jedi\n"
 "Pornography Historian"
 msgstr ""
+"Experto em Tapioca\n"
+"Cientista de Pão\n"
+"Rei das Linguiças\n"
+"Vira-nuvem\n"
+"Colecionador de Vento\n"
+"Musa do Jeff Kaplan\n"
+"Autoridade Suprema do Cuscuz\n"
+"Senhor das MILF\n"
+"Especialista em Areia\n"
+"Supervisor de Dinossauro\n"
+"Vice-rei de Kamabakka\n"
+"Conde da Beterraba\n"
+"Segurança do Chuck Norris\n"
+"Duque da Rapadura\n"
+"Devorador de Caracteres\n"
+"Historiador Pornográfico\n"
+"Catador de Átomos"
 
 #. Unlike other messages, keep this message overly formal and archaic sounding to keep a funny contrast to the silly title that will be "given" to the user.
 #. So, unlike in all the other messages, if your language has a concept of "formal" vs "familiar" you, use the formal you here.
@@ -482,7 +501,7 @@ msgstr "Feito. Suas funções agora são ** {roles} **"
 
 #: orisa/orisa.py:1083
 msgid "Sorry, findplayers doesn't work with role based SR yet. Try later."
-msgstr "Desculpe, busca por jogadores não funciona com SR baseado em funções ainda. Tente depois."
+msgstr "Desculpe, a busca por jogadores ainda não funciona com SR baseado nas funções. Tente depois."
 
 #: orisa/orisa.py:1102
 msgid "SR difference must be positive"
@@ -503,7 +522,7 @@ msgstr "Sua {type} principal não possui SR, por favor, indique um intervalo de 
 #: orisa/orisa.py:1127
 #, python-brace-format
 msgid "within {sr_diff} of {base_sr} SR"
-msgstr ""
+msgstr "entre {sr_diff} e {base_sr} de SR"
 
 #: orisa/orisa.py:1140
 msgid "min and max must be between 500 and 5000, and min must not be larger than max."
@@ -555,23 +574,25 @@ msgid ""
 "\n"
 "There are also {len} offline players within that range. Use the `findallplayers` command to show them as well."
 msgstr ""
+"\n"
+"Também há {len} jogadores off-line nesse intervalo. Use o comando `procurartodosjogadores` para mostrá-los também."
 
 #: orisa/orisa.py:1213
 msgid "I sent you a DM with the results."
-msgstr ""
+msgstr "Enviei a você uma mensagem direta com os resultados."
 
 #. Orisa Admin must not be translated
 #: orisa/orisa.py:1228
 msgid "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!"
-msgstr ""
+msgstr "Eu ainda não estou configurado! Alguém com o cargo `Orisa Admin` precisa enviar `!ow config` para me configurar primeiro!"
 
 #: orisa/orisa.py:1250
 msgid "I tried to send you a DM with help, but you don't allow DM from server members. I can't post it here, because it's rather long. Please allow DMs and try again."
-msgstr ""
+msgstr "Eu tentei enviar a você uma mensagem direta contendo ajuda, mas você não permite mensagens diretas dos membros do servidor. Não posso enviar aqui, pois o conteúdo é bastante longo. Por favor, reverta isso e tente novamente."
 
 #: orisa/orisa.py:1265
 msgid "Orisa's purpose"
-msgstr ""
+msgstr "O propósito da Orisa"
 
 #: orisa/orisa.py:1268
 #, python-brace-format
