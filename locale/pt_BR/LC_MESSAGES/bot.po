@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-20 21:31+0200\n"
-"PO-Revision-Date: 2019-08-20 19:31+0000\n"
+"PO-Revision-Date: 2019-08-20 19:42+0000\n"
 "Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/bot/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -529,22 +529,24 @@ msgid ""
 "**The following players are currently online and {type_msg}:**\n"
 "\n"
 msgstr ""
-"**Os seguintes jogadores estão online entre {type_msg}:**\n"
+"**Os seguintes jogadores estão online {type_msg}:**\n"
 "\n"
 
 #: orisa/orisa.py:1200
 msgid "There are no offline players within that range."
-msgstr ""
+msgstr "Não há jogadores off-line dentro desse intervalo."
 
 #: orisa/orisa.py:1202
 msgid "There are also no offline players within that range. :("
-msgstr ""
+msgstr "Também não há jogadores off-line nesse intervalo. :("
 
 #: orisa/orisa.py:1204
 msgid ""
 "**The following players are within that range, but currently offline:**\n"
 "\n"
 msgstr ""
+"**Os seguintes jogadores estão dentro desse intervalo, mas atualmente off-line: **\n"
+"\n"
 
 #: orisa/orisa.py:1209
 #, python-brace-format
