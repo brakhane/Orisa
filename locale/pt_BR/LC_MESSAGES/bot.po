@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-20 01:40+0200\n"
-"PO-Revision-Date: 2019-08-19 23:26+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"PO-Revision-Date: 2019-08-20 19:09+0000\n"
+"Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/bot/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -379,7 +379,7 @@ msgstr ""
 
 #: orisa/orisa.py:874
 msgid "you must register first"
-msgstr ""
+msgstr "você deve se registrar primeiro"
 
 #: orisa/orisa.py:882
 #, python-brace-format
@@ -428,64 +428,64 @@ msgstr ""
 #: orisa/orisa.py:926
 #, python-brace-format
 msgid "Done. Henceforth, ye shall be knownst as \"`{new_nick}`, {title}"
-msgstr ""
+msgstr "Feito. De agora em diante, tu serás conhecido por \"`{new_nick}`, {title}"
 
 #: orisa/orisa.py:938 orisa/orisa.py:960 orisa/orisa.py:1093
 msgid "you are not registered"
-msgstr ""
+msgstr "você não está registrado"
 
 #: orisa/orisa.py:947
 msgid "Your nick will be updated even when you are not in an OW voice channel. Use `!ow alwaysshowsr off` to turn it off again."
-msgstr ""
+msgstr "Seu apelido será atualizado mesmo quando você não estiver em um canal de voz do OW. Use `!ow sempremostrarsr off` para desligá-lo novamente."
 
 #: orisa/orisa.py:949
 msgid "Your nick will only be updated when you are in an OW voice channel. Use `!ow alwaysshowsr on` to always update your nick."
-msgstr ""
+msgstr "Seu nick só será atualizado quando você estiver em um canal de voz do OW. Use `!ow sempremostrarsr on` para sempre atualizar seu nick."
 
 #: orisa/orisa.py:976
 msgid "There were some problems updating your SR. Try again later."
-msgstr ""
+msgstr "Houve alguns problemas ao atualizar seu SR. Tente mais tarde."
 
 #: orisa/orisa.py:981
 #, python-brace-format
 msgid "OK, I have updated your data. Your (primary) SR is now {sr}. If that is not correct, you need to log out of Overwatch once and try again; your profile also needs to be public for me to track your SR."
-msgstr ""
+msgstr "Ok, atualizei seus dados. Seu SR (primário) agora é {sr}. Se isso não estiver correto, você precisa sair do Overwatch e tentar novamente; seu perfil também precisa estar público para que eu possa acompanhar seu SR."
 
 #: orisa/orisa.py:1011
 #, python-brace-format
 msgid "OK, deleted {name} from database"
-msgstr ""
+msgstr "Ok, excluí {name} do banco de dados"
 
 #: orisa/orisa.py:1016
 msgid "you are not registered anyway, so there's nothing for me to forget..."
-msgstr ""
+msgstr "você não está registrado mesmo, então não há nada para eu esquecer..."
 
 #. the identifiers m o d s must not be translated
 #: orisa/orisa.py:1052
 msgid "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. `ds` would mean Damage + Support."
-msgstr ""
+msgstr "Identificador de função ausente. Identificadores de função válidos são: `m` (Main Tanque),` o` (Off-tanque), `d` (Dano),` s` (Suporte). Eles também podem ser combinados do seguinte modo: `ds` significa Dano + Suporte."
 
 #: orisa/orisa.py:1063
 #, python-brace-format
 msgid "Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. `ds` would mean Damage + Support."
-msgstr ""
+msgstr "Identificador de função desconhecido '{role}'. Identificadores de função válidos são: `m` (Main Tanque),` o` (Off-tanque), `d` (Dano),` s` (Suporte). Eles também podem ser combinados do seguinte modo: `ds` significa Dano + Suporte."
 
 #: orisa/orisa.py:1072
 msgid "You are not registered! Do `!ow register` first."
-msgstr ""
+msgstr "Você não está registrado! Use `!ow registrar` primeiro."
 
 #: orisa/orisa.py:1076
 #, python-brace-format
 msgid "Done. Your roles are now **{roles}**"
-msgstr ""
+msgstr "Feito. Suas funções agora são ** {roles} **"
 
 #: orisa/orisa.py:1083
 msgid "Sorry, findplayers doesn't work with role based SR yet. Try later."
-msgstr ""
+msgstr "Desculpe, busca por jogadores não funciona com SR baseado em funções ainda. Tente depois."
 
 #: orisa/orisa.py:1102
 msgid "SR difference must be positive"
-msgstr ""
+msgstr "A diferença de SR deve ser positiva"
 
 #. used when Orisa is asked to find players that are more than 5000 SR below or above them
 #: orisa/orisa.py:1108
