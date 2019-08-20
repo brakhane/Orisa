@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-20 21:31+0200\n"
-"PO-Revision-Date: 2019-08-20 19:09+0000\n"
+"PO-Revision-Date: 2019-08-20 19:42+0000\n"
 "Last-Translator: Weblate Admin <brakhane+weblateadmin@gmail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -498,7 +498,7 @@ msgstr "SR Differenz muss positiv sein"
 #. in your language
 #: orisa/orisa.py:1109
 msgid "That does not compute!"
-msgstr ""
+msgstr "Diese Logik ist fehlerhaft!"
 
 #. type is BattleTag or GamerTag
 #: orisa/orisa.py:1118
@@ -509,7 +509,7 @@ msgstr "Dein primärer {type} hat keine SR, bitte gebe stattdessen einen SR-Bere
 #: orisa/orisa.py:1127
 #, python-brace-format
 msgid "within {sr_diff} of {base_sr} SR"
-msgstr ""
+msgstr "innerhalb {sr_diff} von {base_sr} SR"
 
 #: orisa/orisa.py:1140
 msgid "min and max must be between 500 and 5000, and min must not be larger than max."
