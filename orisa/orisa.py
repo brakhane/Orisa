@@ -2229,8 +2229,8 @@ class Orisa(Plugin):
 
             # wait a bit before sending the next batch to avoid running into
             # rate limiting and sending data twice due to "timeouts"
-            logger.debug("sleeping for 10s")
-            await trio.sleep(10)
+            logger.debug("sleeping for 5s")
+            await trio.sleep(5)
             logger.debug("done sleeping")
 
     async def _message_new_guilds(self):
