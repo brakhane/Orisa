@@ -1,13 +1,13 @@
 # Translation files for Orisa
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
-#
+# Daniel Martins <dafm200936@gmail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-20 01:40+0200\n"
-"PO-Revision-Date: 2019-08-18 15:28+0000\n"
+"PO-Revision-Date: 2019-08-20 19:10+0000\n"
 "Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://weblate.wur.st/projects/orisa/bot/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -225,7 +225,7 @@ msgstr ""
 #. A tip/information for a user
 #: orisa/orisa.py:633
 msgid "Tip"
-msgstr ""
+msgstr "Dica"
 
 #: orisa/orisa.py:634
 msgid "`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin only channel"
@@ -236,7 +236,7 @@ msgstr ""
 #: orisa/orisa.py:644 orisa/orisa.py:671 orisa/orisa.py:1764
 #: orisa/orisa.py:1785
 msgid ":thinking: Need help?"
-msgstr ""
+msgstr ":thinking: Precisas de ajuda?"
 
 #: orisa/orisa.py:645 orisa/orisa.py:672 orisa/orisa.py:1232
 #: orisa/orisa.py:1765 orisa/orisa.py:1786
@@ -255,7 +255,7 @@ msgstr ""
 
 #: orisa/orisa.py:674
 msgid "This link will be valid for 30 minutes"
-msgstr ""
+msgstr "Este link será válido durante 30 minutos"
 
 #: orisa/orisa.py:677
 msgid "I sent you a DM"
@@ -281,31 +281,32 @@ msgstr ""
 #: orisa/orisa.py:714
 #, python-brace-format
 msgid "Invalid registration type \"{type}\". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet."
-msgstr ""
+msgstr "O tipo de registo \"{type}\" é inválido. Usa `!ow register` ou `!ow register pc` para PC; `!ow register xbox` para XBOX. PlayStation ainda não é ainda suportado."
 
 #. type will be PC, XBOX or PSN
 #: orisa/orisa.py:727
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Click here to register your {type} account"
-msgstr ""
+msgstr "Carrega aqui para registar a tua conta {type}"
 
 #. :information_source: is an emoji
 #: orisa/orisa.py:733
 msgid ":information_source: Protip"
-msgstr ""
+msgstr ":information_source: Protip"
 
 #: orisa/orisa.py:734
+#, fuzzy
 msgid "If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the account data for that account instead."
-msgstr ""
+msgstr "Se quiseres registar uma BattleTag secundária/smurf, podes abrir o link numa aba privada/incógnito (tenta carregar no link com o botão direit e coloca os dados necessários para essa conta."
 
 #. :video_game: is an emoji
 #: orisa/orisa.py:739
 msgid ":video_game: Not on PC?"
-msgstr ""
+msgstr ":video_game: Não estás no PC?"
 
 #: orisa/orisa.py:740
 msgid "If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future."
-msgstr ""
+msgstr "Se tens uma conta XBL, usa `!ow register xbox`. Contas PSN não são atualmente suportadas, mas serão no futuro."
 
 #. The translation should mention that the privacy policy is currently only available in English
 #: orisa/orisa.py:744
