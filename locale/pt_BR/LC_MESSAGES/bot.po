@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-20 21:08+0200\n"
+"POT-Creation-Date: 2019-08-20 21:31+0200\n"
 "PO-Revision-Date: 2019-08-20 19:31+0000\n"
 "Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/bot/pt_BR/>\n"
@@ -498,6 +498,11 @@ msgstr "Não faz sentido!"
 #, python-brace-format
 msgid "You primary {type} has no SR, please give a SR range you want to search for instead"
 msgstr "Sua {type} principal não possui SR, por favor, indique um intervalo de SR que você deseja procurar"
+
+#: orisa/orisa.py:1127
+#, python-brace-format
+msgid "within {sr_diff} of {base_sr} SR"
+msgstr ""
 
 #: orisa/orisa.py:1140
 msgid "min and max must be between 500 and 5000, and min must not be larger than max."
