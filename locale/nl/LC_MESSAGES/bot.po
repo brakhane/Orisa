@@ -2,13 +2,14 @@
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Alpha <delilah94@outlook.com>, 2019.
+# Dennis Brakhane <brakhane@googlemail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-20 21:45+0200\n"
-"PO-Revision-Date: 2019-08-19 23:02+0000\n"
-"Last-Translator: Alpha <delilah94@outlook.com>\n"
+"PO-Revision-Date: 2019-08-21 23:33+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: Dutch <https://weblate.wur.st/projects/orisa/bot/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -447,10 +448,9 @@ msgstr ""
 #. So, unlike in all the other messages, if your language has a concept of "formal" vs "familiar" you, use the formal you here.
 #. {title} is taken from the list of random titles
 #: orisa/orisa.py:926
-#, fuzzy, python-brace-format
-#| msgid "Done. Henceforth, ye shall be knownst as \"`{new_nick}`, {title}"
+#, python-brace-format
 msgid "Done. Henceforth, thou shall be knownst as \"`{new_nick}`, {title}\""
-msgstr "Opgeslagen. Je zult hierna bekend zijn als \"`{new_nick}`, {title}"
+msgstr "Opgeslagen. Je zult hierna bekend zijn als \"`{new_nick}`, {title}\""
 
 #: orisa/orisa.py:938 orisa/orisa.py:960 orisa/orisa.py:1093
 msgid "you are not registered"
