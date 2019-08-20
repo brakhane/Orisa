@@ -1400,7 +1400,7 @@ Pornography Historian""").split("\n")
         embed.add_field(
             name="!ow setprimary *battletag*",
             value=_("Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using, the its SR is shown in your nick\n"
-            "Unlike `register`, the search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n"
+            "The search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n"
             "The given BattleTag must already be registered as one of your BattleTags.\n"
             "*Example:*\n"
             "`!ow setprimary jjonak`"),
@@ -1437,7 +1437,7 @@ Pornography Historian""").split("\n")
         )
         embed.add_field(
             name="!ow unregister *battletag*",
-            value=_("If you have secondary BattleTags, you can remove the given BattleTag from the list. Unlike register, the search is performed fuzzy, so "
+            value=_("If you have secondary BattleTags, you can remove the given BattleTag from the list. The search is performed fuzzy, so "
             "you normally only have to specify the first few letters of the BattleTag to remove.\n"
             "You cannot remove your primary BattleTag, you have to choose a different primary BattleTag first.\n"
             "*Example:*\n"
