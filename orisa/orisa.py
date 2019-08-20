@@ -923,7 +923,7 @@ Pornography Historian""").split("\n")
                         # Unlike other messages, keep this message overly formal and archaic sounding to keep a funny contrast to the silly title that will be "given" to the user. 
                         # So, unlike in all the other messages, if your language has a concept of "formal" vs "familiar" you, use the formal you here.
                         # {title} is taken from the list of random titles
-                        _('Done. Henceforth, ye shall be knownst as "`{new_nick}`, {title}').format(new_nick=new_nick, title=random.choice(titles))
+                        _('Done. Henceforth, thou shall be knownst as "`{new_nick}`, {title}"').format(new_nick=new_nick, title=random.choice(titles))
                     )
         finally:
             session.commit()
