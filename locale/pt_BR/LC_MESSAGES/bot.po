@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-20 21:08+0200\n"
-"PO-Revision-Date: 2019-08-20 19:09+0000\n"
+"PO-Revision-Date: 2019-08-20 19:31+0000\n"
 "Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/bot/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -168,7 +168,7 @@ msgstr ""
 #: orisa/orisa.py:563
 #, python-brace-format
 msgid "{member_name} not found in database! *Do you need a hug?*"
-msgstr "{member_name} não encontrado no banco de dados! *Você quer um abraço?*"
+msgstr "{member_name} não encontrado no banco de dados! *Quer um abraço?*"
 
 #. A headline for a tip for the user
 #: orisa/orisa.py:567
@@ -428,7 +428,7 @@ msgstr ""
 #: orisa/orisa.py:926
 #, python-brace-format
 msgid "Done. Henceforth, ye shall be knownst as \"`{new_nick}`, {title}"
-msgstr "Feito. De agora em diante, tu serás conhecido por \"`{new_nick}`, {title}"
+msgstr "Feito. De agora em diante, serás conhecido por \"`{new_nick}`, {title}"
 
 #: orisa/orisa.py:938 orisa/orisa.py:960 orisa/orisa.py:1093
 msgid "you are not registered"
@@ -454,7 +454,7 @@ msgstr "Ok, atualizei seus dados. Seu SR (primário) agora é {sr}. Se isso não
 #: orisa/orisa.py:1011
 #, python-brace-format
 msgid "OK, deleted {name} from database"
-msgstr "Ok, excluí {name} do banco de dados"
+msgstr "Ok, {name} excluído do banco de dados"
 
 #: orisa/orisa.py:1016
 msgid "you are not registered anyway, so there's nothing for me to forget..."
@@ -491,23 +491,23 @@ msgstr "A diferença de SR deve ser positiva"
 #. in your language
 #: orisa/orisa.py:1109
 msgid "That does not compute!"
-msgstr ""
+msgstr "Não faz sentido!"
 
 #. type is BattleTag or GamerTag
 #: orisa/orisa.py:1118
 #, python-brace-format
 msgid "You primary {type} has no SR, please give a SR range you want to search for instead"
-msgstr ""
+msgstr "Sua {type} principal não possui SR, por favor, indique um intervalo de SR que você deseja procurar"
 
 #: orisa/orisa.py:1140
 msgid "min and max must be between 500 and 5000, and min must not be larger than max."
-msgstr ""
+msgstr "min e max devem estar entre 500 e 5000, e min não deve ser maior que max."
 
 #. used as part of the string "Here is a list of players <between min_sr and max_sr SR>" or "there are no players <between...>"
 #: orisa/orisa.py:1144
 #, python-brace-format
 msgid "between {min_sr} and {max_sr} SR"
-msgstr ""
+msgstr "entre {min_sr} e {max_sr} de SR"
 
 #: orisa/orisa.py:1190
 #, python-brace-format
@@ -515,6 +515,8 @@ msgid ""
 "There are no players currently online {type_msg}\n"
 "\n"
 msgstr ""
+"Não há jogadores disponíveis no momento {type_msg}\n"
+"\n"
 
 #: orisa/orisa.py:1192
 #, python-brace-format
@@ -522,6 +524,8 @@ msgid ""
 "**The following players are currently online and {type_msg}:**\n"
 "\n"
 msgstr ""
+"**Os seguintes jogadores estão online entre {type_msg}:**\n"
+"\n"
 
 #: orisa/orisa.py:1200
 msgid "There are no offline players within that range."
