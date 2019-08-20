@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-20 01:40+0200\n"
 "PO-Revision-Date: 2019-08-20 19:09+0000\n"
-"Last-Translator: Guillem Rosset <guillem.rosset@gmail.com>\n"
+"Last-Translator: Ale <millito12@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.wur.st/projects/orisa/bot/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -298,7 +298,7 @@ msgstr "Haz clic aquí para registrar tu cuenta de {type}"
 #. :information_source: is an emoji
 #: orisa/orisa.py:733
 msgid ":information_source: Protip"
-msgstr ":information_source: Protip"
+msgstr ":information_source: Consejo"
 
 #: orisa/orisa.py:734
 msgid "If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the account data for that account instead."
