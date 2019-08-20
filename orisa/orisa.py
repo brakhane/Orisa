@@ -193,7 +193,7 @@ class Orisa(Plugin):
         Orisa._instance = self
         self.database = database
         self.dialogues = {}
-        self.web_send_ch, self.web_recv_ch = trio.open_memory_channel(0)
+        self.web_send_ch, self.web_recv_ch = trio.open_memory_channel(5)
         self.raven_client = raven_client
 
         self.guild_config = defaultdict(GuildConfig.default)
@@ -282,7 +282,7 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner, bypass_owner=False)
     async def messageallservers(self, ctx, *, message: str):
-        for guild_config in self.guild_config.values():
+        for guild_config in self.guild_config.copy().values():
             try:
                 logger.debug(f"Sending message to {guild_config}")
                 ch = self.client.find_channel(guild_config.listen_channel_id)
@@ -2426,7 +2426,8 @@ class Orisa(Plugin):
         async for uid, type, data in self.web_recv_ch:
             logger.debug(f"got OAuth response data {data} of type {type} for uid {uid}")
             try:
-                await self._handle_registration(uid, type, data)
+                with trio.move_on_after(60):
+                    await self._handle_registration(uid, type, data)
             except Exception:
                 logger.error(
                     "Something went wrong when working with data %s", data, exc_info=True
