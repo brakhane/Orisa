@@ -30,6 +30,7 @@ from sqlalchemy import (
     ForeignKey,
     create_engine,
     func,
+    or_
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -350,8 +351,11 @@ class Database:
     def get_handles_to_be_synced(self, session):
         results = (
             session.query(Handle)
-            .join(Handle.current_sr)
-            .filter(SR.timestamp <= datetime.utcnow() - self._min_delay)
+            .outerjoin(Handle.current_sr)
+            .filter(or_(
+                Handle.current_sr == None,
+                SR.timestamp <= datetime.utcnow() - self._min_delay
+            ))
             .all()
         )
         return [
