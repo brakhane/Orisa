@@ -49,7 +49,6 @@ SR_LOCKS = TTLCache(
 _SESSION = asks.Session(
     headers={
         "User-Agent": "Orisa/1.1 (+https://github.com/brakhane/Orisa)",
-        "Connection": "keep-alive",
     },
     connections=10
 )
