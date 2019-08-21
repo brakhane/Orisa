@@ -28,9 +28,9 @@ from sqlalchemy import (
     SmallInteger,
     String,
     ForeignKey,
+    coalesce,
     create_engine,
     func,
-    or_
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -352,10 +352,9 @@ class Database:
         results = (
             session.query(Handle)
             .outerjoin(Handle.current_sr)
-            .filter(or_(
-                Handle.current_sr == None,
-                SR.timestamp <= datetime.utcnow() - self._min_delay
-            ))
+            .filter(
+                coalesce(SR.timestamp, datetime.min) <= datetime.utcnow() - self._min_delay
+            )
             .all()
         )
         return [
