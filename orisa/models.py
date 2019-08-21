@@ -28,13 +28,13 @@ from sqlalchemy import (
     SmallInteger,
     String,
     ForeignKey,
-    coalesce,
     create_engine,
     func,
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.orderinglist import ordering_list
+from sqlalchemy.sql.functions import coalesce
 from sqlalchemy.orm import raiseload, relationship, sessionmaker
 import sqlalchemy.types as types
 
