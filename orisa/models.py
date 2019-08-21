@@ -360,6 +360,5 @@ class Database:
         return [
             result.id
             for result in results
-            if result.last_update
-            <= datetime.utcnow() - self._sync_delay(result.error_count)
+            if (result.last_update or datetime.min) <= datetime.utcnow() - self._sync_delay(result.error_count)
         ]
