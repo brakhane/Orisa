@@ -347,7 +347,11 @@ async def handle_oauth():
 
         url, headers, body = client.add_token(endpoint)
 
+        logger.debug("requesting data")
+
         data = (await asks.get(url, headers=headers)).json()
+
+        logger.debug("data received: %s", data)
     except Exception:
         logger.error(
             f"Something went wrong while getting OAuth data for {uid} {request_url}",
@@ -357,7 +361,9 @@ async def handle_oauth():
             'I\'m sorry. Something went wrong on my side. Try to reissue <p class="text-monospace">!ow register</p>',
             is_error=True,
         )
+    logger.debug("sending to channel")
     await send_ch.send((uid, type, data))
+    logger.debug("sent to channel")
 
     return await render_message("Thank you! I have sent you a DM.")
 

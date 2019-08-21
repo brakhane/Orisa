@@ -229,7 +229,7 @@ class Orisa(Plugin):
         Orisa._instance = self
         self.database = database
         self.dialogues = {}
-        self.web_send_ch, self.web_recv_ch = trio.open_memory_channel(0)
+        self.web_send_ch, self.web_recv_ch = trio.open_memory_channel(5)
         self.raven_client = raven_client
 
         self.guild_config = defaultdict(GuildConfig.default)
@@ -250,6 +250,7 @@ class Orisa(Plugin):
 
         await self.spawn(self._sync_all_handles_task)
 
+        logger.info("spawning cron")
         await self.spawn(self._cron_task)
 
         await self.spawn(self._web_server)
@@ -317,7 +318,7 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner, bypass_owner=False)
     async def messageallservers(self, ctx, *, message: str):
-        for guild_config in self.guild_config.values():
+        for guild_config in self.guild_config.copy().values():
             try:
                 logger.debug(f"Sending message to {guild_config}")
                 ch = self.client.find_channel(guild_config.listen_channel_id)
@@ -2021,8 +2022,8 @@ Pornography Historian""").split("\n")
     
 
         sr_str = "-".join(val_str(x, short=True) for x in all_sr)
-        rank_str = "-".join(val_rank(x) for x in all_sr)
-        full_sr_str = "-".join(val_str(x, short=False) for x in all_sr)
+        rank_str = "-".join(val_rank(x, short=True) for x in all_sr)
+        full_sr_str = "-".join(val_str(x) for x in all_sr)
         full_rank_str = "-".join(val_rank(x) for x in all_sr)
 
         if has_secondaries:
@@ -2242,6 +2243,7 @@ Pornography Historian""").split("\n")
             )
 
         for guild_id, tops in top_per_guild.items():
+            logger.debug(f"Processing guild {guild_id} for top_players")
 
             # FIXME: wrong if there is a tie
             prev_top_tags = [
@@ -2328,9 +2330,11 @@ Pornography Historian""").split("\n")
             lines = 20
 
             try:
+                logger.debug("trying to send highscore to %i", guild_id)
                 chan = self.client.find_channel(
                     self.guild_config[guild_id].listen_channel_id
                 )
+                logger.debug("found channel %s", chan)
                 send = chan.messages.send
                 # send = self.client.application_info.owner.send
                 await send(
@@ -2349,12 +2353,15 @@ Pornography Historian""").split("\n")
                     csv_file,
                     filename=f"ranking_{sr_kind}_{type_class.blizzard_url_type.upper()}_{pendulum.now().to_iso8601_string()[:10]}.csv",
                 )
+                logger.debug("upload done")
             except Exception:
                 logger.exception("unable to send top players to guild %i", guild_id)
 
             # wait a bit before sending the next batch to avoid running into
             # rate limiting and sending data twice due to "timeouts"
-            await trio.sleep(10)
+            logger.debug("sleeping for 5s")
+            await trio.sleep(5)
+            logger.debug("done sleeping")
 
     async def _message_new_guilds(self):
         for guild_id, guild in self.client.guilds.copy().items():
@@ -2549,7 +2556,8 @@ Pornography Historian""").split("\n")
         async for uid, type, data in self.web_recv_ch:
             logger.debug(f"got OAuth response data {data} of type {type} for uid {uid}")
             try:
-                await self._handle_registration(uid, type, data)
+                with trio.move_on_after(60):
+                    await self._handle_registration(uid, type, data)
             except Exception:
                 logger.error(
                     "Something went wrong when working with data %s", data, exc_info=True
