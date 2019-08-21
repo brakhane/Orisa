@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-20 21:45+0200\n"
 "PO-Revision-Date: 2019-08-21 23:33+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"Last-Translator: Guillem Rosset <guillem.rosset@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.wur.st/projects/orisa/bot/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -637,7 +637,7 @@ msgstr "Este comando solo puede ser usado por miembros con el rol de \"Orisa Adm
 #. help for !ow dumpsr
 #: orisa/orisa.py:1316
 msgid "Download your SR history as an Excel sheet"
-msgstr ""
+msgstr "Descarga tu histórico de SR en una hoja de Excel"
 
 #: orisa/orisa.py:1334
 msgid "Same as `!ow findplayers`, but also includes offline players"
@@ -653,7 +653,7 @@ msgstr ""
 #. help !ow forgetme
 #: orisa/orisa.py:1346
 msgid "All your BattleTags will be removed from the database and your nick will not be updated anymore. You can re-register at any time."
-msgstr ""
+msgstr "Todos tus BattleTags serán eliminados de la base de datos y tu apodo dejará de actualizarse. Puedes volver a registrarte en cualquier momento."
 
 #. help !ow format. $placeholder can be translated, as can ${placeholder}
 #: orisa/orisa.py:1353
@@ -722,7 +722,7 @@ msgstr ""
 
 #: orisa/orisa.py:1399
 msgid "Show Orisa's Privacy Policy"
-msgstr ""
+msgstr "Muestra la Política de Privacidad de Orisa"
 
 #: orisa/orisa.py:1402
 msgid ""
@@ -881,15 +881,13 @@ msgstr "Un aplauso para <@!{discord_id}>!"
 
 #. header for highscore table: position (keep it short)
 #: orisa/orisa.py:2291
-#, fuzzy
 msgid "#"
 msgstr "#"
 
 #. header for highscore table: previous position (keep it short)
 #: orisa/orisa.py:2293
-#, fuzzy
 msgid "prev"
-msgstr "prev"
+msgstr "anterior"
 
 #. header for highscore table: member name
 #: orisa/orisa.py:2295
@@ -903,13 +901,12 @@ msgstr "ID de Miembro"
 
 #. header fdor highscore table: SR
 #: orisa/orisa.py:2299
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{role} SR"
 msgstr "{role} SR"
 
 #. header for highscore table: SR difference
 #: orisa/orisa.py:2301
-#, fuzzy
 msgid "ΔSR"
 msgstr "ΔSR"
 
