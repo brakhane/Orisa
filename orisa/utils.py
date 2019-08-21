@@ -46,6 +46,14 @@ SR_LOCKS = TTLCache(
 )  # if a request should be hanging for 60s, just try another
 
 
+_SESSION = asks.Session(
+    headers={
+        "User-Agent": "Orisa/1.1 (+https://github.com/brakhane/Orisa)",
+        "Connection": "keep-alive",
+    },
+    connections=10
+)
+
 async def get_sr(handle):
     try:
         lock = SR_LOCKS[handle.handle]
@@ -67,11 +75,8 @@ async def get_sr(handle):
         
         logger.debug("requesting %s", url)
         try:
-            result = await asks.get(
+            result = await _SESSION.get(
                 url,
-                headers={
-                    "User-Agent": "Orisa/1.1 (+https://github.com/brakhane/Orisa)"
-                },
                 connection_timeout=60,
                 timeout=60,
             )
