@@ -5,13 +5,14 @@
 # Weblate Admin <brakhane+weblateadmin@gmail.com>, 2019.
 # Guillem Rosset <guillem.rosset@gmail.com>, 2019.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
+# Adrián Hernández González <adrianhernandezgonzalez24@gmail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-20 21:45+0200\n"
 "PO-Revision-Date: 2019-08-21 23:33+0000\n"
-"Last-Translator: Guillem Rosset <guillem.rosset@gmail.com>\n"
+"Last-Translator: Adrián Hernández González <adrianhernandezgonzalez24@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.wur.st/projects/orisa/bot/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -512,7 +513,7 @@ msgstr "La diferencia de SR debe ser positiva"
 #. in your language
 #: orisa/orisa.py:1109
 msgid "That does not compute!"
-msgstr ""
+msgstr "¡No se puede computar!"
 
 #. type is BattleTag or GamerTag
 #: orisa/orisa.py:1118
@@ -523,7 +524,7 @@ msgstr "Tu {type} primario no tiene SR, por favor, mejor escribe el rango de SR 
 #: orisa/orisa.py:1127
 #, python-brace-format
 msgid "within {sr_diff} of {base_sr} SR"
-msgstr ""
+msgstr "entre {sr_diff} de {base_sr} SR"
 
 #: orisa/orisa.py:1140
 msgid "min and max must be between 500 and 5000, and min must not be larger than max."
