@@ -304,12 +304,12 @@ async def handle_oauth():
         type, uid = serializer.loads(request.args["state"], max_age=600)
     except SignatureExpired:
         return await render_message(
-            _('The link has expired. Please request a new link with {register}'.format(register=register_msg),
+            _('The link has expired. Please request a new link with {register}.'.format(register=register_msg),
             is_error=True,
         )
     except BadSignature:
         return await render_message(
-            _('The data I got back is invalid. Please request a new URL with {register}'.format(register=register_msg),
+            _('The data I got back is invalid. Please request a new URL with {register}.'.format(register=register_msg),
             is_error=True,
         )
 
@@ -377,7 +377,7 @@ async def handle_oauth():
             exc_info=True,
         )
         return await render_message(
-            _('I\'m sorry. Something went wrong on my side. Try to reissue {register}'.format(register=register_msg),
+            _('I\'m sorry. Something went wrong on my side. Try to reissue {register}.'.format(register=register_msg),
             is_error=True,
         )
     logger.debug("sending to channel")
