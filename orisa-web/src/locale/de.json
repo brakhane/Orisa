@@ -8,6 +8,11 @@
         "congrats-chan-desc": "Sobald ein Mitglied einen neuen Höchstrank erreicht (z. B. Silber → Gold), wird Orisa ihn öffentlich in diesem Kanal gratulieren. Es ist sehr zu empfehlen, hier den Kanal zu wählen, indem die Mitglieder über OW diskutieren (Orisa wird hier **ausschließlich** Gratulationsmeldungen posten), aber du kannst auch den selben Kanal wie bei \"$t(cfg.listen-chan)\" wählen.",
         "error-saving": "Es gab ein Problem beim abspeichern, bitte versuche es später nochmal!",
         "fix-val-errors": "Bitte behebe die Validierungsfehler, bevor du speicherst.",
+        "general-settings-hdr": "Allgemeine Einstellungen für {{ guild_name }}",
+        "listen-chan": "Botkanal",
+        "listen-chan-desc": "Orisa wird in diesem Kanal auf Befehle hören. Dieser Kanal wird außerdem benutzt, um die tägliche SR Highscoretabelle zu posten (sofern aktiviert). Orisa reagiert immer auf Befehle in PN. Außerdem funktioniert der `!ow help` Befehl überall.",
+        "loading": "Laden",
+        "no-mgt-voice-chan-hdr": "Keine verwalteten Sprachkanäle",
         "save": "Speichern",
         "unsaved": "Es gibt nicht gespeicherte Änderungen!"
     },
