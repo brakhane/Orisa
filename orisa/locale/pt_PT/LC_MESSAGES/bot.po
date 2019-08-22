@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-22 17:14+0200\n"
+"POT-Creation-Date: 2019-08-22 17:30+0200\n"
 "PO-Revision-Date: 2019-08-20 19:10+0000\n"
 "Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://weblate.wur.st/projects/orisa/bot/pt_PT/>\n"
@@ -1025,7 +1025,7 @@ msgid ":warning: Cannot update nickname"
 msgstr ""
 
 #: orisa/orisa.py:2743
-msgid "I do not have enough permissions to update your nickname. The owner needs to move the \"Orisa\" role higher so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry."
+msgid "I do not have enough permissions to update your nickname. The owner needs to move the \"Orisa\" role higher so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry!"
 msgstr ""
 
 #: orisa/orisa.py:2751
