@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-22 17:56+0200\n"
-"PO-Revision-Date: 2019-08-21 23:33+0000\n"
+"PO-Revision-Date: 2019-08-22 16:50+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: Dutch <https://weblate.wur.st/projects/orisa/bot/nl/>\n"
 "Language: nl\n"
@@ -1172,7 +1172,5 @@ msgid "I'm sorry. Something went wrong on my side. Try to reissue {register}."
 msgstr ""
 
 #: orisa/web.py:387
-#, fuzzy
-#| msgid "I've sent you a DM"
 msgid "Thank you! I have sent you a DM."
-msgstr "Ik heb je een privébericht gestuurd"
+msgstr "Ik heb je een privébericht gestuurd."
