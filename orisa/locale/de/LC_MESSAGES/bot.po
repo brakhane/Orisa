@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-22 17:56+0200\n"
-"PO-Revision-Date: 2019-08-22 15:57+0000\n"
+"PO-Revision-Date: 2019-08-22 16:50+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -1234,31 +1234,29 @@ msgstr "Das Benutzerlimit muss zwischen 0 und 99 liegen"
 #: orisa/web.py:307
 #, python-brace-format
 msgid "The link has expired. Please request a new link with {register}."
-msgstr ""
+msgstr "Dieser Link ist abgelaufen. Bitte fordere mit {register} einen neuen an."
 
 #: orisa/web.py:312
 #, python-brace-format
 msgid "The data I got back is invalid. Please request a new URL with {register}."
-msgstr ""
+msgstr "Ich habe ungültige Daten zurückbekommen. Bitte fordere eine neue URL mit {register} an."
 
 #: orisa/web.py:329
 msgid "I got invalid data. Please try registering again."
-msgstr ""
+msgstr "Ich habe ungültige Daten erhalten. Bitte versuche es erneut."
 
 #: orisa/web.py:340
 msgid "You didn't give me permission to access your BattleTag; registration cancelled."
-msgstr ""
+msgstr "Du hast mir nicht erlaubt, auf deinen BattleTag zuzugreifen; Registrierung abgebrochen."
 
 #: orisa/web.py:380
 #, python-brace-format
 msgid "I'm sorry. Something went wrong on my side. Try to reissue {register}."
-msgstr ""
+msgstr "Es tut mir leid. Etwas ist auf meiner Seite schief gelaufen. Versuche, nocheinmal {register} einzugeben."
 
 #: orisa/web.py:387
-#, fuzzy
-#| msgid "I've sent you a DM"
 msgid "Thank you! I have sent you a DM."
-msgstr "Ich habe dir eine PN geschickt"
+msgstr "Ich habe dir eine PN geschickt."
 
 #~ msgid "You just had to try ridiculous values, didn't you?"
 #~ msgstr "Du musstest es einfach versuchen, lächerliche Werte einzugeben, nicht wahr?"
