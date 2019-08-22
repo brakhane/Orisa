@@ -140,8 +140,11 @@ Don't forget to use `!ow setroles` to set your roles; also don't play Genji."
             :state="val_state(validation_errors.listen_channel_id)"
             :invalid-feedback="validation_errors.listen_channel_id"
             label="Listen Channel"
-            description="In which channel should Orisa listen for commands? This channel will also be used to post the daily SR highscore table. Orisa always reacts to commands via DM. Also, the <code>!ow help</code> command works in any channel."
           >
+            <template #description>
+              In which channel should Orisa listen for commands? This channel will also be used to post the daily SR highscore table. Orisa always reacts to commands via DM.
+              Also, the <code>!ow help</code> command works in any channel.
+            </template>
             <channel-selector
               :state="val_state(validation_errors.listen_channel_id)"
               v-model="guild_config.listen_channel_id"
@@ -154,8 +157,12 @@ Don't forget to use `!ow setroles` to set your roles; also don't play Genji."
             :state="val_state(validation_errors.congrats_channel_id)"
             :invalid-feedback="validation_errors.congrats_channel_id"
             label="Congrats Channel"
-            description="When a member reaches a new highest rank (e.g. Silver → Gold), Orisa will publically congratulate him/her in this channel. It is highly recommended to select the channel where members chat about OW (Orisa will <strong>only</strong> post 'rank up' messages), but it can also be the same as &quot;Listen Channel&quot;."
           >
+            <template #description>
+              When a member reaches a new highest rank (e.g. Silver → Gold), Orisa will publically congratulate him/her in this channel.
+              It is highly recommended to select the channel where members chat about OW (Orisa will <strong>only</strong> post 'rank up' messages),
+              but it can also be the same as "Listen Channel".
+            </template>
             <channel-selector
               :state="val_state(validation_errors.congrats_channel_id)"
               v-model="guild_config.congrats_channel_id"
