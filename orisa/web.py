@@ -62,6 +62,7 @@ async def render_message(message, is_error=False):
     return await render_template(
         "message.html",
         message=message,
+        close_msg=_("You can close this window."),
         classes="bg-danger text-white" if is_error else "bg-success text-white",
     )
 
@@ -298,16 +299,17 @@ async def save(guild_id):
 @app.route(OAUTH_REDIRECT_PATH)
 async def handle_oauth():
 
+    register_msg = '<p class="text-monospace">!ow register</p>'
     try:
         type, uid = serializer.loads(request.args["state"], max_age=600)
     except SignatureExpired:
         return await render_message(
-            'The link has expired. Please request a new link with <p class="text-monospace">!ow register</p>',
+            _('The link has expired. Please request a new link with {register}'.format(register=register_msg),
             is_error=True,
         )
     except BadSignature:
         return await render_message(
-            'The data I got back is invalid. Please request a new URL with <p class="text-monospace">!ow register</p>',
+            _('The data I got back is invalid. Please request a new URL with {register}'.format(register=register_msg),
             is_error=True,
         )
 
@@ -324,7 +326,7 @@ async def handle_oauth():
         client_id = OAUTH_DISCORD_CLIENT_ID
         client_secret = OAUTH_DISCORD_CLIENT_SECRET
     else:
-        return await render_message("I got invalid data. Please try registering again.", is_error=True)
+        return await render_message(_("I got invalid data. Please try registering again."), is_error=True)
 
     client = WebApplicationClient(client_id)
     logger.debug(f"got OAuth auth URL {request.url}")
@@ -335,7 +337,7 @@ async def handle_oauth():
 
     if "error=access_denied" in request_url:
         return await render_message(
-            "You didn't give me permission to access your BattleTag; registration cancelled.",
+            _("You didn't give me permission to access your BattleTag; registration cancelled."),
             is_error=True,
         )
 
@@ -375,14 +377,14 @@ async def handle_oauth():
             exc_info=True,
         )
         return await render_message(
-            'I\'m sorry. Something went wrong on my side. Try to reissue <p class="text-monospace">!ow register</p>',
+            _('I\'m sorry. Something went wrong on my side. Try to reissue {register}'.format(register=register_msg),
             is_error=True,
         )
     logger.debug("sending to channel")
     await send_ch.send((uid, type, data))
     logger.debug("sent to channel")
 
-    return await render_message("Thank you! I have sent you a DM.")
+    return await render_message(_("Thank you! I have sent you a DM."))
 
 
 if DEVELOPMENT:
