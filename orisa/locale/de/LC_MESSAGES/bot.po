@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-22 23:27+0200\n"
-"PO-Revision-Date: 2019-08-22 21:24+0000\n"
+"PO-Revision-Date: 2019-08-22 21:36+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -123,7 +123,7 @@ msgstr "Nickname"
 #. When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
 #: orisa/orisa.py:513
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: orisa/orisa.py:524
 msgid "SR"
@@ -149,7 +149,7 @@ msgstr "[Overwatch-Profil]({PROFILE_LINK}) | [Orisa liken]({VOTE_LINK}) | [Orisa
 #: orisa/orisa.py:551
 #, python-brace-format
 msgid "The SR of the primary {type} was last updated {when}."
-msgstr "Das SR von dem primären {type} wurde zuletzt {when} aktualisiert."
+msgstr "Das SR des primären {type}s wurde zuletzt {when} aktualisiert."
 
 #: orisa/orisa.py:553
 #, python-brace-format
@@ -173,11 +173,11 @@ msgstr "{member_name} wurde in der Datenbank nicht gefunden! *Möchtest Du, dass
 #. A headline for a tip for the user
 #: orisa/orisa.py:566
 msgid "Hint"
-msgstr "Tipp"
+msgstr "Tip"
 
 #: orisa/orisa.py:567
 msgid "use `!ow register` to register, or `!ow help` for more info"
-msgstr "Schreib `!ow register` um Dich zu registrieren, oder `!ow help` für mehr Informationen"
+msgstr "Schreibe `!ow register` um Dich zu registrieren, oder `!ow help` für mehr Informationen"
 
 #: orisa/orisa.py:583
 msgid "About Me"
@@ -217,7 +217,7 @@ msgstr "Zeig deine Liebe :heart:"
 #: orisa/orisa.py:614
 #, python-brace-format
 msgid "If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
-msgstr "Wenn du mich nützlich findest, [kaufe meinem Betreuer eine Tasse Kaffee]({DONATE_LINK})."
+msgstr "Wenn du mich nützlich findest, [spendiere meinem Betreuer eine Tasse Kaffee]({DONATE_LINK})."
 
 #: orisa/orisa.py:619
 msgid "I've sent you a DM"
@@ -225,16 +225,16 @@ msgstr "Ich habe dir eine PN geschickt"
 
 #: orisa/orisa.py:627
 msgid "The config command must be issued from a channel of the server you want to configure. Don't worry, I will send you the config instructions as a DM, so others can't configure me just by watching you sending this command."
-msgstr "Der Befehl config muss von einem Kanal des Servers ausgegeben werden, den Du konfigurieren möchtest. Keine Sorge, ich sende dir die Konfigurationsanweisungen als DN. Andere können mich also nicht konfigurieren, indem sie Dir beim Senden dieses Befehls zusehen."
+msgstr "Der Befehl \"config\" muss von einem Kanal des Servers ausgegeben werden, den Du konfigurieren möchtest. Keine Sorge, ich sende dir die Konfigurationsanweisungen als DN. Andere können mich also nicht konfigurieren, indem sie Dir beim Senden dieses Befehls zusehen."
 
 #. A tip/information for a user
 #: orisa/orisa.py:632
 msgid "Tip"
-msgstr "Tipp"
+msgstr "Tip"
 
 #: orisa/orisa.py:633
 msgid "`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin only channel"
-msgstr "`! ow config` funktioniert in * jedem * Kanal (in dem ich natürlich Nachrichten lesen darf), Du kannst also auch einen Nur-Administrator-Kanal verwenden"
+msgstr "`! ow config` funktioniert in *jedem* Kanal (in dem ich natürlich Nachrichten lesen darf), Du kannst also auch einen Nur-Administrator-Kanal verwenden"
 
 #. :thinking: must remain as is, it's an emoji
 #. :thinking: is an emoji code
@@ -247,7 +247,7 @@ msgstr ":thinking: Brauchst du Hilfe?"
 #: orisa/orisa.py:1765 orisa/orisa.py:1786
 #, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})"
-msgstr "Trete dem[Support Discord]({SUPPORT_DISCORD}) bei"
+msgstr "Trete dem [Support Discord]({SUPPORT_DISCORD}) bei"
 
 #. "Orisa Admin" must not be translated; additionally explaining what the string "Orisa Admin" means is ok
 #: orisa/orisa.py:649
@@ -256,11 +256,11 @@ msgstr "Dieser Befehl kann nur von Mitgliedern mit der Rolle `Orisa Admin` verwe
 
 #: orisa/orisa.py:666
 msgid "Click here to configure me"
-msgstr "Klicke hier um mich zu konfigurieren"
+msgstr "Klicke hier, um mich zu konfigurieren"
 
 #: orisa/orisa.py:673
 msgid "This link will be valid for 30 minutes"
-msgstr "Dieser Link wird für 30 Minuten gültig sein"
+msgstr "Dieser Link ist 30 Minuten gültig"
 
 #: orisa/orisa.py:676
 msgid "I sent you a DM"
