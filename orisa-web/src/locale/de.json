@@ -1,1 +1,21 @@
-{}
+{
+  "mvc": {
+    "chan-name-desc": "Der Text, der vor die Kanalnummer und dem SR (sofern \"Zeige SR\" aktiviert ist) eingefügt wird",
+    "user-limit-desc": "Die Maximalanzahl von Teilnehmern in den erzeugten Sprachkanälen. 0 bedeutet unbegrenzt.",
+    "remove-unknown-sr": "Lösche unbekannte Kanäle in dieser Kategorie, die ein `#` enthalten",
+    "chan-limit": "Maximalanzahl von Kanälen pro Präfix",
+    "mngt-prefixes": "Verwaltete Präfixe",
+    "no-prefixes": "Es sind noch keine Präfixe konfiguriert!",
+    "chan-name": "Kanalname",
+    "user-limit": "Teilnehmerlimit",
+    "prefix-placeholder": "z. B. \"Comp\" oder \"Quick Play\"",
+    "show-sr-tt": "Wenn diese Option aktiviert ist, wird Orisa die durchschnittlichen SR der Teilnehmer im Kanalnamen zeigen (z. B. \"Comp #1 [12-23-34]\"). ...",
+    "show-sr": "Zeige SR von Teilnehmern in verwalteten Kanälen"
+  },
+  "cfg": {
+    "fix-val-errors": "Bitte behebe die Validierungsfehler, bevor du speicherst.",
+    "error-saving": "Es gab ein Problem beim abspeichern, bitte versuche es später nochmal!",
+    "unsaved": "Es gibt nicht gespeicherte Änderungen!",
+    "save": "Speichern"
+  }
+}
