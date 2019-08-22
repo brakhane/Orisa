@@ -187,12 +187,13 @@ def validate_config(guild, guild_config):
             pref_errors = {}
             if not prefix.name:
                 pref_errors["name"] = "A prefix is required"
-            elif '#' in prefix.name:
-                pref_errors["name"] = "The channel prefix must not contain a #"
-            elif prefix.name.strip() in names:
-                pref_errors["name"] = "This name is already used in this category"
+            else:
+                if '#' in prefix.name:
+                    pref_errors["name"] = "The channel prefix must not contain a #"
+                elif prefix.name.strip() in names:
+                    pref_errors["name"] = "This name is already used in this category"
 
-            names.add(prefix.name.strip())
+                names.add(prefix.name.strip())
 
             if prefix.limit is None or not (0 <= prefix.limit <= 99):
                 pref_errors["limit"] = "The limit must be between 0 and 99"
