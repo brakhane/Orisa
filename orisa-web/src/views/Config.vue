@@ -49,7 +49,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           $t("cfg.not-top-role-desc", {
             with_the_following_roles: $t("cfg.with-the-following-roles", {
               count: higher_roles.length
-            }) 
+            })
           }) 
         }}</vue-markdown>
         <ul>
