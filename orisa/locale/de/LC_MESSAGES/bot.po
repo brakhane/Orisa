@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-22 23:36+0200\n"
-"PO-Revision-Date: 2019-08-22 21:36+0000\n"
+"PO-Revision-Date: 2019-08-23 07:16+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -271,10 +271,9 @@ msgid "I tried to send you a DM with the link, but you disallow DM from server m
 msgstr "Ich habe versucht, Dir einen PN mit dem Link zu senden, aber Du haben PN von Servermitgliedern nicht zugelassen. Bitte erlaube das und versuche es erneut. (Ich kann den Link hier nicht posten, da jeder, der diesen Link kennt, mich für die nächsten 30 Minuten konfigurieren kann.)"
 
 #: orisa/orisa.py:690
-#, fuzzy, python-brace-format
-#| msgid "{type} looks like a BattleTag and not like pc/xbox, assuming you meant just `!ow register`..."
+#, python-brace-format
 msgid "{type} looks like a BattleTag and not like pc/xbox, assuming you meant `!ow register pc`…"
-msgstr "{type} sieht wie ein BattleTag aus und nicht wie PC/XBOX, ich gehe davon aus das du `!ow register` meintest ..."
+msgstr "{type} sieht wie ein BattleTag aus und nicht wie PC/XBOX, ich gehe davon aus das du `!ow register pc` meintest…"
 
 #: orisa/orisa.py:698
 msgid "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click the link above and give me permission to access your data. I only need this permission once, you can remove it later in your BattleNet account."
