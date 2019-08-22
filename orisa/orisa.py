@@ -687,7 +687,7 @@ class Orisa(Plugin):
         user_id = ctx.message.author_id
 
         if "#" in type:
-            await reply(ctx, _("{type} looks like a BattleTag and not like pc/xbox, assuming you meant just `!ow register`...").format(type=type))
+            await reply(ctx, _("{type} looks like a BattleTag and not like pc/xbox, assuming you meant `!ow register pc`…").format(type=type))
             type = "pc"
 
         if type == "pc":
