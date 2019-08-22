@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-22 23:27+0200\n"
+"POT-Creation-Date: 2019-08-22 23:36+0200\n"
 "PO-Revision-Date: 2019-08-22 16:50+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: Dutch <https://weblate.wur.st/projects/orisa/bot/nl/>\n"
@@ -271,8 +271,9 @@ msgid "I tried to send you a DM with the link, but you disallow DM from server m
 msgstr "Ik ben helaas niet in staat om jou een privébericht te sturen met de link, de door jou ingestelde privacy instellingen staat dat niet toe. Controleer of je `Directe berichten van serverleden toestaan` aan hebt staan en probeer het opnieuw.  (Ik kan de link hier niet plaatsen, omdat iedereen met de link mij de komende 30 minuten kan configureren)"
 
 #: orisa/orisa.py:690
-#, python-brace-format
-msgid "{type} looks like a BattleTag and not like pc/xbox, assuming you meant just `!ow register`..."
+#, fuzzy, python-brace-format
+#| msgid "{type} looks like a BattleTag and not like pc/xbox, assuming you meant just `!ow register`..."
+msgid "{type} looks like a BattleTag and not like pc/xbox, assuming you meant `!ow register pc`…"
 msgstr "{type} lijkt op een BattleTag en is waarschijnlijk geen pc/xbox, ik denk dat je`!ow register`bedoelde..."
 
 #: orisa/orisa.py:698
