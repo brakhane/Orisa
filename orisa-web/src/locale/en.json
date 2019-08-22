@@ -18,9 +18,7 @@
         "save": "Save",
         "fix-val-errors": "Please fix the validation errors before saving.",
         "error-saving": "There was a problem saving, please try again later!",
-        "unsaved": "You have unsaved changes!",
-
-
+        "unsaved": "You have unsaved changes!"
     }
 }
 
