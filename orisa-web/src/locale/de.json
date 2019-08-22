@@ -1,5 +1,11 @@
 {
     "cfg": {
+        "add-mgt-cat": "Füge eine von Orisa zu verwaltende Kategorie hinzu",
+        "allow-sr-in-nick": "Zeige den SR (oder Rang) in Nicknamen",
+        "allow-sr-in-nick-tt": "Wenn diese Einstellung aktiv ist, wird Orisa den SR in Nicknamen zeigen und auf dem neuesten Stand halten (aus `Orisa`wird `Orisa [12-23-34]`).\nFalls Du das Gefühl hast, dass deine Servermitglieder dem SR zu viel Beachtung schenken (\"Du bist nur Silber, deine Meinung zählt nicht!\") kannst du diese Einstellung deaktivieren.\nWenn diese Einstellung aus ist, können Mitglieder ihr SR dennoch anzeigen lassen, indem sie den `!ow alwaysshowsr` Befehl benutzen.\nWenn du dir unsicher bist, lasse diese Einstellung aktiviert und deaktiviere sie nur, wenn die Servermitglieder negativ reagieren.",
+        "configure-for": "Konfiguriere Orisa für {{ guild_name }}",
+        "congrats-chan": "Glückwunsch-Kanal",
+        "congrats-chan-desc": "Sobald ein Mitglied einen neuen Höchstrank erreicht (z. B. Silber → Gold), wird Orisa ihn öffentlich in diesem Kanal gratulieren. Es ist sehr zu empfehlen, hier den Kanal zu wählen, indem die Mitglieder über OW diskutieren (Orisa wird hier **ausschließlich** Gratulationsmeldungen posten), aber du kannst auch den selben Kanal wie bei \"$t(cfg.listen-chan)\" wählen.",
         "error-saving": "Es gab ein Problem beim abspeichern, bitte versuche es später nochmal!",
         "fix-val-errors": "Bitte behebe die Validierungsfehler, bevor du speicherst.",
         "save": "Speichern",

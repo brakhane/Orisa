@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-22 17:30+0200\n"
+"POT-Creation-Date: 2019-08-22 17:54+0200\n"
 "PO-Revision-Date: 2019-08-21 23:33+0000\n"
 "Last-Translator: Adrián Hernández González <adrianhernandezgonzalez24@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.wur.st/projects/orisa/bot/es/>\n"
@@ -1095,72 +1095,105 @@ msgstr ":heart: Da las gracias invitándonos a un café"
 msgid "Want to say thanks to the guy who wrote and maintains me? Why not [buy him a coffee?]({DONATE_LINK})"
 msgstr "¿Quieres darle las gracias al chico que me escribió y me mantiene? ¿Por qué no [invitarle a un café?]({DONATE_LINK})"
 
+#: orisa/web.py:65
+msgid "You can close this window."
+msgstr ""
+
 #. discord permission name
-#: orisa/web.py:127
+#: orisa/web.py:128
 msgid "Send Messages"
 msgstr ""
 
 #. discord permission name
-#: orisa/web.py:129
+#: orisa/web.py:130
 msgid "Read Messages"
 msgstr ""
 
 #. discord permission name
-#: orisa/web.py:131
+#: orisa/web.py:132
 #, fuzzy
 #| msgid "Links"
 msgid "Embed Links"
 msgstr "Enlaces"
 
 #. discord permission name
-#: orisa/web.py:133
+#: orisa/web.py:134
 msgid "Attach Files"
 msgstr ""
 
 #. discord permission name
-#: orisa/web.py:135
+#: orisa/web.py:136
 msgid "Manage Nicknames"
 msgstr ""
 
-#: orisa/web.py:143
+#: orisa/web.py:144
 #, python-brace-format
 msgid "Orisa is missing the following permission: {missing}"
 msgid_plural "Orisa is missing the following permissions: {missing}"
 msgstr[0] ""
 msgstr[1] ""
 
-#: orisa/web.py:149 orisa/web.py:167
+#: orisa/web.py:150 orisa/web.py:168
 msgid "Please select a valid text channel"
 msgstr ""
 
-#: orisa/web.py:184
+#: orisa/web.py:185
 msgid "Please select a valid category"
 msgstr ""
 
 #. config screen validation error
-#: orisa/web.py:194
+#: orisa/web.py:195
 msgid "Limit must be between 0 and 10"
 msgstr ""
 
 #. config screen validation error
-#: orisa/web.py:203
+#: orisa/web.py:204
 msgid "A name is required"
 msgstr ""
 
 #. config screen validation error
-#: orisa/web.py:206
+#: orisa/web.py:207
 msgid "The channel name must not contain a #"
 msgstr ""
 
 #. config screen validation error
-#: orisa/web.py:209
+#: orisa/web.py:210
 msgid "This name is already used in this category"
 msgstr ""
 
 #. config screen validation error
-#: orisa/web.py:215
+#: orisa/web.py:216
 msgid "The limit must be between 0 and 99"
 msgstr ""
+
+#: orisa/web.py:307
+#, python-brace-format
+msgid "The link has expired. Please request a new link with {register}"
+msgstr ""
+
+#: orisa/web.py:312
+#, python-brace-format
+msgid "The data I got back is invalid. Please request a new URL with {register}"
+msgstr ""
+
+#: orisa/web.py:329
+msgid "I got invalid data. Please try registering again."
+msgstr ""
+
+#: orisa/web.py:340
+msgid "You didn't give me permission to access your BattleTag; registration cancelled."
+msgstr ""
+
+#: orisa/web.py:380
+#, python-brace-format
+msgid "I'm sorry. Something went wrong on my side. Try to reissue {register}"
+msgstr ""
+
+#: orisa/web.py:387
+#, fuzzy
+#| msgid "I've sent you a DM"
+msgid "Thank you! I have sent you a DM."
+msgstr "Te he enviado un mensaje privado"
 
 #~ msgid "You just had to try ridiculous values, didn't you?"
 #~ msgstr "De verdad tenías que poner valores tan exagerados?"
