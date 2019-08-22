@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-22 17:30+0200\n"
-"PO-Revision-Date: 2019-08-22 15:32+0000\n"
+"PO-Revision-Date: 2019-08-22 15:55+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -1136,8 +1136,6 @@ msgid ":warning: Cannot update nickname"
 msgstr ":warning: Kann Nicknamen nicht aktualisieren"
 
 #: orisa/orisa.py:2743
-#, fuzzy
-#| msgid "I do not have enough permissions to update your nickname. The owner needs to move the \"Orisa\" role higher so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry."
 msgid "I do not have enough permissions to update your nickname. The owner needs to move the \"Orisa\" role higher so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry!"
 msgstr "Ich habe nicht die nötigen Rechte, um deinen Nicknamen anzupassen. Der Besitzer des Servers muss die Rolle \"Orisa\" so weit nach oben schieben, dass sie höher als deine höchste Rolle ist. Wenn du der Besitzer des Servers bist, gibt es leider keine Möglichkeit für mich, deinen Nickname zu managen, Sorry!"
 
