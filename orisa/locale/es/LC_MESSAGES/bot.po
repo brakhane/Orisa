@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-22 17:56+0200\n"
+"POT-Creation-Date: 2019-08-22 23:27+0200\n"
 "PO-Revision-Date: 2019-08-21 23:33+0000\n"
 "Last-Translator: Adrián Hernández González <adrianhernandezgonzalez24@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.wur.st/projects/orisa/bot/es/>\n"
@@ -125,8 +125,8 @@ msgstr "Apodo"
 
 #. When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
 #: orisa/orisa.py:513
-msgid "Handles"
-msgstr "Cuentas"
+msgid "Tags"
+msgstr ""
 
 #: orisa/orisa.py:524
 msgid "SR"
@@ -1194,6 +1194,9 @@ msgstr ""
 #| msgid "I've sent you a DM"
 msgid "Thank you! I have sent you a DM."
 msgstr "Te he enviado un mensaje privado"
+
+#~ msgid "Handles"
+#~ msgstr "Cuentas"
 
 #~ msgid "You just had to try ridiculous values, didn't you?"
 #~ msgstr "De verdad tenías que poner valores tan exagerados?"

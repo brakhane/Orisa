@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-22 17:56+0200\n"
+"POT-Creation-Date: 2019-08-22 23:27+0200\n"
 "PO-Revision-Date: 2019-08-22 21:24+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
@@ -122,8 +122,8 @@ msgstr "Nickname"
 
 #. When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
 #: orisa/orisa.py:513
-msgid "Handles"
-msgstr "Tags"
+msgid "Tags"
+msgstr ""
 
 #: orisa/orisa.py:524
 msgid "SR"
@@ -1257,6 +1257,9 @@ msgstr "Es tut mir leid. Etwas ist auf meiner Seite schief gelaufen. Versuche, n
 #: orisa/web.py:387
 msgid "Thank you! I have sent you a DM."
 msgstr "Ich habe dir eine PN geschickt."
+
+#~ msgid "Handles"
+#~ msgstr "Tags"
 
 #~ msgid "You just had to try ridiculous values, didn't you?"
 #~ msgstr "Du musstest es einfach versuchen, lächerliche Werte einzugeben, nicht wahr?"
