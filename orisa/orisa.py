@@ -510,7 +510,7 @@ class Orisa(Plugin):
                 if multiple_handles:
                     if multiple_handle_types:
                         # When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
-                        handle_name = _("Handles")
+                        handle_name = _("Tags")
                     else:
                         handle_name = f"{user.handles[0].desc}s"
                 else:
