@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-22 17:02+0200\n"
+"POT-Creation-Date: 2019-08-22 17:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1288,12 +1288,12 @@ msgstr ""
 
 #. config screen validation error
 #: orisa/web.py:203
-msgid "A prefix is required"
+msgid "A name is required"
 msgstr ""
 
 #. config screen validation error
 #: orisa/web.py:206
-msgid "The channel prefix must not contain a #"
+msgid "The channel name must not contain a #"
 msgstr ""
 
 #. config screen validation error

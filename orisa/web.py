@@ -200,10 +200,10 @@ def validate_config(guild, guild_config):
             pref_errors = {}
             if not prefix.name:
                 # config screen validation error
-                pref_errors["name"] = _("A prefix is required")
+                pref_errors["name"] = _("A name is required")
             elif '#' in prefix.name:
                 # config screen validation error
-                pref_errors["name"] = _("The channel prefix must not contain a #")
+                pref_errors["name"] = _("The channel name must not contain a #")
             elif prefix.name.strip() in names:
                 # config screen validation error
                 pref_errors["name"] = _("This name is already used in this category")
