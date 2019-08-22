@@ -42,91 +42,60 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </transition>
     <b-container>
       <h1>Configure Orisa for {{ guild_name }}</h1>
-      <p
-        class="lead"
-      >The save button will appear when you have unsaved changes. After you have saved your changes, you can close this window.</p>
-      <p>If you have questions or suggestions, <a target="_blank" href="https://discord.gg/tsNxvFh">join the official Orisa Discord</a>.</p>
+      <vue-markdown class="lead" :anchorAttributes="{target: '_blank'}">{{ $t("cfg.lead-info", { link: "https://discord.gg/tsNxvFh" }) }}</vue-markdown>
       <b-alert variant="warning" class="my-4" show dismissible v-if="higher_roles.length > 0">
-        <h5 class="alert-heading">The Orisa role is not the top role!</h5>
-        <p>
-          Discord disallows nickname changes when the member whose nickname should be changed has a higher role than Orisa.
-          You need to move the Orisa role all the way to the top if you want her to be able to change all nicknames. Currently, Orisa won't be able to
-          update the nicknames of members with the following
-          <span
-            v-if="higher_roles.length ==1"
-          >role:</span>
-          <span v-else>roles:</span>
-        </p>
+        <h5 class="alert-heading">{{ $t("cfg.not-top-role-head") }}</h5>
+        <vue-markdown>{{ 
+          $t("cfg.not-top-role-desc", {
+            with_the_following_roles: $t("cfg.with-the-following-roles", {
+              count: higher_roles.length
+            }) 
+          }) 
+        }}</vue-markdown>
         <ul>
           <li v-for="role in higher_roles" :key="role">{{ role }}</li>
         </ul>
-        <p>
-          You can simply drag and drop the Orisa role in the
-          <em>Server Settings &gt; Roles</em> screen,
-          <a
-            href="https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif"
-            target="_blank"
-            class="alert-link"
-          >like this</a>.
-          Orisa will not get more permissions by this, it simply allows her to change more nicknames (the nickname of the server owner cannot be changed by her whatever you do).
-        </p>
-        <p>
-          <em>Do not give the Orisa role Administrator rights!</em> It won't help, and is a potential security risk if Orisa has an exploitable bug.
-        </p>
+        <vue-markdown :anchorAttributes="{target: '_blank', class='alert-link'}">
+          {{ $t("cfg.drag-orisa-role", { link: "https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif" }) }}
+        </vue-markdown>
       </b-alert>
       <b-alert variant="success" class="my-4" show dismissible v-else>
-        <h5 class="alert-heading">The Orisa role is the top role</h5>
-        <p>Orisa will be able to change the nicknames of all your members, with the exception of the server owner.</p>
+        <h5 class="alert-heading">{{ $t("cfg.top-role-head") }}</h5>
+        <vue-markdown v-t="cfg.top-role-desc"></vue-markdown>
       </b-alert>
       <b-form :novalidate="true">
-        <b-card :header="`General Settings for ${guild_name}`" class="mb-3">
+        <b-card :header="$t('cfg.general-settings-hdr', { guild_name })" class="mb-3">
           <b-form-checkbox
             class="custom-switch"
             v-model="guild_config.show_sr_in_nicks_by_default"
-          >Always show SR (or rank) in nicknames by default&nbsp;
+          >&nbsp;
             <font-awesome-icon id="always-show-sr-help" icon="question-circle"></font-awesome-icon>
-          </b-form-checkbox>
+          </b-form-checkbox>&nbsp;
           <b-popover target="always-show-sr-help" triggers="hover click">
-            <p>
-              When this setting is on, Orisa will always update the nicknames of all registered users to show their SR in the name (
-              <code>Orisa</code> becomes
-              <code>Orisa [2345]</code>).
-            </p>
-            <p>If you feel your server members focus too much on the SR ("I don't listen to a silver player"), you can turn this setting off.</p>
-            <p>
-              When turned off, your server members can still force their SR to be displayed by issuing the
-              <code>!ow alwaysshowsr</code> command.
-            </p>
-            <p>If unsure, activate this setting, and only turn it off if people react negatively to it.</p>
+            <vue-markdown>{{ $t("cfg.allow-sr-in-nick-tt") }}</vue-markdown>
           </b-popover>
           <b-form-checkbox
             class="custom-switch"
             v-model="guild_config.post_highscores"
-          >Post a daily SR highscore table to the listen channel&nbsp;
+          >{{ $t("cfg.post-hs") }}&nbsp;
             <font-awesome-icon id="post-highscores-help" icon="question-circle"></font-awesome-icon>
           </b-form-checkbox>
           <b-popover target="post-highscores-help" triggers="hover click">
-            <p>
-              When this setting is on, Orisa will post a SR highscore table (separate for PC and XBOX) daily around 09:00 UTC. Only the
-              SR of the primary account will be considered, and only members that currently have an SR are shown. Also, a CSV file with
-              the same data will be posted.
-            </p>
-            <p>
-              If your members feel judged by the highscore table, you can disable it here.
-            </p>
+            <vue-markdown>{{ $t("cfg.post-hs-tt") }}</vue-markdown>
           </b-popover>
           <hr class="hr-3">
           <b-form-group
             horizontal
-            label="Register message"
+            :label="$t('cfg.reg-msg')"
             :invalid-feedback="validation_errors.extra_register_text"
-            description="Optional server specific text that should be shown in the welcome message after a member registered with <code>!ow register</code>. This message is <em>not</em> shown when a user joins this server. Can use <a target=&quot;_blank&quot; href=&quot;https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-&quot;>Discord Markdown</a>."
+            :description="$t('cfg.reg-msg-desc', { 
+              link: 'https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-'
+            })"
           >
             <b-form-textarea
               :state="val_state(validation_errors.extra_register_text)"
               v-model="guild_config.extra_register_text"
-              placeholder="e.g.
-Don't forget to use `!ow setroles` to set your roles; also don't play Genji."
+              :placeholder="$t('cfg.reg-msg-placeholder')"
               :rows="2"
             ></b-form-textarea>
           </b-form-group>
@@ -135,8 +104,8 @@ Don't forget to use `!ow setroles` to set your roles; also don't play Genji."
             horizontal
             :state="val_state(validation_errors.listen_channel_id)"
             :invalid-feedback="validation_errors.listen_channel_id"
-            label="Listen Channel"
-            description="In which channel should Orisa listen for commands? This channel will also be used to post the daily SR highscore table. Orisa always reacts to commands via DM. Also, the <code>!ow help</code> command works in any channel."
+            :label="$t('cfg.listen-chan')"
+            :description="$t('cfg.listen-chan-desc')"
           >
             <channel-selector
               :state="val_state(validation_errors.listen_channel_id)"
@@ -149,8 +118,8 @@ Don't forget to use `!ow setroles` to set your roles; also don't play Genji."
             horizontal
             :state="val_state(validation_errors.congrats_channel_id)"
             :invalid-feedback="validation_errors.congrats_channel_id"
-            label="Congrats Channel"
-            description="When a member reaches a new highest rank (e.g. Silver → Gold), Orisa will publically congratulate him/her in this channel. It is highly recommended to select the channel where members chat about OW (Orisa will <strong>only</strong> post 'rank up' messages), but it can also be the same as &quot;Listen Channel&quot;."
+            :label="$t('cfg.congrats-chan')"
+            :description="$t('cfg.congrats-chan-desc')"
           >
             <channel-selector
               :state="val_state(validation_errors.congrats_channel_id)"
@@ -165,34 +134,13 @@ Don't forget to use `!ow setroles` to set your roles; also don't play Genji."
           text-variant="white"
           class="mb-3 text-justify"
           v-if="guild_config.managed_voice_categories.length == 0"
-          header="No managed voice channels"
+          :header="$t('cfg.no-managed-voice-chan-hdr')"
         >
           <p
             class="lead"
-          >Orisa can help you dynamically create and delete voice channels on demand (not just for OW) and optionally show the SR in the channel names.</p>
-          <p>
-            Instead of manually creating
-            <em>Comp #1</em> to
-            <em>Comp #5</em>
-            channels which are empty most of the time, you can have a single
-            <em>Comp #1</em> channel, and as soon as a person joins,
-            Orisa will automatically create an empty
-            <em>Comp #2</em> channel, and optionally show the SR range in the channel name (e.g.
-            <em>Comp #1 [1234-1804]</em>).
-          </p>
-          <p>
-            If
-            <em>Comp #1</em> becomes empty again,
-            <em>Comp #2</em> will automatically be removed; if on the other hand
-            <em>Comp #3</em> is used, but
-            <em>Comp #1</em> and
-            <em>Comp #2</em> are empty,
-            <em>Comp #2</em> will be removed, and
-            <em>Comp #3</em> will be renamed to
-            <em>Comp #2</em>.
-          </p>
-          <p>This way, there will always be one (and only one) empty voice channel.</p>
-          <p>There are currently no managed voice channels. Click the button below to configure them.</p>
+            v-t="cfg.cfg.no-managed-voice-chan-lead"
+          ></p>
+          <vue-markdown v-t="cfg.no-mgt-voice-chan-text"></vue-markdown>
         </b-card>
         <managed-voice-category
           v-else
@@ -205,10 +153,10 @@ Don't forget to use `!ow setroles` to set your roles; also don't play Genji."
           @delete-cat-clicked="remove_cat(index)"
         ></managed-voice-category>
         <b-btn variant="primary" @click="add_cat">
-          <font-awesome-icon icon="folder-plus"/>Add a managed channel category
+          <font-awesome-icon icon="folder-plus"/>{{ $t('cfg.add-mgt-cat') }}
         </b-btn>
       </b-form>
-      <div class="py-5">Thank you for using Orisa!</div>
+      <div class="py-5" v-t="cfg.footer">
     </b-container>
   </div>
   <div v-else>
@@ -216,8 +164,9 @@ Don't forget to use `!ow setroles` to set your roles; also don't play Genji."
       variant="danger"
       show
       v-if="load_failed"
-    >Something went wrong while loading the data. This link might have expired. Try requesting a new one. If that doesn't help, try again later...</b-alert>
-    <div v-else>Loading
+      v-t="cfg.load-failed"
+    ></b-alert>
+    <div v-else>{{ $t('cfg.loading')
       <font-awesome-icon icon="spinner" pulse></font-awesome-icon>
     </div>
   </div>
