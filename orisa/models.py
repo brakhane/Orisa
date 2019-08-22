@@ -296,7 +296,10 @@ class GuildConfigJson(Base):
 
 class Database:
     def __init__(self):
-        engine = create_engine(DATABASE_URI)
+        if DATABASE_URI.startswith("postgresql://"):
+            engine = create_engine(DATABASE_URI, connect_args={"options": "-c statement_timeout=20000"})
+        else:
+            engine = create_engine(DATABASE_URI)
         self.Session = sessionmaker(bind=engine, autoflush=False)
         Base.metadata.create_all(engine)
 

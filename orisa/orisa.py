@@ -2372,6 +2372,7 @@ class Orisa(Plugin):
         while True:
             try:
                 logger.debug("checking cron...")
+                do_run = False
                 with self.database.session() as s:
                     try:
                         hs = s.query(Cron).filter_by(id="highscore").one()
@@ -2388,11 +2389,14 @@ class Orisa(Plugin):
                         hs.last_run,
                     )
                     if next_run < datetime.utcnow() and hs.last_run < next_run:
-                        logger.debug("running highscore...")
-                        await self._cron_run_highscore()
-                        logger.debug("done running hiscore")
+                        do_run = True
                         hs.last_run = datetime.utcnow()
-                    s.commit()
+                    s.commit() # might have just added the entry, so just always commit
+                    
+                if do_run:
+                    logger.debug("running highscore...")
+                    await self._cron_run_highscore()
+                    logger.debug("done running hiscore")
             except Exception:
                 logger.exception("Error during cron")
             await trio.sleep(1 * 60)
