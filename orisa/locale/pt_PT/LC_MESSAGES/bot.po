@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-22 17:54+0200\n"
+"POT-Creation-Date: 2019-08-22 17:56+0200\n"
 "PO-Revision-Date: 2019-08-20 19:10+0000\n"
 "Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://weblate.wur.st/projects/orisa/bot/pt_PT/>\n"
@@ -1122,12 +1122,12 @@ msgstr ""
 
 #: orisa/web.py:307
 #, python-brace-format
-msgid "The link has expired. Please request a new link with {register}"
+msgid "The link has expired. Please request a new link with {register}."
 msgstr ""
 
 #: orisa/web.py:312
 #, python-brace-format
-msgid "The data I got back is invalid. Please request a new URL with {register}"
+msgid "The data I got back is invalid. Please request a new URL with {register}."
 msgstr ""
 
 #: orisa/web.py:329
@@ -1140,7 +1140,7 @@ msgstr ""
 
 #: orisa/web.py:380
 #, python-brace-format
-msgid "I'm sorry. Something went wrong on my side. Try to reissue {register}"
+msgid "I'm sorry. Something went wrong on my side. Try to reissue {register}."
 msgstr ""
 
 #: orisa/web.py:387
