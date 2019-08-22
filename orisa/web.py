@@ -37,6 +37,7 @@ from .config import (
     OAUTH_REDIRECT_HOST,
 )
 from .config_classes import GuildConfig
+from .i18n import _, ngettext
 from .models import User, GuildConfigJson
 
 logger = logging.getLogger(__name__)
@@ -120,21 +121,32 @@ def validate_config(guild, guild_config):
     errors = {}
 
     def missing_perms(permissions, required):
-        def convert_name(name):
-            return " ".join(part.capitalize() for part in name.split("_"))
+        
+        perm_names = {
+            # discord permission name
+            "send_messages": _("Send Messages"),
+            # discord permission name
+            "read_messages": _("Read Messages"),
+            # discord permission name
+            "embed_links": _("Embed Links"),
+            # discord permission name
+            "attach_files": _("Attach Files"),
+            # discord permission name
+            "manage_nicknames": _("Manage Nicknames")
+        }
 
         missing = [
-            convert_name(perm) for perm in required if not getattr(permissions, perm)
+            perm_names[perm] for perm in required if not getattr(permissions, perm)
         ]
 
         if missing:
-            return f"Orisa is missing the following permissions: {', '.join(missing)}"
+            return ngettext("Orisa is missing the following permission: {missing}", "Orisa is missing the following permissions: {missing}", len(missing)).format({"missing": ", ".join(missing)})
         else:
             return None
 
     chan = guild.channels.get(guild_config.listen_channel_id)
     if not chan or chan.type != 0:
-        errors["listen_channel_id"] = "Please select a valid text channel"
+        errors["listen_channel_id"] = _("Please select a valid text channel")
     else:
         missing = missing_perms(
             chan.effective_permissions(guild.me),
@@ -152,7 +164,7 @@ def validate_config(guild, guild_config):
 
     chan = guild.channels.get(guild_config.congrats_channel_id)
     if not chan or chan.type != 0:
-        errors["congrats_channel_id"] = "Please select a valid text channel"
+        errors["congrats_channel_id"] = _("Please select a valid text channel")
     else:
         missing = missing_perms(
             chan.effective_permissions(guild.me),
@@ -169,7 +181,7 @@ def validate_config(guild, guild_config):
 
         chan = guild.channels.get(vc.category_id)
         if not chan or chan.type != 4:
-            vc_errors["category_id"] = "Please select a valid category"
+            vc_errors["category_id"] = _("Please select a valid category")
         else:
             missing = missing_perms(
                 chan.effective_permissions(guild.me), ["manage_channels"]
@@ -178,7 +190,8 @@ def validate_config(guild, guild_config):
                 vc_errors["category_id"] = missing
 
         if vc.channel_limit is None or not (0 <= vc.channel_limit <= 10):
-            vc_errors["channel_limit"] = "Limit must be between 0 and 10"
+            # config screen validation error
+            vc_errors["channel_limit"] = _("Limit must be between 0 and 10")
 
         pe_list = []
         pe_list_has_errors = False
@@ -186,16 +199,20 @@ def validate_config(guild, guild_config):
         for prefix in vc.prefixes:
             pref_errors = {}
             if not prefix.name:
-                pref_errors["name"] = "A prefix is required"
+                # config screen validation error
+                pref_errors["name"] = _("A prefix is required")
             elif '#' in prefix.name:
-                pref_errors["name"] = "The channel prefix must not contain a #"
+                # config screen validation error
+                pref_errors["name"] = _("The channel prefix must not contain a #")
             elif prefix.name.strip() in names:
-                pref_errors["name"] = "This name is already used in this category"
+                # config screen validation error
+                pref_errors["name"] = _("This name is already used in this category")
 
             names.add(prefix.name.strip())
 
             if prefix.limit is None or not (0 <= prefix.limit <= 99):
-                pref_errors["limit"] = "The limit must be between 0 and 99"
+                # config screen validation error
+                pref_errors["limit"] = _("The limit must be between 0 and 99")
 
             pe_list.append(pref_errors)
 
