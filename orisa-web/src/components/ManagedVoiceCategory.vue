@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 <template>
   <div class="card mb-3 bg-light">
     <div class="card-header">
-      <b-input-group prepend="Category">
+      <b-input-group :prepend="$t('mvc.cat-prepend')">
         <b-form-select
           :state="val_state(validation_errors.category_id)"
           v-model="category.category_id"

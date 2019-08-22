@@ -41,7 +41,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </div>
     </transition>
     <b-container>
-      <h1>Configure Orisa for {{ guild_name }}</h1>
+      <h1>{{ $t("cfg.configure-for", { guild_name }) }}</h1>
       <vue-markdown class="lead" :anchorAttributes="{target: '_blank'}">{{ $t("cfg.lead-info", { link: "https://discord.gg/tsNxvFh" }) }}</vue-markdown>
       <b-alert variant="warning" class="my-4" show dismissible v-if="higher_roles.length > 0">
         <h5 class="alert-heading">{{ $t("cfg.not-top-role-head") }}</h5>
