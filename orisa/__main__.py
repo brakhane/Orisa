@@ -22,11 +22,11 @@ import multio
 import trio
 
 import raven
-from curious.commands.manager import CommandsManager
 from curious.dataclasses.presence import Game, GameType, Status
 
 from . import web
 from .config import SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN, MASHERY_API_KEY, DEVELOPMENT
+from .i18n import I18NCommandsManager
 from .models import Database
 from .orisa import Orisa, OrisaClient
 
@@ -61,7 +61,7 @@ client = OrisaClient(BOT_TOKEN)
 
 database = Database()
 
-manager = CommandsManager.with_client(client, command_prefix="!" if not DEVELOPMENT else ",")
+manager = I18NCommandsManager.with_client(client, command_prefix="!" if not DEVELOPMENT else ",")
 
 
 @client.event("ready")

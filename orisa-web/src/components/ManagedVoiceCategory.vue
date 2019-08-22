@@ -42,38 +42,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <b-form-checkbox
           class="custom-switch"
           v-model="category.show_sr_in_nicks"
-        >Show SR of members in managed channels&nbsp;
+        >{{ $t("mvc.show-sr") }}&nbsp;
           <font-awesome-icon :id="`show-sr-help-${index}`" icon="question-circle"></font-awesome-icon>
         </b-form-checkbox>
         <b-popover :target="`show-sr-help-${index}`" triggers="hover click">
-          <p>
-            When this setting is on, Orisa will adjust the channel name so that the lowest and highest SR of its members are shown (e.g. "Comp #1 [1234-2345]"). She will also update the nicknames
-            of every member in that channel to show their SR (or rank, if that member has configured it via
-            <code>!ow format</code>). Unfortunately, these updated nicknames will only show in the
-            channel list after a reload of Discord due to a Discord bug (that Discord isn't going to fix).
-          </p>
-          <p>It is recommended to turn this setting on for Overwatch channel categories</p>
+          {{ $t("mvc.show-sr-tt") }}
         </b-popover>
         <br>
         <b-form-checkbox class="custom-switch" v-model="category.remove_unknown">
-          Remove unknown channels with
-          <code>#</code> in this category
-          &nbsp;
+          <vue-markdown>{{ $t("mvc.remove-unknown-sr") }}</vue-markdown>&nbsp;
           <font-awesome-icon :id="`remove-unknown-help-${index}`" icon="question-circle"></font-awesome-icon>
           <b-popover :target="`remove-unknown-help-${index}`" triggers="hover click">
-            <p>
-              With this setting active, Orisa will automatically remove any empty channels in this category that contain a
-              <code>#</code>, as they are probably left over channels. For example, if you
-              rename "Comp" to "Competitive", there now will be at least a Comp #1 channel that should get removed.
-            </p>
-            <p>
-              When this settings is off, Orisa will only touch channels that she knows are hers (begin with the prefix and then followed by a
-              <code>#</code>)
-            </p>
-            <p>
-              Unless you have manually created channels in this category that contain a
-              <code>#</code>, it is recommended to leave this setting on
-            </p>
+            <vue-markdown>{{ $t("mvc.remove-unknown-sr-tt") }}</vue-markdown>
           </b-popover>
         </b-form-checkbox>
         <hr class="hr-4">
@@ -82,7 +62,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           :state="val_state(validation_errors.channel_limit)"
           :invalid-feedback="validation_errors.channel_limit"
           :label-cols="4"
-          label="Maximum number of channels per prefix"
+          :label="$t('mvc.chan-limit')"
         >
           <b-form-input
             :state="val_state(validation_errors.channel_limit)"
@@ -95,12 +75,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </b-form-group>
       </b-card>
       <hr class="hr-4">
-      <b-card header="Managed prefixes" no-body>
+      <b-card :header="$t('mvc.mngt-prefixes')" no-body>
         <b-card-body>
           <b-alert
             variant="warning"
             :show="category.prefixes.length == 0"
-          >There are no prefixes configured yet!</b-alert>
+          >{{ $t('mvc.no-prefixes') }}</b-alert>
           <div
             class="row bg-light m-2 p-2"
             :key="index"
@@ -110,21 +90,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               class="col-6 col-md-7 col-lg-8"
               :state="val_state(val_errors_prefixes(index).name)"
               :invalid-feedback="val_errors_prefixes(index).name"
-              label="Channel name"
-              description="The text before the number (and SR if &quot;Show SR&quot; is active)"
+              :label="$t('mvc.chan-name')"
+              :description="$t('mvc.chan-name-desc')"
             >
               <b-form-input
                 :state="val_state(val_errors_prefixes(index).name)"
                 v-model="prefix.name"
-                placeholder="e.g. Comp, or Quick Play"
+                :placeholder="$t('mvc.prefix-placeholder')"
               ></b-form-input>
             </b-form-group>
             <b-form-group
               class="col-6 col-md-5 col-lg-4"
               :state="val_state(val_errors_prefixes(index).limit)"
               :invalid-feedback="val_errors_prefixes(index).limit"
-              label="User limit"
-              description="The maximum number of people allowed in the created voice channels. 0 means no limit."
+              :label="$t('mvc.user-limit')"
+              :description="$t('mvc.user-limit-desc')"
             >
               <b-form-input
                 :state="val_state(val_errors_prefixes(index).limit)"
@@ -141,7 +121,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </b-card-body>
         <b-card-body>
           <b-btn variant="primary" @click="add_prefix(category)">
-            <font-awesome-icon icon="plus"/>Add a managed channel prefix
+            <font-awesome-icon icon="plus"/>{{ $t("mvc.add-prefix") }}
           </b-btn>
         </b-card-body>
       </b-card>

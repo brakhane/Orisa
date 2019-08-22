@@ -24,18 +24,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               <b-btn @click="reset" class="mr-4">Reset</b-btn>
               <b-btn @click="save" variant="primary">
                 <font-awesome-icon icon="spinner" pulse v-if="saving"></font-awesome-icon>
-                <span v-else>Save</span>
+                <span v-else>{{ $t("cfg.save") }}</span>
               </b-btn>
             </div>
             <p
               class="lead"
               v-if="has_validation_errors"
-            >Please fix the validation errors before saving.</p>
+            >{{ $t("cfg.fix-val-errors") }}</p>
             <p
               class="lead"
               v-else-if="save_error"
-            >There was a problem saving, please try again later</p>
-            <p class="lead" v-else>You have unsaved changes!</p>
+            >{{ $t("cfg.error-saving") }}</p>
+            <p class="lead" v-else>{{ $t("cfg.unsaved") }}</p>
           </div>
         </b-card>
       </div>

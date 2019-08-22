@@ -106,6 +106,7 @@ from .exceptions import (
     NicknameTooLong,
     InvalidFormat,
 )
+from .i18n import _, N_, ngettext
 from .utils import (
     get_sr,
     sort_secondaries,
@@ -116,9 +117,6 @@ from .utils import (
     TDS,
 )
 from . import web
-
-_ = lambda x: x
-N_ = lambda x: x
 
 logger = logging.getLogger("orisa")
 
@@ -523,7 +521,7 @@ class Orisa(Plugin):
                 )
                 if any(handle.sr for handle in user.handles):
                     embed.add_field(
-                        name=gettext.ngettext("SR", "SRs", num_handles), value=sr_value
+                        name=ngettext("SR", "SRs", num_handles), value=sr_value
                     )
 
                 if primary.sr is not None:
@@ -887,7 +885,7 @@ class Orisa(Plugin):
                     await reply(
                         ctx,
                         _("Sorry, using this format would make your nickname be longer than 32 characters ({len} to be exact).\n"
-                          "Please choose a shorter format or shorten your nickname").format(len=len(e.nickname)
+                          "Please choose a shorter format or shorten your nickname").format(len=len(e.nickname))
                     )
                     session.rollback()
                 else:
@@ -1473,7 +1471,7 @@ Pornography Historian""").split("\n")
         with self.database.session() as session:
             user = self.database.user_by_discord_id(session, member.id)
             if not user:
-                await reply(ctx, _("{member_name} is not registered").format(member_name=member.name)
+                await reply(ctx, _("{member_name} is not registered").format(member_name=member.name))
                 return
             else:
                 await self._srgraph(ctx, user, member.name, date)
@@ -1764,7 +1762,7 @@ Pornography Historian""").split("\n")
                     try:
                         await channel.messages.send(content=None, embed=Embed(
                             title=_(":thinking: Need help?"),
-                            description=_("Join the [Support Discord]({SUPPORT_DISCORD})").format(SUPPORT_DISCORD=SUPPORT_DISCORD))
+                            description=_("Join the [Support Discord]({SUPPORT_DISCORD})").format(SUPPORT_DISCORD=SUPPORT_DISCORD)))
                     except Exception:
                         logger.exception("Unable to send support embed")
 
@@ -1785,7 +1783,7 @@ Pornography Historian""").split("\n")
             try:
                 await guild.owner.send(content=None, embed=Embed(
                     title=_(":thinking: Need help?"),
-                    description=_("Join the [Support Discord]({SUPPORT_DISCORD})").format(SUPPORT_DISCORD=SUPPORT_DISCORD))
+                    description=_("Join the [Support Discord]({SUPPORT_DISCORD})").format(SUPPORT_DISCORD=SUPPORT_DISCORD)))
             except Exception:
                 logger.exception("Unable to send support embed")
 
@@ -2157,7 +2155,7 @@ Pornography Historian""").split("\n")
                 embed = Embed(
                     # Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
                     title=_("For your own safety, get behind the barrier!"),
-                    description= _(
+                    description= 
                         _("**{name}** just reached **{sr} SR** as **{role}** and advanced to **{rank}**. Congratulations!").format(
                             name=str(guild.members[user.discord_id].name),
                             sr=sr,
@@ -2174,7 +2172,7 @@ Pornography Historian""").split("\n")
                     self.guild_config[guild.id].congrats_channel_id
                 ).messages.send(
                     # <@!> is discord markup and needs to be preserved
-                    content=_("Let's hear it for <@!{discord_id}>!"),format(discord_id=user.discord_id), embed=embed
+                    content=_("Let's hear it for <@!{discord_id}>!").format(discord_id=user.discord_id), embed=embed
                 )
             except Exception:
                 logger.exception(f"Cannot send congrats for guild {guild}")

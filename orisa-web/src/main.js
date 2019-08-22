@@ -19,6 +19,7 @@ import App from './App.vue'
 import router from './router'
 
 import BootstrapVue from 'bootstrap-vue'
+import VueI18Next from '@panter/vue-i18next'
 import axios from 'axios'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -27,6 +28,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
+Vue.use(VueI18Next)
 
 Vue.prototype.$http = axios
 axios.defaults.baseURL = process.env.VUE_APP_BOT_BASE_URL
