@@ -361,16 +361,15 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
-    async def hs(self, ctx, type_str = "pc", style: str = "fancy_grid"):
+    async def hs(self, ctx, kind: str, type_str = "pc", style: str = "fancy_grid"):
 
         prev_date = datetime.utcnow() - timedelta(days=1)
 
-        logger.info("Triggered top_players")
+        logger.info("Triggered top_players %s %s", kind, type_str)
 
         with self.database.session() as session:
             t = BattleTag if type_str == "pc" else Gamertag
-            for kind in "tank damage support".split():
-                await self._top_players(session, prev_date, t, kind, style)
+            await self._top_players(session, prev_date, t, kind, style)
 
     @command()
     @condition(only_owner)
