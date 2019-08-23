@@ -23,6 +23,7 @@ import asks
 from itsdangerous.url_safe import URLSafeTimedSerializer
 from itsdangerous.exc import BadSignature, SignatureExpired
 from oauthlib.oauth2 import WebApplicationClient
+from trio.to_thread import run_sync
 from quart_trio import QuartTrio
 from quart import Quart, request, render_template, jsonify, Response
 
@@ -245,9 +246,9 @@ async def save(guild_id):
 
     orisa.guild_config[guild_id] = new_gi
 
-    with orisa.database.session() as session:
+    async with orisa.database.session() as session:
 
-        gc = session.query(GuildConfigJson).filter_by(id=guild_id).one_or_none()
+        gc = await run_sync(session.query(GuildConfigJson).filter_by(id=guild_id).one_or_none)
         if not gc:
             gc = GuildConfigJson(id=guild_id)
             session.add(gc)
@@ -255,7 +256,7 @@ async def save(guild_id):
         new_config = json.dumps(new_gi.to_js_json())
         gc.config = new_config
         logger.info("New config for guild %d is %s", guild_id, new_config)
-        session.commit()
+        await run_sync(session.commit)
 
     async def update():
         for vc in new_gi.managed_voice_categories:
@@ -263,11 +264,11 @@ async def save(guild_id):
                 client.find_channel(vc.category_id), adjust_user_limits=True
             )
 
-        with orisa.database.session() as session:
-            for user in (
+        async with orisa.database.session() as session:
+            for user in await run_sync(
                 session.query(User)
                 .filter(User.discord_id.in_(guild.members.keys()))
-                .all()
+                .all
             ):
                 try:
                     await orisa._update_nick(user)

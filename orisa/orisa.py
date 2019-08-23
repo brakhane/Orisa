@@ -78,6 +78,7 @@ from pandas.plotting import register_matplotlib_converters
 from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql import func, desc, and_
+from trio.to_thread import run_sync
 from itsdangerous.url_safe import URLSafeTimedSerializer
 from itsdangerous.exc import BadSignature
 from wcwidth import wcswidth
@@ -197,17 +198,18 @@ class Orisa(Plugin):
         self.raven_client = raven_client
 
         self.guild_config = defaultdict(GuildConfig.default)
+
+    async def load(self):
+
         logger.debug("Loading config")
-        with database.session() as session:
-            for config in session.query(GuildConfigJson).filter(
+        async with self.database.session() as session:
+            for config in await run_sync(session.query(GuildConfigJson).filter(
                 GuildConfigJson.id.in_(self.client.guilds.keys())
-            ):
+            ).all):
                 self.guild_config[config.id] = data = GuildConfig.from_json2(
                     config.config
                 )
                 logger.debug("Configured %d as %s", config.id, data)
-
-    async def load(self):
 
         logger.warn("TEMPORARILY NOT SENDING MESSAGES TO GUILDS!")
         # await self.spawn(self._message_new_guilds)
@@ -265,8 +267,8 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner, bypass_owner=False)
     async def messageallusers(self, ctx, *, message: str):
-        with self.database.session() as s:
-            users = s.query(User).all()
+        async with self.database.session() as s:
+            users = await run_sync(s.query(User).all)
             for user in users:
                 try:
                     logger.debug(f"Sending message to {user.discord_id}")
@@ -364,15 +366,15 @@ class Orisa(Plugin):
 
         logger.info("Triggered top_players %s %s", kind, type_str)
 
-        with self.database.session() as session:
+        async with self.database.session() as session:
             t = BattleTag if type_str == "pc" else Gamertag
             await self._top_players(session, prev_date, t, kind, style)
 
     @command()
     @condition(only_owner)
     async def updatenicks(self, ctx):
-        with self.database.session() as session:
-            for user in session.query(User).all():
+        async with self.database.session() as session:
+            for user in await run_sync(session.query(User).all):
                 try:
                     await self._update_nick(user)
                 except Exception:
@@ -387,8 +389,8 @@ class Orisa(Plugin):
         member_ids = [
             id for guild in self.client.guilds.values() for id in guild.members.keys()
         ]
-        with self.database.session() as session:
-            registered_ids = [x[0] for x in session.query(User.discord_id).all()]
+        async with self.database.session() as session:
+            registered_ids = [x[0] for x in await run_sync(session.query(User.discord_id).all)]
             stale_ids = set(registered_ids) - set(member_ids)
             ids = "\n".join(f"<@{id}>" for id in stale_ids)
             await send_long(
@@ -397,14 +399,14 @@ class Orisa(Plugin):
             )
             if doit == "confirm":
                 for id in stale_ids:
-                    user = self.database.user_by_discord_id(session, id)
+                    user = await self.database.user_by_discord_id(session, id)
                     if not user:
                         await ctx.channel.messages.send(f"{id} not found in DB???")
                     else:
-                        session.delete(user)
+                        await run_sync(session.delete, user)
                         logger.info(f"deleted {id}")
                 await send_long(ctx.channel.messages.send, f"Deleted {len(stale_ids)} entries")
-                session.commit()
+                await run_sync(session.commit)
             elif stale_ids:
                 await ctx.channel.messages.send("issue `!cleanup confirm` to delete.")
 
@@ -436,8 +438,8 @@ class Orisa(Plugin):
             member = ctx.author
 
         content = embed = None
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, member.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, member.id)
             if user:
                 embed = Embed(colour=0x659DBD)  # will be overwritten later if SR is set
                 embed.add_field(name="Nick", value=member.name, inline=False)
@@ -675,8 +677,8 @@ class Orisa(Plugin):
     @ow.subcommand()
     @condition(correct_channel)
     async def unregister(self, ctx, handle_or_index: str):
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(
                     ctx, "You are not registered, there's nothing for me to do."
@@ -698,7 +700,7 @@ class Orisa(Plugin):
 
             removed = user.handles.pop(index)
             handle = removed.handle
-            session.commit()
+            await run_sync(session.commit)
             await reply(ctx, f"Removed **{handle}**")
             await self._update_nick_after_secondary_change(ctx, user)
 
@@ -724,8 +726,8 @@ class Orisa(Plugin):
     @ow.subcommand()
     @condition(correct_channel)
     async def setprimary(self, ctx, handle_or_index: str):
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, "You are not registered. Use `!ow register` first.")
                 return
@@ -744,12 +746,12 @@ class Orisa(Plugin):
             p, s = user.handles[0], user.handles[index]
             p.position = index
             s.position = 0
-            session.commit()
+            await run_sync(session.commit)
 
             for i, t in enumerate(sorted(user.handles[1:], key=attrgetter("handle"))):
                 t.position = i + 1
 
-            session.commit()
+            await run_sync(session.commit)
 
             await reply(
                 ctx,
@@ -770,8 +772,8 @@ class Orisa(Plugin):
             await reply(ctx, "format string missing")
             return
 
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, "you must register first")
                 return
@@ -783,14 +785,14 @@ class Orisa(Plugin):
                     await reply(
                         ctx, f'Invalid format string: unknown placeholder "{e.key}"'
                     )
-                    session.rollback()
+                    await run_sync(session.rollback)
                 except NicknameTooLong as e:
                     await reply(
                         ctx,
                         f"Sorry, using this format would make your nickname be longer than 32 characters ({len(e.nickname)} to be exact).\n"
                         f"Please choose a shorter format or shorten your nickname",
                     )
-                    session.rollback()
+                    await run_sync(session.rollback)
                 else:
                     titles = [
                         "Smarties Expert",
@@ -818,20 +820,20 @@ class Orisa(Plugin):
                         ctx,
                         f'Done. Henceforth, ye shall be knownst as "`{new_nick}`, {random.choice(titles)}."',
                     )
-            session.commit()
+            await run_sync(session.commit)
 
     @ow.subcommand(aliases=("alwayshowsr",))
     @condition(correct_channel)
     async def alwaysshowsr(self, ctx, param: str = "on"):
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, "you are not registered")
                 return
             new_setting = param != "off"
             user.always_show_sr = new_setting
             await self._update_nick(user)
-            session.commit()
+            await run_sync(session.commit)
 
         msg = "Done. "
         if new_setting:
@@ -843,9 +845,9 @@ class Orisa(Plugin):
     @ow.subcommand()
     @condition(correct_channel, bypass_owner=False)
     async def forceupdate(self, ctx):
-        with self.database.session() as session:
+        async with self.database.session() as session:
             logger.info(f"{ctx.author.id} used forceupdate")
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, "you are not registered")
             else:
@@ -872,12 +874,12 @@ class Orisa(Plugin):
                         "If that is not correct, you need to log out of Overwatch once and try again; your "
                         "profile also needs to be public for me to track your SR.",
                     )
-            session.commit()
+            await run_sync(session.commit)
 
     @ow.subcommand()
     async def forgetme(self, ctx):
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if user:
                 logger.info(f"{ctx.author.name} ({ctx.author.id}) requested removal")
                 user_id = user.discord_id
@@ -896,7 +898,7 @@ class Orisa(Plugin):
                     logger.exception("Some problems while resetting nicks")
                 session.delete(user)
                 await reply(ctx, f"OK, deleted {ctx.author.name} from database")
-                session.commit()
+                await run_sync(session.commit)
             else:
                 await reply(
                     ctx,
@@ -948,13 +950,13 @@ class Orisa(Plugin):
                 )
                 return
 
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, "You are not registered! Do `!ow register` first.")
                 return
             user.roles = roles
-            session.commit()
+            await run_sync(session.commit)
             await reply(ctx, f"Done. Your roles are now **{roles.format()}**.")
 
     async def _findplayers(
@@ -966,8 +968,8 @@ class Orisa(Plugin):
             f"{ctx.author.id} issued findplayers {diff_or_min_sr} {max_sr} {findall}"
         )
 
-        with self.database.session() as session:
-            asker = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            asker = await self.database.user_by_discord_id(session, ctx.author.id)
             if not asker:
                 await reply(ctx, "you are not registered")
                 return
@@ -1318,8 +1320,8 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def srgraph(self, ctx, date: str = None):
 
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, "You are not registered. Do `!ow register` first.")
                 return
@@ -1329,8 +1331,8 @@ class Orisa(Plugin):
     @ow.subcommand()
     @author_has_roles("Orisa Admin")
     async def usersrgraph(self, ctx, member: Member, date: str = None):
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, member.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, member.id)
             if not user:
                 await reply(ctx, f"{member.name} not registered")
                 return
@@ -1348,8 +1350,8 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     async def dumpsr(self, ctx):
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, "You are not registered.")
                 return
@@ -1461,8 +1463,8 @@ class Orisa(Plugin):
             logger.debug(f"done syncing tags for {new_member.name} after OW close")
 
         if plays_overwatch(old_member) and (not plays_overwatch(new_member)):
-            with self.database.session() as session:
-                user = self.database.user_by_discord_id(session, new_member.user.id)
+            async with self.database.session() as session:
+                user = await self.database.user_by_discord_id(session, new_member.user.id)
                 if not user:
                     logger.debug(
                         f"{new_member.name} stopped playing OW but is not registered, nothing to do."
@@ -1495,8 +1497,8 @@ class Orisa(Plugin):
                     except Exception:
                         logger.exception(f"Can't adjust voice channel for new state parent {new_voice_state.channel.parent}")
 
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, member.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, member.id)
             if user:
                 formatted = self._format_nick(user)
                 try:
@@ -1518,7 +1520,7 @@ class Orisa(Plugin):
     @event("guild_leave")
     async def _guild_leave(self, ctx, guild):
         logger.info("I was removed from guild %s, I'm now in %d guilds", guild, len(self.client.guilds))
-        with self.database.session() as session:
+        async with self.database.session() as session:
             gc = (
                 session.query(GuildConfigJson)
                 .filter_by(id=guild.id)
@@ -1529,7 +1531,7 @@ class Orisa(Plugin):
                 session.delete(gc)
             with suppress(KeyError):
                 del self.guild_config[guild.id]
-            session.commit()
+            await run_sync(session.commit)
 
     @event("guild_member_remove")
     async def _guild_member_remove(self, ctx: Context, member: Member):
@@ -1542,8 +1544,8 @@ class Orisa(Plugin):
             await self._guild_leave(ctx, member.guild)
             return
         else:
-            with self.database.session() as session:
-                user = self.database.user_by_discord_id(session, member.id)
+            async with self.database.session() as session:
+                user = await self.database.user_by_discord_id(session, member.id)
                 if user:
                     in_other_guild = False
                     for guild in self.client.guilds.values():
@@ -1556,7 +1558,7 @@ class Orisa(Plugin):
                             f"deleting {user} from database because {member.name} left the guild and has no other guilds"
                         )
                         session.delete(user)
-                        session.commit()
+                        await run_sync(session.commit)
 
     @event("guild_join")
     async def _guild_joined(self, ctx: Context, guild: Guild):
@@ -1777,8 +1779,8 @@ class Orisa(Plugin):
 
             final_list = []
 
-            def channel_suffix(session, chan):
-                srs = self.database.get_srs(
+            async def channel_suffix(session, chan):
+                srs = await self.database.get_srs(
                     session, [member.id for member in chan.voice_members if member]
                 )
 
@@ -1803,10 +1805,10 @@ class Orisa(Plugin):
             for prefix, prefix_info in prefix_map.items():
                 chans = managed_group[prefix]
                 # rename channels if necessary
-                with self.database.session() as session:
+                async with self.database.session() as session:
                     for i, chan in enumerate(chans):
                         if cat.show_sr_in_nicks:
-                            new_name = f"{prefix} #{i+1}{channel_suffix(session, chan)}"
+                            new_name = f"{prefix} #{i+1}{await channel_suffix(session, chan)}"
                         else:
                             new_name = f"{prefix} #{i+1}"
 
@@ -1935,7 +1937,7 @@ class Orisa(Plugin):
     ):
         nn = str(member.name)
 
-        if force or self._show_sr_in_nick(member, user):
+        if force or await self._show_sr_in_nick(member, user):
             if re.search(r"\[.*?\]", str(nn)):
                 new_nn = re.sub(r"\[.*?\]", f"[{formatted}]", nn)
             else:
@@ -1968,13 +1970,13 @@ class Orisa(Plugin):
 
         return new_nn
 
-    def _show_sr_in_nick(self, member, user):
+    async def _show_sr_in_nick(self, member, user):
         if self.guild_config[member.guild_id].show_sr_in_nicks_by_default:
             return True
 
         if not user:
-            with self.database.session() as session:
-                user = self.database.user_by_discord_id(session, member.id)
+            async with self.database.session() as session:
+                user = await self.database.user_by_discord_id(session, member.id)
 
         if user.always_show_sr:
             return True
@@ -2244,7 +2246,7 @@ class Orisa(Plugin):
 
             if rank is not None:
                 # get highest SR, but exclude current_sr
-                session.flush()
+                await run_sync(session.flush)
                 prev_highest_sr_value = session.query(func.max(type_to_check)).filter(
                     SR.handle == handle, SR.id != handle.current_sr_id
                 )
@@ -2273,26 +2275,26 @@ class Orisa(Plugin):
                     await trio.sleep(delay)
                 else:
                     first = False
-                with self.database.session() as session:
+                async with self.database.session() as session:
                     try:
-                        handle = self.database.handle_by_id(session, handle_id)
+                        handle = await self.database.handle_by_id(session, handle_id)
                         if handle:
                             await self._sync_handle(session, handle)
                         else:
                             logger.warn(f"No handle for id {handle_id} found, probably deleted")
-                        session.commit()
+                        await run_sync(session.commit)
                     except Exception:
                         logger.exception(
                             f"exception while syncing {handle} for {handle.user.discord_id}"
                         )
                     finally:
-                        session.commit()
+                        await run_sync(session.commit)
             
         logger.debug("channel %r closed, done", channel)
 
     async def _sync_check(self):
-        with self.database.session() as session:
-            ids_to_sync = self.database.get_handles_to_be_synced(session)
+        async with self.database.session() as session:
+            ids_to_sync = await self.database.get_handles_to_be_synced(session)
         if ids_to_sync:
             logger.info(f"{len(ids_to_sync)} handles need to be synced")
             await self._sync_handles(ids_to_sync)
@@ -2330,9 +2332,9 @@ class Orisa(Plugin):
             try:
                 logger.debug("checking cron...")
                 do_run = False
-                with self.database.session() as s:
+                async with self.database.session() as s:
                     try:
-                        hs = s.query(Cron).filter_by(id="highscore").one()
+                        hs = await run_sync(s.query(Cron).filter_by(id="highscore").one)
                     except NoResultFound:
                         hs = Cron(id="highscore", last_run=datetime.utcnow())
                         s.add(hs)
@@ -2348,7 +2350,7 @@ class Orisa(Plugin):
                     if next_run < datetime.utcnow() and hs.last_run < next_run:
                         do_run = True
                         hs.last_run = datetime.utcnow()
-                    s.commit() # might have just added the entry, so just always commit
+                    await run_sync(s.commit) # might have just added the entry, so just always commit
                     
                 if do_run:
                     logger.debug("running highscore...")
@@ -2361,7 +2363,7 @@ class Orisa(Plugin):
     async def _cron_run_highscore(self):
         prev_date = datetime.utcnow() - timedelta(days=1)
 
-        with self.database.session() as session:
+        async with self.database.session() as session:
             for type in [BattleTag, Gamertag]:
                 for kind in "tank damage support".split():
                     await self._top_players(session, prev_date, type, kind)
@@ -2397,7 +2399,7 @@ class Orisa(Plugin):
     async def _handle_registration(self, user_id, type, data):
 
         handles_to_check = []
-        with self.database.session() as session:
+        async with self.database.session() as session:
             user_obj = await self.client.get_user(user_id)
             user_channel = await user_obj.open_private_channel()
 
@@ -2426,7 +2428,7 @@ class Orisa(Plugin):
                     )
                     return
 
-            user = self.database.user_by_discord_id(session, user_id)
+            user = await self.database.user_by_discord_id(session, user_id)
 
             if user is None:
                 user = User(discord_id=user_id, handles=handles, format="$sr")
@@ -2533,7 +2535,7 @@ class Orisa(Plugin):
 
             sort_secondaries(user)
 
-            session.commit()
+            await run_sync(session.commit)
 
             try:
                 await self._update_nick(user, force=True, raise_hierachy_error=True)
