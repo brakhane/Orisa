@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-22 23:36+0200\n"
-"PO-Revision-Date: 2019-08-21 23:33+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"PO-Revision-Date: 2019-08-24 00:02+0000\n"
+"Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/bot/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -123,7 +123,7 @@ msgstr "Apelido"
 #. When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
 #: orisa/orisa.py:513
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: orisa/orisa.py:524
 msgid "SR"
@@ -271,10 +271,9 @@ msgid "I tried to send you a DM with the link, but you disallow DM from server m
 msgstr "Eu tentei te mandar um mensagem direta com o link, mas você desabilitou mensagens diretas dos membros do servidor. Por favor, reverta isso e tente novamente. (Eu não posso enviar o link aqui, pois qualquer um com acesso a ele poderá me configurar pelos próximos 30 minutos)"
 
 #: orisa/orisa.py:690
-#, fuzzy, python-brace-format
-#| msgid "{type} looks like a BattleTag and not like pc/xbox, assuming you meant just `!ow register`..."
+#, python-brace-format
 msgid "{type} looks like a BattleTag and not like pc/xbox, assuming you meant `!ow register pc`…"
-msgstr "{type} parece que você tentou registrar usando sua BattleTag e não a plataforma, assumindo que você quis dizer apenas `!ow register`..."
+msgstr "{type} parece que você tentou registrar usando sua BattleTag e não a plataforma, assumindo que você quis dizer `!ow registrar pc`…"
 
 #: orisa/orisa.py:698
 msgid "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click the link above and give me permission to access your data. I only need this permission once, you can remove it later in your BattleNet account."
@@ -606,6 +605,14 @@ msgid ""
 "If you want to use Orisa on your own server or help developing it, enter `!ow about`\n"
 "Parameters in [square brackets] are optional."
 msgstr ""
+"Ao ingressar em um canal QP ou Comp, você precisa saber a BattleTag de um membro do canal, ou eles precisam da sua para adicionar você. Em canais competitivos, isso também irá ajudá-lo a saber qual SR os membros do canal possuem. Para evitar ter que solicitar essas informações repetidamente ao ingressar em um canal, esse bot foi criado. Quando você se registra com sua BattleTag, seu apelido é atualizado periodicamente para mostrar o seu SR atual. Você também pode pedir a BattleTag de outro membro ou solicitar a sua própria para que outras pessoas possam convidá-lo facilmente para jogar.\n"
+"O bot também enviará uma curta mensagem de parabenização quando um membro subir de classificação no jogo.\n"
+"* Como a Orisa do Overwatch, esse bot também é bem jovem e ainda ainda está aprendendo. Relate quaisquer problemas para <@! {OWNER}> *\n"
+"\n"
+"** Os comandos funcionam apenas no canal <# {channel_id}> ou enviando-me uma mensagem direta**\n"
+"Se você é novo para a Orisa, provavelmente está procurando por `!ow registrar` ou`!ow registrar xbox`\n"
+"Se você deseja usar o Orisa em seu próprio servidor ou ajudar a desenvolvê-la, digite `!ow sobre`\n"
+"Os parâmetros entre [colchetes] são opcionais."
 
 #: orisa/orisa.py:1286
 msgid ""
@@ -616,10 +623,16 @@ msgid ""
 "`!ow orisa` will show the BattleTag of \"SG | Orisa\", \"Orisa\", or \"Orisad\"\n"
 "`!ow oirsa` and `!ow ori` will probably also show the BattleTag of \"Orisa\""
 msgstr ""
+"Mostra a BattleTag para o apelido fornecido ou sua BattleTag se nenhum apelido for fornecido. O `apelido` pode conter espaços. Uma pesquisa difusa pelo apelido é realizada.\n"
+"*Exemplos:*\n"
+"`!ow` mostrará sua BattleTag\n"
+"`!ow o escolhido` mostrará a BattleTag do membro \"O EsCoLHidO\"\n"
+"`!ow orisa` mostrará a BattleTag de \"SG | Orisa\", \"Orisa\" ou \"Orisado\"\n"
+"`!ow oirsa` e `!ow ori` provavelmente também mostrarão a BattleTag de \"Orisa\""
 
 #: orisa/orisa.py:1298
 msgid "Shows information about Orisa, and how you can add her to your own Discord server, or help supporting her"
-msgstr ""
+msgstr "Mostra informações sobre a Orisa e como você pode adicioná-la em seu próprio servidor de Discord, ou ajudar a apoiá-la"
 
 #: orisa/orisa.py:1302
 msgid ""
@@ -627,16 +640,19 @@ msgid ""
 "*Example:*\n"
 "`!ow alwaysshowsr on`"
 msgstr ""
+"Em alguns servidores, a Orisa mostra apenas o seu SR ou classificação no seu apelido quando você estiver em um canal de voz OW. Se você quiser que seu apelido sempre mostre seu SR ou classificação, ative-o.\n"
+"*Exemplo:*\n"
+"`!ow sempremostrarsr on`"
 
 #. don't translate "Orisa Admin"
 #: orisa/orisa.py:1310
 msgid "This command can only be used by members with the \"Orisa Admin\" role and allows them to configure Orisa for the specific Discord server"
-msgstr ""
+msgstr "Este comando pode ser usado apenas por membros com a função \"Orisa Admin\" e permite que eles configurem a Orisa para o servidor de Discord em questão"
 
 #. help for !ow dumpsr
 #: orisa/orisa.py:1315
 msgid "Download your SR history as an Excel sheet"
-msgstr ""
+msgstr "Faça o download do seu histórico de SR como uma planilha do Excel"
 
 #: orisa/orisa.py:1333
 msgid "Same as `!ow findplayers`, but also includes offline players"
