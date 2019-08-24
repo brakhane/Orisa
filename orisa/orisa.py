@@ -2316,13 +2316,15 @@ class Orisa(Plugin):
         logger.info("done syncing")
 
     async def _sync_all_handles_task(self):
-        await trio.sleep(10)
         logger.debug("started waiting...")
+        await trio.sleep(10)
         while True:
             try:
+                logger.debug("running sync check")
                 await self._sync_check()
             except Exception as e:
                 logger.exception(f"something went wrong during _sync_check")
+            logger.debug("sleeping for 60s before running sync check again")
             await trio.sleep(60)
 
     async def _cron_task(self):
