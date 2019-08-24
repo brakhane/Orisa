@@ -2284,9 +2284,12 @@ class Orisa(Plugin):
                             logger.warn(f"No handle for id {handle_id} found, probably deleted")
                         await run_sync(session.commit)
                     except Exception:
-                        logger.exception(
-                            f"exception while syncing {handle} for {handle.user.discord_id}"
-                        )
+                        if handle:
+                            logger.exception(
+                                f"exception while syncing {handle} for {handle.user.discord_id}"
+                            )
+                        else:
+                            logger.exception("Exception while getting handle for sync")
                     finally:
                         await run_sync(session.commit)
             
