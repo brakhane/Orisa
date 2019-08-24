@@ -2166,7 +2166,7 @@ class Orisa(Plugin):
                 send = chan.messages.send
                 # send = self.client.application_info.owner.send
                 await send(
-                    f"Hello! Here are the current SR highscores for **{sr_kind.capitalize()}** on {type_class.blizzard_url_type.upper()} . If a member has more than one "
+                    f"Hello! Here are the current SRs for **{sr_kind.capitalize()}** on {type_class.blizzard_url_type.upper()} . If a member has more than one "
                     f"{type_class.desc}, only the primary {type_class.desc} is considered. Players with "
                     "private profiles, or those that didn't do their placements this season yet "
                     "are not shown."
