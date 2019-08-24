@@ -363,9 +363,9 @@ async def handle_oauth():
             'I\'m sorry. Something went wrong on my side. Try to reissue <p class="text-monospace">!ow register</p>',
             is_error=True,
         )
-    logger.debug("sending to channel")
+    logger.debug("sending to channel %s", send_ch)
     await send_ch.send((uid, type, data))
-    logger.debug("sent to channel")
+    logger.debug("sent to channel %s", send_ch)
 
     return await render_message("Thank you! I have sent you a DM.")
 
