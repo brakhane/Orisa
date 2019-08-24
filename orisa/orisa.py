@@ -2388,15 +2388,16 @@ class Orisa(Plugin):
             await trio.sleep(10)
 
     async def _oauth_result_listener(self):
-        async for uid, type, data in self.web_recv_ch:
-            logger.debug(f"got OAuth response data {data} of type {type} for uid {uid}")
-            try:
-                with trio.move_on_after(60):
-                    await self._handle_registration(uid, type, data)
-            except Exception:
-                logger.error(
-                    "Something went wrong when working with data %s", data, exc_info=True
-                )
+        async with self.web_recv_ch as recv_ch:
+            async for uid, type, data in recv_ch:
+                logger.debug(f"got OAuth response data {data} of type {type} for uid {uid}")
+                try:
+                    with trio.move_on_after(60):
+                        await self._handle_registration(uid, type, data)
+                except Exception:
+                    logger.error(
+                        "Something went wrong when working with data %s", data, exc_info=True
+                    )
 
     async def _handle_registration(self, user_id, type, data):
 
