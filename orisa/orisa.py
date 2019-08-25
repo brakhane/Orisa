@@ -2246,7 +2246,7 @@ class Orisa(Plugin):
 
             if rank is not None:
                 # get highest SR, but exclude current_sr
-                await run_sync(session.flush)
+                await run_sync(session.commit)
                 prev_highest_sr_value = session.query(func.max(type_to_check)).filter(
                     SR.handle == handle, SR.id != handle.current_sr_id
                 )
