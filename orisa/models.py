@@ -259,7 +259,7 @@ class SR(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     handle_id = Column(
-        Integer, ForeignKey("handle.id"), nullable=False, index=True
+        Integer, ForeignKey("handle.id"), nullable=False, index=True, cascade="all, delete-orphan"
     )
 
     handle = relationship(
