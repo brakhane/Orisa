@@ -78,6 +78,7 @@ from pandas.plotting import register_matplotlib_converters
 from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.sql import func, desc, and_
+from trio.to_thread import run_sync
 from itsdangerous.url_safe import URLSafeTimedSerializer
 from itsdangerous.exc import BadSignature
 from wcwidth import wcswidth
@@ -231,17 +232,18 @@ class Orisa(Plugin):
         self.raven_client = raven_client
 
         self.guild_config = defaultdict(GuildConfig.default)
+
+    async def load(self):
+
         logger.debug("Loading config")
-        with database.session() as session:
-            for config in session.query(GuildConfigJson).filter(
+        async with self.database.session() as session:
+            for config in await run_sync(session.query(GuildConfigJson).filter(
                 GuildConfigJson.id.in_(self.client.guilds.keys())
-            ):
+            ).all):
                 self.guild_config[config.id] = data = GuildConfig.from_json2(
                     config.config
                 )
                 logger.debug("Configured %d as %s", config.id, data)
-
-    async def load(self):
 
         logger.warn("TEMPORARILY NOT SENDING MESSAGES TO GUILDS!")
         # await self.spawn(self._message_new_guilds)
@@ -299,9 +301,8 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner, bypass_owner=False)
     async def messageallusers(self, ctx, *, message: str):
-        s = self.database.Session()
-        try:
-            users = s.query(User).all()
+        async with self.database.session() as s:
+            users = await run_sync(s.query(User).all)
             for user in users:
                 try:
                     logger.debug(f"Sending message to {user.discord_id}")
@@ -310,8 +311,6 @@ class Orisa(Plugin):
                 except:
                     logger.exception(f"Error while sending to {user.discord_id}")
             logger.debug("Done sending")
-        finally:
-            s.close()
 
     @command()
     @condition(only_owner, bypass_owner=False)
@@ -395,29 +394,28 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
-    async def hs(self, ctx, type_str = "pc", style: str = "fancy_grid"):
+    async def hs(self, ctx, kind: str, type_str = "pc", style: str = "fancy_grid"):
 
         prev_date = datetime.utcnow() - timedelta(days=1)
 
-        logger.info("Triggered top_players")
+        logger.info("Triggered top_players %s %s", kind, type_str)
 
-        with self.database.session() as session:
+        async with self.database.session() as session:
             t = BattleTag if type_str == "pc" else Gamertag
-            for kind in "tank damage support".split():
-                await self._top_players(session, prev_date, t, kind, style)
+            await self._top_players(session, prev_date, t, kind, style)
 
     @command()
     @condition(only_owner)
     async def updatenicks(self, ctx):
-        session = self.database.Session()
-        for user in session.query(User).all():
-            try:
-                await self._update_nick(user)
-            except Exception:
-                if self.raven_client:
-                    self.raven_client.captureException()
-                logger.exception("something went wrong during updatenicks")
-        await ctx.channel.messages.send("Done")
+        async with self.database.session() as session:
+            for user in await run_sync(session.query(User).all):
+                try:
+                    await self._update_nick(user)
+                except Exception:
+                    if self.raven_client:
+                        self.raven_client.captureException()
+                    logger.exception("something went wrong during updatenicks")
+            await ctx.channel.messages.send("Done")
 
     @command()
     @condition(only_owner, bypass_owner=False)
@@ -425,9 +423,8 @@ class Orisa(Plugin):
         member_ids = [
             id for guild in self.client.guilds.values() for id in guild.members.keys()
         ]
-        session = self.database.Session()
-        try:
-            registered_ids = [x[0] for x in session.query(User.discord_id).all()]
+        async with self.database.session() as session:
+            registered_ids = [x[0] for x in await run_sync(session.query(User.discord_id).all)]
             stale_ids = set(registered_ids) - set(member_ids)
             ids = "\n".join(f"<@{id}>" for id in stale_ids)
             await send_long(
@@ -436,19 +433,16 @@ class Orisa(Plugin):
             )
             if doit == "confirm":
                 for id in stale_ids:
-                    user = self.database.user_by_discord_id(session, id)
+                    user = await self.database.user_by_discord_id(session, id)
                     if not user:
                         await ctx.channel.messages.send(f"{id} not found in DB???")
                     else:
-                        session.delete(user)
+                        await run_sync(session.delete, user)
                         logger.info(f"deleted {id}")
                 await send_long(ctx.channel.messages.send, f"Deleted {len(stale_ids)} entries")
-                session.commit()
+                await run_sync(session.commit)
             elif stale_ids:
                 await ctx.channel.messages.send("issue `!cleanup confirm` to delete.")
-
-        finally:
-            session.close()
 
     @command()
     @condition(correct_channel)
@@ -477,11 +471,9 @@ class Orisa(Plugin):
         if not member_given:
             member = ctx.author
 
-        session = self.database.Session()
-
         content = embed = None
-        try:
-            user = self.database.user_by_discord_id(session, member.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, member.id)
             if user:
                 embed = Embed(colour=0x659DBD)  # will be overwritten later if SR is set
 
@@ -566,8 +558,6 @@ class Orisa(Plugin):
                         title=_("Hint"),
                         description=_("use `!ow register` to register, or `!ow help` for more info"),
                     )
-        finally:
-            session.close()
         await ctx.channel.messages.send(content=content, embed=embed)
 
     @ow.subcommand()
@@ -758,9 +748,8 @@ class Orisa(Plugin):
     @ow.subcommand()
     @condition(correct_channel)
     async def unregister(self, ctx, handle_or_index: str):
-        session = self.database.Session()
-        try:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(
                     ctx, _("You are not registered, there's nothing for me to do.")
@@ -783,12 +772,9 @@ class Orisa(Plugin):
 
             removed = user.handles.pop(index)
             handle = removed.handle
-            session.commit()
+            await run_sync(session.commit)
             await reply(ctx, _("Removed **{handle}**").format(handle=handle))
             await self._update_nick_after_secondary_change(ctx, user)
-
-        finally:
-            session.close()
 
     async def _update_nick_after_secondary_change(self, ctx, user):
         try:
@@ -812,9 +798,8 @@ class Orisa(Plugin):
     @ow.subcommand()
     @condition(correct_channel)
     async def setprimary(self, ctx, handle_or_index: str):
-        session = self.database.Session()
-        try:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, _("You are not registered. Use `!ow register` first."))
                 return
@@ -834,12 +819,12 @@ class Orisa(Plugin):
             p, s = user.handles[0], user.handles[index]
             p.position = index
             s.position = 0
-            session.commit()
+            await run_sync(session.commit)
 
             for i, t in enumerate(sorted(user.handles[1:], key=attrgetter("handle"))):
                 t.position = i + 1
 
-            session.commit()
+            await run_sync(session.commit)
 
             await reply(
                 ctx,
@@ -847,9 +832,6 @@ class Orisa(Plugin):
                 _("Done. Your primary {type} is now **{handle}**.").format(handle=user.handles[0].handle, type=user.handles[0].desc)
             )
             await self._update_nick_after_secondary_change(ctx, user)
-
-        finally:
-            session.close()
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -865,10 +847,8 @@ class Orisa(Plugin):
             await reply(ctx, _("format string missing"))
             return
 
-        session = self.database.Session()
-
-        try:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, _("you must register first"))
                 return
@@ -880,14 +860,14 @@ class Orisa(Plugin):
                     await reply(
                         ctx, _('Invalid format string: unknown placeholder "{key}"').format(key=e.key)
                     )
-                    session.rollback()
+                    await run_sync(session.rollback)
                 except NicknameTooLong as e:
                     await reply(
                         ctx,
                         _("Sorry, using this format would make your nickname be longer than 32 characters ({len} to be exact).\n"
                           "Please choose a shorter format or shorten your nickname").format(len=len(e.nickname))
                     )
-                    session.rollback()
+                    await run_sync(session.rollback)
                 else:
                     # A list of random silly titles that will be shown in the confirmation message when a user changed his nickname format. 
                     # Most of them were found on the Internet, for example
@@ -924,22 +904,20 @@ Pornography Historian""").split("\n")
                         # {title} is taken from the list of random titles
                         _('Done. Henceforth, thou shall be knownst as "`{new_nick}`, {title}"').format(new_nick=new_nick, title=random.choice(titles))
                     )
-        finally:
-            session.commit()
-            session.close()
+            await run_sync(session.commit)
 
     @ow.subcommand(aliases=("alwayshowsr",))
     @condition(correct_channel)
     async def alwaysshowsr(self, ctx, param: str = "on"):
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, _("you are not registered"))
                 return
             new_setting = param != "off"
             user.always_show_sr = new_setting
             await self._update_nick(user)
-            session.commit()
+            await run_sync(session.commit)
 
         msg = "Done. "
         if new_setting:
@@ -951,10 +929,9 @@ Pornography Historian""").split("\n")
     @ow.subcommand()
     @condition(correct_channel, bypass_owner=False)
     async def forceupdate(self, ctx):
-        session = self.database.Session()
-        try:
+        async with self.database.session() as session:
             logger.info(f"{ctx.author.id} used forceupdate")
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, _("you are not registered"))
             else:
@@ -981,15 +958,12 @@ Pornography Historian""").split("\n")
                         "If that is not correct, you need to log out of Overwatch once and try again; your "
                         "profile also needs to be public for me to track your SR.").format(sr=user.handles[0].sr)
                     )
-        finally:
-            session.commit()
-            session.close()
+            await run_sync(session.commit)
 
     @ow.subcommand()
     async def forgetme(self, ctx):
-        session = self.database.Session()
-        try:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if user:
                 logger.info(f"{ctx.author.name} ({ctx.author.id}) requested removal")
                 user_id = user.discord_id
@@ -1008,14 +982,12 @@ Pornography Historian""").split("\n")
                     logger.exception("Some problems while resetting nicks")
                 session.delete(user)
                 await reply(ctx, _("OK, deleted {name} from database").format(name=ctx.author.name))
-                session.commit()
+                await run_sync(session.commit)
             else:
                 await reply(
                     ctx,
                     _("you are not registered anyway, so there's nothing for me to forget..."),
                 )
-        finally:
-            session.close()
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -1064,17 +1036,14 @@ Pornography Historian""").split("\n")
                 )
                 return
 
-        session = self.database.Session()
-        try:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, _("You are not registered! Do `!ow register` first."))
                 return
             user.roles = roles
-            session.commit()
+            await run_sync(session.commit)
             await reply(ctx, _("Done. Your roles are now **{roles}**").format(roles=roles.format(ctx)))
-        finally:
-            session.close()
 
     async def _findplayers(
         self, ctx, diff_or_min_sr: int = None, max_sr: int = None, *, findall
@@ -1085,9 +1054,8 @@ Pornography Historian""").split("\n")
             f"{ctx.author.id} issued findplayers {diff_or_min_sr} {max_sr} {findall}"
         )
 
-        session = self.database.Session()
-        try:
-            asker = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            asker = await self.database.user_by_discord_id(session, ctx.author.id)
             if not asker:
                 await reply(ctx, _("you are not registered"))
                 return
@@ -1210,9 +1178,6 @@ Pornography Historian""").split("\n")
             await send_long(ctx.author.send, msg)
             if not ctx.channel.private:
                 await reply(ctx, _("I sent you a DM with the results."))
-
-        finally:
-            session.close()
 
     @ow.subcommand()
     async def help(self, ctx):
@@ -1457,8 +1422,8 @@ Pornography Historian""").split("\n")
     @condition(correct_channel)
     async def srgraph(self, ctx, date: str = None):
 
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, _("You are not registered. Do `!ow register` first."))
                 return
@@ -1468,8 +1433,8 @@ Pornography Historian""").split("\n")
     @ow.subcommand()
     @author_has_roles("Orisa Admin")
     async def usersrgraph(self, ctx, member: Member, date: str = None):
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, member.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, member.id)
             if not user:
                 await reply(ctx, _("{member_name} is not registered").format(member_name=member.name))
                 return
@@ -1488,8 +1453,8 @@ Pornography Historian""").split("\n")
 
     @ow.subcommand()
     async def dumpsr(self, ctx):
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, ctx.author.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
                 await reply(ctx, _("You are not registered."))
                 return
@@ -1607,9 +1572,8 @@ Pornography Historian""").split("\n")
             logger.debug(f"done syncing tags for {new_member.name} after OW close")
 
         if plays_overwatch(old_member) and (not plays_overwatch(new_member)):
-            session = self.database.Session()
-            try:
-                user = self.database.user_by_discord_id(session, new_member.user.id)
+            async with self.database.session() as session:
+                user = await self.database.user_by_discord_id(session, new_member.user.id)
                 if not user:
                     logger.debug(
                         f"{new_member.name} stopped playing OW but is not registered, nothing to do."
@@ -1620,8 +1584,6 @@ Pornography Historian""").split("\n")
                 logger.info(
                     f"{new_member.name} stopped playing OW and has {len(ids_to_sync)} BattleTags that need to be checked"
                 )
-            finally:
-                session.close()
 
             await self.spawn(wait_and_fire, ids_to_sync)
 
@@ -1644,8 +1606,8 @@ Pornography Historian""").split("\n")
                     except Exception:
                         logger.exception(f"Can't adjust voice channel for new state parent {new_voice_state.channel.parent}")
 
-        with self.database.session() as session:
-            user = self.database.user_by_discord_id(session, member.id)
+        async with self.database.session() as session:
+            user = await self.database.user_by_discord_id(session, member.id)
             if user:
                 formatted = self._format_nick(user)
                 try:
@@ -1667,7 +1629,7 @@ Pornography Historian""").split("\n")
     @event("guild_leave")
     async def _guild_leave(self, ctx, guild):
         logger.info("I was removed from guild %s, I'm now in %d guilds", guild, len(self.client.guilds))
-        with self.database.session() as session:
+        async with self.database.session() as session:
             gc = (
                 session.query(GuildConfigJson)
                 .filter_by(id=guild.id)
@@ -1678,7 +1640,7 @@ Pornography Historian""").split("\n")
                 session.delete(gc)
             with suppress(KeyError):
                 del self.guild_config[guild.id]
-            session.commit()
+            await run_sync(session.commit)
 
     @event("guild_member_remove")
     async def _guild_member_remove(self, ctx: Context, member: Member):
@@ -1691,8 +1653,8 @@ Pornography Historian""").split("\n")
             await self._guild_leave(ctx, member.guild)
             return
         else:
-            with self.database.session() as session:
-                user = self.database.user_by_discord_id(session, member.id)
+            async with self.database.session() as session:
+                user = await self.database.user_by_discord_id(session, member.id)
                 if user:
                     in_other_guild = False
                     for guild in self.client.guilds.values():
@@ -1705,7 +1667,7 @@ Pornography Historian""").split("\n")
                             f"deleting {user} from database because {member.name} left the guild and has no other guilds"
                         )
                         session.delete(user)
-                        session.commit()
+                        await run_sync(session.commit)
 
     @event("guild_join")
     async def _guild_joined(self, ctx: Context, guild: Guild):
@@ -1929,8 +1891,8 @@ Pornography Historian""").split("\n")
 
             final_list = []
 
-            def channel_suffix(session, chan):
-                srs = self.database.get_srs(
+            async def channel_suffix(session, chan):
+                srs = await self.database.get_srs(
                     session, [member.id for member in chan.voice_members if member]
                 )
 
@@ -1955,10 +1917,10 @@ Pornography Historian""").split("\n")
             for prefix, prefix_info in prefix_map.items():
                 chans = managed_group[prefix]
                 # rename channels if necessary
-                with self.database.session() as session:
+                async with self.database.session() as session:
                     for i, chan in enumerate(chans):
                         if cat.show_sr_in_nicks:
-                            new_name = f"{prefix} #{i+1}{channel_suffix(session, chan)}"
+                            new_name = f"{prefix} #{i+1}{await channel_suffix(session, chan)}"
                         else:
                             new_name = f"{prefix} #{i+1}"
 
@@ -2087,7 +2049,7 @@ Pornography Historian""").split("\n")
     ):
         nn = str(member.name)
 
-        if force or self._show_sr_in_nick(member, user):
+        if force or await self._show_sr_in_nick(member, user):
             if re.search(r"\[.*?\]", str(nn)):
                 new_nn = re.sub(r"\[.*?\]", f"[{formatted}]", nn)
             else:
@@ -2120,13 +2082,13 @@ Pornography Historian""").split("\n")
 
         return new_nn
 
-    def _show_sr_in_nick(self, member, user):
+    async def _show_sr_in_nick(self, member, user):
         if self.guild_config[member.guild_id].show_sr_in_nicks_by_default:
             return True
 
         if not user:
-            with self.database.session() as session:
-                user = self.database.user_by_discord_id(session, member.id)
+            async with self.database.session() as session:
+                user = await self.database.user_by_discord_id(session, member.id)
 
         if user.always_show_sr:
             return True
@@ -2336,7 +2298,7 @@ Pornography Historian""").split("\n")
                 send = chan.messages.send
                 # send = self.client.application_info.owner.send
                 await send(
-                    _("Hello! Here are the current SR highscores for **{role}** on {platform} . If a member has more than one "
+                    _("Hello! Here are the current SRs for **{role}** on {platform} . If a member has more than one "
                     "{handle_type}, only the primary {handle_type} is considered. Players with "
                     "private profiles, or those that didn't do their placements this season yet "
                     "are not shown.").format(role=_(sr_kind.capitalize()), platform=type_class.blizzard_url_type.upper(), handle_type=type_class.desc)
@@ -2412,7 +2374,7 @@ Pornography Historian""").split("\n")
 
             if rank is not None:
                 # get highest SR, but exclude current_sr
-                session.flush()
+                await run_sync(session.flush)
                 prev_highest_sr_value = session.query(func.max(type_to_check)).filter(
                     SR.handle == handle, SR.id != handle.current_sr_id
                 )
@@ -2441,29 +2403,29 @@ Pornography Historian""").split("\n")
                     await trio.sleep(delay)
                 else:
                     first = False
-                session = self.database.Session()
-                try:
-                    handle = self.database.handle_by_id(session, handle_id)
-                    if handle:
-                        await self._sync_handle(session, handle)
-                    else:
-                        logger.warn(f"No handle for id {handle_id} found, probably deleted")
-                    session.commit()
-                except Exception:
-                    logger.exception(
-                        f"exception while syncing {handle} for {handle.user.discord_id}"
-                    )
-                finally:
-                    session.commit()
-                    session.close()
+                async with self.database.session() as session:
+                    try:
+                        handle = await self.database.handle_by_id(session, handle_id)
+                        if handle:
+                            await self._sync_handle(session, handle)
+                        else:
+                            logger.warn(f"No handle for id {handle_id} found, probably deleted")
+                        await run_sync(session.commit)
+                    except Exception:
+                        if handle:
+                            logger.exception(
+                                f"exception while syncing {handle} for {handle.user.discord_id}"
+                            )
+                        else:
+                            logger.exception("Exception while getting handle for sync")
+                    finally:
+                        await run_sync(session.commit)
+            
         logger.debug("channel %r closed, done", channel)
 
     async def _sync_check(self):
-        session = self.database.Session()
-        try:
-            ids_to_sync = self.database.get_handles_to_be_synced(session)
-        finally:
-            session.close()
+        async with self.database.session() as session:
+            ids_to_sync = await self.database.get_handles_to_be_synced(session)
         if ids_to_sync:
             logger.info(f"{len(ids_to_sync)} handles need to be synced")
             await self._sync_handles(ids_to_sync)
@@ -2485,13 +2447,15 @@ Pornography Historian""").split("\n")
         logger.info("done syncing")
 
     async def _sync_all_handles_task(self):
-        await trio.sleep(10)
         logger.debug("started waiting...")
+        await trio.sleep(10)
         while True:
             try:
+                logger.debug("running sync check")
                 await self._sync_check()
             except Exception as e:
                 logger.exception(f"something went wrong during _sync_check")
+            logger.debug("sleeping for 60s before running sync check again")
             await trio.sleep(60)
 
     async def _cron_task(self):
@@ -2500,9 +2464,10 @@ Pornography Historian""").split("\n")
         while True:
             try:
                 logger.debug("checking cron...")
-                with self.database.session() as s:
+                do_run = False
+                async with self.database.session() as s:
                     try:
-                        hs = s.query(Cron).filter_by(id="highscore").one()
+                        hs = await run_sync(s.query(Cron).filter_by(id="highscore").one)
                     except NoResultFound:
                         hs = Cron(id="highscore", last_run=datetime.utcnow())
                         s.add(hs)
@@ -2516,11 +2481,14 @@ Pornography Historian""").split("\n")
                         hs.last_run,
                     )
                     if next_run < datetime.utcnow() and hs.last_run < next_run:
-                        logger.debug("running highscore...")
-                        await self._cron_run_highscore()
-                        logger.debug("done running hiscore")
+                        do_run = True
                         hs.last_run = datetime.utcnow()
-                    s.commit()
+                    await run_sync(s.commit) # might have just added the entry, so just always commit
+                    
+                if do_run:
+                    logger.debug("running highscore...")
+                    await self._cron_run_highscore()
+                    logger.debug("done running hiscore")
             except Exception:
                 logger.exception("Error during cron")
             await trio.sleep(1 * 60)
@@ -2528,7 +2496,7 @@ Pornography Historian""").split("\n")
     async def _cron_run_highscore(self):
         prev_date = datetime.utcnow() - timedelta(days=1)
 
-        with self.database.session() as session:
+        async with self.database.session() as session:
             for type in [BattleTag, Gamertag]:
                 for kind in "tank damage support".split():
                     await self._top_players(session, prev_date, type, kind)
@@ -2551,23 +2519,21 @@ Pornography Historian""").split("\n")
             await trio.sleep(10)
 
     async def _oauth_result_listener(self):
-        async for uid, type, data in self.web_recv_ch:
-            logger.debug(f"got OAuth response data {data} of type {type} for uid {uid}")
-            try:
-                with trio.move_on_after(60):
-                    await self._handle_registration(uid, type, data)
-            except Exception:
-                logger.error(
-                    "Something went wrong when working with data %s", data, exc_info=True
-                )
+        async with self.web_recv_ch as recv_ch:
+            async for uid, type, data in recv_ch:
+                logger.debug(f"got OAuth response data {data} of type {type} for uid {uid}")
+                try:
+                    with trio.move_on_after(60):
+                        await self._handle_registration(uid, type, data)
+                except Exception:
+                    logger.error(
+                        "Something went wrong when working with data %s", data, exc_info=True
+                    )
 
     async def _handle_registration(self, user_id, type, data):
 
-        session = self.database.Session()
-
         handles_to_check = []
-
-        try:
+        async with self.database.session() as session:
             user_obj = await self.client.get_user(user_id)
             user_channel = await user_obj.open_private_channel()
 
@@ -2597,7 +2563,7 @@ Pornography Historian""").split("\n")
                     )
                     return
 
-            user = self.database.user_by_discord_id(session, user_id)
+            user = await self.database.user_by_discord_id(session, user_id)
 
             if user is None:
                 user = User(discord_id=user_id, handles=handles, format="$sr")
@@ -2725,7 +2691,7 @@ Pornography Historian""").split("\n")
 
             sort_secondaries(user)
 
-            session.commit()
+            await run_sync(session.commit)
 
             try:
                 await self._update_nick(user, force=True, raise_hierachy_error=True)
@@ -2767,9 +2733,6 @@ Pornography Historian""").split("\n")
             )
 
             await user_channel.messages.send(content=None, embed=embed)
-
-        finally:
-            session.close()
 
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):

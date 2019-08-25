@@ -23,6 +23,7 @@ import asks
 from itsdangerous.url_safe import URLSafeTimedSerializer
 from itsdangerous.exc import BadSignature, SignatureExpired
 from oauthlib.oauth2 import WebApplicationClient
+from trio.to_thread import run_sync
 from quart_trio import QuartTrio
 from quart import Quart, request, render_template, jsonify, Response
 
@@ -202,14 +203,15 @@ def validate_config(guild, guild_config):
             if not prefix.name:
                 # config screen validation error
                 pref_errors["name"] = _("A name is required")
-            elif '#' in prefix.name:
-                # config screen validation error
-                pref_errors["name"] = _("The channel name must not contain a #")
-            elif prefix.name.strip() in names:
-                # config screen validation error
-                pref_errors["name"] = _("This name is already used in this category")
+            else:
+                if '#' in prefix.name:
+                    # config screen validation error
+                    pref_errors["name"] = _("The channel name must not contain a #")
+                elif prefix.name.strip() in names:
+                    # config screen validation error
+                    pref_errors["name"] = _("This name is already used in this category")
 
-            names.add(prefix.name.strip())
+                names.add(prefix.name.strip())
 
             if prefix.limit is None or not (0 <= prefix.limit <= 99):
                 # config screen validation error
@@ -262,9 +264,9 @@ async def save(guild_id):
 
     orisa.guild_config[guild_id] = new_gi
 
-    with orisa.database.session() as session:
+    async with orisa.database.session() as session:
 
-        gc = session.query(GuildConfigJson).filter_by(id=guild_id).one_or_none()
+        gc = await run_sync(session.query(GuildConfigJson).filter_by(id=guild_id).one_or_none)
         if not gc:
             gc = GuildConfigJson(id=guild_id)
             session.add(gc)
@@ -272,7 +274,7 @@ async def save(guild_id):
         new_config = json.dumps(new_gi.to_js_json())
         gc.config = new_config
         logger.info("New config for guild %d is %s", guild_id, new_config)
-        session.commit()
+        await run_sync(session.commit)
 
     async def update():
         for vc in new_gi.managed_voice_categories:
@@ -280,11 +282,11 @@ async def save(guild_id):
                 client.find_channel(vc.category_id), adjust_user_limits=True
             )
 
-        with orisa.database.session() as session:
-            for user in (
+        async with orisa.database.session() as session:
+            for user in await run_sync(
                 session.query(User)
                 .filter(User.discord_id.in_(guild.members.keys()))
-                .all()
+                .all
             ):
                 try:
                     await orisa._update_nick(user)
@@ -380,9 +382,9 @@ async def handle_oauth():
             _('I\'m sorry. Something went wrong on my side. Try to reissue {register}.'.format(register=register_msg),
             is_error=True,
         )
-    logger.debug("sending to channel")
+    logger.debug("sending to channel %s", send_ch)
     await send_ch.send((uid, type, data))
-    logger.debug("sent to channel")
+    logger.debug("sent to channel %s", send_ch)
 
     return await render_message(_("Thank you! I have sent you a DM."))
 

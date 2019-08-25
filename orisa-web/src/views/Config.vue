@@ -92,6 +92,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               link: 'https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-'
             })"
           >
+            <template #description>
+              <vue-markdown>{{ $t('cfg.reg-msg-desc', {
+                link: 'https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-'
+              }) }}</vue-markdown>
+            </template>
             <b-form-textarea
               :state="val_state(validation_errors.extra_register_text)"
               v-model="guild_config.extra_register_text"
@@ -105,8 +110,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             :state="val_state(validation_errors.listen_channel_id)"
             :invalid-feedback="validation_errors.listen_channel_id"
             :label="$t('cfg.listen-chan')"
-            :description="$t('cfg.listen-chan-desc')"
           >
+            <template #description>
+              <vue-markdown>{{ $t('cfg.listen-chan-desc') }}</vue-markdown>
+            </template>
             <channel-selector
               :state="val_state(validation_errors.listen_channel_id)"
               v-model="guild_config.listen_channel_id"
@@ -119,8 +126,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             :state="val_state(validation_errors.congrats_channel_id)"
             :invalid-feedback="validation_errors.congrats_channel_id"
             :label="$t('cfg.congrats-chan')"
-            :description="$t('cfg.congrats-chan-desc')"
           >
+            <template #description>
+              <vue-markdown>{{ $t('cfg.congrats-chan-desc') }}</vue-markdown>
+            </template>
             <channel-selector
               :state="val_state(validation_errors.congrats_channel_id)"
               v-model="guild_config.congrats_channel_id"

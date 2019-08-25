@@ -15,9 +15,11 @@
 import random
 import typing
 
-from contextlib import contextmanager
+from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 from enum import Flag, auto
+
+import trio
 
 from sqlalchemy import (
     Boolean,
@@ -34,6 +36,7 @@ from sqlalchemy import (
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.ext.orderinglist import ordering_list
+from sqlalchemy.sql.functions import coalesce
 from sqlalchemy.orm import raiseload, relationship, sessionmaker
 import sqlalchemy.types as types
 
@@ -256,7 +259,7 @@ class SR(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     handle_id = Column(
-        Integer, ForeignKey("handle.id"), nullable=False, index=True
+        Integer, ForeignKey("handle.id"), nullable=False, index=True, cascade="all, delete-orphan"
     )
 
     handle = relationship(
@@ -301,30 +304,30 @@ class Database:
 
         self._min_delay = min(self._sync_delay(x) for x in range(10))
 
-    @contextmanager
-    def session(self):
+    @asynccontextmanager
+    async def session(self):
         session = self.Session()
         try:
             yield session
         finally:
-            session.close()
+            await trio.to_thread.run_sync(session.close)
 
-    def user_by_id(self, session, id):
-        return session.query(User).filter_by(id=id).one_or_none()
+    async def user_by_id(self, session, id):
+        return await trio.to_thread.run_sync(session.query(User).filter_by(id=id).one_or_none)
 
-    def handle_by_id(self, session, id):
-        return session.query(Handle).filter_by(id=id).one_or_none()
+    async def handle_by_id(self, session, id):
+        return await trio.to_thread.run_sync(session.query(Handle).filter_by(id=id).one_or_none)
 
-    def user_by_discord_id(self, session, discord_id):
+    async def user_by_discord_id(self, session, discord_id):
         return session.query(User).filter_by(discord_id=discord_id).one_or_none()
 
-    def get_srs(self, session, discord_ids):
-        return (
+    async def get_srs(self, session, discord_ids):
+        return await trio.to_thread.run_sync(
             session.query(SR)
             .join(Handle.current_sr, User)
             .filter(Handle.position == 0)
             .filter(User.discord_id.in_(discord_ids))
-            .all()
+            .all
         )
 
     def _sync_delay(self, error_count):
@@ -347,16 +350,17 @@ class Database:
         else:
             return timedelta(days=1)
 
-    def get_handles_to_be_synced(self, session):
-        results = (
+    async def get_handles_to_be_synced(self, session):
+        results = await trio.to_thread.run_sync(
             session.query(Handle)
-            .join(Handle.current_sr)
-            .filter(SR.timestamp <= datetime.utcnow() - self._min_delay)
-            .all()
+            .outerjoin(Handle.current_sr)
+            .filter(
+                coalesce(SR.timestamp, datetime.min) <= datetime.utcnow() - self._min_delay
+            )
+            .all
         )
         return [
             result.id
             for result in results
-            if result.last_update
-            <= datetime.utcnow() - self._sync_delay(result.error_count)
+            if (result.last_update or datetime.min) <= datetime.utcnow() - self._sync_delay(result.error_count)
         ]
