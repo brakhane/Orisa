@@ -15,6 +15,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <template>
+<i18next path="">
   <div v-if="loaded">
     <transition name="fade-drop">
       <div :class="'container fixed-top translucent ' + shake_if_problem" v-if="unsaved_changes">
@@ -45,17 +46,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <vue-markdown class="lead" :anchorAttributes="{target: '_blank'}">{{ $t("cfg.lead-info", { link: "https://discord.gg/tsNxvFh" }) }}</vue-markdown>
       <b-alert variant="warning" class="my-4" show dismissible v-if="higher_roles.length > 0">
         <h5 class="alert-heading">{{ $t("cfg.not-top-role-head") }}</h5>
-        <vue-markdown>{{ 
+        <vue-markdown>{{
           $t("cfg.not-top-role-desc", {
             with_the_following_roles: $t("cfg.with-the-following-roles", {
               count: higher_roles.length
             })
-          }) 
+          })
         }}</vue-markdown>
         <ul>
           <li v-for="role in higher_roles" :key="role">{{ role }}</li>
         </ul>
-        <vue-markdown :anchorAttributes="{target: '_blank', class='alert-link'}">
+        <vue-markdown :anchorAttributes="{target: '_blank', class: 'alert-link'}">
           {{ $t("cfg.drag-orisa-role", { link: "https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif" }) }}
         </vue-markdown>
       </b-alert>
@@ -88,7 +89,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             horizontal
             :label="$t('cfg.reg-msg')"
             :invalid-feedback="validation_errors.extra_register_text"
-            :description="$t('cfg.reg-msg-desc', { 
+            :description="$t('cfg.reg-msg-desc', {
               link: 'https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-'
             })"
           >
@@ -147,7 +148,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         >
           <p
             class="lead"
-            v-t="cfg.cfg.no-managed-voice-chan-lead"
+            v-t="cfg.no-managed-voice-chan-lead"
           ></p>
           <vue-markdown v-t="cfg.no-mgt-voice-chan-text"></vue-markdown>
         </b-card>
@@ -165,7 +166,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <font-awesome-icon icon="folder-plus"/>{{ $t('cfg.add-mgt-cat') }}
         </b-btn>
       </b-form>
-      <div class="py-5" v-t="cfg.footer">
+      <div class="py-5" v-t="cfg.footer"></div>
     </b-container>
   </div>
   <div v-else>
@@ -175,10 +176,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       v-if="load_failed"
       v-t="cfg.load-failed"
     ></b-alert>
-    <div v-else>{{ $t('cfg.loading')
+    <div v-else>{{ $t('cfg.loading') }}
       <font-awesome-icon icon="spinner" pulse></font-awesome-icon>
     </div>
   </div>
+</i18next>
 </template>
 
 <script>

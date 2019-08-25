@@ -18,7 +18,7 @@ LOCALES = [
 ]
 
 TRANSLATIONS = {
-    locale: gettext.translation("bot", localedir="locale", languages=[locale])
+    locale: gettext.translation("bot", localedir="orisa/locale", languages=[locale])
     for locale in LOCALES
 }
 

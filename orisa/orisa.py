@@ -107,7 +107,7 @@ from .exceptions import (
     NicknameTooLong,
     InvalidFormat,
 )
-from .i18n import _, N_, ngettext
+from .i18n import _, N_, ngettext, CurrentLocale
 from .utils import (
     get_sr,
     sort_secondaries,
@@ -1674,11 +1674,13 @@ Pornography Historian""").split("\n")
         logger.info("Joined guild %r", guild)
         await self._handle_new_guild(guild)
 
+
     @event("guild_streamed")
     async def _guild_streamed(self, ctx, guild):
         logger.info("Streamed guild %r", guild)
         if guild.id not in self.guild_config:
             await self._handle_new_guild(guild)
+
 
     async def _handle_new_guild(self, guild):
         logger.info("We have a new guild %s, I'm now on %d guilds \o/", guild, len(self.client.guilds))
@@ -2205,6 +2207,8 @@ Pornography Historian""").split("\n")
         for guild_id, tops in top_per_guild.items():
             logger.debug(f"Processing guild {guild_id} for top_players")
 
+            CurrentLocale.set("de")
+
             # FIXME: wrong if there is a tie
             prev_top_tags = [
                 top[1] for top in sorted(tops, key=lambda x: x[2] or 0, reverse=True)
@@ -2296,6 +2300,7 @@ Pornography Historian""").split("\n")
                 )
                 logger.debug("found channel %s", chan)
                 send = chan.messages.send
+                await send(CurrentLocale.get())
                 # send = self.client.application_info.owner.send
                 await send(
                     _("Hello! Here are the current SRs for **{role}** on {platform} . If a member has more than one "

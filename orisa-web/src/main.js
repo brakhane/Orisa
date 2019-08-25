@@ -20,20 +20,37 @@ import router from './router'
 
 import BootstrapVue from 'bootstrap-vue'
 import VueI18Next from '@panter/vue-i18next'
+import i18next from 'i18next'
 import axios from 'axios'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+
+import translation from '@/locale/de.json'
+
 Vue.config.productionTip = false
 
-Vue.use(BootstrapVue)
 Vue.use(VueI18Next)
+Vue.use(BootstrapVue)
+
+const data = {
+  lng: 'de',
+  resources: {
+    de: { translation }
+  }
+}
+
+i18next.init(data)
+console.log(data)
+
+const i18n = new VueI18Next(i18next)
 
 Vue.prototype.$http = axios
 axios.defaults.baseURL = process.env.VUE_APP_BOT_BASE_URL
 
 new Vue({
   router,
+  i18n,
   render: h => h(App)
 }).$mount('#app')
