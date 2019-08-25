@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-25 13:46+0200\n"
-"PO-Revision-Date: 2019-08-25 11:56+0000\n"
+"PO-Revision-Date: 2019-08-25 12:02+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -981,8 +981,7 @@ msgid "ΔSR"
 msgstr "ΔSR"
 
 #: orisa/orisa.py:2301
-#, fuzzy, python-brace-format
-#| msgid "Hello! Here are the current SR highscores for **{role}** on {platform} . If a member has more than one {handle_type}, only the primary {handle_type} is considered. Players with private profiles, or those that didn't do their placements this season yet are not shown."
+#, python-brace-format
 msgid "Hello! Here are the current SRs for **{role}** on {platform} . If a member has more than one {handle_type}, only the primary {handle_type} is considered. Players with private profiles, or those that didn't do their placements this season yet are not shown."
 msgstr "Hallo! Hier ist die aktuelle SR Tabelle für **{role}** auf **{platform}**. Wenn ein Mitglied mehr als ein {handle_type} hat, wird nur der Haupt-{handle_type} berücksichtigt. Nicht auf dieser Liste sind Spieler mit privaten Profilen, oder solche, die noch nicht ihre Platzierungsspiele für diese Saison abgeschlossen haben."
 
