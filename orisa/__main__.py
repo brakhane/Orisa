@@ -70,8 +70,9 @@ already_loaded = False
 async def ready(ctx):
     global already_loaded
 
-    if not already_loaded:
+    if already_loaded:
         logger.info("Ignoring second call to ready")
+    else:
         already_loaded  = True
         await manager.load_plugin(Orisa, database, raven_client)
 
