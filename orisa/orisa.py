@@ -1968,7 +1968,7 @@ Pornography Historian""").split("\n")
 
         def val_str(val, short=False):
             if val is None:
-                return "∅"
+                return "⊘"
             elif val<0:
                 return f"{int(-val//100):02}?" if short else f"{-val:04}?"
             else:
