@@ -21,7 +21,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <b-card bg-variant="dark" text-variant="white">
           <div class="card-text">
             <div class="float-right">
-              <b-btn @click="reset" class="mr-4">{{ $t("cfg.reset") }}</b-btn>
+              <b-btn @click="reset" class="mr-4">{{ $t("cfg.undo") }}</b-btn>
               <b-btn @click="save" variant="primary">
                 <font-awesome-icon icon="spinner" pulse v-if="saving"></font-awesome-icon>
                 <span v-else>{{ $t("cfg.save") }}</span>
