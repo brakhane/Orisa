@@ -64,15 +64,21 @@ database = Database()
 manager = I18NCommandsManager.with_client(client, command_prefix="!" if not DEVELOPMENT else ",")
 
 
+already_loaded = False
+
 @client.event("ready")
 async def ready(ctx):
-    logger.debug(f"Guilds are {ctx.bot.guilds}")
+    global already_loaded
 
-    await manager.load_plugin(Orisa, database, raven_client)
+    if not already_loaded:
+        logger.info("Ignoring second call to ready")
+        already_loaded  = True
+        await manager.load_plugin(Orisa, database, raven_client)
+
+    logger.debug(f"Guilds are {ctx.bot.guilds}")
 
     msg = "!ow help" if not DEVELOPMENT else ",ow help"
     await ctx.bot.change_status(game=Game(name=msg, type=GameType.LISTENING_TO))
-    logger.info("Ready")
 
 
 client.run()
