@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-25 13:46+0200\n"
 "PO-Revision-Date: 2019-08-25 13:55+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
