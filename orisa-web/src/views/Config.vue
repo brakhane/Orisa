@@ -31,24 +31,24 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <p
               class="lead"
               v-if="has_validation_errors"
-            >{{ $t("cfg.fix_val_errors") }}</p>
+            >{{ $t("cfg.fix-val-errors") }}</p>
             <p
               class="lead"
               v-else-if="save_error"
-            >{{ $t("cfg.error_saving") }}</p>
+            >{{ $t("cfg.error-saving") }}</p>
             <p class="lead" v-else>{{ $t("cfg.unsaved") }}</p>
           </div>
         </b-card>
       </div>
     </transition>
     <b-container>
-      <h1>{{ $t("cfg.configure_for", { guild_name }) }}</h1>
-      <vue-markdown class="lead" :anchorAttributes="{target: '_blank'}">{{ $t("cfg.lead_info", { link: "https://discord.gg/tsNxvFh" }) }}</vue-markdown>
+      <h1>{{ $t("cfg.configure-for", { guild_name }) }}</h1>
+      <vue-markdown class="lead" :anchorAttributes="{target: '_blank'}">{{ $t("cfg.lead-info", { link: "https://discord.gg/tsNxvFh" }) }}</vue-markdown>
       <b-alert variant="warning" class="my-4" show dismissible v-if="higher_roles.length > 0">
-        <h5 class="alert-heading">{{ $t("cfg.not_top_role_head") }}</h5>
+        <h5 class="alert-heading">{{ $t("cfg.not-top-role-head") }}</h5>
         <vue-markdown>{{
-          $t("cfg.not_top_role_desc", {
-            with_the_following_roles: $t("cfg.with_the_following_roles", {
+          $t("cfg.not-top-role-desc", {
+            with_the_following_roles: $t("cfg.with-the-following-roles", {
               count: higher_roles.length
             })
           })
@@ -57,15 +57,15 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <li v-for="role in higher_roles" :key="role">{{ role }}</li>
         </ul>
         <vue-markdown :anchorAttributes="{target: '_blank', class: 'alert-link'}">
-          {{ $t("cfg.drag_orisa_role", { link: "https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif" }) }}
+          {{ $t("cfg.drag-orisa-role", { link: "https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif" }) }}
         </vue-markdown>
       </b-alert>
       <b-alert variant="success" class="my-4" show dismissible v-else>
-        <h5 class="alert-heading">{{ $t("cfg.top_role_head") }}</h5>
-        <vue-markdown v-t="'cfg.top_role_desc'"></vue-markdown>
+        <h5 class="alert-heading">{{ $t("cfg.top-role-head") }}</h5>
+        <vue-markdown v-t="cfg.top-role-desc"></vue-markdown>
       </b-alert>
       <b-form :novalidate="true">
-        <b-card :header="$t('cfg.general_settings_hdr', { guild_name })" class="mb-3">
+        <b-card :header="$t('cfg.general-settings-hdr', { guild_name })" class="mb-3">
           <b-form-checkbox
             class="custom-switch"
             v-model="guild_config.show_sr_in_nicks_by_default"
@@ -73,35 +73,35 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <font-awesome-icon id="always-show-sr-help" icon="question-circle"></font-awesome-icon>
           </b-form-checkbox>&nbsp;
           <b-popover target="always-show-sr-help" triggers="hover click">
-            <vue-markdown>{{ $t("cfg.allow_sr_in_nick_tt") }}</vue-markdown>
+            <vue-markdown>{{ $t("cfg.allow-sr-in-nick-tt") }}</vue-markdown>
           </b-popover>
           <b-form-checkbox
             class="custom-switch"
             v-model="guild_config.post_highscores"
-          >{{ $t("cfg.post_hs") }}&nbsp;
+          >{{ $t("cfg.post-hs") }}&nbsp;
             <font-awesome-icon id="post-highscores-help" icon="question-circle"></font-awesome-icon>
           </b-form-checkbox>
           <b-popover target="post-highscores-help" triggers="hover click">
-            <vue-markdown>{{ $t("cfg.post_hs_tt") }}</vue-markdown>
+            <vue-markdown>{{ $t("cfg.post-hs-tt") }}</vue-markdown>
           </b-popover>
           <hr class="hr-3">
           <b-form-group
             horizontal
-            :label="$t('cfg.reg_msg')"
+            :label="$t('cfg.reg-msg')"
             :invalid-feedback="validation_errors.extra_register_text"
-            :description="$t('cfg.reg_msg_desc', {
+            :description="$t('cfg.reg-msg-desc', {
               link: 'https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-'
             })"
           >
             <template #description>
-              <vue-markdown>{{ $t('cfg.reg_msg_desc', {
+              <vue-markdown>{{ $t('cfg.reg-msg-desc', {
                 link: 'https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-'
               }) }}</vue-markdown>
             </template>
             <b-form-textarea
               :state="val_state(validation_errors.extra_register_text)"
               v-model="guild_config.extra_register_text"
-              :placeholder="$t('cfg.reg_msg_placeholder')"
+              :placeholder="$t('cfg.reg-msg-placeholder')"
               :rows="2"
             ></b-form-textarea>
           </b-form-group>
@@ -110,10 +110,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             horizontal
             :state="val_state(validation_errors.listen_channel_id)"
             :invalid-feedback="validation_errors.listen_channel_id"
-            :label="$t('cfg.listen_chan')"
+            :label="$t('cfg.listen-chan')"
           >
             <template #description>
-              <vue-markdown>{{ $t('cfg.listen_chan_desc') }}</vue-markdown>
+              <vue-markdown>{{ $t('cfg.listen-chan-desc') }}</vue-markdown>
             </template>
             <channel-selector
               :state="val_state(validation_errors.listen_channel_id)"
@@ -126,10 +126,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             horizontal
             :state="val_state(validation_errors.congrats_channel_id)"
             :invalid-feedback="validation_errors.congrats_channel_id"
-            :label="$t('cfg.congrats_chan')"
+            :label="$t('cfg.congrats-chan')"
           >
             <template #description>
-              <vue-markdown>{{ $t('cfg.congrats_chan_desc') }}</vue-markdown>
+              <vue-markdown>{{ $t('cfg.congrats-chan-desc') }}</vue-markdown>
             </template>
             <channel-selector
               :state="val_state(validation_errors.congrats_channel_id)"
@@ -144,13 +144,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           text-variant="white"
           class="mb-3 text-justify"
           v-if="guild_config.managed_voice_categories.length == 0"
-          :header="$t('cfg.no_managed_voice_chan_hdr')"
+          :header="$t('cfg.no-managed-voice-chan-hdr')"
         >
           <p
             class="lead"
-            v-t="cfg.no_managed_voice_chan_lead"
+            v-t="cfg.no-managed-voice-chan-lead"
           ></p>
-          <vue-markdown v-t="cfg.no_mgt_voice_chan_text"></vue-markdown>
+          <vue-markdown v-t="cfg.no-mgt-voice-chan-text"></vue-markdown>
         </b-card>
         <managed-voice-category
           v-else
@@ -163,7 +163,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           @delete-cat-clicked="remove_cat(index)"
         ></managed-voice-category>
         <b-btn variant="primary" @click="add_cat">
-          <font-awesome-icon icon="folder-plus"/>{{ $t('cfg.add_mgt_cat') }}
+          <font-awesome-icon icon="folder-plus"/>{{ $t('cfg.add-mgt-cat') }}
         </b-btn>
       </b-form>
       <div class="py-5" v-t="cfg.footer"></div>
@@ -174,7 +174,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       variant="danger"
       show
       v-if="load_failed"
-      v-t="'cfg.load_failed'"
+      v-t="cfg.load-failed"
     ></b-alert>
     <div v-else>{{ $t('cfg.loading') }}
       <font-awesome-icon icon="spinner" pulse></font-awesome-icon>

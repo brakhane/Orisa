@@ -17,7 +17,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 <template>
   <div class="card mb-3 bg-light">
     <div class="card-header">
-      <b-input-group :prepend="$t('mvc.cat_prepend')">
+      <b-input-group :prepend="$t('mvc.cat-prepend')">
         <b-form-select
           :state="val_state(validation_errors.category_id)"
           v-model="category.category_id"
@@ -42,18 +42,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <b-form-checkbox
           class="custom-switch"
           v-model="category.show_sr_in_nicks"
-        >{{ $t("mvc.show_sr") }}&nbsp;
+        >{{ $t("mvc.show-sr") }}&nbsp;
           <font-awesome-icon :id="`show-sr-help-${index}`" icon="question-circle"></font-awesome-icon>
         </b-form-checkbox>
         <b-popover :target="`show-sr-help-${index}`" triggers="hover click">
-          {{ $t("mvc.show_sr_tt") }}
+          {{ $t("mvc.show-sr-tt") }}
         </b-popover>
         <br>
         <b-form-checkbox class="custom-switch" v-model="category.remove_unknown">
-          <vue-markdown>{{ $t("mvc.remove_unknown_sr") }}</vue-markdown>&nbsp;
+          <vue-markdown>{{ $t("mvc.remove-unknown-sr") }}</vue-markdown>&nbsp;
           <font-awesome-icon :id="`remove-unknown-help-${index}`" icon="question-circle"></font-awesome-icon>
           <b-popover :target="`remove-unknown-help-${index}`" triggers="hover click">
-            <vue-markdown>{{ $t("mvc.remove_unknown_sr_tt") }}</vue-markdown>
+            <vue-markdown>{{ $t("mvc.remove-unknown-sr-tt") }}</vue-markdown>
           </b-popover>
         </b-form-checkbox>
         <hr class="hr-4">
@@ -62,7 +62,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           :state="val_state(validation_errors.channel_limit)"
           :invalid-feedback="validation_errors.channel_limit"
           :label-cols="4"
-          :label="$t('mvc.chan_limit')"
+          :label="$t('mvc.chan-limit')"
         >
           <b-form-input
             :state="val_state(validation_errors.channel_limit)"
@@ -75,12 +75,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </b-form-group>
       </b-card>
       <hr class="hr-4">
-      <b-card :header="$t('mvc.mngt_prefixes')" no-body>
+      <b-card :header="$t('mvc.mngt-prefixes')" no-body>
         <b-card-body>
           <b-alert
             variant="warning"
             :show="category.prefixes.length == 0"
-          >{{ $t('mvc.no_prefixes') }}</b-alert>
+          >{{ $t('mvc.no-prefixes') }}</b-alert>
           <div
             class="row bg-light m-2 p-2"
             :key="index"
@@ -90,21 +90,21 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               class="col-6 col-md-7 col-lg-8"
               :state="val_state(val_errors_prefixes(index).name)"
               :invalid-feedback="val_errors_prefixes(index).name"
-              :label="$t('mvc.chan_name')"
-              :description="$t('mvc.chan_name_desc')"
+              :label="$t('mvc.chan-name')"
+              :description="$t('mvc.chan-name-desc')"
             >
               <b-form-input
                 :state="val_state(val_errors_prefixes(index).name)"
                 v-model="prefix.name"
-                :placeholder="$t('mvc.prefix_placeholder')"
+                :placeholder="$t('mvc.prefix-placeholder')"
               ></b-form-input>
             </b-form-group>
             <b-form-group
               class="col-6 col-md-5 col-lg-4"
               :state="val_state(val_errors_prefixes(index).limit)"
               :invalid-feedback="val_errors_prefixes(index).limit"
-              :label="$t('mvc.user_limit')"
-              :description="$t('mvc.user_limit_desc')"
+              :label="$t('mvc.user-limit')"
+              :description="$t('mvc.user-limit-desc')"
             >
               <b-form-input
                 :state="val_state(val_errors_prefixes(index).limit)"
@@ -121,7 +121,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </b-card-body>
         <b-card-body>
           <b-btn variant="primary" @click="add_prefix(category)">
-            <font-awesome-icon icon="plus"/>{{ $t("mvc.add_prefix") }}
+            <font-awesome-icon icon="plus"/>{{ $t("mvc.add-prefix") }}
           </b-btn>
         </b-card-body>
       </b-card>
