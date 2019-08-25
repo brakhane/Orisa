@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-25 13:46+0200\n"
-"PO-Revision-Date: 2019-08-25 12:02+0000\n"
+"PO-Revision-Date: 2019-08-25 13:55+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -459,7 +459,7 @@ msgstr "Bei der Aktualisierung Deines SR sind Probleme aufgetreten! Versuche es 
 #: orisa/orisa.py:957
 #, python-brace-format
 msgid "OK, I have updated your data. Your (primary) SR is now {sr}. If that is not correct, you need to log out of Overwatch once and try again; your profile also needs to be public for me to track your SR."
-msgstr "OK, ich habe Deine Daten aktualisiert. Dein (primäre) SR ist jetzt {sr}. Wenn dies nicht korrekt ist, musst Du dich einmal von Overwatch abmelden und es erneut versuchen. Dein Profil muss auch öffentlich sein, damit ich deine SR nachverfolgen kann."
+msgstr "OK, ich habe Deine Daten aktualisiert. Dein (primärer) SR ist jetzt {sr}. Wenn dies nicht korrekt ist, musst Du dich einmal von Overwatch abmelden und es erneut versuchen. Dein Profil muss auch öffentlich sein, damit ich deine SR nachverfolgen kann."
 
 #: orisa/orisa.py:984
 #, python-brace-format
