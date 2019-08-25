@@ -259,11 +259,12 @@ class SR(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     handle_id = Column(
-        Integer, ForeignKey("handle.id"), nullable=False, index=True, cascade="all, delete-orphan"
+        Integer, ForeignKey("handle.id"), nullable=False, index=True
     )
 
     handle = relationship(
-        "Handle", back_populates="sr_history", foreign_keys=[handle_id]
+        "Handle", back_populates="sr_history", foreign_keys=[handle_id],
+        cascade="all, delete-orphan", single_parent=True
     )
     timestamp = Column(DateTime, nullable=False)
     tank = Column(SmallInteger)
