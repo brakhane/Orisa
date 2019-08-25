@@ -260,6 +260,11 @@ class Orisa(Plugin):
     # admin commands
 
     @command()
+    async def validate(self, ctx, token: str):
+        if token == "domain":
+            await ctx.channel.messages.send("A700142")
+
+    @command()
     @condition(only_owner, bypass_owner=False)
     async def shutdown(self, ctx, safety: str = None):
         if safety != "Orisa":
