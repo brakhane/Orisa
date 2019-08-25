@@ -15,14 +15,13 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <template>
-<i18next path="">
   <div v-if="loaded">
     <transition name="fade-drop">
       <div :class="'container fixed-top translucent ' + shake_if_problem" v-if="unsaved_changes">
         <b-card bg-variant="dark" text-variant="white">
           <div class="card-text">
             <div class="float-right">
-              <b-btn @click="reset" class="mr-4">Reset</b-btn>
+              <b-btn @click="reset" class="mr-4">{{ $t("cfg.reset") }}</b-btn>
               <b-btn @click="save" variant="primary">
                 <font-awesome-icon icon="spinner" pulse v-if="saving"></font-awesome-icon>
                 <span v-else>{{ $t("cfg.save") }}</span>
@@ -56,20 +55,20 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <ul>
           <li v-for="role in higher_roles" :key="role">{{ role }}</li>
         </ul>
-        <vue-markdown :anchorAttributes="{target: '_blank', class: 'alert-link'}">
-          {{ $t("cfg.drag-orisa-role", { link: "https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif" }) }}
-        </vue-markdown>
+        <vue-markdown :anchorAttributes="{target: '_blank', class: 'alert-link'}">{{
+          $t("cfg.drag-orisa-role", { link: "https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif" })
+        }}</vue-markdown>
       </b-alert>
       <b-alert variant="success" class="my-4" show dismissible v-else>
         <h5 class="alert-heading">{{ $t("cfg.top-role-head") }}</h5>
-        <vue-markdown v-t="cfg.top-role-desc"></vue-markdown>
+        <vue-markdown>{{ $t('cfg.top-role-desc') }}</vue-markdown>
       </b-alert>
       <b-form :novalidate="true">
         <b-card :header="$t('cfg.general-settings-hdr', { guild_name })" class="mb-3">
           <b-form-checkbox
             class="custom-switch"
             v-model="guild_config.show_sr_in_nicks_by_default"
-          >&nbsp;
+          >{{ $t("cfg.allow-sr-in-nick") }}&nbsp;
             <font-awesome-icon id="always-show-sr-help" icon="question-circle"></font-awesome-icon>
           </b-form-checkbox>&nbsp;
           <b-popover target="always-show-sr-help" triggers="hover click">
@@ -144,13 +143,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           text-variant="white"
           class="mb-3 text-justify"
           v-if="guild_config.managed_voice_categories.length == 0"
-          :header="$t('cfg.no-managed-voice-chan-hdr')"
+          :header="$t('cfg.no-mgt-voice-chan-hdr')"
         >
           <p
             class="lead"
-            v-t="cfg.no-managed-voice-chan-lead"
+            v-t="'cfg.no-mgt-voice-chan-lead'"
           ></p>
-          <vue-markdown v-t="cfg.no-mgt-voice-chan-text"></vue-markdown>
+          <vue-markdown>{{$t('cfg.no-mgt-voice-chan-text')}}</vue-markdown>
         </b-card>
         <managed-voice-category
           v-else
@@ -166,7 +165,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <font-awesome-icon icon="folder-plus"/>{{ $t('cfg.add-mgt-cat') }}
         </b-btn>
       </b-form>
-      <div class="py-5" v-t="cfg.footer"></div>
+      <div class="py-5" v-t="'cfg.footer'"></div>
     </b-container>
   </div>
   <div v-else>
@@ -174,13 +173,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       variant="danger"
       show
       v-if="load_failed"
-      v-t="cfg.load-failed"
+      v-t="'cfg.load-failed'"
     ></b-alert>
     <div v-else>{{ $t('cfg.loading') }}
       <font-awesome-icon icon="spinner" pulse></font-awesome-icon>
     </div>
   </div>
-</i18next>
 </template>
 
 <script>

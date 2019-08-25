@@ -20,24 +20,30 @@ import router from './router'
 
 import BootstrapVue from 'bootstrap-vue'
 import VueI18Next from '@panter/vue-i18next'
+import VueMarkdown from 'vue-markdown'
 import i18next from 'i18next'
 import axios from 'axios'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-
-import translation from '@/locale/de.json'
+import de from '@/locale/de.json'
+import en from '@/locale/en.json'
 
 Vue.config.productionTip = false
 
 Vue.use(VueI18Next)
 Vue.use(BootstrapVue)
 
+Vue.component('vue-markdown', VueMarkdown)
+
 const data = {
   lng: 'de',
+  fallbackLng: 'en',
+  debug: true,
   resources: {
-    de: { translation }
+    de: { translation: de },
+    en: { translation: en }
   }
 }
 

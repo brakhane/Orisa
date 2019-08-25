@@ -26,6 +26,7 @@
         "reg-msg": "Register message",
         "reg-msg-desc": "Optional server specific text that should be shown in the welcome message after a member registered with `!ow register`. This message is *not* shown when a user joins this server. Can use [Discord Markdown]({{ link }}).",
         "reg-msg-placeholder": "e.g.\nDon't forget to use `!ow setroles` to set your roles; also don't play Genji.",
+        "reset": "Reset",
         "save": "Save",
         "top-role-desc": "Orisa will be able to change the nicknames of all your members, with the exception of the server owner.",
         "top-role-head": "The Orisa role is the top role",

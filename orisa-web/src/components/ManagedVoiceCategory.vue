@@ -43,7 +43,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           class="custom-switch"
           v-model="category.show_sr_in_nicks"
         >{{ $t("mvc.show-sr") }}&nbsp;
-          <font-awesome-icon :id="`show-sr-help-${index}`" icon="question-circle"></font-awesome-icon>
+        <font-awesome-icon :id="`show-sr-help-${index}`" icon="question-circle"></font-awesome-icon>
         </b-form-checkbox>
         <b-popover :target="`show-sr-help-${index}`" triggers="hover click">
           {{ $t("mvc.show-sr-tt") }}
@@ -179,6 +179,7 @@ export default {
         limit: 0
       })
     }
+
   },
   props: ['category', 'validation_errors', 'channels', 'index']
 }

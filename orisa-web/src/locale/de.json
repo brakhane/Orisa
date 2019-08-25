@@ -25,7 +25,7 @@
         "post-hs-tt": "Wenn aktiviert, wird Orisa täglich gegen 09:00 UTC eine SR Highscoretabelle pro Rolle posten (getrennte Tabellen für PC und XBOX). Nur die SR der Hauptaccounts wird berücksichtigt, und nur Mitglieder, die momentan einen SR haben werden angezeigt. Eine CSV-Datei mit den gleichen Daten wird ebenfalls gepostet.\nFalls deine Servermitglieder sich durch die Highscoretabelle kritisiert fühlen, kannst du die Tabelle hier abschalten.",
         "reg-msg": "Nachricht beim Registrieren",
         "reg-msg-desc": "Optionaler serverspezifischer Text der in der Willkommensnachricht erscheinen soll nachdem sich ein Mitglied mittels `!ow register` registriert hat. Dieser Text wird *nicht* angezeigt, wenn ein Benutzer dem Discordserver beitritt. Im Text kann [Discord Markdown]({{ link }}) verwendet werden.",
-        "reg-msg-placeholder": "z.B.\nVergiss nicht, uns mit `!ow setroles`zu sagen, welche Rollen Du spielst; und denk' gar nicht dran, Genji zu spielen.",
+        "reg-msg-placeholder": "z.B.\nVergiss nicht, uns mit `!ow setroles`zu sagen, welche Rollen Du spielst; hauptsache es ist kein Genji.",
         "save": "Speichern",
         "top-role-desc": "Orisa wird die Nicknamen aller deiner Mitglieder verwalten können, mit Ausnahme des Serverbesitzers.",
         "top-role-head": "Die \"Orisa\"-Rolle ist die oberste Rolle",
