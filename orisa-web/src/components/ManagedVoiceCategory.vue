@@ -50,7 +50,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </b-popover>
         <br>
         <b-form-checkbox class="custom-switch" v-model="category.remove_unknown">
-          <vue-markdown>{{ $t("mvc.remove-unknown-sr") }}</vue-markdown>&nbsp;
+          <vue-markdown class="d-inline-block">{{ $t("mvc.remove-unknown-sr") }}</vue-markdown>&nbsp;
           <font-awesome-icon :id="`remove-unknown-help-${index}`" icon="question-circle"></font-awesome-icon>
           <b-popover :target="`remove-unknown-help-${index}`" triggers="hover click">
             <vue-markdown>{{ $t("mvc.remove-unknown-sr-tt") }}</vue-markdown>
@@ -121,7 +121,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </b-card-body>
         <b-card-body>
           <b-btn variant="primary" @click="add_prefix(category)">
-            <font-awesome-icon icon="plus"/>{{ $t("mvc.add-prefix") }}
+            <font-awesome-icon icon="plus"/>&nbsp;{{ $t("mvc.add-prefix") }}
           </b-btn>
         </b-card-body>
       </b-card>
