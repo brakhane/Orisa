@@ -178,8 +178,8 @@ def validate_config(guild, guild_config):
             if missing:
                 vc_errors["category_id"] = missing
 
-        if vc.channel_limit is None or not (0 <= vc.channel_limit <= 10):
-            vc_errors["channel_limit"] = "Limit must be between 0 and 10"
+        if vc.channel_limit is None or not (0 <= vc.channel_limit <= 30):
+            vc_errors["channel_limit"] = "Limit must be between 0 and 30"
 
         pe_list = []
         pe_list_has_errors = False

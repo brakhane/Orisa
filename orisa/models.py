@@ -299,7 +299,7 @@ class GuildConfigJson(Base):
 
 class Database:
     def __init__(self):
-        engine = create_engine(DATABASE_URI)
+        engine = create_engine(DATABASE_URI, pool_size=20, max_overflow=10)
         self.Session = sessionmaker(bind=engine, autoflush=False)
         Base.metadata.create_all(engine)
 

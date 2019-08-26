@@ -159,7 +159,7 @@ description = "An async library for the Discord API"
 name = "discord-curious"
 optional = false
 python-versions = ">=3.6.2"
-version = "0.7.8.dev106"
+version = "0.7.8.dev107"
 
 [package.dependencies]
 asks = ">=2.3.0,<2.4.0"
