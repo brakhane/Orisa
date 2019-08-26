@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
-"POT-Creation-Date: 2019-08-26 23:27+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-27 01:43+0200\n"
 "PO-Revision-Date: 2019-08-26 23:44+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
@@ -466,7 +466,9 @@ msgid "OK, deleted {name} from database"
 msgstr "OK, ich habe {name} aus meiner Datenbank gelöscht"
 
 #: orisa/orisa.py:989
-msgid "you are not registered anyway, so there's nothing for me to forget..."
+#, fuzzy
+#| msgid "you are not registered anyway, so there's nothing for me to forget..."
+msgid "you are not registered anyway, so there's nothing for me to forget…"
 msgstr "Du bist sowieso nicht registriert, also gibt es nichts zu vergessen ..."
 
 #. Translators: the identifiers m o d s must not be translated
@@ -1099,64 +1101,73 @@ msgstr "{type} hinzugefügt"
 msgid "OK. I've added **{new_handle}** to the list of your {new_type}s. **Your primary {primary_type} remains {primary_handle}**. To change your primary tag, use `!ow setprimary`, see help for more details."
 msgstr "OK. Ich habe **{new_handle}** zur Liste deiner {new_type}s hinzugefügt. **Dein Haupt-{primary_type} bleibt {primary_handle}**. Um dein Haupt-Tag zu ändern, nutze `!ow setprimary`, siehe in der Hilfe für weitere Informationen nach."
 
-#: orisa/orisa.py:2669
+#. Translators: Used during registration while Orisa checks the BattleTag/GamerTag. {type} is BattleTag/GamerTag, {tag} is the tag (Foo#2345)
+#: orisa/orisa.py:2663
 #, python-brace-format
-msgid "Invalid {type}: {message}...Blizzard claims that the {type} {handle} has no OW account. Play a QP or arcade game, close OW and try again, sometimes this helps."
+msgid "Checking your {type} {tag}…"
+msgstr ""
+
+#. Translators: {type} is "BattleTag", {handle} is the tag (Foo#2345), {message} is some untranslated English error message
+#: orisa/orisa.py:2671
+#, fuzzy, python-brace-format
+#| msgid "Invalid {type}: {message}...Blizzard claims that the {type} {handle} has no OW account. Play a QP or arcade game, close OW and try again, sometimes this helps."
+msgid "Invalid {type}: {message}… Blizzard claims that the {type} {handle} has no OW account. Play a QP or arcade game, close OW and try again, sometimes this helps."
 msgstr "Ungültiger {type} ({message}). Blizzard behauptet, dass der {type} {handle} keinen OW Account hat. Spiele eine Schnellsuche- oder Arcade-Partie, schließe OW und versuche es erneut, das hilft manchmal."
 
 #. Translators: e is some (English) error message
-#: orisa/orisa.py:2678
+#: orisa/orisa.py:2680
 #, python-brace-format
 msgid "Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later!"
 msgstr "Es tut mir leid, aber es sieht so aus, als ob Blizzards Webseite aktuell ein paar Probleme hat ({e}), versuche es später noch einmal!"
 
 #. Translators: :warning: is an emoji code
-#: orisa/orisa.py:2684
+#: orisa/orisa.py:2686
 msgid ":warning: No SR"
 msgstr ":warning: Kein SR"
 
-#: orisa/orisa.py:2685
-#, python-brace-format
-msgid "You don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your {type}."
+#: orisa/orisa.py:2687
+#, fuzzy, python-brace-format
+#| msgid "You don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your {type}."
+msgid "You don't have an SR though, your profile needs to be public for SR tracking to work… I still saved your {type}."
 msgstr "Du scheinst allerdings keinen SR zu haben; dein Profil muss öffentlich sein, damit ich deinen SR ermitteln kann... Deinen {type} habe ich aber gespeichert."
 
 #. Translators: :warning: is emoji code
-#: orisa/orisa.py:2706
+#: orisa/orisa.py:2708
 msgid ":warning: Nickname too long!"
 msgstr ":warning: Nickname ist zu lang!"
 
-#: orisa/orisa.py:2708
+#: orisa/orisa.py:2710
 #, python-brace-format
 msgid "Adding your SR to your nickname would result in '{nickname}' and with {len} characters, be longer than Discord's maximum of 32. Please shorten your nick to be no longer than 28 characters. I will regularly try to update it."
 msgstr "Wenn ich dein SR zu deinem Nicknamen hinzufüge, ergibt das '{nickname}', welches mit {len} Zeichen länger als Discords maximal erlaubte 32 ist. Bitte kürze deinen Nicknamen, so dass es nicht länger als 28 Zeichen ist. Ich werde regelmäßig versuchen, deinen Nicknamen zu aktualisieren."
 
-#: orisa/orisa.py:2713 orisa/orisa.py:2720
+#: orisa/orisa.py:2715 orisa/orisa.py:2722
 msgid ":warning: Cannot update nickname"
 msgstr ":warning: Kann Nicknamen nicht aktualisieren"
 
-#: orisa/orisa.py:2714
+#: orisa/orisa.py:2716
 msgid "I do not have enough permissions to update your nickname. The owner needs to move the \"Orisa\" role higher so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry!"
 msgstr "Ich habe nicht die nötigen Rechte, um deinen Nicknamen anzupassen. Der Besitzer des Servers muss die Rolle \"Orisa\" so weit nach oben schieben, dass sie höher als deine höchste Rolle ist. Wenn du der Besitzer des Servers bist, gibt es leider keine Möglichkeit für mich, deinen Nickname zu managen, Sorry!"
 
-#: orisa/orisa.py:2722
+#: orisa/orisa.py:2724
 #, python-brace-format
 msgid "Right now I couldn't update your nickname, I will try that again later. People will still be able to ask for your {type}, though."
 msgstr "Ich kann deinen Nickname gerade nicht aktualisieren, ich werde es später nochmal versuchen. Leute können mich aber bereits nach deinem {type} fragen."
 
-#: orisa/orisa.py:2731
+#: orisa/orisa.py:2733
 msgid ":thumbsup: Vote for me on Discord Bot List"
 msgstr ":thumbsup: Stimme für mich auf Discord Bot Lit"
 
-#: orisa/orisa.py:2732
+#: orisa/orisa.py:2734
 #, python-brace-format
 msgid "If you find me useful, consider voting for me [by clicking here]({VOTE_LINK})!"
 msgstr "Wenn du mich nützlich findest, denk darüber nach, mir deine Stimme zu geben, [indem du hier klickst]({VOTE_LINK})!"
 
-#: orisa/orisa.py:2736
+#: orisa/orisa.py:2738
 msgid ":heart: Say thanks by buying a coffee"
 msgstr ":heart: Sag Danke, indem du einen Kaffee ausgibst"
 
-#: orisa/orisa.py:2737
+#: orisa/orisa.py:2739
 #, python-brace-format
 msgid "Want to say thanks to the guy who wrote and maintains me? Why not [buy him a coffee?]({DONATE_LINK})"
 msgstr "Möchtest du dich bei dem Typen, der mich geschrieben hat und mich wartet bedanken? Warum [spendest du ihm nicht eine Tasse Kaffe?]({DONATE_LINK})"
