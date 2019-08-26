@@ -9,9 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-26 22:12+0200\n"
-"PO-Revision-Date: 2019-08-26 20:14+0000\n"
+"PO-Revision-Date: 2019-08-26 23:09+0000\n"
 "Last-Translator: Guillem Rosset <guillem.rosset@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.wur.st/projects/orisa/bot/es/>\n"
 "Language: es\n"
@@ -151,12 +151,12 @@ msgstr "[Perfil de Overwatch]({PROFILE_LINK}) | [Votar a Orisa]({VOTE_LINK}) | [
 #: orisa/orisa.py:543
 #, python-brace-format
 msgid "The SR of the primary {type} was last updated {when}."
-msgstr "El SR del {type} primario ha sido actualizado {when}."
+msgstr "El SR del {type} primario fue actualizado por última vez el {when}."
 
 #: orisa/orisa.py:545
 #, python-brace-format
 msgid "The SR was last updated {when}."
-msgstr "El SR ha sido actualizado {when}."
+msgstr "El SR ha sido actualizado por última vez el {when}."
 
 #: orisa/orisa.py:550
 msgid ""
@@ -164,7 +164,7 @@ msgid ""
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough."
 msgstr ""
 "\n"
-"Por cierto, no hace falta que especifiques tu nick si quieres ver tu propio BattleTag; con !ow es suficiente."
+"Por cierto, no hace falta que especifiques tu apodo si quieres ver tu propio BattleTag; con !ow es suficiente."
 
 #. Translators: "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:554
@@ -464,10 +464,8 @@ msgid "Your nick will only be updated when you are in an OW voice channel. Use `
 msgstr "Tu nick solamente se actualizará cuando estés en un canal de voz de OW. Utiliza `!ow alwaysshorsr on` para siempre actualizar tu nick."
 
 #: orisa/orisa.py:952
-#, fuzzy
-#| msgid "There were some problems updating your SR. Try again later."
 msgid "There were some problems updating your SR! Try again later."
-msgstr "Ha habido problemas actualizando tu SR. Inténtalo de nuevo más tarde."
+msgstr "Ha habido problemas actualizando tu SR! Inténtalo de nuevo más tarde."
 
 #: orisa/orisa.py:957
 #, python-brace-format
@@ -507,10 +505,8 @@ msgid "Sorry, findplayers doesn't work with role based SR yet. Try later."
 msgstr "Lo siento, no puedo encontrar jugadores según su rango todavía. Inténtalo de nuevo más adelante."
 
 #: orisa/orisa.py:1069
-#, fuzzy
-#| msgid "SR difference must be positive"
 msgid "SR difference must be positive!"
-msgstr "La diferencia de SR debe ser positiva"
+msgstr "La diferencia de SR debe ser positiva!"
 
 #. Translators: used when Orisa is asked to find players that are more than 5000 SR below or above them, use the equivalent Orisa voiceline
 #. in your language
@@ -520,10 +516,9 @@ msgstr "¡No se puede computar!"
 
 #. Translators: type is BattleTag or GamerTag
 #: orisa/orisa.py:1085
-#, fuzzy, python-brace-format
-#| msgid "You primary {type} has no SR, please give a SR range you want to search for instead"
+#, python-brace-format
 msgid "You primary {type} has no SR, please give a SR range you want to search for instead."
-msgstr "Tu {type} primario no tiene SR, por favor, mejor escribe el rango de SR en el que quieras buscar"
+msgstr "Tu {type} primario no tiene SR, por favor mejor escribe el rango de SR en el que quieras buscar."
 
 #: orisa/orisa.py:1094
 #, python-brace-format
@@ -541,15 +536,12 @@ msgid "between {min_sr} and {max_sr} SR"
 msgstr "entre {min_sr} y {max_sr} SR"
 
 #: orisa/orisa.py:1157
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "There are no players currently online {type_msg}\n"
-#| "\n"
+#, python-brace-format
 msgid ""
 "There are no players currently online {type_msg}!\n"
 "\n"
 msgstr ""
-"No hay jugadores en línea en este momento {type_msg}\n"
+"No hay jugadores en línea en este momento {type_msg}!\n"
 "\n"
 
 #: orisa/orisa.py:1159
@@ -641,10 +633,8 @@ msgstr ""
 "`!ow oirsa` y `!ow ori` probablemente también mostrarán el BattleTag de \"Orisa\""
 
 #: orisa/orisa.py:1263
-#, fuzzy
-#| msgid "Shows information about Orisa, and how you can add her to your own Discord server, or help supporting her"
 msgid "Shows information about Orisa, and how you can add her to your own Discord server, or help supporting her."
-msgstr "Muestra información sobre Orisa, y como puedes añadirlo a tu propio servidor de Discord, o ayudar a mantenerlo"
+msgstr "Muestra información sobre Orisa, y como puedes añadirla a tu propio servidor de Discord, o ayudar a mantenerla."
 
 #: orisa/orisa.py:1267
 msgid ""
@@ -658,10 +648,8 @@ msgstr ""
 
 #. Translators: don't translate "Orisa Admin"
 #: orisa/orisa.py:1275
-#, fuzzy
-#| msgid "This command can only be used by members with the \"Orisa Admin\" role and allows them to configure Orisa for the specific Discord server"
 msgid "This command can only be used by members with the \"Orisa Admin\" role and allows them to configure Orisa for the specific Discord server."
-msgstr "Este comando solo puede ser usado por miembros con el rol de \"Orisa Admin\" y les permite configurar Orisa para el servidor de Discord específico"
+msgstr "Este comando solo puede ser usado por miembros con el rol de \"Orisa Admin\" y les permite configurar Orisa para el servidor de Discord específico."
 
 #. Translators: help for !ow dumpsr
 #: orisa/orisa.py:1280
@@ -669,10 +657,8 @@ msgid "Download your SR history as an Excel sheet"
 msgstr "Descarga tu histórico de SR en una hoja de Excel"
 
 #: orisa/orisa.py:1298
-#, fuzzy
-#| msgid "Same as `!ow findplayers`, but also includes offline players"
 msgid "Same as `!ow findplayers`, but also includes offline players."
-msgstr "Lo mismo que `!ow findplayers`, pero también incluye jugadores que estén offline"
+msgstr "Lo mismo que `!ow findplayers`, pero también incluye jugadores que estén offline."
 
 #. Translators: help !ow forceupdate
 #: orisa/orisa.py:1303
@@ -686,7 +672,7 @@ msgstr ""
 #. Translators: help !ow forgetme
 #: orisa/orisa.py:1310
 msgid "All your BattleTags will be removed from the database and your nick will not be updated anymore. You can re-register at any time."
-msgstr "Todos tus BattleTags serán eliminados de la base de datos y tu apodo dejará de actualizarse. Puedes volver a registrarte en cualquier momento."
+msgstr "Todos tus BattleTags serán eliminados de la base de datos y tu nick dejará de actualizarse. Puedes volver a registrarte en cualquier momento."
 
 #. Translators: help !ow format. $placeholder can be translated, as can ${placeholder}
 #: orisa/orisa.py:1317
@@ -695,10 +681,12 @@ msgid ""
 "Lets you specify how your SR or rank is displayed. It will always be shown in [square\\u00a0brackets] appended to your name.\n"
 "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`."
 msgstr ""
+"Permite especificar como se muestra tu SR o rango. Siempre se mostrará en [corchetes] detrás de tu nombre.\n"
+"En el *formato*, puede especificar placeholders con `$placeholder` o `${placeholder}`."
 
 #: orisa/orisa.py:1321
 msgid "\\N{BLACK STAR} *ow format placeholders*"
-msgstr ""
+msgstr "\\N{BLACK STAR} *ow placeholders para el formato*"
 
 #. Translators: $fullsr, $rank, etc. cannot be translated
 #: orisa/orisa.py:1323
