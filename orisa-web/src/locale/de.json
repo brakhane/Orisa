@@ -11,6 +11,7 @@
         "fix-val-errors": "Bitte behebe die Validierungsfehler, bevor du speicherst.",
         "footer": "Danke, dass Du Orisa nutzt!",
         "general-settings-hdr": "Allgemeine Einstellungen für {{ guild_name }}",
+        "lang": "Sprache",
         "lead-info": "Der Speichern-Button erscheint, sobald es ungesicherte Änderungen gibt. Nachdem Du deine Änderungen gespeichert hast, kannst Du dieses Fenster schließen.\nWenn Du Fragen oder Vorschläge hast, [besuche den offiziellen Discord]({{ link }}).",
         "listen-chan": "Orisakanal",
         "listen-chan-desc": "Orisa wird in diesem Kanal auf Befehle hören. Dieser Kanal wird außerdem benutzt, um die tägliche SR Highscoretabelle zu posten (sofern aktiviert). Orisa reagiert immer auf Befehle in PN. Außerdem funktioniert der `!ow help` Befehl überall.",
