@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
-"POT-Creation-Date: 2019-08-26 22:12+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-26 23:27+0200\n"
 "PO-Revision-Date: 2019-08-26 23:09+0000\n"
 "Last-Translator: Guillem Rosset <guillem.rosset@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.wur.st/projects/orisa/bot/es/>\n"
@@ -1174,9 +1174,11 @@ msgid "Please select a valid category"
 msgstr ""
 
 #. Translators: config screen validation error
-#: orisa/web.py:198
-msgid "Limit must be between 0 and 10"
-msgstr ""
+#: orisa/web.py:198 orisa/web.py:220
+#, fuzzy, python-brace-format
+#| msgid "between {min_sr} and {max_sr} SR"
+msgid "Limit must be between {min} and {max}"
+msgstr "entre {min_sr} y {max_sr} SR"
 
 #. Translators: config screen validation error
 #: orisa/web.py:207
@@ -1191,11 +1193,6 @@ msgstr ""
 #. Translators: config screen validation error
 #: orisa/web.py:214
 msgid "This name is already used in this category"
-msgstr ""
-
-#. Translators: config screen validation error
-#: orisa/web.py:220
-msgid "The limit must be between 0 and 99"
 msgstr ""
 
 #: orisa/web.py:311

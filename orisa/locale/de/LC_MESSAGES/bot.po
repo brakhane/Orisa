@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
-"POT-Creation-Date: 2019-08-26 22:12+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-26 23:27+0200\n"
 "PO-Revision-Date: 2019-08-26 23:09+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
@@ -1206,8 +1206,10 @@ msgid "Please select a valid category"
 msgstr "Bitte wähle eine gültige Kategoie"
 
 #. Translators: config screen validation error
-#: orisa/web.py:198
-msgid "Limit must be between 0 and 10"
+#: orisa/web.py:198 orisa/web.py:220
+#, fuzzy, python-brace-format
+#| msgid "Limit must be between 0 and 10"
+msgid "Limit must be between {min} and {max}"
 msgstr "Limit muss zwischen 0 und 10 liegen"
 
 #. Translators: config screen validation error
@@ -1224,11 +1226,6 @@ msgstr "The Kanalname darf kein # enthalten"
 #: orisa/web.py:214
 msgid "This name is already used in this category"
 msgstr "Dieser Name wird in dieser Kategorie bereits verwendet"
-
-#. Translators: config screen validation error
-#: orisa/web.py:220
-msgid "The limit must be between 0 and 99"
-msgstr "Das Benutzerlimit muss zwischen 0 und 99 liegen"
 
 #: orisa/web.py:311
 #, python-brace-format
@@ -1256,6 +1253,9 @@ msgstr "Es tut mir leid. Etwas ist auf meiner Seite schief gelaufen. Versuche, n
 #: orisa/web.py:391
 msgid "Thank you! I have sent you a DM."
 msgstr "Ich habe dir eine PN geschickt."
+
+#~ msgid "The limit must be between 0 and 99"
+#~ msgstr "Das Benutzerlimit muss zwischen 0 und 99 liegen"
 
 #~ msgid "Handles"
 #~ msgstr "Tags"
