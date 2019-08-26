@@ -129,44 +129,44 @@ VOTE_LINK="https://discordbots.org/bot/445905377712930817/vote"
 DONATE_LINK="https://ko-fi.com/R5R2PC36"
 
 RANKS = (
-    # 2 letter code for "Bronze" rank
+    # Translators: 2 letter code for "Bronze" rank
     N_("Br"), 
-    # 2 letter code for "Silver" rank
+    # Translators: 2 letter code for "Silver" rank
     N_("Si"), 
-    # 2 letter code for "Gold" rank
+    # Translators: 2 letter code for "Gold" rank
     N_("Go"), 
-    # 2 letter code for "Platinum" rank
+    # Translators: 2 letter code for "Platinum" rank
     N_("Pt"), 
-    # 2 letter code for "Diamond" rank
+    # Translators: 2 letter code for "Diamond" rank
     N_("Dm"), 
-    # 2 letter code for "Master" rank
+    # Translators: 2 letter code for "Master" rank
     N_("Ma"), 
-    # 2 letter code for "Grandmaster" rank
+    # Translators: 2 letter code for "Grandmaster" rank
     N_("GM")
 )
 FULL_RANKS = (
-    # SR rank
+    # Translators: SR rank
     N_("Bronze"), 
-    # SR rank
+    # Translators: SR rank
     N_("Silver"), 
-    # SR rank
+    # Translators: SR rank
     N_("Gold"), 
-    # SR rank
+    # Translators: SR rank
     N_("Platinum"), 
-    # SR rank
+    # Translators: SR rank
     N_("Diamond"), 
-    # SR rank
+    # Translators: SR rank
     N_("Master"), 
-    # SR rank
+    # Translators: SR rank
     N_("Grandmaster")
 )
 
 ROLE_NAMES = [
-    # Role
+    # Translators: Role
     N_('Tank'),
-    # Role
+    # Translators: Role
     N_('Damage'),
-    # Role
+    # Translators: Role
     N_('Support'),
 ]
 
@@ -477,7 +477,7 @@ class Orisa(Plugin):
             if user:
                 embed = Embed(colour=0x659DBD)  # will be overwritten later if SR is set
 
-                # Short for Discord Nickname
+                # Translators: Short for Discord Nickname
                 embed.add_field(name=_("Nick"), value=member.name, inline=False)
 
                 primary, *secondary = user.handles
@@ -501,7 +501,7 @@ class Orisa(Plugin):
 
                 if multiple_handles:
                     if multiple_handle_types:
-                        # When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
+                        # Translators: When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
                         handle_name = _("Tags")
                     else:
                         handle_name = f"{user.handles[0].desc}s"
@@ -520,11 +520,11 @@ class Orisa(Plugin):
                     embed.colour = COLORS[sr_to_rank(np.nanmean(np.array([primary.sr.tank, primary.sr.damage, primary.sr.support], dtype=float)))]
 
                 if user.roles:
-                    # The roles a user has set with setroles (Main Tank, Damage, etc.)
+                    # Translators: The roles a user has set with setroles (Main Tank, Damage, etc.)
                     embed.add_field(name=_("Roles"), value=user.roles.format(ctx))
 
                 embed.add_field(
-                    # Weblinks
+                    # Translators: Weblinks
                     name=_("Links"),
                     inline=False,
                     value=(
@@ -550,11 +550,11 @@ class Orisa(Plugin):
                     footer_text += _("\nBTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough.")
                 embed.set_footer(text=footer_text)
             else:
-                # "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
+                # Translators: "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
                 content = _("{member_name} not found in database! *Do you need a hug?*").format(member_name=member.name)
                 if member == ctx.author:
                     embed = Embed(
-                        # A headline for a tip for the user
+                        # Translators: A headline for a tip for the user
                         title=_("Hint"),
                         description=_("Use `!ow register` to register, or `!ow help` for more info."),
                     )
@@ -572,7 +572,7 @@ class Orisa(Plugin):
         embed = Embed(
             title=_("About Me"),
             description=( 
-                # feel free to add "and the translation for this language was done by name"
+                # Translators: feel free to add "and the translation for this language was done by name"
                 _(
                     "I am an open source Discord bot to help manage Overwatch Discord communities.\n"
                     "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord) and licensed under the "
@@ -618,7 +618,7 @@ class Orisa(Plugin):
                     "Don't worry, I will send you the config instructions as a DM, so others can't configure me just by watching you sending this command."
                 ),
                 embed=Embed(
-                    # A tip/information for a user
+                    # Translators: A tip/information for a user
                     title=_("Tip"),
                     description=_("`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin only channel."),
                 ),
@@ -629,13 +629,13 @@ class Orisa(Plugin):
             role.name.lower() == "orisa admin" for role in ctx.author.roles
         ):
             help_embed=Embed(
-                # :thinking: must remain as is, it's an emoji
+                # Translators: :thinking: must remain as is, it's an emoji
                 title=_(":thinking: Need help?"),
                 description=_("Join the [Support Discord]({SUPPORT_DISCORD})!").format(SUPPORT_DISCORD=SUPPORT_DISCORD)
             )
             await reply(
                 ctx,
-                # "Orisa Admin" must not be translated; additionally explaining what the string "Orisa Admin" means is ok
+                # Translators: "Orisa Admin" must not be translated; additionally explaining what the string "Orisa Admin" means is ok
                 _("This command can only be used by members with the `Orisa Admin` role! Only the name of the role is important, it doesn't need any permissions.")
             )
             try:
@@ -656,7 +656,7 @@ class Orisa(Plugin):
             title=_("Click here to configure me!"), url=f"{WEB_APP_PATH}config/{token}"
         )
         embed.add_field(
-            # :thinking: is an emoji code
+            # Translators: :thinking: is an emoji code
             name=_(":thinking: Need help?"),
             value=_("Join the [Support Discord]({SUPPORT_DISCORD})!").format(SUPPORT_DISCORD=SUPPORT_DISCORD)
         )
@@ -712,24 +712,24 @@ class Orisa(Plugin):
         )
         embed = Embed(
             url=url,
-            # type will be PC, XBOX or PSN
+            # Translators: type will be PC, XBOX or PSN
             title=_("Click here to register your {type} account!").format(type=type.upper()),
             description=description
         )
         if type == "pc":
             embed.add_field(
-                # :information_source: is an emoji
+                # Translators: :information_source: is an emoji
                 name=_(":information_source: Protip"),
                 value=_("If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
                 "account data for that account instead."),
             )
             embed.add_field(
-                # :video_game: is an emoji
+                # Translators: :video_game: is an emoji
                 name=_(":video_game: Not on PC?"),
                 value=_("If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future.")
             )
         embed.set_footer(
-            # The translation should mention that the privacy policy is currently only available in English
+            # Translators: The translation should mention that the privacy policy is currently only available in English
             text=_("By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy.")
         )
 
@@ -737,7 +737,7 @@ class Orisa(Plugin):
             await ctx.author.send(content=None, embed=embed)
         except Forbidden:
             await reply(ctx, 
-                # Check how Discord translates "Allow direct messages from server members" in your local language and use the same term
+                # Translators: Check how Discord translates "Allow direct messages from server members" in your local language and use the same term
                 _('I\'m not allowed to send you a DM. Please right click on the Discord server, '
                   'select Privacy Settings, and enable "Allow direct messages from server members." Then try again.')
             )
@@ -811,7 +811,7 @@ class Orisa(Plugin):
             if index == 0:
                 await reply(
                     ctx,
-                    # handle will be the battletag/gamertag the user tried to register, type will be BattleTag or GamerTag                   
+                    # Translators: handle will be the battletag/gamertag the user tried to register, type will be BattleTag or GamerTag                   
                     _('"{handle}" already is your primary {type}. *Going back to sleep!*').format(handle=user.handles[0].handle, type=user.handles[0].desc)
                 )
                 return
@@ -828,7 +828,7 @@ class Orisa(Plugin):
 
             await reply(
                 ctx,
-                # handle will be the battletag/gamertag the user registered, type will be BattleTag or GamerTag                   
+                # Translators: handle will be the battletag/gamertag the user registered, type will be BattleTag or GamerTag                   
                 _("Done. Your primary {type} is now **{handle}**.").format(handle=user.handles[0].handle, type=user.handles[0].desc)
             )
             await self._update_nick_after_secondary_change(ctx, user)
@@ -840,7 +840,7 @@ class Orisa(Plugin):
             await reply(ctx, _("format string may not contain square brackets!"))
             return
         if "$" not in format:
-            # keep the $ to remind the user that placeholders start with a $ sign
+            # Translators: keep the $ to remind the user that placeholders start with a $ sign
             await reply(ctx, _("format string must contain at least one $placeholder!"))
             return
         if not format:
@@ -869,7 +869,7 @@ class Orisa(Plugin):
                     )
                     await run_sync(session.rollback)
                 else:
-                    # A list of random silly titles that will be shown in the confirmation message when a user changed his nickname format. 
+                    # Translators: A list of random silly titles that will be shown in the confirmation message when a user changed his nickname format. 
                     # Most of them were found on the Internet, for example
                     # "Eternal Bosom of Hot Love" is one of Kim Jong-Il's official titles.
                     # One title per line, you can replace it with different titles, the number of
@@ -899,7 +899,7 @@ Pornography Historian""").split("\n")
                     await self._update_nick(user)
                     await reply(
                         ctx,
-                        # Unlike other messages, keep this message overly formal and archaic sounding to keep a funny contrast to the silly title that will be "given" to the user. 
+                        # Translators: Unlike other messages, keep this message overly formal and archaic sounding to keep a funny contrast to the silly title that will be "given" to the user. 
                         # So, unlike in all the other messages, if your language has a concept of "formal" vs "familiar" you, use the formal you here.
                         # {title} is taken from the list of random titles
                         _('Done. Henceforth, thou shall be knownst as "`{new_nick}`, {title}".').format(new_nick=new_nick, title=random.choice(titles))
@@ -1019,7 +1019,7 @@ Pornography Historian""").split("\n")
         if roles_str is None:
             await reply(
                 ctx,
-                # the identifiers m o d s must not be translated
+                # Translators: the identifiers m o d s must not be translated
                 _("Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). "
                   "They can be combined, eg. `ds` would mean Damage + Support.")
             )
@@ -1071,7 +1071,7 @@ Pornography Historian""").split("\n")
 
                     if sr_diff > 5000:
                         await reply(
-                            # used when Orisa is asked to find players that are more than 5000 SR below or above them, use the equivalent Orisa voiceline
+                            # Translators: used when Orisa is asked to find players that are more than 5000 SR below or above them, use the equivalent Orisa voiceline
                             # in your language
                             ctx, _("That does not compute!")
                         )
@@ -1081,7 +1081,7 @@ Pornography Historian""").split("\n")
                 if not base_sr:
                     await reply(
                         ctx,
-                        # type is BattleTag or GamerTag
+                        # Translators: type is BattleTag or GamerTag
                         _("You primary {type} has no SR, please give a SR range you want to search for instead.").format(type=asker.handles[0].desc)
                     )
                     return
@@ -1107,7 +1107,7 @@ Pornography Historian""").split("\n")
                         _("min and max must be between 500 and 5000, and min must not be larger than max."),
                     )
                     return
-                # used as part of the string "Here is a list of players <between min_sr and max_sr SR>" or "there are no players <between...>"
+                # Translators: used as part of the string "Here is a list of players <between min_sr and max_sr SR>" or "there are no players <between...>"
                 type_msg = _("between {min_sr} and {max_sr} SR").format(min_sr=min_sr, max_sr=max_sr)
 
             candidates = (
@@ -1188,7 +1188,7 @@ Pornography Historian""").split("\n")
             ):
                 await reply(
                     ctx,
-                    # Orisa Admin must not be translated
+                    # Translators: Orisa Admin must not be translated
                     _("I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!"),
                 )
                 try:
@@ -1227,7 +1227,7 @@ Pornography Historian""").split("\n")
 
         embed = Embed(
             title=_("Orisa's purpose"),
-            # <@!> and <#> are discord codes and must be kept
+            # Translators: <@!> and <#> are discord codes and must be kept
             description=( _(
                 "When joining a QP or Comp channel, you need to know the BattleTag of a channel member, or they need "
                 "yours to add you. In competitive channels it also helps to know which SR the channel members have. "
@@ -1246,7 +1246,7 @@ Pornography Historian""").split("\n")
         )
         embed.add_field(
             name="!ow [nick]",
-            # help text for !ow <some nickname>
+            # Translators: help text for !ow <some nickname>
             value=(
                 _("Shows the BattleTag for the given nickname, or your BattleTag "
                 "if no nickname is given. `nick` can contain spaces. A fuzzy search for the nickname is performed.\n"
@@ -1271,12 +1271,12 @@ Pornography Historian""").split("\n")
         )
         embed.add_field(
             name="!ow config",
-            # don't translate "Orisa Admin"
+            # Translators: don't translate "Orisa Admin"
             value=_('This command can only be used by members with the "Orisa Admin" role and allows them to configure Orisa for the specific Discord server.'),
         )
         embed.add_field(
             name="!ow dumpsr",
-            # help for !ow dumpsr
+            # Translators: help for !ow dumpsr
             value=_("Download your SR history as an Excel sheet")
         )
         embed.add_field(
@@ -1299,27 +1299,27 @@ Pornography Historian""").split("\n")
         )
         embed.add_field(
             name="!ow forceupdate",
-            # help !ow forceupdate
+            # Translators: help !ow forceupdate
             value=_("Immediately checks your account data and updates your nick accordingly.\n"
             "*Checks and updates are done automatically, use this command only if "
             "you want your nick to be up to date immediately!*"),
         )
         embed.add_field(
             name="!ow forgetme",
-            # help !ow forgetme
+            # Translators: help !ow forgetme
             value=_("All your BattleTags will be removed from the database and your nick "
             "will not be updated anymore. You can re-register at any time."),
         )
 
         embed.add_field(
             name="!ow format *format*",
-            # help !ow format. $placeholder can be translated, as can ${placeholder}
+            # Translators: help !ow format. $placeholder can be translated, as can ${placeholder}
             value=_("Lets you specify how your SR or rank is displayed. It will always be shown in [square\u00a0brackets] appended to your name.\n"
             "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`.")
         )
         embed.add_field(
             name=_("\N{BLACK STAR} *ow format placeholders*"),
-            # $fullsr, $rank, etc. cannot be translated
+            # Translators: $fullsr, $rank, etc. cannot be translated
             value=_("*The following placeholders are defined:*\n"
             "`$sr`\nthe first two digits of your SR for all 3 roles in order Tank, Damage, Support; if you have secondary accounts, an asterisk (\*) is added at the end. A question mark is added if an old SR is shown\n\n"
             "`$fullsr`\nLike `$sr` but all 4 digits are shown\n\n"
@@ -1340,7 +1340,7 @@ Pornography Historian""").split("\n")
         )
 
         embeds = [embed]
-        # headline of second help page
+        # Translators: headline of second help page
         embed = Embed(title=_("help cont'd"))
         embeds.append(embed)
 
@@ -1378,7 +1378,7 @@ Pornography Historian""").split("\n")
         )
         embed.add_field(
             name="!ow setroles *roles*",
-            # the role codes d, m, o, s cannot be translated
+            # Translators: the role codes d, m, o, s cannot be translated
             value=_("Sets the role you can/want to play. It will be shown in `!ow` and will also be used to update the number of roles "
             "in voice channels you join.\n"
             '*roles* is a single "word" consisting of one or more of the following identifiers (both upper and lower case work):\n'
@@ -1448,7 +1448,7 @@ Pornography Historian""").split("\n")
         text = text.replace("OWNER_ID", f"<@!{self.client.application_info.owner.id}>")
         await send_long(ctx.author.send, text)
         if not ctx.channel.private:
-            # privacy policy is currently only availabe in English
+            # Translators: privacy policy is currently only availabe in English
             await reply(ctx, _("I sent you the privacy policy as DM."))
 
     @ow.subcommand()
@@ -1479,12 +1479,12 @@ Pornography Historian""").split("\n")
                     chan = await ctx.author.user.open_private_channel()
                 await chan.messages.upload(
                     data, 
-                    # file name of the sr history excel file to download
+                    # Translators: file name of the sr history excel file to download
                     filename=_("sr-history.xls"), 
                     message_content=_("Here is your SR history of all your accounts as an Excel sheet.")
                 )
             except Forbidden:
-                # check how Discord translated "Allow DM from server members"
+                # Translators: check how Discord translated "Allow DM from server members"
                 await reply(ctx, _("I'm not allowed to send you a DM, please make sure that you enabled \"Allow DM from server members\" in the server's privacy settings!"))
             if not ctx.channel.private:
                 await reply(ctx, "I sent you a DM.")
@@ -1545,7 +1545,7 @@ Pornography Historian""").split("\n")
         embed = Embed(
             title=_("SR History For {name}").format(name=name),
             description=_("Here is your SR history starting from {date}").format(
-                # used instead of a date when user requested a SR history from the beginning (which is the usual case)
+                # Translators: used instead of a date when user requested a SR history from the beginning (which is the usual case)
                 date=_('when you registered') if not date else pendulum.instance(date).to_formatted_date_string()
             )
         )
@@ -1687,7 +1687,7 @@ Pornography Historian""").split("\n")
         self.guild_config[guild.id] = GuildConfig.default()
 
         msg = (
-            # sent by Orisa when she joins a new server
+            # Translators: sent by Orisa when she joins a new server
             _(
                 "*Greetings*! I am excited to be here :smiley:\n"
                 "To get started, create a new role named `Orisa Admin` (only the name is important, it doesn't need any special permissions) and add yourself "
@@ -2117,7 +2117,7 @@ Pornography Historian""").split("\n")
                 if user.discord_id not in guild.members:
                     continue
                 embed = Embed(
-                    # Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
+                    # Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
                     title=_("For your own safety, get behind the barrier!"),
                     description= 
                         _("**{name}** just reached **{sr} SR** as **{role}** and advanced to **{rank}**. Congratulations!").format(
@@ -2135,7 +2135,7 @@ Pornography Historian""").split("\n")
                 await self.client.find_channel(
                     self.guild_config[guild.id].congrats_channel_id
                 ).messages.send(
-                    # <@!> is discord markup and needs to be preserved
+                    # Translators: <@!> is discord markup and needs to be preserved
                     content=_("Let's hear it for <@!{discord_id}>!").format(discord_id=user.discord_id), embed=embed
                 )
             except Exception:
@@ -2253,17 +2253,17 @@ Pornography Historian""").split("\n")
                 )
 
             headers = [
-                # header for highscore table: position (keep it short)
+                # Translators: header for highscore table: position (keep it short)
                 _("#"), 
-                # header for highscore table: previous position (keep it short)
+                # Translators: header for highscore table: previous position (keep it short)
                 _("prev"), 
-                # header for highscore table: member name
+                # Translators: header for highscore table: member name
                 _("Member"), 
-                # header for highscore table: member discord id
+                # Translators: header for highscore table: member discord id
                 _("Member ID"), 
-                # header fdor highscore table: SR
+                # Translators: header fdor highscore table: SR
                 _("{role} SR").format(role=sr_kind.capitalize()),
-                # header for highscore table: SR difference
+                # Translators: header for highscore table: SR difference
                 _("ΔSR")
             ]
             csv_file = StringIO()
@@ -2584,7 +2584,7 @@ Pornography Historian""").split("\n")
                         break
                 first, *others = handles
                 if others:
-                    # type will be BattleTag or GamerTag, and it must be transformed into plural
+                    # Translators: type will be BattleTag or GamerTag, and it must be transformed into plural
                     desc = _("OK. People can now ask me for your {type}s **{handles}**, and I will keep track of your SR.").format(
                         type=first.desc, handles=', '.join(h.handle for h in handles)
                     )
@@ -2619,7 +2619,7 @@ Pornography Historian""").split("\n")
                     if existing_handle and existing_handle.handle != new_handle.handle:
                         embed = Embed(
                             color=0x6DB76D,
-                            # type is battletag or gamertag
+                            # Translators: type is battletag or gamertag
                             title=_("{type} updated").format(type=existing_handle.desc),
                             description=_("It seems like your {type} changed from *{old_handle}* to *{new_handle}*. I have updated my database.").format(
                                 type=existing_handle.desc, old_handle=existing_handle.handle, new_handle=new_handle.handle
@@ -2629,7 +2629,7 @@ Pornography Historian""").split("\n")
                         handles_to_check.append(existing_handle)
                     elif existing_handle:
                         embed = Embed(
-                            # type is GamerTag or BattleTag
+                            # Translators: type is GamerTag or BattleTag
                             title=_("{type} already registered").format(type=existing_handle.desc),
                             color=0x6F0808,
                             description=_("You already registered the {type} *{handle}*, so there's nothing for me to do. *Sleep mode reactivated.*\n").format(
@@ -2648,9 +2648,9 @@ Pornography Historian""").split("\n")
                         handles_to_check.append(new_handle)
                         embed = Embed(
                             color=0x6DB76D,
-                            # type is GamerTag/BattleTag
+                            # Translators: type is GamerTag/BattleTag
                             title=_("{type} added").format(type=new_handle.desc),
-                            # {new_type}s is plural. type is BattleTag/GamerTag
+                            # Translators: {new_type}s is plural. type is BattleTag/GamerTag
                             description=_("OK. I've added **{new_handle}** to the list of your {new_type}s. **Your primary {primary_type} remains {primary_handle}**. "
                                 "To change your primary tag, use `!ow setprimary`, see help for more details.").format(
                                     new_handle=new_handle.handle, new_type=new_handle.desc, primary_type = user.handles[0].desc, primary_handle=user.handles[0].handle
@@ -2674,13 +2674,13 @@ Pornography Historian""").split("\n")
                     return
                 except BlizzardError as e:
                     await user_channel.messages.send(
-                        # e is some error message
+                        # Translators: e is some (English) error message
                         _("Sorry, but it seems like Blizzard's site has some problems currently ({e}), please try again later!").format(e=e)
                     )
                     raise
                 except UnableToFindSR:
                     embed.add_field(
-                        # :warning: is an emoji code
+                        # Translators: :warning: is an emoji code
                         name=_(":warning: No SR"),
                         value=_("You don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your {type}.").format(type=handle.desc),
                     )
@@ -2702,7 +2702,7 @@ Pornography Historian""").split("\n")
                 await self._update_nick(user, force=True, raise_hierachy_error=True)
             except NicknameTooLong as e:
                 embed.add_field(
-                    # :warning: is emoji code
+                    # Translators: :warning: is emoji code
                     name=_(":warning: Nickname too long!"),
                     value=_(
                         "Adding your SR to your nickname would result in '{nickname}' and with {len} characters, be longer than Discord's maximum of 32. "
