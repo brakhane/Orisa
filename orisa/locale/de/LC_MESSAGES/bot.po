@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-26 23:27+0200\n"
-"PO-Revision-Date: 2019-08-26 23:09+0000\n"
+"PO-Revision-Date: 2019-08-26 23:44+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -1207,10 +1207,9 @@ msgstr "Bitte wähle eine gültige Kategoie"
 
 #. Translators: config screen validation error
 #: orisa/web.py:198 orisa/web.py:220
-#, fuzzy, python-brace-format
-#| msgid "Limit must be between 0 and 10"
+#, python-brace-format
 msgid "Limit must be between {min} and {max}"
-msgstr "Limit muss zwischen 0 und 10 liegen"
+msgstr "Limit muss zwischen {min} und {max} liegen"
 
 #. Translators: config screen validation error
 #: orisa/web.py:207
