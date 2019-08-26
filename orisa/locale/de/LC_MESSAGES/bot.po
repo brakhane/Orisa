@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-26 22:12+0200\n"
-"PO-Revision-Date: 2019-08-26 17:02+0000\n"
+"PO-Revision-Date: 2019-08-26 23:09+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -161,7 +161,7 @@ msgid ""
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough."
 msgstr ""
 "\n"
-"Übrigens, Du brauchst deinen Discordnamen nicht anzugeben, wenn Du deinen eigenen BattleTag meinst; !ow alleine reicht aus."
+"Übrigens, Du brauchst deinen Nicknamen nicht anzugeben, wenn Du deinen eigenen BattleTag meinst; !ow alleine reicht aus."
 
 #. Translators: "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:554
