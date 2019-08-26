@@ -4,6 +4,9 @@
 .. image:: https://discordbots.org/api/widget/servers/445905377712930817.svg?noavatar=true
    :target: https://discordbots.org/bot/445905377712930817
 
+.. image:: https://weblate.wur.st/widgets/orisa/-/svg-badge.svg
+   :target: https://weblate.wur.st/engage/orisa/?utm_source=widget
+
 .. image:: https://www.ko-fi.com/img/donate_sm.png
    :target: https://ko-fi.com/R5R2PC36
 
