@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: 2019-08-26 23:44+0000\n"
+"PO-Revision-Date: 2019-08-27 06:02+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.wur.st/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -466,10 +466,8 @@ msgid "OK, deleted {name} from database"
 msgstr "OK, ich habe {name} aus meiner Datenbank gelöscht"
 
 #: orisa/orisa.py:989
-#, fuzzy
-#| msgid "you are not registered anyway, so there's nothing for me to forget..."
 msgid "you are not registered anyway, so there's nothing for me to forget…"
-msgstr "Du bist sowieso nicht registriert, also gibt es nichts zu vergessen ..."
+msgstr "Du bist sowieso nicht registriert, also gibt es nichts zu vergessen…"
 
 #. Translators: the identifiers m o d s must not be translated
 #: orisa/orisa.py:1023
@@ -1105,14 +1103,13 @@ msgstr "OK. Ich habe **{new_handle}** zur Liste deiner {new_type}s hinzugefügt.
 #: orisa/orisa.py:2663
 #, python-brace-format
 msgid "Checking your {type} {tag}…"
-msgstr ""
+msgstr "Überprüfe Dein {type} {tag}…"
 
 #. Translators: {type} is "BattleTag", {handle} is the tag (Foo#2345), {message} is some untranslated English error message
 #: orisa/orisa.py:2671
-#, fuzzy, python-brace-format
-#| msgid "Invalid {type}: {message}...Blizzard claims that the {type} {handle} has no OW account. Play a QP or arcade game, close OW and try again, sometimes this helps."
+#, python-brace-format
 msgid "Invalid {type}: {message}… Blizzard claims that the {type} {handle} has no OW account. Play a QP or arcade game, close OW and try again, sometimes this helps."
-msgstr "Ungültiger {type} ({message}). Blizzard behauptet, dass der {type} {handle} keinen OW Account hat. Spiele eine Schnellsuche- oder Arcade-Partie, schließe OW und versuche es erneut, das hilft manchmal."
+msgstr "Ungültiger {type} ({message})… Blizzard behauptet, dass der {type} {handle} keinen OW Account hat. Spiele eine Schnellsuche- oder Arcade-Partie, schließe OW und versuche es erneut, das hilft manchmal."
 
 #. Translators: e is some (English) error message
 #: orisa/orisa.py:2680
@@ -1126,10 +1123,9 @@ msgid ":warning: No SR"
 msgstr ":warning: Kein SR"
 
 #: orisa/orisa.py:2687
-#, fuzzy, python-brace-format
-#| msgid "You don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your {type}."
+#, python-brace-format
 msgid "You don't have an SR though, your profile needs to be public for SR tracking to work… I still saved your {type}."
-msgstr "Du scheinst allerdings keinen SR zu haben; dein Profil muss öffentlich sein, damit ich deinen SR ermitteln kann... Deinen {type} habe ich aber gespeichert."
+msgstr "Du scheinst allerdings keinen SR zu haben; dein Profil muss öffentlich sein, damit ich deinen SR ermitteln kann… Deinen {type} habe ich aber gespeichert."
 
 #. Translators: :warning: is emoji code
 #: orisa/orisa.py:2708
