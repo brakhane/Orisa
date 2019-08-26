@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-25 13:46+0200\n"
-"PO-Revision-Date: 2019-08-22 16:50+0000\n"
+"PO-Revision-Date: 2019-08-26 17:02+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: Dutch <https://weblate.wur.st/projects/orisa/bot/nl/>\n"
 "Language: nl\n"
@@ -157,10 +157,6 @@ msgid "The SR was last updated {when}."
 msgstr "De SR was als laatst bijgewerkt op {when}."
 
 #: orisa/orisa.py:550
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough"
 msgid ""
 "\n"
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough."
@@ -212,8 +208,7 @@ msgid "Join the official Orisa Discord"
 msgstr "Word lid van de officiële Orisa Discord"
 
 #: orisa/orisa.py:597
-#, fuzzy, python-brace-format
-#| msgid "If you use me in your Discord server, or generally have suggestions, [join the official Orisa Discord]({SUPPORT_DISCORD}). Updates and new features will be discussed and announced there"
+#, python-brace-format
 msgid "If you use me in your Discord server, or generally have suggestions, [join the official Orisa Discord]({SUPPORT_DISCORD}). Updates and new features will be discussed and announced there."
 msgstr "Als je van mij gebruik maakt in jouw Discord server, of als je suggesties hebt, [word dan lid van de officiële Orisa Discord]({SUPPORT_DISCORD}). Nieuwe functies en updates worden daar besproken en aangekondigd."
 
@@ -338,8 +333,6 @@ msgstr "Als je een XBL account hebt, gebruik dan `!ow register xbox`. PSN accoun
 
 #. The translation should mention that the privacy policy is currently only available in English
 #: orisa/orisa.py:733
-#, fuzzy
-#| msgid "By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy"
 msgid "By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy."
 msgstr ""
 "Door te registreren, gaat u akkoord met het Privacybeleid van Orisa. Typ !ow privacy om het Privacybeleid op te vragen.\n"
@@ -508,10 +501,8 @@ msgid "Your nick will only be updated when you are in an OW voice channel. Use `
 msgstr "Je naam zal alleen worden bijgewerkt als je verbonden bent met een Overwatch spraakkanaal. Gebruik `!ow alwaysshowsr on` om altijd jouw gebruikersnaam bij te werken."
 
 #: orisa/orisa.py:952
-#, fuzzy
-#| msgid "There were some problems updating your SR. Try again later."
 msgid "There were some problems updating your SR! Try again later."
-msgstr "Er is een probleem opgetreden met het updaten van jouw SR. Probeer het later opnieuw."
+msgstr "Er is een probleem opgetreden met het updaten van jouw SR! Probeer het later opnieuw."
 
 #: orisa/orisa.py:957
 #, python-brace-format
@@ -805,7 +796,9 @@ msgstr ""
 msgid ""
 "*This command can only be used by users with the Orisa Admin role!*\n"
 "Like srgraph, but shows the graph for the given user."
-msgstr "Deze command kan alleen worden uitgevoerd door leden met de `Orisa Admin`rol (alleen de naam van de rol is belangrijk, het heeft verder geen specifieke permissies nodig)"
+msgstr ""
+"*Deze command kan alleen worden uitgevoerd door leden met de `Orisa Admin`rol!*\n"
+"..."
 
 #: orisa/orisa.py:1404
 msgid ""
@@ -825,10 +818,8 @@ msgid ""
 msgstr ""
 
 #: orisa/orisa.py:1428
-#, fuzzy
-#| msgid "You are not registered. Use `!ow register` first."
 msgid "You are not registered. Do `!ow register` first!"
-msgstr "Helaas ben je nog niet geregistreerd. Gebruik `!ow register` om te registreren."
+msgstr "Helaas ben je nog niet geregistreerd. Gebruik `!ow register` om te registreren!"
 
 #: orisa/orisa.py:1439
 #, fuzzy, python-brace-format
@@ -1121,7 +1112,7 @@ msgstr ""
 #, fuzzy, python-brace-format
 #| msgid "If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
 msgid "If you find me useful, consider voting for me [by clicking here]({VOTE_LINK})!"
-msgstr "Als je mij nuttig vindt, [koop dan een kop koffie voor mijn beheerder.]({DONATE_LINK})."
+msgstr "Als je mij nuttig vindt, [koop dan een kop koffie voor mijn beheerder.]({DONATE_LINK})!"
 
 #: orisa/orisa.py:2731
 msgid ":heart: Say thanks by buying a coffee"
