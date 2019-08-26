@@ -35,14 +35,14 @@ def N_(x):
 
 def _(msg):
     locale = CurrentLocale.get()
-    if locale:
+    if locale and locale != 'en':
         return TRANSLATIONS[locale].gettext(msg)
     else:
         return msg
 
 def ngettext(singular, plural, n):
     locale = CurrentLocale.get()
-    if locale:
+    if locale and locale != 'en':
         return TRANSLATIONS[locale].ngettext(singular, plural, n)
     else:
         return singular if n==0 else plural

@@ -986,7 +986,7 @@ Pornography Historian""").split("\n")
             else:
                 await reply(
                     ctx,
-                    _("you are not registered anyway, so there's nothing for me to forget..."),
+                    _("you are not registered anyway, so there's nothing for me to forget…"),
                 )
 
     @ow.subcommand()
@@ -2659,14 +2659,16 @@ Pornography Historian""").split("\n")
 
             for handle in handles_to_check:
                 try:
-                    check_msg_obj = await user_channel.messages.send(f"Checking your {handle.desc} {handle.handle}…")
+                    # Translators: Used during registration while Orisa checks the BattleTag/GamerTag. {type} is BattleTag/GamerTag, {tag} is the tag (Foo#2345)
+                    check_msg_obj = await user_channel.messages.send(_("Checking your {type} {tag}…").format(type=handle.desc, tag=handle.handle))
                     async with user_channel.typing:
                         srs, images = await get_sr(handle)
                 except InvalidBattleTag as e:
                     logger.exception(f"Got invalid {handle.desc} for {handle.handle}")
                     await user_channel.messages.send(
                         _(
-                            "Invalid {type}: {message}...Blizzard claims that the {type} {handle} has no OW account. "
+                            # Translators: {type} is "BattleTag", {handle} is the tag (Foo#2345), {message} is some untranslated English error message
+                            "Invalid {type}: {message}… Blizzard claims that the {type} {handle} has no OW account. "
                             "Play a QP or arcade game, close OW and try again, sometimes this helps.").format(
                                 type=handle.desc, handle=handle.handle, message=e.message
                         )
@@ -2682,7 +2684,7 @@ Pornography Historian""").split("\n")
                     embed.add_field(
                         # Translators: :warning: is an emoji code
                         name=_(":warning: No SR"),
-                        value=_("You don't have an SR though, your profile needs to be public for SR tracking to work... I still saved your {type}.").format(type=handle.desc),
+                        value=_("You don't have an SR though, your profile needs to be public for SR tracking to work… I still saved your {type}.").format(type=handle.desc),
                     )
                     srs = TDS(None, None, None)
                 finally:

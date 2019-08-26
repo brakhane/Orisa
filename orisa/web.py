@@ -125,15 +125,15 @@ def validate_config(guild, guild_config):
     def missing_perms(permissions, required):
         
         perm_names = {
-            # discord permission name
+            # Translators: discord permission name
             "send_messages": _("Send Messages"),
-            # discord permission name
+            # Translators: discord permission name
             "read_messages": _("Read Messages"),
-            # discord permission name
+            # Translators: discord permission name
             "embed_links": _("Embed Links"),
-            # discord permission name
+            # Translators: discord permission name
             "attach_files": _("Attach Files"),
-            # discord permission name
+            # Translators: discord permission name
             "manage_nicknames": _("Manage Nicknames")
         }
 
@@ -192,7 +192,8 @@ def validate_config(guild, guild_config):
                 vc_errors["category_id"] = missing
 
         if vc.channel_limit is None or not (0 <= vc.channel_limit <= 30):
-            vc_errors["channel_limit"] = "Limit must be between 0 and 30"
+            # Translators: config screen validation error
+            vc_errors["channel_limit"] = _("Limit must be between {min} and {max}").format(min=0, max=30)
 
         pe_list = []
         pe_list_has_errors = False
@@ -200,21 +201,21 @@ def validate_config(guild, guild_config):
         for prefix in vc.prefixes:
             pref_errors = {}
             if not prefix.name:
-                # config screen validation error
+                # Translators: config screen validation error
                 pref_errors["name"] = _("A name is required")
             else:
                 if '#' in prefix.name:
-                    # config screen validation error
+                    # Translators: config screen validation error
                     pref_errors["name"] = _("The channel name must not contain a #")
                 elif prefix.name.strip() in names:
-                    # config screen validation error
+                    # Translators: config screen validation error
                     pref_errors["name"] = _("This name is already used in this category")
 
                 names.add(prefix.name.strip())
 
             if prefix.limit is None or not (0 <= prefix.limit <= 99):
-                # config screen validation error
-                pref_errors["limit"] = _("The limit must be between 0 and 99")
+                # Translators: config screen validation error
+                pref_errors["limit"] = _("Limit must be between {min} and {max}").format(min=0, max=99)
 
             pe_list.append(pref_errors)
 
