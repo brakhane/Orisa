@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
 "PO-Revision-Date: 2019-08-27 20:25+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"Last-Translator: Mette <mette.rahunen@gmail.com>\n"
 "Language-Team: Finnish <https://weblate.orisa.rocks/projects/orisa/bot/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -757,12 +757,12 @@ msgid ""
 msgstr ""
 
 #: orisa/orisa.py:1399
-#, fuzzy
-#| msgid "This command can only be used by members with the `Orisa Admin` role (only the name of the role is important, it doesn't need any permissions)"
 msgid ""
 "*This command can only be used by users with the Orisa Admin role!*\n"
 "Like srgraph, but shows the graph for the given user."
-msgstr "Tätä komentoa voi käyttää vain käyttäjät, joilla on `Orisa Admin` rooli (vain roolin nimi on tärkeä, siihen ei tarvitse liittyä mitään käyttöoikeuksia)"
+msgstr ""
+"*Tätä komentoa voi käyttää vain käyttäjät, joilla on Orisa Admin rooli!*\n"
+"Kuin srgraph, mutta näyttää kaavion määritellylle käyttäjälle."
 
 #: orisa/orisa.py:1404
 msgid ""
@@ -1077,10 +1077,9 @@ msgid ":thumbsup: Vote for me on Discord Bot List"
 msgstr ""
 
 #: orisa/orisa.py:2734
-#, fuzzy, python-brace-format
-#| msgid "If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
+#, python-brace-format
 msgid "If you find me useful, consider voting for me [by clicking here]({VOTE_LINK})!"
-msgstr "Jos pidät minua hyödyllisenä, [osta ylläpitäjälleni kupillinen kahvia]({DONATE_LINK})."
+msgstr "Jos pidät minua hyödyllisenä, äänestä minua [klikkaamalla tästä]({VOTE_LINK})!"
 
 #: orisa/orisa.py:2738
 msgid ":heart: Say thanks by buying a coffee"
