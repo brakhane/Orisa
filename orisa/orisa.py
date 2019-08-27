@@ -534,7 +534,7 @@ class Orisa(Plugin):
         embed.add_field(
             name="Invite me to your own Discord",
             value=(
-                "To invite me to your server, simply [click here](https://wur.st/bot/ever/invite), I will post a message with more information in a channel after I have joined your server"
+                "To invite me to your server, simply [click here](https://orisa.rocks/invite), I will post a message with more information in a channel after I have joined your server"
             ),
         )
         embed.add_field(
