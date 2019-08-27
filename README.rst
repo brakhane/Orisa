@@ -31,14 +31,14 @@ She also can manage voice channels and create them on demand, and show fancy SR 
 Features
 --------
 
-* Shows the current SR and/or rank in nicknames, e.g. ``somenick [2345]``. Users can configure what is shown by using flexible format strings
+* Shows the current SR and/or rank in nicknames, e.g. ``somenick [1234-2345-3456]``. Users can configure what is shown by using flexible format strings
 * SR is automatically updated whenever a player stops playing Overwatch while being in Discord, and also every hour
 * Supports multiple BattleTags per user
 * BattleTags are registered via OAuth, so you can be sure that the BattleTag really belongs to that user
 * Finds (registered) players in a given SR range
 * Congratulates every player when he/she reached a new personal best rank
 * Can manage voice channels and create them on demand, e.g. "Comp #2" will be created when "Comp #1" has members in it
-* Can show the SR range of people in the voice channel name, e.g. "Comp #1 [2104-2340]"
+* Can show the average SR of people (first 2 digits) in the voice channel name, e.g. "Comp #1 [23-12-33]"
 * Allows people to track their SR and display a SR graph
 * Has a `findplayers` command that can suggest people in a specific SR range
 * Can be configured via a web interface
@@ -52,7 +52,7 @@ Features
 Using Orisa on your Discord
 ---------------------------
 
-You can simply invite Orisa to your discord by visiting `this link <https://wur.st/bot/ever/invite>`_. She will send your further information after she has joined your server.
+You can simply invite Orisa to your discord by visiting `this link <https://orisa.rocks/invite>`_. She will send your further information after she has joined your server.
 
 Installation of your own instance
 ---------------------------------
