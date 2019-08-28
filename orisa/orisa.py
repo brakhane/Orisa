@@ -1465,14 +1465,14 @@ class Orisa(Plugin):
             await self._sync_handles(ids_to_sync)
             logger.debug(f"done syncing tags for {new_member.name} after OW close")
 
-        uid = new_member.user.id
-        if uid in self.stopped_playing_cache:
-            logger.debug("Already handled %s, ignoring", new_member.name)
-            return
-        else:
-            self.stopped_playing_cache[uid] = True
-
         if plays_overwatch(old_member) and (not plays_overwatch(new_member)):
+            uid = new_member.user.id
+            if uid in self.stopped_playing_cache:
+                logger.debug("Already handled %s, ignoring", new_member.name)
+                return
+            else:
+                self.stopped_playing_cache[uid] = True
+
             async with self.database.session() as session:
                 user = await self.database.user_by_discord_id(session, new_member.user.id)
                 if not user:
