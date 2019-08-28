@@ -39,6 +39,7 @@ from string import Template
 from typing import Optional
 
 import asks
+import cachetools
 import dateutil.parser as date_parser
 import hypercorn.config
 import hypercorn.trio
@@ -230,6 +231,8 @@ class Orisa(Plugin):
         self.dialogues = {}
         self.web_send_ch, self.web_recv_ch = trio.open_memory_channel(5)
         self.raven_client = raven_client
+        self.sync_cache = cachetools.TTLCache(maxsize=1000, ttl=30)
+        self.stopped_playing_cache = cachetools.TTLCache(maxsize=1000, ttl=10)
 
         self.guild_config = defaultdict(GuildConfig.default)
 
@@ -588,7 +591,7 @@ class Orisa(Plugin):
             value=( _(
                 "To invite me to your server, simply [click here]({LINK}), I will post a message with more "
                 "information in a channel after I have joined your server"
-                ).format(LINK="https://wur.st/bot/ever/invite")
+                ).format(LINK="https://orisa.rocks/invite")
             ),
         )
         embed.add_field(
@@ -1572,11 +1575,18 @@ Pornography Historian""").split("\n")
             logger.debug(f"done syncing tags for {new_member.name} after OW close")
 
         if plays_overwatch(old_member) and (not plays_overwatch(new_member)):
+            uid = new_member.user.id
+            if uid in self.stopped_playing_cache:
+                logger.debug("Already handled %s, ignoring", new_member.name)
+                return
+            else:
+                self.stopped_playing_cache[uid] = True
+
             async with self.database.session() as session:
                 user = await self.database.user_by_discord_id(session, new_member.user.id)
                 if not user:
                     logger.debug(
-                        f"{new_member.name} stopped playing OW but is not registered, nothing to do."
+                        "%s stopped playing OW but is not registered, nothing to do.", new_member.name
                     )
                     return
 
@@ -2402,6 +2412,11 @@ Pornography Historian""").split("\n")
         async with channel:
             async for handle_id in channel:
                 logger.debug("got %s from channel %r", handle_id, channel)
+                if handle_id in self.sync_cache:
+                    logger.debug("Already updated, not doing it again")
+                    continue
+                else:
+                    self.sync_cache[handle_id] = True  # any value really
                 if not first:
                     delay = 1 + random.random() * 5
                     logger.debug(f"rate limiting: sleeping for {delay:4.02}s")
