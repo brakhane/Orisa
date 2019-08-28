@@ -39,6 +39,7 @@ from string import Template
 from typing import Optional
 
 import asks
+import cachetools
 import dateutil.parser as date_parser
 import hypercorn.config
 import hypercorn.trio
@@ -196,6 +197,7 @@ class Orisa(Plugin):
         self.dialogues = {}
         self.web_send_ch, self.web_recv_ch = trio.open_memory_channel(5)
         self.raven_client = raven_client
+        self.sync_cache = cachetools.TTLCache(maxsize=1000, ttl=30)
 
         self.guild_config = defaultdict(GuildConfig.default)
 
@@ -2269,6 +2271,11 @@ class Orisa(Plugin):
         async with channel:
             async for handle_id in channel:
                 logger.debug("got %s from channel %r", handle_id, channel)
+                if handle_id in self.sync_cache:
+                    logger.debug("Already updated, not doing it again")
+                    continue
+                else:
+                    self.sync_cache[handle_id] = True  # any value really
                 if not first:
                     delay = 1 + random.random() * 5
                     logger.debug(f"rate limiting: sleeping for {delay:4.02}s")
