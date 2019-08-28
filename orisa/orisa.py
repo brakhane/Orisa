@@ -198,6 +198,7 @@ class Orisa(Plugin):
         self.web_send_ch, self.web_recv_ch = trio.open_memory_channel(5)
         self.raven_client = raven_client
         self.sync_cache = cachetools.TTLCache(maxsize=1000, ttl=30)
+        self.stopped_playing_cache = cachetools.TTLCache(maxsize=1000, ttl=10)
 
         self.guild_config = defaultdict(GuildConfig.default)
 
@@ -1464,12 +1465,19 @@ class Orisa(Plugin):
             await self._sync_handles(ids_to_sync)
             logger.debug(f"done syncing tags for {new_member.name} after OW close")
 
+        uid = new_member.user.id
+        if uid in self.stopped_playing_cache:
+            logger.debug("Already handled %s, ignoring", new_member.name)
+            return
+        else:
+            self.stopped_playing_cache[uid] = True
+
         if plays_overwatch(old_member) and (not plays_overwatch(new_member)):
             async with self.database.session() as session:
                 user = await self.database.user_by_discord_id(session, new_member.user.id)
                 if not user:
                     logger.debug(
-                        f"{new_member.name} stopped playing OW but is not registered, nothing to do."
+                        "%s stopped playing OW but is not registered, nothing to do.", new_member.name
                     )
                     return
 
