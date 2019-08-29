@@ -2,13 +2,14 @@
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Valerio D'Onghia <venom1@live.de>, 2019.
+# Weblate Admin <brakhane+weblate@gmail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: 2019-08-29 12:55+0000\n"
-"Last-Translator: Valerio D'Onghia <venom1@live.de>\n"
+"PO-Revision-Date: 2019-08-29 13:04+0000\n"
+"Last-Translator: Weblate Admin <brakhane+weblate@gmail.com>\n"
 "Language-Team: Italian <https://weblate.orisa.rocks/projects/orisa/bot/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -144,7 +145,7 @@ msgstr "Link"
 msgid ""
 "[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa "
 "Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})"
-msgstr "[Profilo overwatch] ({PROFILE_LINK}) | [Upvote Orisa] ({VOTE_LINK}) | [Server Di Support Orisa] ({SUPPORT_DISCORD}) | [Dona `{HEART}`] ({DONATE_LINK})"
+msgstr "[Profilo overwatch]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Server Di Support Orisa]({SUPPORT_DISCORD}) | [Dona `{HEART}`]({DONATE_LINK})"
 
 #: orisa/orisa.py:543
 #, python-brace-format
