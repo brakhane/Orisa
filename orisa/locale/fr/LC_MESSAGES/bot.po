@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: 2019-08-29 14:45+0000\n"
+"PO-Revision-Date: 2019-08-29 14:46+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
@@ -251,10 +251,8 @@ msgstr "Rejoindre le[serveur Discord de Support]({SUPPORT_DISCORD})!"
 
 #. Translators: "Orisa Admin" must not be translated; additionally explaining what the string "Orisa Admin" means is ok
 #: orisa/orisa.py:639
-#, fuzzy
-#| msgid "This command can only be used by members with the `Orisa Admin` role (only the name of the role is important, it doesn't need any permissions)"
 msgid "This command can only be used by members with the `Orisa Admin` role! Only the name of the role is important, it doesn't need any permissions."
-msgstr "Cette commande ne peut être utilisée que par des membres ayant le rôle `Orisa Admin` (seul le nom du rôle est important, il n'a pas besoin d'avoir de permissions)"
+msgstr "Cette commande ne peut être utilisée que par des membres ayant le rôle `Orisa Admin`! Seul le nom du rôle est important, il n'a pas besoin d'avoir de permissions."
 
 #: orisa/orisa.py:656
 #, fuzzy
