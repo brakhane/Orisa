@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
 "PO-Revision-Date: 2019-08-29 14:45+0000\n"
-"Last-Translator: Diable Dk <Kazoku.ow@gmail.com>\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -147,9 +147,9 @@ msgid "[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Oris
 msgstr "[Profil Overwatch]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Serveur de Support Orisa]({SUPPORT_DISCORD}) | [Faire un don `{HEART}`]({DONATE_LINK})"
 
 #: orisa/orisa.py:543
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The SR of the primary {type} was last updated {when}."
-msgstr "La côte de {type} a été mise à jour pour la dernière fois il y a {when}"
+msgstr "La côte de {type} a été mise à jour pour la dernière fois il y a {when}."
 
 #: orisa/orisa.py:545
 #, python-brace-format
@@ -245,10 +245,9 @@ msgstr ":thinking: Besoin d'aide ?"
 
 #: orisa/orisa.py:634 orisa/orisa.py:661 orisa/orisa.py:1197
 #: orisa/orisa.py:1729 orisa/orisa.py:1750
-#, fuzzy, python-brace-format
-#| msgid "Join the [Support Discord]({SUPPORT_DISCORD})"
+#, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})!"
-msgstr "Rejoindre le[serveur Discord de Support]({SUPPORT_DISCORD})"
+msgstr "Rejoindre le[serveur Discord de Support]({SUPPORT_DISCORD})!"
 
 #. Translators: "Orisa Admin" must not be translated; additionally explaining what the string "Orisa Admin" means is ok
 #: orisa/orisa.py:639
