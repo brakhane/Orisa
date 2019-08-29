@@ -5,155 +5,156 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2019-08-29 12:55+0000\n"
+"Last-Translator: Valerio D'Onghia <venom1@live.de>\n"
+"Language-Team: Italian <https://weblate.orisa.rocks/projects/orisa/bot/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.8\n"
 
 #. Translators: Role
 #: orisa/models.py:58 orisa/orisa.py:168 orisa/orisa.py:1468
 #: orisa/orisa.py:1506 orisa/orisa.py:1508
 msgid "Damage"
-msgstr ""
+msgstr "Attacco"
 
 #: orisa/models.py:59
 msgid "Main Tank"
-msgstr ""
+msgstr "Tank principale"
 
 #: orisa/models.py:60
 msgid "Off Tank"
-msgstr ""
+msgstr "Tank secondario"
 
 #. Translators: Role
 #: orisa/models.py:61 orisa/orisa.py:170 orisa/orisa.py:1468
 #: orisa/orisa.py:1506 orisa/orisa.py:1508
 msgid "Support"
-msgstr ""
+msgstr "Supporto"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:133
 msgid "Br"
-msgstr ""
+msgstr "Br"
 
 #. Translators: 2 letter code for "Silver" rank
 #: orisa/orisa.py:135
 msgid "Si"
-msgstr ""
+msgstr "Ar"
 
 #. Translators: 2 letter code for "Gold" rank
 #: orisa/orisa.py:137
 msgid "Go"
-msgstr ""
+msgstr "Or"
 
 #. Translators: 2 letter code for "Platinum" rank
 #: orisa/orisa.py:139
 msgid "Pt"
-msgstr ""
+msgstr "Pt"
 
 #. Translators: 2 letter code for "Diamond" rank
 #: orisa/orisa.py:141
 msgid "Dm"
-msgstr ""
+msgstr "Dm"
 
 #. Translators: 2 letter code for "Master" rank
 #: orisa/orisa.py:143
 msgid "Ma"
-msgstr ""
+msgstr "Ma"
 
 #. Translators: 2 letter code for "Grandmaster" rank
 #: orisa/orisa.py:145
 msgid "GM"
-msgstr ""
+msgstr "GM"
 
 #. Translators: SR rank
 #: orisa/orisa.py:149
 msgid "Bronze"
-msgstr ""
+msgstr "Bronzo"
 
 #. Translators: SR rank
 #: orisa/orisa.py:151
 msgid "Silver"
-msgstr ""
+msgstr "Argento"
 
 #. Translators: SR rank
 #: orisa/orisa.py:153
 msgid "Gold"
-msgstr ""
+msgstr "Oro"
 
 #. Translators: SR rank
 #: orisa/orisa.py:155
 msgid "Platinum"
-msgstr ""
+msgstr "Platino"
 
 #. Translators: SR rank
 #: orisa/orisa.py:157
 msgid "Diamond"
-msgstr ""
+msgstr "Diamante"
 
 #. Translators: SR rank
 #: orisa/orisa.py:159
 msgid "Master"
-msgstr ""
+msgstr "Master"
 
 #. Translators: SR rank
 #: orisa/orisa.py:161
 msgid "Grandmaster"
-msgstr ""
+msgstr "Gran Maestro"
 
 #. Translators: Role
 #: orisa/orisa.py:166 orisa/orisa.py:1468 orisa/orisa.py:1506
 #: orisa/orisa.py:1508
 msgid "Tank"
-msgstr ""
+msgstr "Tank"
 
 #. Translators: Short for Discord Nickname
 #: orisa/orisa.py:481
 msgid "Nick"
-msgstr ""
+msgstr "Nick"
 
 #. Translators: When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
 #: orisa/orisa.py:505
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: orisa/orisa.py:516
 msgid "SR"
 msgid_plural "SRs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "SR"
+msgstr[1] "SRs"
 
 #. Translators: The roles a user has set with setroles (Main Tank, Damage, etc.)
 #: orisa/orisa.py:524
 msgid "Roles"
-msgstr ""
+msgstr "Ruoli"
 
 #. Translators: Weblinks
 #: orisa/orisa.py:528
 msgid "Links"
-msgstr ""
+msgstr "Link"
 
 #: orisa/orisa.py:532
 #, python-brace-format
 msgid ""
 "[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa "
 "Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})"
-msgstr ""
+msgstr "[Profilo overwatch] ({PROFILE_LINK}) | [Upvote Orisa] ({VOTE_LINK}) | [Server Di Support Orisa] ({SUPPORT_DISCORD}) | [Dona `{HEART}`] ({DONATE_LINK})"
 
 #: orisa/orisa.py:543
 #, python-brace-format
 msgid "The SR of the primary {type} was last updated {when}."
-msgstr ""
+msgstr "L'SR del {type} primario è stato aggiornato l'ultima volta {when}."
 
 #: orisa/orisa.py:545
 #, python-brace-format
 msgid "The SR was last updated {when}."
-msgstr ""
+msgstr "L'SR è stato aggiornato l'ultima volta {when}."
 
 #: orisa/orisa.py:550
 msgid ""
@@ -161,25 +162,27 @@ msgid ""
 "BTW, you do not need to specify your nickname if you want your own "
 "BattleTag; just !ow is enough."
 msgstr ""
+"\n"
+"Cmq, non devi specificare il tuo soprannome se vuoi il tuo BattleTag; basta solo !ow."
 
 #. Translators: "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:554
 #, python-brace-format
 msgid "{member_name} not found in database! *Do you need a hug?*"
-msgstr ""
+msgstr "{member_name} non è stato trovato nel database! *Vuoi un abbraccio?*"
 
 #. Translators: A headline for a tip for the user
 #: orisa/orisa.py:558
 msgid "Hint"
-msgstr ""
+msgstr "Suggerimento"
 
 #: orisa/orisa.py:559
 msgid "Use `!ow register` to register, or `!ow help` for more info."
-msgstr ""
+msgstr "Usa `!ow register` per registrarti o `!ow help` per ulteriori informazioni."
 
 #: orisa/orisa.py:573
 msgid "About Me"
-msgstr ""
+msgstr "Su di me"
 
 #: orisa/orisa.py:577
 #, python-brace-format
@@ -190,21 +193,24 @@ msgid ""
 "licensed under the [GNU Affero General Public License 3.0]({AGPL_LINK}); the "
 "[development is done on Github]({GH_LINK})"
 msgstr ""
+"Sono un bot Discord open source per aiutare a gestire le community di Overwatch.\n"
+"Sono scritto e mantenuto da Dennis Brakhane (Joghurt#2732  su Discord) e sotto licenda in base alla [GNU Affero General Public License 3.0] ({AGPL_LINK}); lo [sviluppo è fatto su Github] ({GH_LINK})\n"
+"La traduzione Italiana è stata fatta da SigmaTheArcticFox"
 
 #: orisa/orisa.py:587
 msgid "Invite me to your own Discord"
-msgstr ""
+msgstr "Invitami nel tuo Discord"
 
 #: orisa/orisa.py:589
 #, python-brace-format
 msgid ""
 "To invite me to your server, simply [click here]({LINK}), I will post a "
 "message with more information in a channel after I have joined your server"
-msgstr ""
+msgstr "Per invitarmi nel tuo server, semplicemente [clicca qui]({LINK}), manderò un messaggio con maggiori informazioni in un canale dopo essermi unito al tuo server"
 
 #: orisa/orisa.py:595
 msgid "Join the official Orisa Discord"
-msgstr ""
+msgstr "Unisciti al Discord ufficiale di Orisa"
 
 #: orisa/orisa.py:597
 #, python-brace-format
