@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: 2019-08-29 14:23+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"PO-Revision-Date: 2019-08-29 14:45+0000\n"
+"Last-Translator: Diable Dk <Kazoku.ow@gmail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -157,16 +157,12 @@ msgid "The SR was last updated {when}."
 msgstr "La côté à été mise à jour pour la dernière fois il y a {when}."
 
 #: orisa/orisa.py:550
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough"
 msgid ""
 "\n"
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough."
 msgstr ""
 "\n"
-"D'ailleurs, vous n'avez pas besoin de donner votre pseudo si vous voulez votre propre BattleTag; la commande !ow est suffisante"
+"D'ailleurs, vous n'avez pas besoin de donner votre pseudo si vous voulez votre propre BattleTag; la commande !ow is enough."
 
 #. Translators: "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:554
@@ -210,10 +206,9 @@ msgid "Join the official Orisa Discord"
 msgstr "Rejoindre le Discord officiel d'Orisa"
 
 #: orisa/orisa.py:597
-#, fuzzy, python-brace-format
-#| msgid "If you use me in your Discord server, or generally have suggestions, [join the official Orisa Discord]({SUPPORT_DISCORD}). Updates and new features will be discussed and announced there"
+#, python-brace-format
 msgid "If you use me in your Discord server, or generally have suggestions, [join the official Orisa Discord]({SUPPORT_DISCORD}). Updates and new features will be discussed and announced there."
-msgstr "Si tu m'utilises sur ton serveur Discord ou si tu as des suggestions,  [rejoins le serveur Discord officiel d'Orisa]({SUPPORT_DISCORD})"
+msgstr "Si tu m'utilises sur ton serveur Discord ou si tu as des suggestions,  [rejoins le serveur Discord officiel d'Orisa]({SUPPORT_DISCORD}). Les mises à jour et les nouvelles fonctionnalités y seront discutées et annoncées."
 
 #: orisa/orisa.py:602
 msgid "Show your love :heart:"
@@ -225,10 +220,8 @@ msgid "If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})
 msgstr "Si tu me trouves utile, [achète un café à mon responsable]({DONATE_LINK})."
 
 #: orisa/orisa.py:609
-#, fuzzy
-#| msgid "I've sent you a DM"
 msgid "I've sent you a DM."
-msgstr "Je t'ai envoyé un MP"
+msgstr "Je t'ai envoyé un DM."
 
 #: orisa/orisa.py:617
 msgid "The config command must be issued from a channel of the server you want to configure. Don't worry, I will send you the config instructions as a DM, so others can't configure me just by watching you sending this command."
@@ -240,10 +233,8 @@ msgid "Tip"
 msgstr "Astuce"
 
 #: orisa/orisa.py:623
-#, fuzzy
-#| msgid "`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin only channel"
 msgid "`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin only channel."
-msgstr "`!ow config` fonctionne dans *n'impote quel* chat (dont je peux lire les messages bien évidemment), de manière à ça ce que tu puisses aussi utiliser un chat réservé aux administrateurs"
+msgstr "`!ow config` fonctionne dans *n’importe quel* salon (dont je peux lire les messages bien évidemment), de manière à ça ce que tu puisses aussi utiliser un salon réservé aux administrateurs."
 
 #. Translators: :thinking: must remain as is, it's an emoji
 #. Translators: :thinking: is an emoji code
@@ -607,6 +598,14 @@ msgid ""
 "If you want to use Orisa on your own server or help developing it, enter `!ow about`\n"
 "Parameters in [square brackets] are optional."
 msgstr ""
+"Lorsque vous rejoignez un Salon QP ou Comp, vous devez connaître le Battletag d’un membre du salon, ou ils ont besoin du vôtre pour vous ajouter. Dans les salon compétitif, il est également utile de savoir quel SR les membres du salon ont. Pour éviter d’avoir à demander cette information encore et encore lors de l’adhésion à un salon, ce bot a été créé. Lorsque vous vous inscrivez auprès de votre Battletag, votre pseudonyme sera automatiquement mis à jour pour afficher votre SR actuel et il sera tenu à jour. Vous pouvez également demander le Battletag d’un autre membre, ou demander le vôtre afin que d’autres puissent facilement vous ajouter dans OW.\n"
+"Il enverra également un court message à la conversation lorsque vous vous êtes classé.\n"
+"*Comme Orisa d’Overwatch, ce robot est très jeune et encore nouveau. Signalez les problèmes à @!{OWNER}>*\n"
+"\n"
+"**Les commandes ne fonctionnent que dans le canal <#{channel_id}> ou en m’envoyant un DM**\n"
+"Si vous êtes nouveau sur Orisa, vous êtes probablement à la recherche de '!ow register' ou '!ow register xbox'\n"
+"Si vous voulez utiliser Orisa sur votre propre serveur ou aider à le développer, entrez '!ow about'\n"
+"Les paramètres de [crochets] sont optionnels."
 
 #: orisa/orisa.py:1251
 msgid ""
@@ -651,6 +650,8 @@ msgid ""
 "Immediately checks your account data and updates your nick accordingly.\n"
 "*Checks and updates are done automatically, use this command only if you want your nick to be up to date immediately!*"
 msgstr ""
+"Vérifie immédiatement les données de votre compte et met à jour votre pseudonyme en conséquence.\n"
+"*Les vérifications et mises à jour sont effectuées automatiquement, utilisez cette commande uniquement si vous voulez que votre pseudonyme soit à jour immédiatement! *"
 
 #. Translators: help !ow forgetme
 #: orisa/orisa.py:1310
@@ -709,7 +710,7 @@ msgstr ""
 #. Translators: headline of second help page
 #: orisa/orisa.py:1344
 msgid "help cont'd"
-msgstr ""
+msgstr "aide (suite)"
 
 #: orisa/orisa.py:1350
 msgid ""
@@ -720,7 +721,7 @@ msgstr ""
 
 #: orisa/orisa.py:1357
 msgid "Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. Your OW account will be checked periodically and your nick will be automatically updated to show your SR or rank (see the *format* command for more info). `!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. If you register an XBL account, you have to link it to your Discord beforehand. PSN accounts are not supported yet."
-msgstr ""
+msgstr "Créez un lien vers votre compte Battlenet ou Gamertag, ou ajoutez un Battletag secondaire à votre compte. Votre compte OW sera vérifié périodiquement et votre pseudonyme sera automatiquement mis à jour pour afficher votre SR ou votre grade (voir la commande *format* pour plus d’informations). `!ow register` et `!ow register pc` enregistreront un compte PC, `!ow register xbox` enregistreront un compte XBL. Si vous enregistrez un compte XBL, vous devez le lier à votre Discord au préalable. Les comptes PSN ne sont pas encore supportés."
 
 #: orisa/orisa.py:1363
 msgid "Show Orisa's Privacy Policy"
@@ -878,18 +879,18 @@ msgstr ""
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
 #: orisa/orisa.py:2121
 msgid "For your own safety, get behind the barrier!"
-msgstr ""
+msgstr "Pour votre sécurité, derrière la barrière !"
 
 #: orisa/orisa.py:2123
 #, python-brace-format
 msgid "**{name}** just reached **{sr} SR** as **{role}** and advanced to **{rank}**. Congratulations!"
-msgstr ""
+msgstr "***{name}** vient tout juste d’atteindre **{sr} SR** en tant que **{role}** et passe à **{rank}**. Félicitations !"
 
 #. Translators: <@!> is discord markup and needs to be preserved
 #: orisa/orisa.py:2139
 #, python-brace-format
 msgid "Let's hear it for <@!{discord_id}>!"
-msgstr ""
+msgstr "Faites du bruit pour <@!{discord_id}> !"
 
 #. Translators: header for highscore table: position (keep it short)
 #: orisa/orisa.py:2257
@@ -1106,7 +1107,7 @@ msgstr ""
 
 #: orisa/web.py:66
 msgid "You can close this window."
-msgstr ""
+msgstr "Vous pouvez fermer cette fenêtre."
 
 #. Translators: discord permission name
 #: orisa/web.py:129
@@ -1185,7 +1186,7 @@ msgstr ""
 
 #: orisa/web.py:344
 msgid "You didn't give me permission to access your BattleTag; registration cancelled."
-msgstr ""
+msgstr "Vous ne m’avez pas donné la permission d’accéder à votre Battletag; inscription annulée."
 
 #: orisa/web.py:384
 #, python-brace-format
@@ -1194,4 +1195,4 @@ msgstr ""
 
 #: orisa/web.py:391
 msgid "Thank you! I have sent you a DM."
-msgstr ""
+msgstr "Merci! Je t'ai envoyé un message privé."
