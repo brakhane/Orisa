@@ -2,14 +2,15 @@
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Leo <dao3300@gmail.com>, 2019.
+# Diable Dk <Kazoku.ow@gmail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: 2019-08-23 07:16+0000\n"
-"Last-Translator: Leo <dao3300@gmail.com>\n"
-"Language-Team: French <https://weblate.wur.st/projects/orisa/bot/fr/>\n"
+"PO-Revision-Date: 2019-08-29 14:23+0000\n"
+"Last-Translator: Diable Dk <Kazoku.ow@gmail.com>\n"
+"Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -590,11 +591,11 @@ msgstr ""
 
 #: orisa/orisa.py:1214
 msgid "I tried to send you a DM with help, but you don't allow DM from server members. I can't post it here, because it's rather long. Please allow DMs and try again."
-msgstr ""
+msgstr "J’ai essayé de vous envoyer un DM avec de l’aide, mais vous n’autorisez pas le DM des membres du serveur. Je ne peux pas l’afficher ici, parce que c’est plutôt long. Veuillez autoriser les DM et réessayer."
 
 #: orisa/orisa.py:1229
 msgid "Orisa's purpose"
-msgstr ""
+msgstr "Le but d’Orisa"
 
 #: orisa/orisa.py:1232
 #, python-brace-format
@@ -863,6 +864,10 @@ msgid ""
 "Then, write `!ow config` in this channel and I will send you a link to configure me via DM.\n"
 "*I will ignore all commands except `!ow help` and `!ow config` until I'm configured for this Discord!*"
 msgstr ""
+"*Salutations*! Je suis heureux d’être ici :smiley:\n"
+"Pour commencer, créez un nouveau rôle nommé `Orisa Admin` (seul le nom est important, il n’a pas besoin de permissions spéciales) et ajoutez le vous et à tout le monde qui devrait être autorisé à me configurer.\n"
+"Ensuite, écrivez `!ow config` dans ce salon et je vous enverrai un lien pour me configurer via DM.\n"
+"*Je ne tiendrai pas compte de toutes les commandes sauf `!ow help` et `!ow config` jusqu'à ce que je sois configuré pour ce discord! *"
 
 #: orisa/orisa.py:1742
 #, python-brace-format
