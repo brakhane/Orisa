@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
 "PO-Revision-Date: 2019-08-29 14:47+0000\n"
-"Last-Translator: Diable Dk <Kazoku.ow@gmail.com>\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -259,10 +259,8 @@ msgid "Click here to configure me!"
 msgstr "Clique ici pour me configurer !"
 
 #: orisa/orisa.py:663
-#, fuzzy
-#| msgid "This link will be valid for 30 minutes"
 msgid "This link will be valid for 30 minutes."
-msgstr "Ce lien sera valide pour 30 minutes"
+msgstr "Ce lien sera valide pour 30 minutes."
 
 #: orisa/orisa.py:666
 #, fuzzy
