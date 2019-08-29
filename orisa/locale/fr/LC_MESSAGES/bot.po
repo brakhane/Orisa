@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: 2019-08-29 17:10+0000\n"
+"PO-Revision-Date: 2019-08-29 20:08+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
@@ -157,6 +157,7 @@ msgid "The SR was last updated {when}."
 msgstr "La côté à été mise à jour pour la dernière fois il y a {when}."
 
 #: orisa/orisa.py:550
+#, fuzzy
 msgid ""
 "\n"
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough."
@@ -247,7 +248,7 @@ msgstr ":thinking: Besoin d'aide ?"
 #: orisa/orisa.py:1729 orisa/orisa.py:1750
 #, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})!"
-msgstr "Rejoindre le[serveur Discord de Support]({SUPPORT_DISCORD})!"
+msgstr "Rejoindre le[serveur Discord de Support]({SUPPORT_DISCORD}) !"
 
 #. Translators: "Orisa Admin" must not be translated; additionally explaining what the string "Orisa Admin" means is ok
 #: orisa/orisa.py:639
@@ -857,7 +858,7 @@ msgstr ""
 
 #: orisa/orisa.py:1428
 msgid "You are not registered. Do `!ow register` first!"
-msgstr "Tu n'est pas enregistré. Fait d'abord `!ow register`."
+msgstr "Tu n'est pas enregistré. Fait d'abord `!ow register`!"
 
 #: orisa/orisa.py:1439
 #, python-brace-format
@@ -930,7 +931,7 @@ msgstr ""
 "*Salutations*! Je suis heureux d’être ici :smiley:\n"
 "Pour commencer, créez un nouveau rôle nommé `Orisa Admin` (seul le nom est important, il n’a pas besoin de permissions spéciales) et ajoutez le vous et à tout le monde qui devrait être autorisé à me configurer.\n"
 "Ensuite, écrivez `!ow config` dans ce salon et je vous enverrai un lien pour me configurer via DM.\n"
-"*Je ne tiendrai pas compte de toutes les commandes sauf `!ow help` et `!ow config` jusqu'à ce que je sois configuré pour ce discord! *"
+"*Je ne tiendrai pas compte de toutes les commandes sauf `!ow help` et `!ow config` jusqu'à ce que je sois configuré pour ce discord!*"
 
 #: orisa/orisa.py:1742
 #, python-brace-format
@@ -1168,7 +1169,7 @@ msgstr ":thumbsup: Votez pour moi sur Discord Bot List"
 #: orisa/orisa.py:2734
 #, python-brace-format
 msgid "If you find me useful, consider voting for me [by clicking here]({VOTE_LINK})!"
-msgstr "Si vous me trouvez utile, pensez à voter pour moi [en cliquant ici] ({VOTE_LINK}) !"
+msgstr "Si vous me trouvez utile, pensez à voter pour moi [en cliquant ici]({VOTE_LINK}) !"
 
 #: orisa/orisa.py:2738
 msgid ":heart: Say thanks by buying a coffee"
