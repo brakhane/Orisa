@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: 2019-08-29 14:49+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"PO-Revision-Date: 2019-08-29 14:55+0000\n"
+"Last-Translator: Diable Dk <Kazoku.ow@gmail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -366,25 +366,25 @@ msgstr "C'est fait, ton {type} principal est maintenant **{handle}**."
 
 #: orisa/orisa.py:840
 msgid "format string may not contain square brackets!"
-msgstr ""
+msgstr "La chaîne de format ne peut pas contenir de crochets !"
 
 #. Translators: keep the $ to remind the user that placeholders start with a $ sign
 #: orisa/orisa.py:844
 msgid "format string must contain at least one $placeholder!"
-msgstr ""
+msgstr "La chaîne de format doit contenir au moins un $placeholder !"
 
 #: orisa/orisa.py:847
 msgid "format string missing!"
-msgstr ""
+msgstr "Chaîne de format manquant !"
 
 #: orisa/orisa.py:853
 msgid "you must register first!"
-msgstr ""
+msgstr "Vous devez d’abord vous inscrire !"
 
 #: orisa/orisa.py:861
 #, python-brace-format
 msgid "Invalid format string: unknown placeholder \"{key}\"!"
-msgstr ""
+msgstr "Chaîne de format non valide : inconnu \"{key}\" !"
 
 #: orisa/orisa.py:867
 #, python-brace-format
@@ -392,6 +392,8 @@ msgid ""
 "Sorry, using this format would make your nickname be longer than 32 characters ({len} to be exact).\n"
 "Please choose a shorter format or shorten your nickname!"
 msgstr ""
+"Désolé, utiliser ce format rendrait votre pseudonyme plus long que 32 caractères ({len} pour être exact).\n"
+"Veuillez choisir un format plus court ou raccourcir votre pseudo !"
 
 #. Translators: A list of random silly titles that will be shown in the confirmation message when a user changed his nickname format.
 #. Most of them were found on the Internet, for example
@@ -428,7 +430,7 @@ msgstr ""
 #: orisa/orisa.py:905
 #, python-brace-format
 msgid "Done. Henceforth, thou shall be knownst as \"`{new_nick}`, {title}\"."
-msgstr ""
+msgstr "Fait. Dorénavant, vous serez connu sous le nom de `{new_nick}`,{title}»."
 
 #: orisa/orisa.py:915 orisa/orisa.py:936 orisa/orisa.py:1060
 #, fuzzy
