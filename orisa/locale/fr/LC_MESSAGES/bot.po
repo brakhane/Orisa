@@ -335,10 +335,9 @@ msgid "You cannot unregister your primary handle. Use `!ow setprimary` to set a 
 msgstr "Tu ne peux pas dé-enregistrer ton compte principal. Utilise `!ow setprimary` pour changer de compte principal puis utilise`!ow forgetme` pour supprimer les données de ce compte."
 
 #: orisa/orisa.py:776
-#, fuzzy, python-brace-format
-#| msgid "Removed **{handle}**"
+#, python-brace-format
 msgid "Removed **{handle}**!"
-msgstr "**{handle}** supprimé"
+msgstr "**{handle}** supprimé!"
 
 #: orisa/orisa.py:787
 #, python-brace-format
