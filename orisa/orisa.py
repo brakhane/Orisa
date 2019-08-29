@@ -1808,7 +1808,7 @@ class Orisa(Plugin):
                     ]
                 
                 def val(x):
-                    return "xx" if np.isnan(x) else "??" if x == 0 else f"{int(x//100):02}"
+                    return "xx" if np.isnan(x) else "⊘" if x == 0 else f"{int(x//100):02}"
 
                 return f" [{'-'.join(val(x) for x in tds_filtered_mean)}]"
 
