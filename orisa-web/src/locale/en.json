@@ -12,7 +12,7 @@
         "footer": "Thank you for using Orisa!",
         "general-settings-hdr": "General Settings for {{ guild_name }}",
         "lang": "Language",
-        "lang-incomplete-engage": "This language is not full translated yet! [Want to help?]({{ link }})",
+        "lang-incomplete-engage": "{{ lang }} is not full translated yet! [Want to help?]({{ link }})",
         "lang-incomplete": "Incomplete translation",
         "lang-complete": "Fully translated",
         "lead-info": "The save button will appear when you have unsaved changes. After you have saved your changes, you can close this window.\nIf you have questions or suggestions, [join the official discord]({{ link }}).",
