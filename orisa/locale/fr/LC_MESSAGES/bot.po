@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
 "PO-Revision-Date: 2019-08-29 14:49+0000\n"
-"Last-Translator: Diable Dk <Kazoku.ow@gmail.com>\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -314,10 +314,8 @@ msgstr "Si tu as un compte XBOX Live, utilise `!ow register xbox`. Les comptes P
 
 #. Translators: The translation should mention that the privacy policy is currently only available in English
 #: orisa/orisa.py:733
-#, fuzzy
-#| msgid "By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy"
 msgid "By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy."
-msgstr "En t'enregistrant, tu acceptes la politique de confidentialité d'Orisa; tu peux les lire en utilisant la commande !ow privacy"
+msgstr "En t'enregistrant, tu acceptes la politique de confidentialité d'Orisa; tu peux les lire en utilisant la commande !ow privacy."
 
 #. Translators: Check how Discord translates "Allow direct messages from server members" in your local language and use the same term
 #: orisa/orisa.py:741
