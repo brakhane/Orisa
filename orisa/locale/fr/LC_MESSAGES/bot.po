@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
 "PO-Revision-Date: 2019-08-29 17:10+0000\n"
-"Last-Translator: Diable Dk <Kazoku.ow@gmail.com>\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -342,7 +342,7 @@ msgstr "**{handle}** supprimé !"
 #: orisa/orisa.py:787
 #, python-brace-format
 msgid "However, your new nickname \"{nickname}\" is now longer than 32 characters, which Discord doesn't allow. Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards."
-msgstr "Cependant, ton nouveau pseudo est plus long que 32 caractères ce que Discord n'autorise pas. Choisis un format différent ou alors raccourcis ton pseudo et utilise la commande `!ow forceupdate` après."
+msgstr "Cependant, ton nouveau pseudo \"{nickname}\" est plus long que 32 caractères ce que Discord n'autorise pas. Choisis un format différent ou alors raccourcis ton pseudo et utilise la commande `!ow forceupdate` après."
 
 #: orisa/orisa.py:793
 msgid "However, there was an error updating your nickname. I will try that again later."
