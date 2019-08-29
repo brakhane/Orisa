@@ -1,1 +1,10 @@
-{}
+{
+    "cfg": {
+        "add-mgt-cat": "Ajouter une catégorie de salon gérés",
+        "allow-sr-in-nick": "Toujours afficher SR (ou rang) dans les pseudo",
+        "allow-sr-in-nick-tt": "Lorsque ce paramètre est activé, Orisa met toujours à jour les pseudo de tous les utilisateurs enregistrés pour afficher leur SR dans le nom (`Orisa` devient` Orisa [12-23-34]`).\nSi vous sentez que vos membres serveurs se concentrent trop sur le SR (\"Je n’écoute pas un joueur d’argent\"), vous pouvez désactiver ce paramètre.\nUne fois désactivé, les membres de votre serveur peuvent encore forcer l’affichage de leur SR en émettant la commande `ow alwaysshowsr`\nEn cas d’incertitude, activez ce paramètre et n’éteignez-le que si les gens y réagissent négativement.",
+        "configure-for": "Configurez Orisa pour {{ guild_name }}",
+        "congrats-chan": "Salon de félicitation",
+        "congrats-chan-desc": "Lorsqu’un membre atteint un rang supérieur (ex. : Silver Gold), Orisa le félicitera publiquement dans ce canal. Il est fortement recommandé de sélectionner le canal où les membres discutent au sujet d’OW (Orisa **seulement** affichera des messages 'rank up'), mais il peut aussi être le même que \"$t(cfg.listen-chan)\"."
+    }
+}
