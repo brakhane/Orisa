@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: 2019-08-29 13:04+0000\n"
+"PO-Revision-Date: 2019-08-29 13:23+0000\n"
 "Last-Translator: Lukas Notnword <lnbatman01@gmail.com>\n"
 "Language-Team: Czech <https://weblate.orisa.rocks/projects/orisa/bot/cs/>\n"
 "Language: cs\n"
@@ -314,7 +314,7 @@ msgstr ""
 #. Translators: The translation should mention that the privacy policy is currently only available in English
 #: orisa/orisa.py:733
 msgid "By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy."
-msgstr ""
+msgstr "Tím že se registrujete, přijímáte podmínky Ochrany Soukromí Orisy; můžete si je přečíst tím, že napíšeš !ow privacy."
 
 #. Translators: Check how Discord translates "Allow direct messages from server members" in your local language and use the same term
 #: orisa/orisa.py:741
