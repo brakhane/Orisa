@@ -13,7 +13,7 @@
         "general-settings-hdr": "General Settings for {{ guild_name }}",
         "lang": "Language",
         "lead-info": "The save button will appear when you have unsaved changes. After you have saved your changes, you can close this window.\nIf you have questions or suggestions, [join the official discord]({{ link }}).",
-        "listen-chan": "Listen Channel",
+        "listen-chan": "Orisa Channel",
         "listen-chan-desc": "In which channel should Orisa listen for commands? This channel will also be used to post the daily SR highscore table. Orisa always reacts to commands via DM. Also, the `!ow help` command will work in any channel.",
         "load-failed": "Something went wrong while loading the data. This link might have expired. Try requesting a new one. If that doesn't help, try again later…",
         "loading": "Loading",
