@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: 2019-08-29 14:47+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"PO-Revision-Date: 2019-08-29 14:49+0000\n"
+"Last-Translator: Diable Dk <Kazoku.ow@gmail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -263,16 +263,12 @@ msgid "This link will be valid for 30 minutes."
 msgstr "Ce lien sera valide pour 30 minutes."
 
 #: orisa/orisa.py:666
-#, fuzzy
-#| msgid "I sent you a DM"
 msgid "I sent you a DM."
-msgstr "Je t'ai envoyé un MP"
+msgstr "Je t'ai envoyé un DM."
 
 #: orisa/orisa.py:669
-#, fuzzy
-#| msgid "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. (I can't post the link here because everybody who knows that link will be able to configure me for the next 30 minutes)"
 msgid "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. I can't post the link here because everybody who knows that link will be able to configure me for the next 30 minutes."
-msgstr "J'ai essayé de t'envoyer un MP avec le lien mais tu as désactivé les MP venant de personnes que tu n'as pas en amis. Désactive cette option et réessaie (Je ne peux pas poster le lien ici car tous ceux qui détiendront le lien pourront alors me configurer pendant les 30 prochaines minutes)."
+msgstr "J'ai essayé de t'envoyer un DM avec le lien mais tu as désactivé les DM venant de personnes que tu n'as pas en amis. Désactive cette option et réessaie (Je ne peux pas poster le lien ici car tous ceux qui détiendront le lien pourront alors me configurer pendant les 30 prochaines minutes)."
 
 #: orisa/orisa.py:680
 #, python-brace-format
