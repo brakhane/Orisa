@@ -3,14 +3,15 @@
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Alpha <delilah94@outlook.com>, 2019.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
+# Dirk Jean Bakker <djthemen@live.nl>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: 2019-08-26 17:02+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
-"Language-Team: Dutch <https://weblate.wur.st/projects/orisa/bot/nl/>\n"
+"PO-Revision-Date: 2019-08-29 17:10+0000\n"
+"Last-Translator: Dirk Jean Bakker <djthemen@live.nl>\n"
+"Language-Team: Dutch <https://weblate.orisa.rocks/projects/orisa/bot/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -864,7 +865,7 @@ msgstr ""
 
 #: orisa/orisa.py:1513
 msgid "I have no SR for your account stored yet."
-msgstr ""
+msgstr "Ik heb nog geen sr voor jouw account opgeslagen."
 
 #: orisa/orisa.py:1524
 #, python-brace-format
@@ -874,12 +875,12 @@ msgstr ""
 #: orisa/orisa.py:1546
 #, python-brace-format
 msgid "SR History For {name}"
-msgstr ""
+msgstr "SR Geschiednis voor {name}"
 
 #: orisa/orisa.py:1547
 #, python-brace-format
 msgid "Here is your SR history starting from {date}"
-msgstr ""
+msgstr "Hier is je SR vanaf {date}"
 
 #. Translators: used instead of a date when user requested a SR history from the beginning (which is the usual case)
 #: orisa/orisa.py:1549
@@ -905,7 +906,7 @@ msgstr ""
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
 #: orisa/orisa.py:2121
 msgid "For your own safety, get behind the barrier!"
-msgstr ""
+msgstr "Voor je eigen veiligheid, kom achter mijn barrière!"
 
 #: orisa/orisa.py:2123
 #, python-brace-format
@@ -916,7 +917,7 @@ msgstr ""
 #: orisa/orisa.py:2139
 #, python-brace-format
 msgid "Let's hear it for <@!{discord_id}>!"
-msgstr ""
+msgstr "Laat je horen voor <@!{discord_id}>!"
 
 #. Translators: header for highscore table: position (keep it short)
 #: orisa/orisa.py:2257
@@ -1133,7 +1134,7 @@ msgstr ""
 
 #: orisa/web.py:66
 msgid "You can close this window."
-msgstr ""
+msgstr "Je kan dit venster sluiten."
 
 #. Translators: discord permission name
 #: orisa/web.py:129
@@ -1214,7 +1215,7 @@ msgstr ""
 
 #: orisa/web.py:344
 msgid "You didn't give me permission to access your BattleTag; registration cancelled."
-msgstr ""
+msgstr "Je hebt me geen toegang gegeven to jouw BattleTag; registratie geannuleerd."
 
 #: orisa/web.py:384
 #, python-brace-format
@@ -1223,7 +1224,7 @@ msgstr ""
 
 #: orisa/web.py:391
 msgid "Thank you! I have sent you a DM."
-msgstr "Ik heb je een privébericht gestuurd."
+msgstr "Dank je! Ik heb je een privébericht gestuurd."
 
 #~ msgid "Handles"
 #~ msgstr "Account"
