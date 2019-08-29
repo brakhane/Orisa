@@ -5,6 +5,19 @@
         "allow-sr-in-nick-tt": "Lorsque ce paramètre est activé, Orisa met toujours à jour les pseudo de tous les utilisateurs enregistrés pour afficher leur SR dans le nom (`Orisa` devient `Orisa [12-23-34]`).\nSi vous sentez que vos membres serveurs se concentrent trop sur le SR (\"Je n’écoute pas un joueur d’argent\"), vous pouvez désactiver ce paramètre.\nUne fois désactivé, les membres de votre serveur peuvent encore forcer l’affichage de leur SR en émettant la commande `ow alwaysshowsr`\nEn cas d’incertitude, activez ce paramètre et n’éteignez-le que si les gens y réagissent négativement.",
         "configure-for": "Configurez Orisa pour {{ guild_name }}",
         "congrats-chan": "Salon de félicitation",
-        "congrats-chan-desc": "Lorsqu’un membre atteint un rang supérieur (ex. : Argent → Or), Orisa le félicitera publiquement dans ce canal. Il est fortement recommandé de sélectionner le canal où les membres discutent au sujet d’OW (Orisa **seulement** affichera des messages 'rank up'), mais il peut aussi être le même que \"$t(cfg.listen-chan)\"."
+        "congrats-chan-desc": "Lorsqu’un membre atteint un rang supérieur (ex. : Argent → Or), Orisa le félicitera publiquement dans ce canal. Il est fortement recommandé de sélectionner le canal où les membres discutent au sujet d’OW (Orisa **seulement** affichera des messages 'rank up'), mais il peut aussi être le même que \"$t(cfg.listen-chan)\".",
+        "drag-orisa-role": "Vous pouvez simplement faire glisser et déposer le rôle `Orisa` dans l’écran *Paramètres du serveur > Rôles*, [like this]({{ link }}). Orisa n’obtiendra pas plus de permissions, mais elle pourras changer les pseudo des personne qui lui sont inférieur.\nLe pseudonyme du propriétaire du serveur ne peut être modifié par elle quoi que vous fassiez. **Ne donnez pas de droits à l’administrateur de rôle Orisa !** Cela n’aidera pas, et représente un risque potentiel pour la sécurité de votre serveur si Orisa a un bug exploitable.",
+        "error-saving": "Il a eu un problème de sauvegarde, s’il vous plaît réessayer plus tard !",
+        "fix-val-errors": "Veuillez corriger les erreurs de validation avant de sauvegarder.",
+        "footer": "Merci d’utiliser Orisa !",
+        "general-settings-hdr": "Paramètres général pour {{ guild_name }}",
+        "lang": "Langue",
+        "lead-info": "Le bouton d’enregistrement s’affiche lorsque vous avez des modifications non sauvegardées. Après avoir sauvegardé vos modifications, vous pouvez fermer cette fenêtre.\nSi vous avez des questions ou des suggestions, [joignez-vous au discord officielle] ({{ link }}).",
+        "listen-chan": "Salon d'écoute",
+        "listen-chan-desc": "Sur quel canal Orisa doit-elle écouter les commandes ? Ce canal sera également utilisé pour afficher le tableau de SR quotidien. Orisa réagit toujours aux commandes via DM. De plus, la commande `!ow help` fonctionnera sur n’importe quel canal.",
+        "load-failed": "Quelque chose s’est mal passé lors du chargement des données. Ce lien à peut-être expiré. Essayez d’en demander un nouveau. Si cela ne vous aide pas, essayez de nouveau plus tard…",
+        "loading": "Chargement",
+        "no-mgt-voice-chan-hdr": "Aucun salon vocaux gérés",
+        "no-mgt-voice-chan-lead": "Orisa peut vous aider à créer et supprimer dynamiquement des salons vocaux à la demande (pas seulement pour OW) et à afficher en option le SR dans les noms des salons."
     }
 }
