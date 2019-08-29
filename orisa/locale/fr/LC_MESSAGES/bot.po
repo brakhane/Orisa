@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: 2019-08-29 14:46+0000\n"
+"PO-Revision-Date: 2019-08-29 14:47+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
@@ -255,10 +255,8 @@ msgid "This command can only be used by members with the `Orisa Admin` role! Onl
 msgstr "Cette commande ne peut être utilisée que par des membres ayant le rôle `Orisa Admin`! Seul le nom du rôle est important, il n'a pas besoin d'avoir de permissions."
 
 #: orisa/orisa.py:656
-#, fuzzy
-#| msgid "Click here to configure me"
 msgid "Click here to configure me!"
-msgstr "Clique ici pour me configurer"
+msgstr "Clique ici pour me configurer!"
 
 #: orisa/orisa.py:663
 #, fuzzy
