@@ -5,16 +5,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2019-08-29 13:04+0000\n"
+"Last-Translator: Lukas Notnword <lnbatman01@gmail.com>\n"
+"Language-Team: Czech <https://weblate.orisa.rocks/projects/orisa/bot/cs/>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Generator: Weblate 3.8\n"
 
 #. Translators: Role
 #: orisa/models.py:58 orisa/orisa.py:168 orisa/orisa.py:1468
@@ -132,19 +133,19 @@ msgstr[2] ""
 #. Translators: The roles a user has set with setroles (Main Tank, Damage, etc.)
 #: orisa/orisa.py:524
 msgid "Roles"
-msgstr ""
+msgstr "Role"
 
 #. Translators: Weblinks
 #: orisa/orisa.py:528
 msgid "Links"
-msgstr ""
+msgstr "Odkazy"
 
 #: orisa/orisa.py:532
 #, python-brace-format
 msgid ""
 "[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa "
 "Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})"
-msgstr ""
+msgstr "[Overwatch profil]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa Support Server]({SUPPORT_DISCORD}) | [Podpoř mě `{HEART}`]({DONATE_LINK})"
 
 #: orisa/orisa.py:543
 #, python-brace-format
@@ -154,7 +155,7 @@ msgstr ""
 #: orisa/orisa.py:545
 #, python-brace-format
 msgid "The SR was last updated {when}."
-msgstr ""
+msgstr "SR byly naposled načteny {when}."
 
 #: orisa/orisa.py:550
 msgid ""
@@ -162,25 +163,27 @@ msgid ""
 "BTW, you do not need to specify your nickname if you want your own "
 "BattleTag; just !ow is enough."
 msgstr ""
+"\n"
+"BTW, nemusíš napsat tvůj nick když chceš svůj vlastní BattleTag; !ow stačí."
 
 #. Translators: "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:554
 #, python-brace-format
 msgid "{member_name} not found in database! *Do you need a hug?*"
-msgstr ""
+msgstr "{member_name} nenalezen v databázi! *Potřebuješ objetí?*"
 
 #. Translators: A headline for a tip for the user
 #: orisa/orisa.py:558
 msgid "Hint"
-msgstr ""
+msgstr "Rada"
 
 #: orisa/orisa.py:559
 msgid "Use `!ow register` to register, or `!ow help` for more info."
-msgstr ""
+msgstr "Použí `!ow register` aby jsi se zaregisteroval, nebo `!ow help` pro další info."
 
 #: orisa/orisa.py:573
 msgid "About Me"
-msgstr ""
+msgstr "O mě"
 
 #: orisa/orisa.py:577
 #, python-brace-format
@@ -191,21 +194,23 @@ msgid ""
 "licensed under the [GNU Affero General Public License 3.0]({AGPL_LINK}); the "
 "[development is done on Github]({GH_LINK})"
 msgstr ""
+"Jsem open source Discord bot, který pomáhá spravovat Overwatch Discord komunity.\n"
+"Jsem napsán a spravován Dennisem Brakhanem (Joghurt#2732 na Dicordu) a licensovaný [GNU Affero General Public License 3.0]({AGPL_LINK}); [vývoj na Githubu je dokončen]({GH_LINK})"
 
 #: orisa/orisa.py:587
 msgid "Invite me to your own Discord"
-msgstr ""
+msgstr "Pozvi mě na tvůj Discord"
 
 #: orisa/orisa.py:589
 #, python-brace-format
 msgid ""
 "To invite me to your server, simply [click here]({LINK}), I will post a "
 "message with more information in a channel after I have joined your server"
-msgstr ""
+msgstr "Aby jsi mě pozval na tvůj server, prostě [klikni zde]({LINK}), já napíšu zprávu s více informacema do kanálu po tom co se připojím na tvůj server"
 
 #: orisa/orisa.py:595
 msgid "Join the official Orisa Discord"
-msgstr ""
+msgstr "Připoj se na officiální Discord Orisy"
 
 #: orisa/orisa.py:597
 #, python-brace-format
@@ -213,71 +218,71 @@ msgid ""
 "If you use me in your Discord server, or generally have suggestions, [join "
 "the official Orisa Discord]({SUPPORT_DISCORD}). Updates and new features "
 "will be discussed and announced there."
-msgstr ""
+msgstr "Jestli mě používáš na tvém Discordu, nebo máš prostě návrhy, [připoj se na official Discord Orisy]({SUPPORT_DISCORD}). Updaty a nové funkce tu budou oznámeny a zde se o nich také diskutuje."
 
 #: orisa/orisa.py:602
 msgid "Show your love :heart:"
-msgstr ""
+msgstr "Předveď mi tvou lásku :heart:"
 
 #: orisa/orisa.py:604
 #, python-brace-format
 msgid ""
 "If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
-msgstr ""
+msgstr "Jestli jsem pro tebe useful, [kup mému tvůrci kafe]({DONATE_LINK})."
 
 #: orisa/orisa.py:609
 msgid "I've sent you a DM."
-msgstr ""
+msgstr "Poslala jsem ti DM"
 
 #: orisa/orisa.py:617
 msgid ""
 "The config command must be issued from a channel of the server you want to "
 "configure. Don't worry, I will send you the config instructions as a DM, so "
 "others can't configure me just by watching you sending this command."
-msgstr ""
+msgstr "Příkaz config musí být použit v channelu na server kde mě chceš nakonfigurovat. Neboj se, pošlu ti instrukce jako DM, takže to ostatní neuvidí, pouze uvidí to, že jsi mi odeslal příkaz."
 
 #. Translators: A tip/information for a user
 #: orisa/orisa.py:622
 msgid "Tip"
-msgstr ""
+msgstr "Rada"
 
 #: orisa/orisa.py:623
 msgid ""
 "`!ow config` works in *any* channel (that I'm allowed to read messages in, "
 "of course), so you can also use an admin only channel."
-msgstr ""
+msgstr "`!ow config` funguje v *any* channelu (tam, kde mám práva číst zprávy samozřejmě), takže mě můžeš použít i v admin only channelu."
 
 #. Translators: :thinking: must remain as is, it's an emoji
 #. Translators: :thinking: is an emoji code
 #: orisa/orisa.py:633 orisa/orisa.py:660 orisa/orisa.py:1728
 #: orisa/orisa.py:1749
 msgid ":thinking: Need help?"
-msgstr ""
+msgstr ":thinking: Potřebuješ pomoci?"
 
 #: orisa/orisa.py:634 orisa/orisa.py:661 orisa/orisa.py:1197
 #: orisa/orisa.py:1729 orisa/orisa.py:1750
 #, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})!"
-msgstr ""
+msgstr "Připoj se [Support Discord]({SUPPORT_DISCORD})!"
 
 #. Translators: "Orisa Admin" must not be translated; additionally explaining what the string "Orisa Admin" means is ok
 #: orisa/orisa.py:639
 msgid ""
 "This command can only be used by members with the `Orisa Admin` role! Only "
 "the name of the role is important, it doesn't need any permissions."
-msgstr ""
+msgstr "Tento příkaz smí použít jenom členové, kteří mají roli `Orisa Admin`! Pouze jméno role je důležité, nepotřebuje žádná práva."
 
 #: orisa/orisa.py:656
 msgid "Click here to configure me!"
-msgstr ""
+msgstr "Klikni zde aby jsi mě nakonfiguroval!"
 
 #: orisa/orisa.py:663
 msgid "This link will be valid for 30 minutes."
-msgstr ""
+msgstr "Tento odkaz platí po dobu 30minut."
 
 #: orisa/orisa.py:666
 msgid "I sent you a DM."
-msgstr ""
+msgstr "Poslala jsem ti DM."
 
 #: orisa/orisa.py:669
 msgid ""
@@ -285,14 +290,14 @@ msgid ""
 "members. Please allow that and retry. I can't post the link here because "
 "everybody who knows that link will be able to configure me for the next 30 "
 "minutes."
-msgstr ""
+msgstr "Pokusila jsem se ti poslat DM s odkazem, ale nemáš povolené DM od členů serveru. Povol to a zkus znovu. Nemůžu poslat zde protože by mě mohli nakonfigurovat všichní kdo vidí tento odkaz po dobu 30 minut."
 
 #: orisa/orisa.py:680
 #, python-brace-format
 msgid ""
 "{type} looks like a BattleTag and not like pc/xbox, assuming you meant `!ow "
 "register pc`…"
-msgstr ""
+msgstr "{type} vypadá jako BattleTag a ne PC/Xbox, nemyslel jsi `!ow register pc`…"
 
 #: orisa/orisa.py:688
 msgid ""
@@ -300,44 +305,44 @@ msgid ""
 "your BattleTag. Please click the link above and give me permission to access "
 "your data. I only need this permission once, you can remove it later in your "
 "BattleNet account."
-msgstr ""
+msgstr "Aby jsi dokončil registraci potřebuju práva na Blizzardu pro získání tvého BattleTagu. Prosím klikni ten odkaz a dej mi práva k přístupu k tvým datům. Potřebuju to pouze jednou, pak mě můžeš odstranit z BattleNet účtu."
 
 #: orisa/orisa.py:698
 msgid ""
 "To complete your registration, I need your permission to ask Discord for "
 "your Gamertag. Please click the link above and give me permission to access "
 "your data. Make sure you have linked your Xbox account to Discord."
-msgstr ""
+msgstr "Aby jsi dokončil registraci potřebuju práva od Discordu pro získání tvého Gamertagu. Prosím klikni ten odkaz a dej mi práva k přístupu k tvým datům. Nezapoměň mít linknutý účet Xboxu k tvému Discordu."
 
 #: orisa/orisa.py:703
 #, python-brace-format
 msgid ""
 "Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
 "pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet."
-msgstr ""
+msgstr "Neplatný typ registrace \"{type}\". Použí `!ow register` nebo `!ow register pc` for PC; `!ow register xbox` pro XBOX. PlayStation ještě není podporován."
 
 #. Translators: type will be PC, XBOX or PSN
 #: orisa/orisa.py:716
 #, python-brace-format
 msgid "Click here to register your {type} account!"
-msgstr ""
+msgstr "Klikni zde pro registraci tvého {type} účtu!"
 
 #. Translators: :information_source: is an emoji
 #: orisa/orisa.py:722
 msgid ":information_source: Protip"
-msgstr ""
+msgstr ":information_source: Protip"
 
 #: orisa/orisa.py:723
 msgid ""
 "If you want to register a secondary/smurf BattleTag, you can open the link "
 "in a private/incognito tab (try right clicking the link) and enter the "
 "account data for that account instead."
-msgstr ""
+msgstr "Jestli si chceš zaregisterovat druhý BattleTag, otevří tento odkaz v incognito okně (zkus rightclick na odkaz) a vyplň data toho účtu."
 
 #. Translators: :video_game: is an emoji
 #: orisa/orisa.py:728
 msgid ":video_game: Not on PC?"
-msgstr ""
+msgstr ":video_game: Ne na PC?"
 
 #: orisa/orisa.py:729
 msgid ""
