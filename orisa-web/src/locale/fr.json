@@ -12,7 +12,7 @@
         "footer": "Merci d’utiliser Orisa !",
         "general-settings-hdr": "Paramètres général pour {{ guild_name }}",
         "lang": "Langue",
-        "lead-info": "Le bouton d’enregistrement s’affiche lorsque vous avez des modifications non sauvegardées. Après avoir sauvegardé vos modifications, vous pouvez fermer cette fenêtre.\nSi vous avez des questions ou des suggestions, [joignez-vous au discord officielle] ({{ link }}).",
+        "lead-info": "Le bouton d’enregistrement s’affiche lorsque vous avez des modifications non sauvegardées. Après avoir sauvegardé vos modifications, vous pouvez fermer cette fenêtre.\nSi vous avez des questions ou des suggestions, [joignez-vous au discord officielle]({{ link }}).",
         "listen-chan": "Salon d'Orisa",
         "listen-chan-desc": "Sur quel canal Orisa doit-elle écouter les commandes ? Ce canal sera également utilisé pour afficher le tableau de SR quotidien. Orisa réagit toujours aux commandes via DM. De plus, la commande `!ow help` fonctionnera sur n’importe quel canal.",
         "load-failed": "Quelque chose s’est mal passé lors du chargement des données. Ce lien à peut-être expiré. Essayez d’en demander un nouveau. Si cela ne vous aide pas, essayez de nouveau plus tard…",
