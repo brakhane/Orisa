@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
 "PO-Revision-Date: 2019-08-29 14:49+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"Last-Translator: Diable Dk <Kazoku.ow@gmail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -337,7 +337,7 @@ msgstr "Tu ne peux pas dé-enregistrer ton compte principal. Utilise `!ow setpri
 #: orisa/orisa.py:776
 #, python-brace-format
 msgid "Removed **{handle}**!"
-msgstr "**{handle}** supprimé!"
+msgstr "**{handle}** supprimé !"
 
 #: orisa/orisa.py:787
 #, python-brace-format
