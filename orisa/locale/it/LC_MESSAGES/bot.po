@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
 "PO-Revision-Date: 2019-08-29 13:04+0000\n"
-"Last-Translator: Weblate Admin <brakhane+weblate@gmail.com>\n"
+"Last-Translator: Valerio D'Onghia <venom1@live.de>\n"
 "Language-Team: Italian <https://weblate.orisa.rocks/projects/orisa/bot/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -26,11 +26,11 @@ msgstr "Attacco"
 
 #: orisa/models.py:59
 msgid "Main Tank"
-msgstr "Tank principale"
+msgstr "Main-Tank"
 
 #: orisa/models.py:60
 msgid "Off Tank"
-msgstr "Tank secondario"
+msgstr "Off-Tank"
 
 #. Translators: Role
 #: orisa/models.py:61 orisa/orisa.py:170 orisa/orisa.py:1468
@@ -117,7 +117,7 @@ msgstr "Tank"
 #. Translators: Short for Discord Nickname
 #: orisa/orisa.py:481
 msgid "Nick"
-msgstr "Nick"
+msgstr "Nome"
 
 #. Translators: When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
 #: orisa/orisa.py:505
@@ -195,7 +195,7 @@ msgid ""
 "[development is done on Github]({GH_LINK})"
 msgstr ""
 "Sono un bot Discord open source per aiutare a gestire le community di Overwatch.\n"
-"Sono scritto e mantenuto da Dennis Brakhane (Joghurt#2732  su Discord) e sotto licenda in base alla [GNU Affero General Public License 3.0] ({AGPL_LINK}); lo [sviluppo è fatto su Github] ({GH_LINK})\n"
+"Sono scritto e mantenuto da Dennis Brakhane (Joghurt#2732  su Discord) e sotto licenda in base alla [GNU Affero General Public License 3.0]({AGPL_LINK}); lo [sviluppo è fatto su Github]({GH_LINK})\n"
 "La traduzione Italiana è stata fatta da SigmaTheArcticFox"
 
 #: orisa/orisa.py:587
