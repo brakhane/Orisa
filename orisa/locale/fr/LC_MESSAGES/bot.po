@@ -3,13 +3,14 @@
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Leo <dao3300@gmail.com>, 2019.
 # Diable Dk <Kazoku.ow@gmail.com>, 2019.
+# Dennis Brakhane <brakhane@googlemail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-27 01:43+0200\n"
 "PO-Revision-Date: 2019-08-29 14:23+0000\n"
-"Last-Translator: Diable Dk <Kazoku.ow@gmail.com>\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -179,10 +180,8 @@ msgid "Hint"
 msgstr "Astuce"
 
 #: orisa/orisa.py:559
-#, fuzzy
-#| msgid "use `!ow register` to register, or `!ow help` for more info"
 msgid "Use `!ow register` to register, or `!ow help` for more info."
-msgstr "Utilise `!ow register` pour t'enregistrer ou `!ow help` pour obtenir plus d'informations"
+msgstr "Utilise `!ow register` pour t'enregistrer ou `!ow help` pour obtenir plus d'informations."
 
 #: orisa/orisa.py:573
 msgid "About Me"
@@ -311,10 +310,9 @@ msgstr "Enregistrement de type \"{type}\" invalide. Utilise `!ow register` ou `!
 
 #. Translators: type will be PC, XBOX or PSN
 #: orisa/orisa.py:716
-#, fuzzy, python-brace-format
-#| msgid "Click here to register your {type} account"
+#, python-brace-format
 msgid "Click here to register your {type} account!"
-msgstr "Clique ici pour enregistrer ton compte {type}"
+msgstr "Clique ici pour enregistrer ton compte {type}!"
 
 #. Translators: :information_source: is an emoji
 #: orisa/orisa.py:722
