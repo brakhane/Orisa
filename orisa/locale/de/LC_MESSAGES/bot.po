@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-08-29 20:08+0000\n"
+"PO-Revision-Date: 2019-08-30 21:37+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.orisa.rocks/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -930,7 +930,7 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"Jemand (und ich hoffe, das warst du) hat mich zu deinem Server {guild_name} eingeladen, aber ich konnte keinen Textkanal finden, wohin ich Nachrichten senden darf, daher muss ich dich direkt anschreiben*"
+"*Jemand (und ich hoffe, das warst du) hat mich zu deinem Server {guild_name} eingeladen, aber ich konnte keinen Textkanal finden, in den ich schreiben darf, daher muss ich dich direkt anschreiben*"
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
 #: orisa/orisa.py:2151

@@ -2,13 +2,14 @@
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Daniel Martins <dafm200936@gmail.com>, 2019.
+# Dennis Brakhane <brakhane@googlemail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-08-27 20:25+0000\n"
-"Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
+"PO-Revision-Date: 2019-08-30 21:37+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://weblate.orisa.rocks/projects/orisa/bot/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
@@ -160,7 +161,7 @@ msgstr "O SR da {type} primária foi atualizado pela última vez {when}."
 #: orisa/orisa.py:561
 #, python-brace-format
 msgid "The SR was last updated {when}."
-msgstr "O SR foi atualizado pela última vez há {when}."
+msgstr "O SR foi atualizado pela última vez {when}."
 
 #: orisa/orisa.py:566
 msgid ""
@@ -196,7 +197,7 @@ msgid ""
 "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord) and licensed under the [GNU Affero General Public License 3.0]({AGPL_LINK}); the [development is done on Github]({GH_LINK})"
 msgstr ""
 "Eu sou um Bot open source do Discord que ajuda a gerir comunidades de Overwatch no Discord.\n"
-"Sou escrita e suportada pelo Dennis Brakhane (Joghurt#2732 no Discord) e licenciada sob [GNU Affero General Public License 3.0] ({AGPL_LINK}]; o [desenvolvimento é feito no GitHub]({GH_LINK})"
+"Sou escrita e suportada pelo Dennis Brakhane (Joghurt#2732 no Discord) e licenciada sob [GNU Affero General Public License 3.0] ({AGPL_LINK}); o [desenvolvimento é feito no GitHub]({GH_LINK})"
 
 #: orisa/orisa.py:603
 msgid "Invite me to your own Discord"
