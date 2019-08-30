@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-08-30 14:18+0000\n"
-"Last-Translator: Leo <dao3300@gmail.com>\n"
+"PO-Revision-Date: 2019-08-30 21:37+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -161,12 +161,12 @@ msgstr "[Profil Overwatch]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Serv
 #: orisa/orisa.py:559
 #, python-brace-format
 msgid "The SR of the primary {type} was last updated {when}."
-msgstr "La côte de {type} a été mise à jour pour la dernière fois il y a {when}."
+msgstr "La côte de {type} a été mise à jour pour la dernière fois {when}."
 
 #: orisa/orisa.py:561
 #, python-brace-format
 msgid "The SR was last updated {when}."
-msgstr "La côté à été mise à jour pour la dernière fois il y a {when}."
+msgstr "La côté à été mise à jour pour la dernière fois {when}."
 
 #: orisa/orisa.py:566
 msgid ""
@@ -174,7 +174,7 @@ msgid ""
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough."
 msgstr ""
 "\n"
-"D'ailleurs, vous n'avez pas besoin de donner votre pseudo si vous voulez votre propre BattleTag;  la commande !ow est suffisante."
+"D'ailleurs, vous n'avez pas besoin de donner votre pseudo si vous voulez votre propre BattleTag; la commande !ow est suffisante."
 
 #. Translators: "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:570
@@ -259,7 +259,7 @@ msgstr ":thinking: Besoin d'aide ?"
 #: orisa/orisa.py:1759 orisa/orisa.py:1780
 #, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})!"
-msgstr "Rejoindre le[serveur Discord de Support]({SUPPORT_DISCORD}) !"
+msgstr "Rejoindre le [serveur Discord de Support]({SUPPORT_DISCORD}) !"
 
 #. Translators: "Orisa Admin" must not be translated; additionally explaining what the string "Orisa Admin" means is ok
 #: orisa/orisa.py:655
