@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
 "PO-Revision-Date: 2019-08-30 14:11+0000\n"
-"Last-Translator: Leo <dao3300@gmail.com>\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -276,7 +276,7 @@ msgstr "Ce lien sera valide pour 30 minutes."
 
 #: orisa/orisa.py:682
 msgid "I sent you a DM."
-msgstr "Je t'ai envoyé un DM."
+msgstr "Je t'ai envoyé un MP."
 
 #: orisa/orisa.py:685
 msgid "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. I can't post the link here because everybody who knows that link will be able to configure me for the next 30 minutes."
