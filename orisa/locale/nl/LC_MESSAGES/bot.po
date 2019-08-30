@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-08-29 20:08+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"PO-Revision-Date: 2019-08-30 21:37+0000\n"
+"Last-Translator: Alpha <delilah94@outlook.com>\n"
 "Language-Team: Dutch <https://weblate.orisa.rocks/projects/orisa/bot/nl/>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
@@ -122,6 +122,10 @@ msgid ""
 "Then, write `!ow config` in this channel and I will send you a link to configure me via DM.\n"
 "*I will ignore all commands except `!ow help` and `!ow config` until I'm configured for this Discord!*"
 msgstr ""
+"*Goedendag*! Ik kan niet wachten om te beginnen :smiley:\n"
+"Om te beginnen, creëer een nieuwe rol genaamd `Orisa Admin`(Alleen de naam is belangrijk, het heeft geen speciale permissies nodig) en voeg het aan jouw Discord gebruikersprofiel, en iedereen die mag beslissen over mijn configuratie.\n"
+"Type daarna `!ow config` in dit kanaal en ik zal je zo een link sturen via een privé bericht om mij in te stellen.\n"
+"*Ik zal alle andere commands negeren behalve `!ow help` en `!ow config` totdat ik volledig ben geconfigureerd op deze Discord server!"
 
 #. Translators: Short for Discord Nickname
 #: orisa/orisa.py:497
@@ -131,7 +135,7 @@ msgstr "Naam"
 #. Translators: When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
 #: orisa/orisa.py:521
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: orisa/orisa.py:532
 msgid "SR"
@@ -466,6 +470,24 @@ msgid ""
 "Retail Jedi\n"
 "Pornography Historian"
 msgstr ""
+"Smarties Expert\n"
+"Bread Scientist\n"
+"Eternal Bosom of Hot Love\n"
+"Sith Lord of Security\n"
+"Namer of Clouds\n"
+"Scourge of Beer Cans\n"
+"Muse of Jeff Kaplan\n"
+"Shredded Cheese Authority\n"
+"MILF Commander\n"
+"Cunning Linguist\n"
+"Pork Rind Expert\n"
+"Dinosaur Supervisor\n"
+"Galactic Viceroy of C9\n"
+"Earl of Bacon\n"
+"Dean of Pizza\n"
+"Duke of Tacos\n"
+"Retail Jedi\n"
+"Pornography Historian"
 
 #. Translators: Unlike other messages, keep this message overly formal and archaic sounding to keep a funny contrast to the silly title that will be "given" to the user.
 #. So, unlike in all the other messages, if your language has a concept of "formal" vs "familiar" you, use the formal you here.
@@ -513,46 +535,46 @@ msgstr "je bent niet geregistreerd, kan ik je ergens anders mee helpen?"
 #. Translators: the identifiers m o d s must not be translated
 #: orisa/orisa.py:1039
 msgid "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. `ds` would mean Damage + Support."
-msgstr ""
+msgstr "Er ontbreekt een rol-id. Geldige rol-id's zijn: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). Ze kunnen gecombineerd worden, bv. 'ds' betekent Damage + Support."
 
 #: orisa/orisa.py:1050
 #, python-brace-format
 msgid "Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. `ds` would mean Damage + Support."
-msgstr ""
+msgstr "Onbekende rol-id '{role}'. Geldige rol-id's zijn: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). Ze kunnen gecombineerd worden, bv. 'ds' betekent Damage + Support."
 
 #: orisa/orisa.py:1058
 msgid "You are not registered! Do `!ow register` first."
-msgstr ""
+msgstr "Je bent niet geregistreerd! Typ `!ow register`om te registreren."
 
 #: orisa/orisa.py:1062
 #, python-brace-format
 msgid "Done. Your roles are now **{roles}**"
-msgstr ""
+msgstr "Uitgevoerd. Jouw rollen zijn nu **{roles}**"
 
 #: orisa/orisa.py:1067
 msgid "Sorry, findplayers doesn't work with role based SR yet. Try later."
-msgstr ""
+msgstr "Sorry, maar findplayers werkt nog niet met SR die gebaseerd zijn op rollen. Probeer het later opnieuw."
 
 #: orisa/orisa.py:1085
 msgid "SR difference must be positive!"
-msgstr ""
+msgstr "SR verschil moet positief zijn!"
 
 #. Translators: used when Orisa is asked to find players that are more than 5000 SR below or above them, use the equivalent Orisa voiceline
 #. in your language
 #: orisa/orisa.py:1092
 msgid "That does not compute!"
-msgstr ""
+msgstr "That does not compute!"
 
 #. Translators: type is BattleTag or GamerTag
 #: orisa/orisa.py:1101
 #, python-brace-format
 msgid "You primary {type} has no SR, please give a SR range you want to search for instead."
-msgstr ""
+msgstr "Jouw eerste {type} heeft geen SR, geef a.u.b. een SR reeks op die je probeert te vinden."
 
 #: orisa/orisa.py:1110
 #, python-brace-format
 msgid "within {sr_diff} of {base_sr} SR"
-msgstr ""
+msgstr "binnen {sr_diff} van {base_sr} SR"
 
 #: orisa/orisa.py:1123
 msgid "min and max must be between 500 and 5000, and min must not be larger than max."
