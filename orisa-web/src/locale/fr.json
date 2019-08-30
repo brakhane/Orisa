@@ -12,7 +12,7 @@
         "footer": "Merci d’utiliser Orisa !",
         "general-settings-hdr": "Paramètres généraux pour {{ guild_name }}",
         "lang": "Langue",
-        "lang-complete": "Entièrement Traduite",
+        "lang-complete": "Entièrement Traduit",
         "lang-incomplete": "Pas encore entièrement traduit",
         "lang-incomplete-engage": "{{ lang }} n’est pas encore entièrement traduit ! [Vous voulez aider ? ]({{ link }})",
         "lead-info": "Le bouton d’enregistrement s’affiche lorsque vous avez des modifications non sauvegardées. Après avoir sauvegardé vos modifications, vous pouvez fermer cette fenêtre.\nSi vous avez des questions ou des suggestions, [joignez-vous au discord officielle]({{ link }}).",
