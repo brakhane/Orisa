@@ -280,7 +280,7 @@ msgstr "Je t'ai envoyé un MP."
 
 #: orisa/orisa.py:685
 msgid "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. I can't post the link here because everybody who knows that link will be able to configure me for the next 30 minutes."
-msgstr "J'ai essayé de t'envoyer un DM avec le lien mais tu as désactivé les DM venant de personnes que tu n'as pas en amis. Désactive cette option et réessaie. Je ne peux pas poster le lien ici car tous ceux qui détiendront le lien pourront alors me configurer pendant les 30 prochaines minutes."
+msgstr "J'ai essayé de t'envoyer un MP avec le lien mais tu as désactivé les MP venant de personnes que tu n'as pas en amis. Désactive cette option et réessaie. Je ne peux pas poster le lien ici car tous ceux qui détiendront le lien pourront alors me configurer pendant les 30 prochaines minutes."
 
 #: orisa/orisa.py:696
 #, python-brace-format
