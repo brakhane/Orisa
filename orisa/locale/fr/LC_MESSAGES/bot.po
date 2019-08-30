@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-08-30 14:10+0000\n"
-"Last-Translator: Diable Dk <Kazoku.ow@gmail.com>\n"
+"PO-Revision-Date: 2019-08-30 14:11+0000\n"
+"Last-Translator: Leo <dao3300@gmail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -174,7 +174,7 @@ msgid ""
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough."
 msgstr ""
 "\n"
-"D'ailleurs, vous n'avez pas besoin de donner votre pseudo si vous voulez votre propre BattleTag; la commande !ow is enough."
+"D'ailleurs, vous n'avez pas besoin de donner votre pseudo si vous voulez votre propre BattleTag; la commande !ow est suffisante."
 
 #. Translators: "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:570
@@ -233,7 +233,7 @@ msgstr "Si tu me trouves utile, [achète un café à mon responsable]({DONATE_LI
 
 #: orisa/orisa.py:625
 msgid "I've sent you a DM."
-msgstr "Je t'ai envoyé un DM."
+msgstr "Je t'ai envoyé un MP."
 
 #: orisa/orisa.py:633
 msgid "The config command must be issued from a channel of the server you want to configure. Don't worry, I will send you the config instructions as a DM, so others can't configure me just by watching you sending this command."
