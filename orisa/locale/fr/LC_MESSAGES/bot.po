@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-08-30 14:11+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"PO-Revision-Date: 2019-08-30 14:18+0000\n"
+"Last-Translator: Leo <dao3300@gmail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -174,7 +174,7 @@ msgid ""
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough."
 msgstr ""
 "\n"
-"D'ailleurs, vous n'avez pas besoin de donner votre pseudo si vous voulez votre propre BattleTag; la commande !ow est suffisante."
+"D'ailleurs, vous n'avez pas besoin de donner votre pseudo si vous voulez votre propre BattleTag;  la commande !ow est suffisante."
 
 #. Translators: "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:570
@@ -869,7 +869,7 @@ msgstr ""
 
 #: orisa/orisa.py:1444
 msgid "You are not registered. Do `!ow register` first!"
-msgstr "Tu n'est pas enregistré. Fait d'abord `!ow register`!"
+msgstr "Tu n'es pas enregistré. Fais d'abord `!ow register` !"
 
 #: orisa/orisa.py:1455
 #, python-brace-format
