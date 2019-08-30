@@ -39,6 +39,7 @@ from string import Template
 from typing import Optional
 
 import asks
+import arrow
 import cachetools
 import dateutil.parser as date_parser
 import hypercorn.config
@@ -51,7 +52,6 @@ import matplotlib.pyplot as plt
 import multio
 import numpy as np
 import pandas as pd
-import pendulum
 import raven
 import seaborn as sns
 import tabulate
@@ -64,6 +64,7 @@ from curious.commands.conditions import author_has_roles
 from curious.commands.decorators import command, condition
 from curious.commands.exc import ConversionFailedError
 from curious.commands.plugin import Plugin
+from curious.core.event import EventContext
 from curious.core.client import Client
 from curious.core.httpclient import HTTPClient
 from curious.exc import Forbidden, HierarchyError, NotFound
@@ -84,6 +85,8 @@ from itsdangerous.url_safe import URLSafeTimedSerializer
 from itsdangerous.exc import BadSignature
 from wcwidth import wcswidth
 
+from . import i18n
+
 from .config import (
     GuildConfig,
     CHANNEL_NAMES,
@@ -100,7 +103,7 @@ from .config import (
     ROLE_EMOJIS,
     WEB_APP_PATH,
 )
-from .models import Cron, User, BattleTag, Gamertag, SR, Role, GuildConfigJson
+from .models import Cron, User, BattleTag, Gamertag, SR, Role, GuildConfigJson, WelcomeMessage
 from .exceptions import (
     BlizzardError,
     InvalidBattleTag,
@@ -108,7 +111,7 @@ from .exceptions import (
     NicknameTooLong,
     InvalidFormat,
 )
-from .i18n import _, N_, ngettext, CurrentLocale
+from .i18n import _, N_, ngettext, CurrentLocale, locale_by_flag
 from .utils import (
     get_sr,
     sort_secondaries,
@@ -235,6 +238,22 @@ class Orisa(Plugin):
         self.stopped_playing_cache = cachetools.TTLCache(maxsize=1000, ttl=10)
 
         self.guild_config = defaultdict(GuildConfig.default)
+
+        # Translators: sent by Orisa when she joins a new server
+        self._welcome_text = N_(
+            "*Greetings*! I am excited to be here :smiley:\n"
+            "To get started, create a new role named `Orisa Admin` (only the name is important, it doesn't need any special permissions) and add yourself "
+            "and everybody that should be allowed to configure me.\n"
+            "Then, write `!ow config` in this channel and I will send you a link to configure me via DM.\n"
+            "*I will ignore all commands except `!ow help` and `!ow config` until I'm configured for this Discord!*"
+        )
+
+        self._welcome_embed_title = N_(":thinking: Need help?")
+        self._welcome_embed_desc = N_("Join the [Support Discord]({SUPPORT_DISCORD})!")
+        self._welcome_private_message_info = N_(
+            "\n\n*Somebody (hopefully you) invited me to your server {guild_name}, but I couldn't find a "
+            "text channel I am allowed to send messages to, so I have to message you directly*")
+
 
     async def load(self):
 
@@ -542,10 +561,11 @@ class Orisa(Plugin):
                 )
 
                 if primary.last_update:
+                    when = arrow.get(primary.last_update).humanize(locale=CurrentLocale.get())
                     if multiple_handles:
-                        footer_text = _("The SR of the primary {type} was last updated {when}.").format(type=user.handles[0].desc, when=pendulum.instance(primary.last_update).diff_for_humans())
+                        footer_text = _("The SR of the primary {type} was last updated {when}.").format(type=user.handles[0].desc, when=when)
                     else:
-                        footer_text = _("The SR was last updated {when}.").format(when=pendulum.instance(primary.last_update).diff_for_humans())
+                        footer_text = _("The SR was last updated {when}.").format(when=when)
                 else:
                     footer_text = ""
 
@@ -878,7 +898,7 @@ class Orisa(Plugin):
                     # One title per line, you can replace it with different titles, the number of
                     # titles can be different than the english one, but must contain at least one entry.
                     # Keep the titles funny and not insulting! Nobody wants to be called an asshole when he used ow format.
-                    # You can also leave the list untranslated.
+                    # You can also leave the list empty; in that case, the English original will be used.
                     titles = _("""\
 Smarties Expert
 Bread Scientist
@@ -1196,7 +1216,7 @@ Pornography Historian""").split("\n")
                 )
                 try:
                     await ctx.channel.messages.send(content=None, embed=Embed(
-                        title=":thinking: Need help?",
+                        title=_(":thinking: Need help?"),
                         description=_("Join the [Support Discord]({SUPPORT_DISCORD})!").format(SUPPORT_DISCORD=SUPPORT_DISCORD)
                     ))
                 except Exception:
@@ -1679,6 +1699,36 @@ Pornography Historian""").split("\n")
                         session.delete(user)
                         await run_sync(session.commit)
 
+
+    @event("gateway_dispatch_received")
+    async def _gw_dispatch_received(self, event_ctx: EventContext, event: str, data: dict):
+        if event.startswith("MESSAGE_REACTION_"):
+            if int(data["user_id"]) == event_ctx.bot.user.id:
+                return
+            mid = data["message_id"]
+            async with self.database.session() as session:
+                wm_info = await self.database.get_welcome_message(session, mid)
+                if not wm_info:
+                    return
+                session.expunge(wm_info)
+
+            CurrentLocale.set(locale_by_flag(data["emoji"]["name"]) or "en")
+
+            text = _(self._welcome_text)
+            if wm_info.is_private_message:
+                text += _(self._welcome_private_message_info).format(guild_name=wm_info.guild_name)
+            
+            await self.client.http.edit_message(int(data["channel_id"]), mid, text)
+
+            embed_id = wm_info.need_help_embed_id
+            if embed_id:
+                await self.client.http.edit_message(int(data["channel_id"]), embed_id, embed={
+                    "title": _(self._welcome_embed_title),
+                    "description": _(self._welcome_embed_desc).format(SUPPORT_DISCORD=SUPPORT_DISCORD)
+                })
+
+
+
     @event("guild_join")
     async def _guild_joined(self, ctx: Context, guild: Guild):
         logger.info("Joined guild %r", guild)
@@ -1696,17 +1746,6 @@ Pornography Historian""").split("\n")
         logger.info("We have a new guild %s, I'm now on %d guilds \o/", guild, len(self.client.guilds))
         self.guild_config[guild.id] = GuildConfig.default()
 
-        msg = (
-            # Translators: sent by Orisa when she joins a new server
-            _(
-                "*Greetings*! I am excited to be here :smiley:\n"
-                "To get started, create a new role named `Orisa Admin` (only the name is important, it doesn't need any special permissions) and add yourself "
-                "and everybody that should be allowed to configure me.\n"
-                "Then, write `!ow config` in this channel and I will send you a link to configure me via DM.\n"
-                "*I will ignore all commands except `!ow help` and `!ow config` until I'm configured for this Discord!*"
-            )
-        )
-
         # try to find a channel to post the first hello message to
         channels = sorted(guild.channels.values(), key=attrgetter("position"))
 
@@ -1722,44 +1761,74 @@ Pornography Historian""").split("\n")
                 and channel.effective_permissions(guild.me).read_messages
             ):
                 logger.debug("found hello channel %s", channel)
-                try:
-                    await channel.messages.send(msg)
-                    logger.debug("message successfully sent")
-                except Exception:
-                    logger.exception(
-                        "Got exception when trying to send to channel %s, checking another one",
-                        channel
-                    )
-                    continue
-                else:
-                    # found one
+                async with self.database.session() as session:
                     try:
-                        await channel.messages.send(content=None, embed=Embed(
-                            title=_(":thinking: Need help?"),
-                            description=_("Join the [Support Discord]({SUPPORT_DISCORD})!").format(SUPPORT_DISCORD=SUPPORT_DISCORD)))
+                        # no need to translate here, as we will provide reactions to translate for this one
+                        message = await channel.messages.send(self._welcome_text)
+                        logger.debug("message successfully sent")
                     except Exception:
-                        logger.exception("Unable to send support embed")
+                        logger.exception(
+                            "Got exception when trying to send to channel %s, checking another one",
+                            channel
+                        )
+                        continue
+                    else:
+                        # found one
+                        wm_info = WelcomeMessage(id=message.id)
+                        try:
+                            embed = await channel.messages.send(content=None, embed=Embed(
+                                title=self._welcome_embed_title,
+                                description=self._welcome_embed_desc.format(SUPPORT_DISCORD=SUPPORT_DISCORD)))
+                        except Exception:
+                            logger.exception("Unable to send support embed")
+                        else:
+                            wm_info.need_help_embed_id = embed.id
 
-                    break
+                        for flag, locale in i18n.FLAG_TO_LOCALE.items():
+                            if locale == "en" or i18n.get_translation(locale, self._welcome_text) != self._welcome_text:
+                                try:
+                                    await message.react(flag)
+                                except Exception:
+                                    logger.debug("Cannot react to message", exc_info=True)
+
+                        session.add(wm_info)
+                        await run_sync(session.commit)
+
+                        break
         else:
             logger.debug(
                 "no valid hello channel found. Falling back to DM to owner for %s",
                 guild,
             )
-            try:
-                await guild.owner.send(
-                    msg
-                    + _("\n\n*Somebody (hopefully you) invited me to your server {guild_name}, but I couldn't find a "
-                    "text channel I am allowed to send messages to, so I have to message you directly*").format(guild_name=guild.name)
-                )
-            except Exception:
-                logger.exception("Unable to send mail to owner, oh well...")
-            try:
-                await guild.owner.send(content=None, embed=Embed(
-                    title=_(":thinking: Need help?"),
-                    description=_("Join the [Support Discord]({SUPPORT_DISCORD})!").format(SUPPORT_DISCORD=SUPPORT_DISCORD)))
-            except Exception:
-                logger.exception("Unable to send support embed")
+            async with self.database.session() as session:
+                try:
+                    message = await guild.owner.send(
+                        self._welcome_text
+                        + self._welcome_private_message_info.format(guild_name=guild.name)
+                    )
+                except Exception:
+                    logger.exception("Unable to send mail to owner, oh well...")
+                else:
+                    wm_info = WelcomeMessage(id=message.id, is_private_message=True, guild_name=guild.name)
+                    session.add(wm_info)
+                    try:
+                        embed = await guild.owner.send(content=None, embed=Embed(
+                            title=self._welcome_embed_title,
+                            description=self._welcome_embed_desc.format(SUPPORT_DISCORD=SUPPORT_DISCORD)))
+                    except Exception:
+                        logger.exception("Unable to send support embed")
+                    else:
+                        wm_info.need_help_embed_id = embed.id
+
+                    for flag, locale in i18n.FLAG_TO_LOCALE.items():
+                        if locale == "en" or i18n.get_translation(locale, self._welcome_text) != self._welcome_text:
+                            try:
+                                await message.react(flag)
+                            except Exception:
+                                logger.debug("Cannot react to message", exc_info=True)
+                                break
+
+                    await run_sync(session.commit)
 
 
     # Util
@@ -2217,8 +2286,6 @@ Pornography Historian""").split("\n")
         for guild_id, tops in top_per_guild.items():
             logger.debug(f"Processing guild {guild_id} for top_players")
 
-            CurrentLocale.set("de")
-
             # FIXME: wrong if there is a tie
             prev_top_tags = [
                 top[1] for top in sorted(tops, key=lambda x: x[2] or 0, reverse=True)
@@ -2308,9 +2375,11 @@ Pornography Historian""").split("\n")
                 chan = self.client.find_channel(
                     self.guild_config[guild_id].listen_channel_id
                 )
+                if not chan:
+                    logger.debug("no channel found")
+                    continue
                 logger.debug("found channel %s", chan)
                 send = chan.messages.send
-                await send(CurrentLocale.get())
                 # send = self.client.application_info.owner.send
                 await send(
                     _("Hello! Here are the current SRs for **{role}** on {platform} . If a member has more than one "

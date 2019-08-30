@@ -13,7 +13,6 @@ sqlalchemy_aio = "*"
 trio = "^0.12.1"
 fuzzywuzzy = {version = "*", extras = ["speedup"]}
 pyyaml = "*"
-pendulum = "*"
 discord-curious = {git = "https://github.com/brakhane/curious.git", rev = "orisa-triows"}
 # discord-curious = {path="../curious"}
 cachetools = "*"
@@ -33,7 +32,7 @@ itsdangerous = "*"
 prospector = "^1.1"
 "openpyxl" = "*"
 h2 = ">=3.1.0"
-
+arrow = "*"
 
 [tool.poetry.dev-dependencies]
 "black" = { version = "*", allows-prereleases = true }

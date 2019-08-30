@@ -42,10 +42,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </transition>
     <b-container>
       <h1>{{ $t("cfg.configure-for", { guild_name }) }}</h1>
-      <vue-markdown class="lead" :anchorAttributes="{target: '_blank'}">{{ $t("cfg.lead-info", { link: "https://discord.gg/tsNxvFh" }) }}</vue-markdown>
+      <vue-markdown key="language" class="lead" :anchorAttributes="{target: '_blank'}">{{ $t("cfg.lead-info", { link: "https://discord.gg/tsNxvFh" }) }}</vue-markdown>
       <b-alert variant="warning" class="my-4" show dismissible v-if="higher_roles.length > 0">
         <h5 class="alert-heading">{{ $t("cfg.not-top-role-head") }}</h5>
-        <vue-markdown>{{
+        <vue-markdown key="language">{{
           $t("cfg.not-top-role-desc", {
             with_the_following_roles: $t("cfg.with-the-following-roles", {
               count: higher_roles.length
@@ -55,13 +55,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <ul>
           <li v-for="role in higher_roles" :key="role">{{ role }}</li>
         </ul>
-        <vue-markdown :anchorAttributes="{target: '_blank', class: 'alert-link'}">{{
+        <vue-markdown key="language" :anchorAttributes="{target: '_blank', class: 'alert-link'}">{{
           $t("cfg.drag-orisa-role", { link: "https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif" })
         }}</vue-markdown>
       </b-alert>
       <b-alert variant="success" class="my-4" show dismissible v-else>
         <h5 class="alert-heading">{{ $t("cfg.top-role-head") }}</h5>
-        <vue-markdown>{{ $t('cfg.top-role-desc') }}</vue-markdown>
+        <vue-markdown key="language">{{ $t('cfg.top-role-desc') }}</vue-markdown>
       </b-alert>
       <b-form :novalidate="true">
         <b-card :header="$t('cfg.general-settings-hdr', { guild_name })" class="mb-3">
@@ -72,7 +72,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <font-awesome-icon id="always-show-sr-help" icon="question-circle"></font-awesome-icon>
           </b-form-checkbox>&nbsp;
           <b-popover target="always-show-sr-help" triggers="hover click">
-            <vue-markdown>{{ $t("cfg.allow-sr-in-nick-tt") }}</vue-markdown>
+            <vue-markdown key="language">{{ $t("cfg.allow-sr-in-nick-tt") }}</vue-markdown>
           </b-popover>
           <b-form-checkbox
             class="custom-switch"
@@ -81,19 +81,31 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <font-awesome-icon id="post-highscores-help" icon="question-circle"></font-awesome-icon>
           </b-form-checkbox>
           <b-popover target="post-highscores-help" triggers="hover click">
-            <vue-markdown>{{ $t("cfg.post-hs-tt") }}</vue-markdown>
+            <vue-markdown key="language">{{ $t("cfg.post-hs-tt") }}</vue-markdown>
           </b-popover>
           <hr class="hr-3">
+          <b-form-group
+           horizontal  
+           :label="$t('cfg.lang')"
+          >
+            <template #description>
+              <vue-markdown key="language">{{ $t('cfg.lang-engage-text',
+                {link: 'https://weblate.orisa.rocks/engage/orisa/'})
+              }}</vue-markdown>
+            </template>
+            <b-form-select v-model="guild_config.locale">
+              <template v-for="lang in ['de', 'en']">
+                <option :value="lang">{{ lang }}</option>
+              </template>
+            </b-form-select>
+          </b-form-group>
           <b-form-group
             horizontal
             :label="$t('cfg.reg-msg')"
             :invalid-feedback="validation_errors.extra_register_text"
-            :description="$t('cfg.reg-msg-desc', {
-              link: 'https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-'
-            })"
           >
             <template #description>
-              <vue-markdown>{{ $t('cfg.reg-msg-desc', {
+              <vue-markdown key="language">{{ $t('cfg.reg-msg-desc', {
                 link: 'https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-'
               }) }}</vue-markdown>
             </template>
@@ -112,7 +124,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             :label="$t('cfg.listen-chan')"
           >
             <template #description>
-              <vue-markdown>{{ $t('cfg.listen-chan-desc') }}</vue-markdown>
+              <vue-markdown key="language">{{ $t('cfg.listen-chan-desc') }}</vue-markdown>
             </template>
             <channel-selector
               :state="val_state(validation_errors.listen_channel_id)"
@@ -128,7 +140,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             :label="$t('cfg.congrats-chan')"
           >
             <template #description>
-              <vue-markdown>{{ $t('cfg.congrats-chan-desc') }}</vue-markdown>
+              <vue-markdown key="language">{{ $t('cfg.congrats-chan-desc') }}</vue-markdown>
             </template>
             <channel-selector
               :state="val_state(validation_errors.congrats_channel_id)"
@@ -149,7 +161,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             class="lead"
             v-t="'cfg.no-mgt-voice-chan-lead'"
           ></p>
-          <vue-markdown>{{$t('cfg.no-mgt-voice-chan-text')}}</vue-markdown>
+          <vue-markdown key="language">{{$t('cfg.no-mgt-voice-chan-text')}}</vue-markdown>
         </b-card>
         <managed-voice-category
           v-else
@@ -162,7 +174,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           @delete-cat-clicked="remove_cat(index)"
         ></managed-voice-category>
         <b-btn variant="primary" @click="add_cat">
-          <font-awesome-icon icon="folder-plus"/>{{ $t('cfg.add-mgt-cat') }}
+          <font-awesome-icon icon="folder-plus"/>&nbsp;{{ $t('cfg.add-mgt-cat') }}
         </b-btn>
       </b-form>
       <div class="py-5" v-t="'cfg.footer'"></div>
@@ -191,6 +203,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { isEqual, isEmpty, cloneDeep } from 'lodash'
+import i18next from 'i18next'
 
 const ChannelSelector = () => import(/* webpackChunkName: "channel-selector" */'@/components/ChannelSelector')
 const ManagedVoiceCategory = () => import(/* webpackChunkName: "managed-voice-category" */'@/components/ManagedVoiceCategory')
@@ -267,8 +280,16 @@ export default {
             console.error(error)
           }
         })
+    },
+  },
+
+  watch: {
+    language (new_val, old_val) {
+      console.log(new_val)
+      i18next.changeLanguage(new_val.locale)
     }
   },
+
   computed: {
     unsaved_changes () {
       return !isEqual(this.guild_config, this.orig_guild_config)
@@ -286,6 +307,9 @@ export default {
     higher_roles () {
       var myPos = this.roles.indexOf(this.my_top_role)
       return this.roles.slice(myPos + 1)
+    },
+    language () {
+      return this.guild_config.locale
     }
   },
   props: ['token'],

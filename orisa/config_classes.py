@@ -31,6 +31,7 @@ class GuildConfig:
     post_highscores: bool
     congrats_channel_id: int
     listen_channel_id: int
+    locale: str
     managed_voice_categories: Sequence[VoiceCategoryInfo]
     extra_register_text: str
 
@@ -42,6 +43,7 @@ class GuildConfig:
             congrats_channel_id=None,
             listen_channel_id=None,
             extra_register_text=None,
+            locale=None,
             managed_voice_categories=[],
         )
 
@@ -90,7 +92,7 @@ class GuildConfig:
                 else:
                     try:
                         init[name] = None if data[name] is None else type(data[name])
-                    except ValueError:
+                    except (KeyError, ValueError):
                         init[name] = None
             return cls(**init)
 

@@ -27,9 +27,6 @@ import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-import de from '@/locale/de.json'
-import en from '@/locale/en.json'
-
 Vue.config.productionTip = false
 
 Vue.use(VueI18Next)
@@ -37,18 +34,24 @@ Vue.use(BootstrapVue)
 
 Vue.component('vue-markdown', VueMarkdown)
 
-const data = {
+
+const LOCALES = [
+  "de",
+  "en"
+]
+
+i18next.init({
   lng: 'de',
   fallbackLng: 'en',
-  debug: true,
-  resources: {
-    de: { translation: de },
-    en: { translation: en }
-  }
-}
-
-i18next.init(data)
-console.log(data)
+  debug: true
+}).then(() => {
+  LOCALES.forEach((loc) => {
+    import(/* webpackChunkName: '[request]' */`@/locale/${loc}.json`).then( (data) => {
+      console.log(`Loaded ${loc}`)
+      i18next.addResourceBundle(loc, 'translation', data)
+    })
+  })
+})
 
 const i18n = new VueI18Next(i18next)
 

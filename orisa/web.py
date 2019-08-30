@@ -38,7 +38,7 @@ from .config import (
     OAUTH_REDIRECT_HOST,
 )
 from .config_classes import GuildConfig
-from .i18n import _, ngettext
+from .i18n import _, ngettext, CurrentLocale
 from .models import User, GuildConfigJson
 
 logger = logging.getLogger(__name__)
@@ -145,6 +145,8 @@ def validate_config(guild, guild_config):
             return ngettext("Orisa is missing the following permission: {missing}", "Orisa is missing the following permissions: {missing}", len(missing)).format({"missing": ", ".join(missing)})
         else:
             return None
+
+    CurrentLocale.set(guild_config.locale)
 
     chan = guild.channels.get(guild_config.listen_channel_id)
     if not chan or chan.type != 0:

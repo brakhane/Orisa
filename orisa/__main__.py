@@ -63,7 +63,6 @@ database = Database()
 
 manager = I18NCommandsManager.with_client(client, command_prefix="!" if not DEVELOPMENT else ",")
 
-
 already_loaded = False
 
 @client.event("ready")

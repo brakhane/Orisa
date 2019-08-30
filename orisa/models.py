@@ -22,14 +22,14 @@ from enum import Flag, auto
 import trio
 
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     Column,
     DateTime,
-    BigInteger,
+    ForeignKey,
     Integer,
     SmallInteger,
     String,
-    ForeignKey,
     create_engine,
     func,
 )
@@ -95,6 +95,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     discord_id = Column(BigInteger, unique=True, nullable=False, index=True)
     format = Column(String, nullable=False)
+    locale = Column(String(5))
 
     handles = relationship(
         "Handle",
@@ -297,6 +298,15 @@ class GuildConfigJson(Base):
     config = Column(String, nullable=False)
 
 
+class WelcomeMessage(Base):
+    __tablename__ = "welcome_message"
+
+    id = Column(BigInteger, primary_key=True, index=True)
+    need_help_embed_id = Column(BigInteger)
+    is_private_message = Column(Boolean, nullable=False, default=False)
+    guild_name = Column(String)
+
+
 class Database:
     def __init__(self):
         engine = create_engine(DATABASE_URI, pool_size=20, max_overflow=10)
@@ -365,3 +375,11 @@ class Database:
             for result in results
             if (result.last_update or datetime.min) <= datetime.utcnow() - self._sync_delay(result.error_count)
         ]
+
+    async def get_welcome_message(self, session, message_id):
+        msg = await trio.to_thread.run_sync(
+            session.query(WelcomeMessage)
+            .filter_by(id=message_id)
+            .one_or_none
+        )
+        return msg
