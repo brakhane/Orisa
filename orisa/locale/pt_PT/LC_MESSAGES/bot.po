@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
 "PO-Revision-Date: 2019-09-01 12:44+0000\n"
-"Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://weblate.orisa.rocks/projects/orisa/bot/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
@@ -151,7 +151,7 @@ msgstr "Links"
 #: orisa/orisa.py:548
 #, python-brace-format
 msgid "[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})"
-msgstr "[Perfil do Overwatch]({PROFILE_LINK}) | [Faz Upvote na Orisa]({VOTE_LINK}) | [Servidor de Suporte da Orisa]({SUPPORT_DISCORD}) | [Doa-nos] `{HEART}`]({DONATE_LINK})"
+msgstr "[Perfil do Overwatch]({PROFILE_LINK}) | [Faz Upvote na Orisa]({VOTE_LINK}) | [Servidor de Suporte da Orisa]({SUPPORT_DISCORD}) | [Doa-nos `{HEART}`]({DONATE_LINK})"
 
 #: orisa/orisa.py:559
 #, python-brace-format
