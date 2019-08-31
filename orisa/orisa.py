@@ -128,7 +128,7 @@ logger = logging.getLogger("orisa")
 
 OAUTH_SERIALIZER = URLSafeTimedSerializer(SIGNING_SECRET)
 
-SUPPORT_DISCORD="https://discord.gg/tsNxvFh"
+SUPPORT_DISCORD="https://discord.gg/yb7TkPN"
 VOTE_LINK="https://discordbots.org/bot/445905377712930817/vote"
 DONATE_LINK="https://ko-fi.com/R5R2PC36"
 
@@ -1992,7 +1992,7 @@ Pornography Historian""").split("\n")
                     ]
                 
                 def val(x):
-                    return "xx" if np.isnan(x) else "??" if x == 0 else f"{int(x//100):02}"
+                    return "xx" if np.isnan(x) else "⊘" if x == 0 else f"{int(x//100):02}"
 
                 return f" [{'-'.join(val(x) for x in tds_filtered_mean)}]"
 
