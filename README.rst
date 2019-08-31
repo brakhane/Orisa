@@ -57,7 +57,7 @@ You can simply invite Orisa to your discord by visiting `this link <https://oris
 Installation of your own instance
 ---------------------------------
 
-**This information here is a little bit outdated, setting Orisa up is not trivial currently.**
+**This information here is outdated, setting Orisa up is not trivial currently.**
 
 You need to use Discords developer pages to create a link you can use to allow
 Orisa on your site. Orisa needs the following permissions: "Manage Nicknames", "Send Messages",
