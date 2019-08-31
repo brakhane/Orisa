@@ -50,10 +50,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </b-popover>
         <br>
         <b-form-checkbox class="custom-switch" v-model="category.remove_unknown">
-          <vue-markdown class="d-inline-block">{{ $t("mvc.remove-unknown-sr") }}</vue-markdown>&nbsp;
+          <vue-markdown class="d-inline-block" :source="$t('mvc.remove-unknown-sr')"/>
           <font-awesome-icon :id="`remove-unknown-help-${index}`" icon="question-circle"></font-awesome-icon>
           <b-popover :target="`remove-unknown-help-${index}`" triggers="hover click">
-            <vue-markdown>{{ $t("mvc.remove-unknown-sr-tt") }}</vue-markdown>
+            <vue-markdown :source="$t('mvc.remove-unknown-sr-tt')"/>
           </b-popover>
         </b-form-checkbox>
         <hr class="hr-4">

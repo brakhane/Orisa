@@ -46,7 +46,7 @@ logger = logging.getLogger(__name__)
 serializer = URLSafeTimedSerializer(SIGNING_SECRET)
 
 
-TOKEN_MAX_AGE = 1800
+TOKEN_MAX_AGE = 1800 if not DEVELOPMENT else 3600000
 
 app = QuartTrio(__name__)
 

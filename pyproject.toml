@@ -36,6 +36,7 @@ arrow = "*"
 
 [tool.poetry.dev-dependencies]
 "black" = { version = "*", allows-prereleases = true }
+"Babel" = "*"
 
 [build-system]
 requires = ["poetry>=0.12"]

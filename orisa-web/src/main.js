@@ -23,6 +23,7 @@ import VueI18Next from '@panter/vue-i18next'
 import VueMarkdown from 'vue-markdown'
 import i18next from 'i18next'
 import axios from 'axios'
+import LanguageDetector from 'i18next-browser-languagedetector'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -34,24 +35,44 @@ Vue.use(BootstrapVue)
 
 Vue.component('vue-markdown', VueMarkdown)
 
-
 const LOCALES = [
-  "de",
-  "en"
+  'de',
+  'en'
 ]
 
-i18next.init({
-  lng: 'de',
-  fallbackLng: 'en',
-  debug: true
-}).then(() => {
-  LOCALES.forEach((loc) => {
-    import(/* webpackChunkName: '[request]' */`@/locale/${loc}.json`).then( (data) => {
-      console.log(`Loaded ${loc}`)
-      i18next.addResourceBundle(loc, 'translation', data)
-    })
+const LangResourceLoader = {
+  type: 'backend',
+
+  init (services, backendOptions, i18nextOptions) {
+
+  },
+
+  read (lang, ns, callback) {
+    console.debug("Loading", lang, ns)
+    import(/* webpackChunkName: '[request]' */`@/locale/${lang}.json`)
+      .then((data) => { callback(null, data) })
+      .catch(callback)
+  },
+
+  save (language, namespace, data) {
+  },
+
+  create (languages, namespace, key, fallbackValue) {
+  }
+
+}
+
+i18next
+  .use(LangResourceLoader)
+  .use(LanguageDetector)
+  .init({
+    fallbackLng: 'en',
+    detection: {order: ['navigator']},
+    debug: true
   })
-})
+  .then((msg) => {
+    console.log("initialized", msg)
+  })
 
 const i18n = new VueI18Next(i18next)
 

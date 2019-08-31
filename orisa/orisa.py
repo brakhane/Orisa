@@ -690,7 +690,7 @@ class Orisa(Plugin):
         except Forbidden:
             await reply(ctx,
                 _("I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. I can't post the link here because "
-                "everybody who knows that link will be able to configure me for the next 30 minutes.")
+                "everybody who knows that link will be able to configure me.")
             )
 
 
@@ -1636,6 +1636,7 @@ Pornography Historian""").split("\n")
                     except Exception:
                         logger.exception(f"Can't adjust voice channel for new state parent {new_voice_state.channel.parent}")
 
+        CurrentLocale.set(self.guild_info[member.guild_id].locale)
         async with self.database.session() as session:
             user = await self.database.user_by_discord_id(session, member.id)
             if user:
@@ -2102,6 +2103,7 @@ Pornography Historian""").split("\n")
             except KeyError:
                 continue
             try:
+                CurrentLocale.set(self.guild_config[guild.id].locale)
                 formatted = self._format_nick(user)
                 new_nn = await self._update_nick_for_member(
                     member,

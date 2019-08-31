@@ -11,12 +11,16 @@ from trio.to_thread import run_sync
 DEFAULT_LOCALE = "en"
 
 LOCALES = [
+    "cs",
     "de",
     "es",
+    "fi",
     "fr",
+    "it",
     "nl",
     "pt_BR",
     "pt_PT",
+    "ru",
 ]
 
 CurrentLocale: ContextVar[str] = ContextVar("CurrentLocale", default=DEFAULT_LOCALE)
@@ -44,7 +48,6 @@ class I18NCommandsManager(CommandsManager):
         # update locale for user, or get locale from user if we have no locale
         async with orisa.database.session() as session:
             user = await orisa.database.user_by_discord_id(session, message.author_id)
-            print("USER", user)
             if user:
                 if locale:
                     user.locale = locale

@@ -42,26 +42,26 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </transition>
     <b-container>
       <h1>{{ $t("cfg.configure-for", { guild_name }) }}</h1>
-      <vue-markdown key="language" class="lead" :anchorAttributes="{target: '_blank'}">{{ $t("cfg.lead-info", { link: "https://discord.gg/tsNxvFh" }) }}</vue-markdown>
+      <vue-markdown :source="$t('cfg.lead-info', {link: 'https://discord.gg/tsNxvFh'})" class="lead" :anchorAttributes="{target: '_blank'}"/>
       <b-alert variant="warning" class="my-4" show dismissible v-if="higher_roles.length > 0">
         <h5 class="alert-heading">{{ $t("cfg.not-top-role-head") }}</h5>
-        <vue-markdown key="language">{{
-          $t("cfg.not-top-role-desc", {
-            with_the_following_roles: $t("cfg.with-the-following-roles", {
+        <vue-markdown :source="
+          $t('cfg.not-top-role-desc', {
+            with_the_following_roles: $t('cfg.with-the-following-roles', {
               count: higher_roles.length
             })
           })
-        }}</vue-markdown>
+        "/>
         <ul>
           <li v-for="role in higher_roles" :key="role">{{ role }}</li>
         </ul>
-        <vue-markdown key="language" :anchorAttributes="{target: '_blank', class: 'alert-link'}">{{
-          $t("cfg.drag-orisa-role", { link: "https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif" })
-        }}</vue-markdown>
+        <vue-markdown :anchorAttributes="{target: '_blank', class: 'alert-link'}" :source="
+          $t('cfg.drag-orisa-role', { link: 'https://support.discordapp.com/hc/article_attachments/115001756771/Role_Management_101_Update.gif' })
+        "/>
       </b-alert>
       <b-alert variant="success" class="my-4" show dismissible v-else>
         <h5 class="alert-heading">{{ $t("cfg.top-role-head") }}</h5>
-        <vue-markdown key="language">{{ $t('cfg.top-role-desc') }}</vue-markdown>
+        <vue-markdown :source="$t('cfg.top-role-desc')"/>
       </b-alert>
       <b-form :novalidate="true">
         <b-card :header="$t('cfg.general-settings-hdr', { guild_name })" class="mb-3">
@@ -72,7 +72,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <font-awesome-icon id="always-show-sr-help" icon="question-circle"></font-awesome-icon>
           </b-form-checkbox>&nbsp;
           <b-popover target="always-show-sr-help" triggers="hover click">
-            <vue-markdown key="language">{{ $t("cfg.allow-sr-in-nick-tt") }}</vue-markdown>
+            <vue-markdown :source="$t('cfg.allow-sr-in-nick-tt')"/>
           </b-popover>
           <b-form-checkbox
             class="custom-switch"
@@ -81,21 +81,32 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <font-awesome-icon id="post-highscores-help" icon="question-circle"></font-awesome-icon>
           </b-form-checkbox>
           <b-popover target="post-highscores-help" triggers="hover click">
-            <vue-markdown key="language">{{ $t("cfg.post-hs-tt") }}</vue-markdown>
+            <vue-markdown>{{ $t("cfg.post-hs-tt") }}</vue-markdown>
           </b-popover>
           <hr class="hr-3">
           <b-form-group
            horizontal  
            :label="$t('cfg.lang')"
           >
-            <template #description>
-              <vue-markdown key="language">{{ $t('cfg.lang-engage-text',
-                {link: 'https://weblate.orisa.rocks/engage/orisa/'})
-              }}</vue-markdown>
+            <template v-if="!lang_fully_translated" #description>
+              <vue-markdown class="alert alert-warning" :source="$t('cfg.lang-incomplete-engage',
+                {lang: lang_native_name, link: 'https://weblate.orisa.rocks/engage/orisa/'})
+              " :anchorAttributes="{target: '_blank'}"/>
             </template>
             <b-form-select v-model="guild_config.locale">
-              <template v-for="lang in ['de', 'en']">
-                <option :value="lang">{{ lang }}</option>
+              <optgroup :label="$t('cfg.lang-complete')">
+                <template v-for="info in translationInfo.complete">
+                  <option :key="info.code" :value="info.code">{{ info.native_name }}
+                    <template v-if="info.percent_translated < 100">({{ Math.round(info.percent_translated) }}% translated)</template>
+                  </option>
+                </template>
+              </optgroup>
+              <template v-if="translationInfo.incomplete.length">
+                <optgroup :label="$t('cfg.lang-incomplete')">
+                  <template v-for="info in translationInfo.incomplete">
+                    <option :key="info.code" :value="info.code">{{ info.native_name }} ({{ Math.round(info.percent_translated) }}% translated)</em></option>
+                  </template>
+                </optgroup>
               </template>
             </b-form-select>
           </b-form-group>
@@ -105,9 +116,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             :invalid-feedback="validation_errors.extra_register_text"
           >
             <template #description>
-              <vue-markdown key="language">{{ $t('cfg.reg-msg-desc', {
+              <vue-markdown :source="$t('cfg.reg-msg-desc', {
                 link: 'https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-'
-              }) }}</vue-markdown>
+              })"/>
             </template>
             <b-form-textarea
               :state="val_state(validation_errors.extra_register_text)"
@@ -124,7 +135,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             :label="$t('cfg.listen-chan')"
           >
             <template #description>
-              <vue-markdown key="language">{{ $t('cfg.listen-chan-desc') }}</vue-markdown>
+              <vue-markdown :source="$t('cfg.listen-chan-desc')"/>
             </template>
             <channel-selector
               :state="val_state(validation_errors.listen_channel_id)"
@@ -140,7 +151,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             :label="$t('cfg.congrats-chan')"
           >
             <template #description>
-              <vue-markdown key="language">{{ $t('cfg.congrats-chan-desc') }}</vue-markdown>
+              <vue-markdown :source="$t('cfg.congrats-chan-desc')"/>
             </template>
             <channel-selector
               :state="val_state(validation_errors.congrats_channel_id)"
@@ -161,7 +172,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             class="lead"
             v-t="'cfg.no-mgt-voice-chan-lead'"
           ></p>
-          <vue-markdown key="language">{{$t('cfg.no-mgt-voice-chan-text')}}</vue-markdown>
+          <vue-markdown :source="$t('cfg.no-mgt-voice-chan-text')"/>
         </b-card>
         <managed-voice-category
           v-else
@@ -204,6 +215,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { isEqual, isEmpty, cloneDeep } from 'lodash'
 import i18next from 'i18next'
+import translationInfo from '@/generated/translation_info.json'
 
 const ChannelSelector = () => import(/* webpackChunkName: "channel-selector" */'@/components/ChannelSelector')
 const ManagedVoiceCategory = () => import(/* webpackChunkName: "managed-voice-category" */'@/components/ManagedVoiceCategory')
@@ -284,9 +296,9 @@ export default {
   },
 
   watch: {
-    language (new_val, old_val) {
-      console.log(new_val)
-      i18next.changeLanguage(new_val.locale)
+    'guild_config.locale': function(new_val, old_val) {
+      console.log("language changed from", old_val, "to", new_val)
+      i18next.changeLanguage(new_val)
     }
   },
 
@@ -308,8 +320,19 @@ export default {
       var myPos = this.roles.indexOf(this.my_top_role)
       return this.roles.slice(myPos + 1)
     },
-    language () {
-      return this.guild_config.locale
+
+    lang_fully_translated () {
+      return this.translationInfo.complete.some((e) => e.code === this.guild_config.locale)
+    },
+
+    lang_native_name () {
+      let all = [...this.translationInfo.complete, ...this.translationInfo.incomplete]
+      for (let el of all) {
+        if (el.code === this.guild_config.locale) {
+          return el.native_name
+        }
+      }
+      throw Error(`${this.guild_config.locale} not found in translationInfo`)
     }
   },
   props: ['token'],
@@ -326,7 +349,8 @@ export default {
       validation_errors: {},
       save_error: false,
       roles: null,
-      my_top_role: null
+      my_top_role: null,
+      translationInfo
     }
   },
   mounted () {
