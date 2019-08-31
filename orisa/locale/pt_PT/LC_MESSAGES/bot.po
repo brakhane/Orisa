@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-08-31 18:20+0000\n"
+"PO-Revision-Date: 2019-09-01 12:44+0000\n"
 "Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://weblate.orisa.rocks/projects/orisa/bot/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -520,28 +520,28 @@ msgstr "A diferença de SR deve ser positiva!"
 #. in your language
 #: orisa/orisa.py:1092
 msgid "That does not compute!"
-msgstr ""
+msgstr "Não faz sentido!"
 
 #. Translators: type is BattleTag or GamerTag
 #: orisa/orisa.py:1101
 #, python-brace-format
 msgid "You primary {type} has no SR, please give a SR range you want to search for instead."
-msgstr ""
+msgstr "A tua {type} primária não tem SR, por favor introduz antes um intervalo de SR a pesquisar."
 
 #: orisa/orisa.py:1110
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "within {sr_diff} of {base_sr} SR"
-msgstr ""
+msgstr "entre {sr_diff} de {base_sr} de SR"
 
 #: orisa/orisa.py:1123
 msgid "min and max must be between 500 and 5000, and min must not be larger than max."
-msgstr ""
+msgstr "O mínimo e o máximo devem estar entre 500 e 5000, sendo que o mínimo não pode ser maior que o máximo."
 
 #. Translators: used as part of the string "Here is a list of players <between min_sr and max_sr SR>" or "there are no players <between...>"
 #: orisa/orisa.py:1127
 #, python-brace-format
 msgid "between {min_sr} and {max_sr} SR"
-msgstr ""
+msgstr "entre {min_sr} e {max_sr} de SR"
 
 #: orisa/orisa.py:1173
 #, python-brace-format
@@ -549,6 +549,8 @@ msgid ""
 "There are no players currently online {type_msg}!\n"
 "\n"
 msgstr ""
+"Não há atualmente jogadores online {type_msg}!\n"
+"\n"
 
 #: orisa/orisa.py:1175
 #, python-brace-format
@@ -556,20 +558,24 @@ msgid ""
 "**The following players are currently online and {type_msg}:**\n"
 "\n"
 msgstr ""
+"**Os seguintes jogadores estão online e {type_msg}:**\n"
+"\n"
 
 #: orisa/orisa.py:1183
 msgid "There are no offline players within that range."
-msgstr ""
+msgstr "Não há jogadores offline dentro desse intervalo."
 
 #: orisa/orisa.py:1185
 msgid "There are also no offline players within that range. :("
-msgstr ""
+msgstr "Também não há jogadores offline dentro desse intervalo. :("
 
 #: orisa/orisa.py:1187
 msgid ""
 "**The following players are within that range, but currently offline:**\n"
 "\n"
 msgstr ""
+"**Os jogadores listados encontram-se dentro desse intervalo, mas estão atualmente offline:**\n"
+"\n"
 
 #: orisa/orisa.py:1192
 #, python-brace-format
@@ -577,15 +583,17 @@ msgid ""
 "\n"
 "There are also {len} offline players within that range. Use the `findallplayers` command to show them as well."
 msgstr ""
+"\n"
+"Também há {len} jogadores offline dentro desse intervalo. Usa o comando `findallplayers`para também os mostrar."
 
 #: orisa/orisa.py:1196
 msgid "I sent you a DM with the results."
-msgstr ""
+msgstr "Enviei-te uma DM com os resultados."
 
 #. Translators: Orisa Admin must not be translated
 #: orisa/orisa.py:1208
 msgid "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!"
-msgstr ""
+msgstr "Ainda não fui configurada! Alguém com o cargo `Orisa Admin` tem de fazer primeiro `!ow config` para me configurar!"
 
 #: orisa/orisa.py:1230
 msgid "I tried to send you a DM with help, but you don't allow DM from server members. I can't post it here, because it's rather long. Please allow DMs and try again."
@@ -620,7 +628,7 @@ msgstr ""
 
 #: orisa/orisa.py:1279
 msgid "Shows information about Orisa, and how you can add her to your own Discord server, or help supporting her."
-msgstr ""
+msgstr "Mostra informação sobre a Orisa e como podes adicioná-la ao teu servidor do Discord, ou como a podes apoiar."
 
 #: orisa/orisa.py:1283
 msgid ""
@@ -632,16 +640,16 @@ msgstr ""
 #. Translators: don't translate "Orisa Admin"
 #: orisa/orisa.py:1291
 msgid "This command can only be used by members with the \"Orisa Admin\" role and allows them to configure Orisa for the specific Discord server."
-msgstr ""
+msgstr "Este comando só pode ser usado por membros com o cargo \"Orisa Admin\" e permite-lhes configurar a Orisa para um servidor de Discord em específico."
 
 #. Translators: help for !ow dumpsr
 #: orisa/orisa.py:1296
 msgid "Download your SR history as an Excel sheet"
-msgstr ""
+msgstr "Transfere o teu histórico de SR numa folha de Excel"
 
 #: orisa/orisa.py:1314
 msgid "Same as `!ow findplayers`, but also includes offline players."
-msgstr ""
+msgstr "Faz o mesmo que `!ow findplayers`, mas também inclui jogadores offline."
 
 #. Translators: help !ow forceupdate
 #: orisa/orisa.py:1319
@@ -655,7 +663,7 @@ msgstr ""
 #. Translators: help !ow forgetme
 #: orisa/orisa.py:1326
 msgid "All your BattleTags will be removed from the database and your nick will not be updated anymore. You can re-register at any time."
-msgstr ""
+msgstr "Todas as tuas BattleTags serão removidas da base de dados e o teu nick não será mais atualizado. Podes registar-te novamente a qualquer altura."
 
 #. Translators: help !ow format. $placeholder can be translated, as can ${placeholder}
 #: orisa/orisa.py:1333
@@ -860,7 +868,7 @@ msgstr ""
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
 #: orisa/orisa.py:2151
 msgid "For your own safety, get behind the barrier!"
-msgstr ""
+msgstr "Para a vossa segurança, fiquem atrás da barreira!"
 
 #: orisa/orisa.py:2153
 #, fuzzy, python-brace-format
