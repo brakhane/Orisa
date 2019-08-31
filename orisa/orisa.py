@@ -2287,6 +2287,7 @@ Pornography Historian""").split("\n")
 
         for guild_id, tops in top_per_guild.items():
             logger.debug(f"Processing guild {guild_id} for top_players")
+            CurrentLocale.set(self.guild_info[guild_id].locale)
 
             # FIXME: wrong if there is a tie
             prev_top_tags = [
