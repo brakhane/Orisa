@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-08-31 10:27+0000\n"
+"PO-Revision-Date: 2019-08-31 18:20+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: Russian <https://weblate.orisa.rocks/projects/orisa/bot/ru/>\n"
 "Language: ru\n"
@@ -41,52 +41,52 @@ msgstr "Поддержка"
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:137
 msgid "Br"
-msgstr ""
+msgstr "Бр"
 
 #. Translators: 2 letter code for "Silver" rank
 #: orisa/orisa.py:139
 msgid "Si"
-msgstr ""
+msgstr "Ср"
 
 #. Translators: 2 letter code for "Gold" rank
 #: orisa/orisa.py:141
 msgid "Go"
-msgstr ""
+msgstr "Зл"
 
 #. Translators: 2 letter code for "Platinum" rank
 #: orisa/orisa.py:143
 msgid "Pt"
-msgstr ""
+msgstr "Пт"
 
 #. Translators: 2 letter code for "Diamond" rank
 #: orisa/orisa.py:145
 msgid "Dm"
-msgstr ""
+msgstr "Ам"
 
 #. Translators: 2 letter code for "Master" rank
 #: orisa/orisa.py:147
 msgid "Ma"
-msgstr ""
+msgstr "Ма"
 
 #. Translators: 2 letter code for "Grandmaster" rank
 #: orisa/orisa.py:149
 msgid "GM"
-msgstr ""
+msgstr "Зл"
 
 #. Translators: SR rank
 #: orisa/orisa.py:153
 msgid "Bronze"
-msgstr ""
+msgstr "Бронза"
 
 #. Translators: SR rank
 #: orisa/orisa.py:155
 msgid "Silver"
-msgstr ""
+msgstr "Серебро"
 
 #. Translators: SR rank
 #: orisa/orisa.py:157
 msgid "Gold"
-msgstr ""
+msgstr "Золото"
 
 #. Translators: SR rank
 #: orisa/orisa.py:159
@@ -106,7 +106,7 @@ msgstr "Мастер"
 #. Translators: SR rank
 #: orisa/orisa.py:165
 msgid "Grandmaster"
-msgstr "Грандмастер"
+msgstr "Элита"
 
 #. Translators: Role
 #: orisa/orisa.py:170 orisa/orisa.py:1484 orisa/orisa.py:1522
