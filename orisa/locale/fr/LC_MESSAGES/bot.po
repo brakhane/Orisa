@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-08-30 21:37+0000\n"
-"Last-Translator: Leo <dao3300@gmail.com>\n"
+"PO-Revision-Date: 2019-08-31 18:20+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -697,7 +697,7 @@ msgstr ""
 
 #: orisa/orisa.py:1337
 msgid "\\N{BLACK STAR} *ow format placeholders*"
-msgstr "N{BLACK STAR} *ow format espaces réservés*"
+msgstr "\\N{BLACK STAR} *ow format espaces réservés*"
 
 #. Translators: $fullsr, $rank, etc. cannot be translated
 #: orisa/orisa.py:1339
