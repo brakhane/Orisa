@@ -5,17 +5,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2019-08-31 10:27+0000\n"
+"Last-Translator: Danila <sharanda.danila@gmail.com>\n"
+"Language-Team: Russian <https://weblate.orisa.rocks/projects/orisa/bot/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
-"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.8\n"
 
 #. Translators: Role
 #: orisa/models.py:58 orisa/orisa.py:172 orisa/orisa.py:1484
@@ -90,28 +90,28 @@ msgstr ""
 #. Translators: SR rank
 #: orisa/orisa.py:159
 msgid "Platinum"
-msgstr ""
+msgstr "Платина"
 
 #. Translators: SR rank
 #: orisa/orisa.py:161
 msgid "Diamond"
-msgstr ""
+msgstr "Алмаз"
 
 #. Translators: SR rank
 #: orisa/orisa.py:163
 msgid "Master"
-msgstr ""
+msgstr "Мастер"
 
 #. Translators: SR rank
 #: orisa/orisa.py:165
 msgid "Grandmaster"
-msgstr ""
+msgstr "Грандмастер"
 
 #. Translators: Role
 #: orisa/orisa.py:170 orisa/orisa.py:1484 orisa/orisa.py:1522
 #: orisa/orisa.py:1524
 msgid "Tank"
-msgstr ""
+msgstr "Танк"
 
 #: orisa/orisa.py:244
 msgid ""
@@ -128,36 +128,36 @@ msgstr ""
 #. Translators: Short for Discord Nickname
 #: orisa/orisa.py:497
 msgid "Nick"
-msgstr ""
+msgstr "Никнейм"
 
 #. Translators: When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
 #: orisa/orisa.py:521
 msgid "Tags"
-msgstr ""
+msgstr "Тэги"
 
 #: orisa/orisa.py:532
 msgid "SR"
 msgid_plural "SRs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Рейтинг"
+msgstr[1] "Рейтингов"
+msgstr[2] "Рейтинг"
 
 #. Translators: The roles a user has set with setroles (Main Tank, Damage, etc.)
 #: orisa/orisa.py:540
 msgid "Roles"
-msgstr ""
+msgstr "Роли"
 
 #. Translators: Weblinks
 #: orisa/orisa.py:544
 msgid "Links"
-msgstr ""
+msgstr "Ссылки"
 
 #: orisa/orisa.py:548
 #, python-brace-format
 msgid ""
 "[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa "
 "Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})"
-msgstr ""
+msgstr "Профиль Overwatch ({PROFILE_LINK}) | Проголосовать за Орису ({VOTE_LINK}) | Сервер помощи с Орисой ({SUPPORT_DISCORD}) | Пожертвования `{HEART}` ({DONATE_LINK})"
 
 #: orisa/orisa.py:559
 #, python-brace-format
@@ -189,7 +189,7 @@ msgstr ""
 
 #: orisa/orisa.py:575
 msgid "Use `!ow register` to register, or `!ow help` for more info."
-msgstr ""
+msgstr "Используйте `!ow register` чтобы зарегестрировать себя в сети Орисы, или `!ow help` чтобы получить больше информации."
 
 #: orisa/orisa.py:589
 msgid "About Me"
@@ -313,14 +313,14 @@ msgid ""
 "your BattleTag. Please click the link above and give me permission to access "
 "your data. I only need this permission once, you can remove it later in your "
 "BattleNet account."
-msgstr ""
+msgstr "Чтобы завершить регистрацию,  Мне нужно Ваше разрешение на запрос вашей информации у Blizzard. Пожалуйста, нажмите на ссылку надо мной и дайте разрешение для доступа к вашим данным. Разрешение потребуется единожды, но вы всегда сможете его отменить в вашем BattleNet аккаунте."
 
 #: orisa/orisa.py:714
 msgid ""
 "To complete your registration, I need your permission to ask Discord for "
 "your Gamertag. Please click the link above and give me permission to access "
 "your data. Make sure you have linked your Xbox account to Discord."
-msgstr ""
+msgstr "Чтобы завершить Вашу регистрацию, Мне нужно разрешение, чтобы узнать Ваш GamerTag через Discord. Пожалуйста, нажмите на ссылку надо мной и дайте разрешение для доступа к вашим данным. Убедитесь, что вы связали ваш Xbox с Discord."
 
 #: orisa/orisa.py:719
 #, python-brace-format
@@ -333,30 +333,30 @@ msgstr ""
 #: orisa/orisa.py:732
 #, python-brace-format
 msgid "Click here to register your {type} account!"
-msgstr ""
+msgstr "Нажмите здесь {type} , чтобы зарегестрировать Ваш аккаунт!"
 
 #. Translators: :information_source: is an emoji
 #: orisa/orisa.py:738
 msgid ":information_source: Protip"
-msgstr ""
+msgstr ":information_source: Подсказка"
 
 #: orisa/orisa.py:739
 msgid ""
 "If you want to register a secondary/smurf BattleTag, you can open the link "
 "in a private/incognito tab (try right clicking the link) and enter the "
 "account data for that account instead."
-msgstr ""
+msgstr "Если Вы хотите зарегистрировать второй/смурф BattleTag, Вы можете открыть ссылку в приватной/инкогнито вкладке (попробуйте нажать ПКМ на ссылку) и введите данные аккаунта для этого аккаунта."
 
 #. Translators: :video_game: is an emoji
 #: orisa/orisa.py:744
 msgid ":video_game: Not on PC?"
-msgstr ""
+msgstr ":video_game: Не для ПК?"
 
 #: orisa/orisa.py:745
 msgid ""
 "If you have an XBL account, use `!ow register xbox`. PSN accounts are "
 "currently not supported, but will be in the future."
-msgstr ""
+msgstr "Если у вас есть XBL аккаунт, то используйте `!ow register xbox`. PSN аккаунты в данный момент не поддерживаются, но будут в будущем."
 
 #. Translators: The translation should mention that the privacy policy is currently only available in English
 #: orisa/orisa.py:749
