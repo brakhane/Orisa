@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
 "PO-Revision-Date: 2019-08-31 18:20+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"Last-Translator: Danila <sharanda.danila@gmail.com>\n"
 "Language-Team: Russian <https://weblate.orisa.rocks/projects/orisa/bot/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -643,11 +643,11 @@ msgid ""
 "I tried to send you a DM with help, but you don't allow DM from server "
 "members. I can't post it here, because it's rather long. Please allow DMs "
 "and try again."
-msgstr ""
+msgstr "Я попыталась отправить Вам личное сообщение с помощью, но у Вас не включена возможность получения личных сообщений от пользователей сервера. Я не могу разместить это здесь, потому что это будет занимать много места в канале. Пожалуйста, откройте личные сообщения и попробуйте снова."
 
 #: orisa/orisa.py:1245
 msgid "Orisa's purpose"
-msgstr ""
+msgstr "Цель Орисы"
 
 #: orisa/orisa.py:1248
 #, python-brace-format
