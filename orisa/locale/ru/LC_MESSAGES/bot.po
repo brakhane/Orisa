@@ -2,13 +2,14 @@
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Danila <sharanda.danila@gmail.com>, 2019.
+# Dennis Brakhane <brakhane@googlemail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
 "PO-Revision-Date: 2019-08-31 10:27+0000\n"
-"Last-Translator: Danila <sharanda.danila@gmail.com>\n"
+"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: Russian <https://weblate.orisa.rocks/projects/orisa/bot/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +22,7 @@ msgstr ""
 #: orisa/models.py:58 orisa/orisa.py:172 orisa/orisa.py:1484
 #: orisa/orisa.py:1522 orisa/orisa.py:1524
 msgid "Damage"
-msgstr ""
+msgstr "Урон"
 
 #: orisa/models.py:59
 msgid "Main Tank"
@@ -35,7 +36,7 @@ msgstr ""
 #: orisa/models.py:61 orisa/orisa.py:174 orisa/orisa.py:1484
 #: orisa/orisa.py:1522 orisa/orisa.py:1524
 msgid "Support"
-msgstr ""
+msgstr "Поддержка"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:137
