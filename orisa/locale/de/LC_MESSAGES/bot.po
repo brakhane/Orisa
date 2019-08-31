@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-08-30 21:37+0000\n"
+"PO-Revision-Date: 2019-08-31 18:20+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.orisa.rocks/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -66,7 +66,7 @@ msgstr "Dm"
 #. Translators: 2 letter code for "Master" rank
 #: orisa/orisa.py:147
 msgid "Ma"
-msgstr "Ms"
+msgstr "Mt"
 
 #. Translators: 2 letter code for "Grandmaster" rank
 #: orisa/orisa.py:149
@@ -317,7 +317,7 @@ msgstr "Wenn Du ein sekundäres/smurf BattleTag registrieren möchtest, kannst d
 #. Translators: :video_game: is an emoji
 #: orisa/orisa.py:744
 msgid ":video_game: Not on PC?"
-msgstr ":video_game: Nicht am PC?"
+msgstr ":video_game: Keinen PC?"
 
 #: orisa/orisa.py:745
 msgid "If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future."
@@ -489,7 +489,7 @@ msgstr "Fehlende Rollenkennung. Gültige Rollenbezeichnungen sind: `m` (Main-Tan
 #: orisa/orisa.py:1050
 #, python-brace-format
 msgid "Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. `ds` would mean Damage + Support."
-msgstr "Unbekannte Rollenbezeichnung'{role}'. '. Gültige Rollenbezeichnungen sind: `m` (Main-Tank),`o` (Off-Tank),`d` (Schaden),`s` (Unterstützer). Sie können kombiniert werden, z.B. `ds` würde Schaden + Unterstützung bedeuten."
+msgstr "Unbekannte Rollenbezeichnung'{role}'. Gültige Rollenbezeichnungen sind: `m` (Main-Tank),`o` (Off-Tank),`d` (Schaden),`s` (Unterstützer). Sie können kombiniert werden, z.B. `ds` würde Schaden + Unterstützung bedeuten."
 
 #: orisa/orisa.py:1058
 msgid "You are not registered! Do `!ow register` first."
@@ -550,7 +550,7 @@ msgid ""
 "**The following players are currently online and {type_msg}:**\n"
 "\n"
 msgstr ""
-"**Folgende Spieler sind aktuell online und{type_msg}:**\n"
+"**Folgende Spieler sind aktuell online und {type_msg}:**\n"
 "\n"
 
 #: orisa/orisa.py:1183
@@ -608,7 +608,7 @@ msgid ""
 "Parameters in [square brackets] are optional."
 msgstr ""
 "Wenn Du einem Schnellsuche- oder Rangliste-Kanal beitreten willst, musst Du den BattleTag eines Kanalmitglieds kennen, oder Du musst von einem Mitglied hinzugefügt werden. In Rangliste-Kanälen hilft es auch zu wissen, welche SR die Kanalmitglieder haben. Um zu vermeiden, dass Du beim Beitritt zu einem Kanal immer wieder nach diesen Informationen fragen muss, wurde dieser Bot erstellt. Wenn Du dich mit Deinem BattleTag registrierst, wird Ihr Nickname automatisch aktualisiert und zeigt Deine aktuelle SR an und wird auf dem neuesten Stand gehalten. Du kannst auch nach dem BattleTag eines anderen Mitglieds fragen oder Dein eigenes anfragen, damit andere Dich anz einfach zu OW hinzufügen können.\n"
-"Orisa wird auch eine kurze Nachricht an den Chat senden, wenn Du einen Rang aufsteigst.\n"
+"Orisa wird auch eine kurze Nachricht an den Chat senden, wenn Du ein Spielniveau aufsteigst.\n"
 "*Wie Orisa von Overwatch ist dieser Bot noch recht jung und in unerfahren. Melde Probleme an <@!{OWNER}>*\n"
 "\n"
 "**Die Befehle funktionieren nur in den <#{channel_id}> Kanal oder indem Du mir eine PN schickst**\n"
@@ -642,7 +642,7 @@ msgid ""
 "*Example:*\n"
 "`!ow alwaysshowsr on`"
 msgstr ""
-"Auf einigen Servern zeigt Orisa nur dann Deinen SR oder Rang in Deinem Nickname an, wenn Du dich in einem OW-Sprachkanal befindest. Wenn Du möchtest, dass Dein Nickname immer Deinen SR oder Deinen Rang anzeigt, setzen dies auf \"on\".\n"
+"Auf einigen Servern zeigt Orisa nur dann Deinen SR oder Dein Spielniveau in Deinem Nickname an, solange Du dich in einem OW-Sprachkanal befindest. Wenn Du möchtest, dass Dein Nickname immer Deinen SR bzw. Dein Spielniveau anzeigt, setzen dies auf \"on\".\n"
 "*Beispiel:*\n"
 "`!ow alwaysshowsr on`"
 
@@ -681,7 +681,7 @@ msgid ""
 "Lets you specify how your SR or rank is displayed. It will always be shown in [square\\u00a0brackets] appended to your name.\n"
 "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`."
 msgstr ""
-"Legt fest, wie Dein SR oder Rang angezeigt wird. Das gewählte Format wird immer in [eckigen\\u00a0Klammern] an deinen Nicknamen angehängt.\n"
+"Legt fest, wie Dein SR oder Spielniveau angezeigt wird. Das gewählte Format wird immer in [eckigen\\u00a0Klammern] an deinen Nicknamen angehängt.\n"
 "Im *format* Parameter können Platzhalter sowohl als `$Platzhalter` als auch`${Platzhalter}`angegeben werden."
 
 #: orisa/orisa.py:1337
@@ -725,7 +725,7 @@ msgstr ""
 "Dein kompletter SR für die entsprechende Rolle zusammen mit dem entsprechenden Symbol. Asterisk und Fragezeichen haben die selbe Bedeutung wie bei`$sr`. Aus technischen Gründen sind die Symbole `{SYMBOL_TANK}`, `{SYMBOL_DPS}`, `{SYMBOL_SUPPORT}`\n"
 "\n"
 "`$tankrank`, `$damagerank`, `$supportrank`\n"
-"Wie oben, nur dass der Rang statt SR angezeigt wird.\n"
+"Wie oben, nur dass das Spielniveau statt SR angezeigt wird.\n"
 "\n"
 "`$dps`, `$dpsrank`\n"
 "Alias für`$damage` und`$damagerank`."
@@ -764,7 +764,7 @@ msgstr ""
 
 #: orisa/orisa.py:1373
 msgid "Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. Your OW account will be checked periodically and your nick will be automatically updated to show your SR or rank (see the *format* command for more info). `!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. If you register an XBL account, you have to link it to your Discord beforehand. PSN accounts are not supported yet."
-msgstr "Verbindet Orisa mit deinem BattleNet oder Gamertag, oder fügt sekundäre BattleTags deinem Account hinzu. Dein OW Account wird periodisch überprüft und dein Nickname wird automatisch aktualisiert, um deinen SR oder Rank anzuzeigen (siehe auch: *format* Befehl). Nutze `!ow register` oder `!ow register pc`, um einen PC Account registrieren, für XBL nutze `!ow register xbox. Wenn du einen XBL Account registrieren willst, musst du vorher eine Verknüpfung zwischen deinem Discord Account und XBL herstellen. PSN Accounts werden noch nicht unterstützt."
+msgstr "Verbindet Orisa mit deinem BattleNet oder Gamertag, oder fügt sekundäre BattleTags deinem Account hinzu. Dein OW Account wird periodisch überprüft und dein Nickname wird automatisch aktualisiert, um deinen SR oder Spielniveau anzuzeigen (siehe auch: *format* Befehl). Nutze `!ow register` oder `!ow register pc`, um einen PC Account registrieren, für XBL nutze `!ow register xbox. Wenn du einen XBL Account registrieren willst, musst du vorher eine Verknüpfung zwischen deinem Discord Account und XBL herstellen. PSN Accounts werden noch nicht unterstützt."
 
 #: orisa/orisa.py:1379
 msgid "Show Orisa's Privacy Policy"
@@ -1049,7 +1049,7 @@ msgid ""
 "On some servers, I will only update your nick if you join a OW voice channel. If you want your nick to always show your SR, use the `!ow alwaysshowsr` command. If you want me to show your rank instead of your SR, use `!ow format $rank`.\n"
 "If you have more than one account, simply issue `!ow register` again.\n"
 msgstr ""
-"Auf einigen Servern werde ich deinen Nicknamen nur aktualieren, solange du dich in einem OW Sprachkanal des Servers befindest. Wenn du auch auf diesen Servern dein SR immer im Nicknamen haben möchtest, kannst du den `!ow alwaysshowsr` Befehl nutzen. Wenn du lieber deinen Rang als SR im Nick haben willst, nutzt `!ow format $rank`.\n"
+"Auf einigen Servern werde ich deinen Nicknamen nur aktualieren, solange du dich in einem OW Sprachkanal des Servers befindest. Wenn du auch auf diesen Servern dein SR immer im Nicknamen haben möchtest, kannst du den `!ow alwaysshowsr` Befehl nutzen. Wenn du lieber dein Spielniveau als SR im Nick haben willst, nutzt `!ow format $rank`.\n"
 "Wenn du mehr als einen Account hast, wiederhole einfach`!ow register`.\n"
 
 #: orisa/orisa.py:2644
