@@ -3,13 +3,14 @@
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Weblate Admin <brakhane+weblateadmin@gmail.com>, 2019.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
+# Cynthia <cynti-ebert@web.de>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-01 18:14+0200\n"
-"PO-Revision-Date: 2019-09-01 14:02+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"PO-Revision-Date: 2019-09-01 21:01+0000\n"
+"Last-Translator: Cynthia <cynti-ebert@web.de>\n"
 "Language-Team: German <https://weblate.orisa.rocks/projects/orisa/bot/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -287,10 +288,8 @@ msgid "I sent you a DM."
 msgstr "Ich habe dir eine PN gesendet."
 
 #: orisa/orisa.py:692
-#, fuzzy
-#| msgid "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. I can't post the link here because everybody who knows that link will be able to configure me for the next 30 minutes."
 msgid "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. I can't post the link here because everybody who knows that link will be able to configure me."
-msgstr "Ich habe versucht, Dir einen PN mit dem Link zu senden, aber Du haben PN von Servermitgliedern nicht zugelassen. Bitte erlaube das und versuche es erneut. Ich kann den Link hier nicht posten, da jeder, der diesen Link kennt, mich für die nächsten 30 Minuten konfigurieren kann."
+msgstr "Ich habe versucht, Dir eine PN mit dem Link zu senden, aber deine Einstellungen erlauben keine PNs von Servermitgliedern. Bitte ändere deine Privatsphäreneinstellung und versuche es erneut. Ich kann den Link hier nicht posten, da jeder, der diesen Link hat, mich konfigurieren kann."
 
 #: orisa/orisa.py:703
 #, python-brace-format
@@ -517,7 +516,7 @@ msgstr "Entschuldigung, findplayer funktioniert noch nicht mit rollenbasiertem S
 
 #: orisa/orisa.py:1092
 msgid "SR difference must be positive!"
-msgstr "SR Differenz muss positiv sein!"
+msgstr "SN-Differenz muss positiv sein!"
 
 #. Translators: used when Orisa is asked to find players that are more than 5000 SR below or above them, use the equivalent Orisa voiceline
 #. in your language
@@ -527,15 +526,14 @@ msgstr "Diese Logik ist fehlerhaft!"
 
 #. Translators: type is BattleTag or GamerTag
 #: orisa/orisa.py:1108
-#, fuzzy, python-brace-format
-#| msgid "You primary {type} has no SR, please give a SR range you want to search for instead."
+#, python-brace-format
 msgid "Your primary {type} has no SR, please give a SR range you want to search for instead."
-msgstr "Dein primärer {type} hat keine SR, bitte gebe stattdessen einen SR-Bereich an, nach dem Du suchen möchtest."
+msgstr "Dein primärer {type} hat kein SN, bitte gebe stattdessen ein SN-Bereich an, nach dem Du suchen möchtest."
 
 #: orisa/orisa.py:1117
 #, python-brace-format
 msgid "within {sr_diff} of {base_sr} SR"
-msgstr "innerhalb {sr_diff} von {base_sr} SR"
+msgstr "innerhalb {sr_diff} von {base_sr} SN"
 
 #: orisa/orisa.py:1130
 msgid "min and max must be between 500 and 5000, and min must not be larger than max."
@@ -545,7 +543,7 @@ msgstr "min und max müssen zwischen 500 und 5000 liegen und min darf nicht grö
 #: orisa/orisa.py:1134
 #, python-brace-format
 msgid "between {min_sr} and {max_sr} SR"
-msgstr "zwischen {min_sr} und {max_sr} SR"
+msgstr "zwischen {min_sr} und {max_sr} SN"
 
 #: orisa/orisa.py:1180
 #, python-brace-format
@@ -783,13 +781,6 @@ msgid "Show Orisa's Privacy Policy"
 msgstr "Zeige Orisa's Datenschutzbestimmungen (momentan nur in Englischer Sprache)"
 
 #: orisa/orisa.py:1389
-#, fuzzy
-#| msgid ""
-#| "Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using, the its SR is shown in your nick\n"
-#| "The search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n"
-#| "The given BattleTag must already be registered as one of your BattleTags.\n"
-#| "*Example:*\n"
-#| "`!ow setprimary jjonak`"
 msgid ""
 "Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using: its SR is shown in your nick\n"
 "The search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n"
@@ -797,9 +788,9 @@ msgid ""
 "*Example:*\n"
 "`!ow setprimary jjonak`"
 msgstr ""
-"Macht das angegebene sekundäre BattleTag zu deinem Haupt-BattleTag. Dein Haupt-BattleTag ist das, welches du momentan hauptsächlich nutzt; der Account, dessen SR in deinem Nickname erscheinen soll.\n"
+"Macht den angegebenen sekundären BattleTag zu deinem Haupt-BattleTag. Dein Haupt-BattleTag ist das, welches du momentan hauptsächlich nutzt; der Account, dessen SN in deinem Nickname erscheinen soll.\n"
 "Es wird eine unscharfe Suche durchgeführt, so dass es normalerweise reicht, nur die ersten (paar) Buchstaben anzugeben.\n"
-"Das angegebene BattleTag muss bereits als eines deiner BattleTags registriert sein.\n"
+"Der angegebene BattleTag muss bereits als eines deiner BattleTags registriert sein.\n"
 "*Beispiel:*\n"
 "`!ow setprimary jjonak`"
 
