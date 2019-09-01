@@ -30,7 +30,7 @@ Orisa wouldn't be possible without the help of contributors. If you feel you are
   * Jean Lucas
 
 * Portuguese (Portugal) translation
-  * Daniel Martins
+  * Daniel Martins (aka "Raving Sombra")
 
 * Spanish translation
   * Adrián Hernández González
