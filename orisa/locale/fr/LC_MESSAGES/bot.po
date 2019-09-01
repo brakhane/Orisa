@@ -174,7 +174,7 @@ msgid ""
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough."
 msgstr ""
 "\n"
-"D'ailleurs, vous n'avez pas besoin de donner votre pseudo si vous voulez votre propre BattleTag; la commande !ow est suffisante."
+"D'ailleurs, tu n'as pas besoin de donner ton pseudo si tu veux ton propre BattleTag ; la commande !ow est suffisante."
 
 #. Translators: "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:570
