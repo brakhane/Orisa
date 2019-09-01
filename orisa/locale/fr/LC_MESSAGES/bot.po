@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
 "PO-Revision-Date: 2019-09-01 15:13+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"Last-Translator: Leo <dao3300@gmail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -36,7 +36,6 @@ msgstr "Offtank"
 #. Translators: Role
 #: orisa/models.py:61 orisa/orisa.py:174 orisa/orisa.py:1484
 #: orisa/orisa.py:1522 orisa/orisa.py:1524
-#, fuzzy
 msgid "Support"
 msgstr "Soutien"
 
@@ -189,9 +188,8 @@ msgid "Hint"
 msgstr "Astuce"
 
 #: orisa/orisa.py:575
-#, fuzzy
 msgid "Use `!ow register` to register, or `!ow help` for more info."
-msgstr "Tape`!ow register` pour t'enregistrer ou `!ow help` pour avoir la liste de commandes."
+msgstr "Tape`!ow register` pour t'enregistrer ou `!ow help` pour avoir la liste des commandes."
 
 #: orisa/orisa.py:589
 msgid "About Me"
@@ -308,7 +306,7 @@ msgstr "Enregistrement de type \"{type}\" invalide. Utilise `!ow register` ou `!
 
 #. Translators: type will be PC, XBOX or PSN
 #: orisa/orisa.py:732
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Click here to register your {type} account!"
 msgstr "Clique ici pour enregistrer ton compte {type}!"
 
@@ -483,9 +481,8 @@ msgid "Your nick will be updated even when you are not in an OW voice channel. U
 msgstr "Ton pseudonyme sera mis à jour même si tu n’es pas dans un salon vocal Overwatch. Utilise `!ow alwaysshowsr off’ pour l’éteindre à nouveau."
 
 #: orisa/orisa.py:942
-#, fuzzy
 msgid "Your nick will only be updated when you are in an OW voice channel. Use `!ow alwaysshowsr on` to always update your nick."
-msgstr "Votre pseudonyme ne sera mis à jour que lorsque vous êtes dans un canal vocal OW. Utilisez `!ow alwaysshowsr on pour toujours mettre à jour votre pseudonyme."
+msgstr "Ton pseudo ne sera mis à jour que lorsque tu es dans un salon vocal Overwatch. Utilise `!ow alwaysshowsr on` pour que ton pseudo soit mis à jour en permanence."
 
 #: orisa/orisa.py:968
 #, fuzzy
@@ -625,12 +622,10 @@ msgid "I'm not configured yet! Somebody with the role `Orisa Admin` needs to iss
 msgstr "Je ne suis pas encore configuré! Quelqu’un qui à le rôle `Orisa Admin` doit émettre `!ow config` pour me configurer d’abord !"
 
 #: orisa/orisa.py:1230
-#, fuzzy
 msgid "I tried to send you a DM with help, but you don't allow DM from server members. I can't post it here, because it's rather long. Please allow DMs and try again."
-msgstr "J’ai essayé de vous envoyer un DM avec de l’aide, mais vous n’autorisez pas le DM des membres du serveur. Je ne peux pas l’afficher ici, parce que c’est plutôt long. Veuillez autoriser les DM et réessayer."
+msgstr "J’ai essayé de t'envoyer un MP avec quelques infos sur moi mais tu as désactivé la réception des MP provenant de membres d'un serveur commun. Je ne peux pas l’afficher ici parce que c’est plutôt long donc réactive cette option et réessaie."
 
 #: orisa/orisa.py:1245
-#, fuzzy
 msgid "Orisa's purpose"
 msgstr "Le but d’Orisa"
 
@@ -678,13 +673,12 @@ msgid "Shows information about Orisa, and how you can add her to your own Discor
 msgstr "Affiche des informations sur Orisa, et comment vous pouvez l’ajouter à votre propre serveur Discord, ou l’aider à la soutenir."
 
 #: orisa/orisa.py:1283
-#, fuzzy
 msgid ""
 "On some servers, Orisa will only show your SR or rank in your nick when you are in an OW voice channel. If you want your nick to always show your SR or rank, set this to on.\n"
 "*Example:*\n"
 "`!ow alwaysshowsr on`"
 msgstr ""
-"Sur certains serveurs, Orisa ne montrera votre SR ou votre rang dans votre nick que lorsque vous êtes sur un canal OW. Si vous voulez que votre nick montre toujours votre SR ou votre grade, réglez ça.\n"
+"Sur certains serveurs, Orisa ne montrera ta côte ou ton rang dans ton pseudo que lorsque tu es dans un salon Overwatch. Si tu veux que ton pseudo montre toujours ta côte ou ton rang, utilise la commande ci-dessous.\n"
 "*Exemple ;*\n"
 "`!ow alwaysshowsr on`"
 
@@ -707,13 +701,12 @@ msgstr "La même chose que `!Ow findplayers`, mais inclut aussi les joueurs hors
 
 #. Translators: help !ow forceupdate
 #: orisa/orisa.py:1319
-#, fuzzy
 msgid ""
 "Immediately checks your account data and updates your nick accordingly.\n"
 "*Checks and updates are done automatically, use this command only if you want your nick to be up to date immediately!*"
 msgstr ""
-"Vérifie immédiatement les données de votre compte et met à jour votre pseudonyme en conséquence.\n"
-"*Les vérifications et mises à jour sont effectuées automatiquement, utilisez cette commande uniquement si vous voulez que votre pseudonyme soit à jour immédiatement! *"
+"Vérifie les infos de ton compte et mets à jour ton pseudo directement.\n"
+"*Les vérifications et mises à jour sont effectuées automatiquement. Utilise cette commande uniquement si tu veux que ton pseudo soit à jour immédiatement! *"
 
 #. Translators: help !ow forgetme
 #: orisa/orisa.py:1326
@@ -798,7 +791,6 @@ msgstr ""
 
 #. Translators: headline of second help page
 #: orisa/orisa.py:1360
-#, fuzzy
 msgid "help cont'd"
 msgstr "aide (suite)"
 
@@ -814,9 +806,8 @@ msgstr ""
 "'!ow get register' cherchera le pseudonyme \"register\"."
 
 #: orisa/orisa.py:1373
-#, fuzzy
 msgid "Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. Your OW account will be checked periodically and your nick will be automatically updated to show your SR or rank (see the *format* command for more info). `!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. If you register an XBL account, you have to link it to your Discord beforehand. PSN accounts are not supported yet."
-msgstr "Créez un lien vers votre compte Battlenet ou Gamertag, ou ajoutez un Battletag secondaire à votre compte. Votre compte OW sera vérifié périodiquement et votre pseudonyme sera automatiquement mis à jour pour afficher votre SR ou votre grade (voir la commande *format* pour plus d’informations). `!ow register` et `!ow register pc` enregistreront un compte PC, `!ow register xbox` enregistreront un compte XBL. Si vous enregistrez un compte XBL, vous devez le lier à votre Discord au préalable. Les comptes PSN ne sont pas encore supportés."
+msgstr "Crée un lien vers ton compte Battlenet ou ton Gamertag ou ajoute un Battletag secondaire à ton compte. Ton compte Overwatch sera vérifié périodiquement et ton pseudo sera automatiquement mis à jour pour afficher ta côte ou ton rang (voir la commande *format* pour plus d’informations). `!ow register` et `!ow register pc` enregistreront un compte PC, `!ow register xbox` enregistrera un compte Xbox Live. Si tu enregistres un compte Xbox Live, tu devras le lier à ton compte Discord au préalable. Les comptes PlayStation Network ne sont pas encore supportés."
 
 #: orisa/orisa.py:1379
 #, fuzzy
