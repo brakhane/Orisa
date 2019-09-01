@@ -17,7 +17,7 @@ Orisa wouldn't be possible without the help of contributors. If you feel you are
 
 * French translation
   * "Diable Dk"
-  * "Leo"
+  * Léo Clauzure
 
 * German translation
   * "AIERKUCHEN"
