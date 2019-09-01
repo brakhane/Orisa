@@ -1,1 +1,8 @@
-{}
+{
+    "cfg": {
+        "allow-sr-in-nick": "Zawsze pokazuj RU (lub rangę) przy nickach",
+        "allow-sr-in-nick-tt": "Kiedy opcja zostanie włączona, Orisa zawsze będzie aktualizowała nicki wszystkich wpisanych użytkowników tak, aby zawierały ich RU (`Orisa` stanie się `Orisa [12-23-34]`)\nJeżeli uważasz że członkowie twojego serwera za bardzo polegają na RU (\"Silver nie ma nic do gadania\"), możesz wyłączyć tą opcje.\nKiedy to się stanie, członkowie twojego serwera wciąż mogą wymusić pojawienie się RU obok ich nicku dzięki komendzie '!ow alwaysshowsr'\nJeśli nie jesteś pewien, włącz tą opcję, i wyłącz ją jeśli zauważysz negatywny odzew społeczności.",
+        "configure-for": "Skonfiguruj Orisę dla {{ guild_name }}",
+        "congrats-chan": "Kanał Gratulacyjny"
+    }
+}
