@@ -3,6 +3,22 @@
         "allow-sr-in-nick": "Mostra sempre o SR (ou rank) nos nicknames",
         "allow-sr-in-nick-tt": "Quando esta opção está ativada, a Orisa irá sempre atualizar os nicknames de todos os utilizadores registados para mostrar o SR nos nome (`Orisa` passa a `Orisa [12-23-34]`).\nSe achas que os membros do teu servidor focam-se demasiado no SR (\"Eu não dou ouvidos a silvers\") podes desativar esta opção.\nQuando desativada, os membros do teu servidor podem mesmo assim forçar o seu SR para ser mostrado, fazendo o comando `!ow alwaysshowsr`.\nSe estás na dúvida, ativa esta opção e apenas desliga se receber críticas negativas.",
         "configure-for": "Configura a Orisa para o/a {{guild_name}}",
-        "congrats-chan-desc": "Quando um membro alcança um rank superior (ex. Silver → Gold), a Orisa irá felicitá-lo publicamente neste canal. É fortemente recomendado que seleciones o canal onde os membros falem sobre OW. (a Orisa irá **apenas** colocar mensagens de 'subida de rank'), mas pode ser o mesmo que \"$t(cfg.listen-chan)\"."
+        "congrats-chan-desc": "Quando um membro alcança um rank superior (ex. Silver → Gold), a Orisa irá felicitá-lo publicamente neste canal. É fortemente recomendado que seleciones o canal onde os membros falem sobre OW. (a Orisa irá **apenas** colocar mensagens de 'subida de rank'), mas pode ser o mesmo que \"$t(cfg.listen-chan)\".",
+        "drag-orisa-role": "Podes simplesmente arrastar o cargo `Orisa` na aba *Config. do Servidor > Cargos*, [desta forma]({{ link }}). A Orisa não irá receber mais permissões com isto, apenas permite que possa mudar mais nicknames.\nO nickname do dono do servidor não pode ser alterado independentemente do que possa ser feito. **Não dês a permissão de Administrador à Orisa!** Não vai ajudar, e é um potencial problema de segurança se a Orisa tiver um bug explorável.",
+        "error-saving": "Houve um erro ao guardar, tenta novamente mais tarde!",
+        "fix-val-errors": "Por favor corrige os erros de validação antes de continuar.",
+        "footer": "Obrigado por usares a Orisa!",
+        "general-settings-hdr": "Definições Gerais para {{guild_name}}",
+        "lang": "Língua",
+        "lang-complete": "(Quase) completamente traduzido",
+        "lang-incomplete": "Ainda não totalmente traduzido.",
+        "lang-incomplete-engage": "{{lang}} ainda não está totalmente traduzida! As strings ainda não traduzidas serão mostradas em Inglês. [Clica aqui se queres ajudar a traduzir!]({{ link }})",
+        "lead-info": "O botão para guardar irá apenas aparecer quando tiveres alterações não guardadas. Após guardares as tuas definições, podes fechar esta janela.\nSe tens dúvidas ou sugestões, [junta-te ao Discord oficial]({{ link }}).",
+        "listen-chan": "Canal da Orisa",
+        "listen-chan-desc": "Em que canal queres que a Orisa procure por comandos? Este canal será também usado para colocar a tabela de classificações de SR diária. A Orisa reage sempre a comandos por DM. Já agora, o comando `!ow help` irá funcionar em qualquer canal.",
+        "load-failed": "Algo correu mal ao carregar os dados. Este link pode ter expirado. Tenta pedir um novo. Se isso não ajudar, tenta novamente mais tarde…",
+        "loading": "A carregar",
+        "no-mgt-voice-chan-hdr": "Sem canais de voz geridos",
+        "no-mgt-voice-chan-lead": "A Orisa pode ajudar-te a criar e apagar dinamicamente canais de voz a pedido (não só para OW) e opcionalmente mostrar o SR nos nomes do canal."
     }
 }
