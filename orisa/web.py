@@ -125,20 +125,23 @@ def validate_config(guild, guild_config):
     def missing_perms(permissions, required):
         
         perm_names = {
-            # Translators: discord permission name
+            # Translators: Discord permission name
             "send_messages": _("Send Messages"),
-            # Translators: discord permission name
+            # Translators: Discord permission name
             "read_messages": _("Read Messages"),
-            # Translators: discord permission name
+            # Translators: Discord permission name
             "embed_links": _("Embed Links"),
-            # Translators: discord permission name
+            # Translators: Discord permission name
             "attach_files": _("Attach Files"),
-            # Translators: discord permission name
+            # Translators: Discord permission name
             "manage_nicknames": _("Manage Nicknames")
+            # Translators: Discord permission name
+            "manage_channels": _("Manage Channels")
+
         }
 
         missing = [
-            perm_names[perm] for perm in required if not getattr(permissions, perm)
+            perm_names.get(perm, perm) for perm in required if not getattr(permissions, perm)
         ]
 
         if missing:
