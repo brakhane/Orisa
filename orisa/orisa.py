@@ -1636,7 +1636,7 @@ Pornography Historian""").split("\n")
                     except Exception:
                         logger.exception(f"Can't adjust voice channel for new state parent {new_voice_state.channel.parent}")
 
-        CurrentLocale.set(self.guild_info[member.guild_id].locale)
+        CurrentLocale.set(self.guild_config[member.guild_id].locale)
         async with self.database.session() as session:
             user = await self.database.user_by_discord_id(session, member.id)
             if user:
@@ -2287,7 +2287,7 @@ Pornography Historian""").split("\n")
 
         for guild_id, tops in top_per_guild.items():
             logger.debug(f"Processing guild {guild_id} for top_players")
-            CurrentLocale.set(self.guild_info[guild_id].locale)
+            CurrentLocale.set(self.guild_config[guild_id].locale)
 
             # FIXME: wrong if there is a tie
             prev_top_tags = [

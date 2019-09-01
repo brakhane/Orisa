@@ -41,7 +41,10 @@ TRANSLATIONS = {
 class I18NCommandsManager(CommandsManager):
     async def handle_commands(self, ctx: EventContext, message: Message):
         guild_id = message.guild_id
-        orisa = self.plugins["Orisa"]
+        try:
+            orisa = self.plugins["Orisa"]
+        except KeyError:
+            logger.debug("Not initialized yet, ignoring command", exc_info=True)
         # guild_config is a defaultdict, so we can just lookup, even if guild_id is None
         locale = orisa.guild_config[guild_id].locale
 
