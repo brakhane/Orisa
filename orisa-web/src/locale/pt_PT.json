@@ -2,6 +2,7 @@
     "cfg": {
         "allow-sr-in-nick": "Mostra sempre o SR (ou rank) nos nicknames",
         "allow-sr-in-nick-tt": "Quando esta opção está ativada, a Orisa irá sempre atualizar os nicknames de todos os utilizadores registados para mostrar o SR nos nome (`Orisa` passa a `Orisa [12-23-34]`).\nSe achas que os membros do teu servidor focam-se demasiado no SR (\"Eu não dou ouvidos a silvers\") podes desativar esta opção.\nQuando desativada, os membros do teu servidor podem mesmo assim forçar o seu SR para ser mostrado, fazendo o comando `!ow alwaysshowsr`.\nSe estás na dúvida, ativa esta opção e apenas desliga se receber críticas negativas.",
-        "configure-for": "Configura a Orisa para o/a {{guild_name}}"
+        "configure-for": "Configura a Orisa para o/a {{guild_name}}",
+        "congrats-chan-desc": "Quando um membro alcança um rank superior (ex. Silver → Gold), a Orisa irá felicitá-lo publicamente neste canal. É fortemente recomendado que seleciones o canal onde os membros falem sobre OW. (a Orisa irá **apenas** colocar mensagens de 'subida de rank'), mas pode ser o mesmo que \"$t(cfg.listen-chan)\"."
     }
 }
