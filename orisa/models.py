@@ -42,6 +42,7 @@ import sqlalchemy.types as types
 
 from .config import DATABASE_URI
 from .utils import sr_to_rank, TDS
+from .i18n import _
 
 Base = declarative_base()
 
