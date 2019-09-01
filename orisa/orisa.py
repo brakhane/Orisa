@@ -238,6 +238,7 @@ class Orisa(Plugin):
         self.stopped_playing_cache = cachetools.TTLCache(maxsize=1000, ttl=10)
 
         self.guild_config = defaultdict(GuildConfig.default)
+        self._welcome_language = cachetools.Cache(maxsize=100)
 
         # Translators: sent by Orisa when she joins a new server
         self._welcome_text = N_(
@@ -1706,14 +1707,19 @@ Pornography Historian""").split("\n")
         if event.startswith("MESSAGE_REACTION_"):
             if int(data["user_id"]) == event_ctx.bot.user.id:
                 return
-            mid = data["message_id"]
+            mid = int(data["message_id"])
             async with self.database.session() as session:
                 wm_info = await self.database.get_welcome_message(session, mid)
                 if not wm_info:
                     return
                 session.expunge(wm_info)
 
-            CurrentLocale.set(locale_by_flag(data["emoji"]["name"]) or "en")
+            locale = locale_by_flag(data["emoji"]["name"]) or "en"
+            CurrentLocale.set(locale)
+            guild_id = int(data.get("guild_id", 0)) or None
+
+            if guild_id:
+                self._welcome_language[guild_id] = locale
 
             text = _(self._welcome_text)
             if wm_info.is_private_message:

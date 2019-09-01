@@ -52,6 +52,9 @@ class I18NCommandsManager(CommandsManager):
         # guild_config is a defaultdict, so we can just lookup, even if guild_id is None
         locale = orisa.guild_config[guild_id].locale
 
+        if not locale:
+            locale = orisa._welcome_language.get(guild_id, None)
+
         # update locale for user, or get locale from user if we have no locale
         async with orisa.database.session() as session:
             user = await orisa.database.user_by_discord_id(session, message.author_id)
