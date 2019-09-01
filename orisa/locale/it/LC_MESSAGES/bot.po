@@ -3,13 +3,14 @@
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Valerio D'Onghia <venom1@live.de>, 2019.
 # Weblate Admin <brakhane+weblate@gmail.com>, 2019.
+# Daniele Giulietti <lordnocht@gmail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-08-29 13:04+0000\n"
-"Last-Translator: Valerio D'Onghia <venom1@live.de>\n"
+"PO-Revision-Date: 2019-09-01 17:34+0000\n"
+"Last-Translator: Daniele Giulietti <lordnocht@gmail.com>\n"
 "Language-Team: Italian <https://weblate.orisa.rocks/projects/orisa/bot/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -121,6 +122,9 @@ msgid ""
 "Then, write `!ow config` in this channel and I will send you a link to configure me via DM.\n"
 "*I will ignore all commands except `!ow help` and `!ow config` until I'm configured for this Discord!*"
 msgstr ""
+"*Saluti*! Sono entusiasta di essere qui :smiley:\n"
+"Per iniziare, creare un nuovo ruolo chiamato `Orisa Admin` (Solo il nome è importante, non è necessario nessun permesso speciale) ed aggiungi te stesso e tutti quelli che dovrebbero essere autorizzati a configurarmi.\n"
+"*Ignorerò tutti i comandi eccetto '!ow help' e ' !ow config' finché non sarò configurata per questo Discord!*"
 
 #. Translators: Short for Discord Nickname
 #: orisa/orisa.py:497
