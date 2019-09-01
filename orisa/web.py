@@ -134,9 +134,9 @@ def validate_config(guild, guild_config):
             # Translators: Discord permission name
             "attach_files": _("Attach Files"),
             # Translators: Discord permission name
-            "manage_nicknames": _("Manage Nicknames")
+            "manage_nicknames": _("Manage Nicknames"),
             # Translators: Discord permission name
-            "manage_channels": _("Manage Channels")
+            "manage_channels": _("Manage Channels"),
 
         }
 
