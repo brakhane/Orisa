@@ -122,7 +122,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           >
             <template #description>
               <vue-markdown 
-                :anchorAttributes="{target: '_blank'}
+                :anchorAttributes="{target: '_blank'}"
                 :source="$t('cfg.reg-msg-desc', {
                 link: 'https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-'
               })"/>
