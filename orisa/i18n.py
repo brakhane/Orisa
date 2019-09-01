@@ -47,7 +47,7 @@ class I18NCommandsManager(CommandsManager):
         try:
             orisa = self.plugins["Orisa"]
         except KeyError:
-            logger.debug("Not initialized yet, ignoring command", exc_info=True)
+            logger.debug("Not initialized yet, ignoring command")
             return
         # guild_config is a defaultdict, so we can just lookup, even if guild_id is None
         locale = orisa.guild_config[guild_id].locale

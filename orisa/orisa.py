@@ -1386,7 +1386,7 @@ Pornography Historian""").split("\n")
         embed.add_field(name="!ow privacy", value=_("Show Orisa's Privacy Policy"))
         embed.add_field(
             name="!ow setprimary *battletag*",
-            value=_("Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using, the its SR is shown in your nick\n"
+            value=_("Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using: its SR is shown in your nick\n"
             "The search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n"
             "The given BattleTag must already be registered as one of your BattleTags.\n"
             "*Example:*\n"

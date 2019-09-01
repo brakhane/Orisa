@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-01 17:46+0200\n"
+"POT-Creation-Date: 2019-09-01 18:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,21 +18,21 @@ msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #. Translators: Role
-#: orisa/models.py:58 orisa/orisa.py:172 orisa/orisa.py:1491
+#: orisa/models.py:59 orisa/orisa.py:172 orisa/orisa.py:1491
 #: orisa/orisa.py:1529 orisa/orisa.py:1531
 msgid "Damage"
 msgstr ""
 
-#: orisa/models.py:59
+#: orisa/models.py:60
 msgid "Main Tank"
 msgstr ""
 
-#: orisa/models.py:60
+#: orisa/models.py:61
 msgid "Off Tank"
 msgstr ""
 
 #. Translators: Role
-#: orisa/models.py:61 orisa/orisa.py:174 orisa/orisa.py:1491
+#: orisa/models.py:62 orisa/orisa.py:174 orisa/orisa.py:1491
 #: orisa/orisa.py:1529 orisa/orisa.py:1531
 msgid "Support"
 msgstr ""
@@ -824,8 +824,7 @@ msgstr ""
 #: orisa/orisa.py:1389
 msgid ""
 "Makes the given secondary BattleTag your primary BattleTag. Your primary "
-"BattleTag is the one you are currently using, the its SR is shown in your "
-"nick\n"
+"BattleTag is the one you are currently using: its SR is shown in your nick\n"
 "The search is performed fuzzy and case-insensitve, so you normally only need "
 "to give the first (few) letters.\n"
 "The given BattleTag must already be registered as one of your BattleTags.\n"
