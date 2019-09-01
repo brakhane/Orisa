@@ -451,6 +451,7 @@ msgstr ""
 #. Keep the titles funny and not insulting! Nobody wants to be called an asshole when he used ow format.
 #. You can also leave the list empty; in that case, the English original will be used.
 #: orisa/orisa.py:895
+#, fuzzy
 msgid ""
 "Smarties Expert\n"
 "Bread Scientist\n"
@@ -660,7 +661,7 @@ msgid "Orisa's purpose"
 msgstr "Le but d’Orisa"
 
 #: orisa/orisa.py:1248
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "When joining a QP or Comp channel, you need to know the BattleTag of a channel member, or they need yours to add you. In competitive channels it also helps to know which SR the channel members have. To avoid having to ask for this information again and again when joining a channel, this bot was created. When you register with your BattleTag, your nick will automatically be updated to show your current SR and it will be kept up to date. You can also ask for other member's BattleTag, or request your own so others can easily add you in OW.\n"
 "It will also send a short message to the chat when you ranked up.\n"
@@ -1025,6 +1026,7 @@ msgstr "Faites du bruit pour <@!{discord_id}> !"
 
 #. Translators: header for highscore table: position (keep it short)
 #: orisa/orisa.py:2287
+#, fuzzy
 msgid "#"
 msgstr "#"
 
@@ -1035,6 +1037,7 @@ msgstr "préc"
 
 #. Translators: header for highscore table: member name
 #: orisa/orisa.py:2291
+#, fuzzy
 msgid "Member"
 msgstr "Membre"
 
@@ -1051,6 +1054,7 @@ msgstr "{role} SR"
 
 #. Translators: header for highscore table: SR difference
 #: orisa/orisa.py:2297
+#, fuzzy
 msgid "ΔSR"
 msgstr "ΔSR"
 
@@ -1060,11 +1064,12 @@ msgid "Hello! Here are the current SRs for **{role}** on {platform} . If a membe
 msgstr "Bonjour! Voici les SR actuelles pour **{role}** sur {platform}. Si un membre a plus d’un {handle_type}, seul le {handle_type} principal est pris en compte. Les joueurs avec des profils privés, ou ceux qui n’ont pas fait leurs placements cette saison ne sont pas encore montrés."
 
 #: orisa/orisa.py:2396
+#, fuzzy
 msgid "*To avoid spamming you, I will only send out this warning once per week*\n"
 msgstr "*Pour éviter que vous spammer, je n’enverrai cet avertissement qu’une fois par semaine*\n"
 
 #: orisa/orisa.py:2397
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Hi! I just tried to update your nickname, but the result '{nick}' would be longer than 32 characters."
 msgstr "Salut! J’ai juste essayé de mettre à jour votre pseudonyme, mais le résultat '{nick}' serait plus long que 32 caractères."
 
