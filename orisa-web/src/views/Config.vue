@@ -85,7 +85,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           </b-popover>
           <hr class="hr-3">
           <b-form-group
-           horizontal
+           label-cols-sm="4" label-cols-lg="3"
            :label="$t('cfg.lang')"
           >
             <template v-if="!lang_fully_translated" #description>
@@ -116,7 +116,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             </b-form-select>
           </b-form-group>
           <b-form-group
-            horizontal
+            label-cols-sm="4" label-cols-lg="3"
             :label="$t('cfg.reg-msg')"
             :invalid-feedback="validation_errors.extra_register_text"
           >
@@ -134,7 +134,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           </b-form-group>
 
           <b-form-group
-            horizontal
+            label-cols-sm="4" label-cols-lg="3"
             :state="val_state(validation_errors.listen_channel_id)"
             :invalid-feedback="validation_errors.listen_channel_id"
             :label="$t('cfg.listen-chan')"
@@ -150,7 +150,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           </b-form-group>
 
           <b-form-group
-            horizontal
+            label-cols-sm="4" label-cols-lg="3"
             :state="val_state(validation_errors.congrats_channel_id)"
             :invalid-feedback="validation_errors.congrats_channel_id"
             :label="$t('cfg.congrats-chan')"
@@ -330,6 +330,7 @@ export default {
     },
 
     lang_config_fully_translated () {
+      console.log("WPT", this.current_lang_info.web_percent_translated)
       return this.current_lang_info.web_percent_translated >= 90
     },
 
