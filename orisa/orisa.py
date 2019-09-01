@@ -1105,7 +1105,7 @@ Pornography Historian""").split("\n")
                     await reply(
                         ctx,
                         # Translators: type is BattleTag or GamerTag
-                        _("You primary {type} has no SR, please give a SR range you want to search for instead.").format(type=asker.handles[0].desc)
+                        _("Your primary {type} has no SR, please give a SR range you want to search for instead.").format(type=asker.handles[0].desc)
                     )
                     return
 
