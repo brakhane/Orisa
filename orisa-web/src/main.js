@@ -20,7 +20,7 @@ import router from './router'
 
 import BootstrapVue from 'bootstrap-vue'
 import VueI18Next from '@panter/vue-i18next'
-import VueMarkdown from 'vue-markdown'
+import VueMarkdown from '@/components/VueMarkdown'
 import i18next from 'i18next'
 import axios from 'axios'
 

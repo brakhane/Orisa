@@ -121,7 +121,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             :invalid-feedback="validation_errors.extra_register_text"
           >
             <template #description>
-              <vue-markdown 
+              <vue-markdown
                 :anchorAttributes="{target: '_blank'}"
                 :source="$t('cfg.reg-msg-desc', {
                 link: 'https://support.discordapp.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-'
@@ -332,7 +332,6 @@ export default {
     },
 
     lang_config_fully_translated () {
-      console.log("WPT", this.current_lang_info.web_percent_translated)
       return this.current_lang_info.web_percent_translated >= 90
     },
 
