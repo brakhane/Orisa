@@ -16,7 +16,7 @@ for fn in glob.glob("orisa/locale/stats/*_stats.json"):
         loc = data["code"]
         data["native_name"] = Locale.parse(loc).get_display_name(loc).title()
     with suppress(IOError):
-        with open(f"orisa-web/locale/stats/{loc}_stats.json") as f:
+        with open(f"orisa-web/locale/info/{loc}_info.json") as f:
             data["web_percent_translated"] = json.load(f)["percent_translated"]
 
     if data["percent_translated"] >= 90:

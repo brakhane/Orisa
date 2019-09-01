@@ -265,7 +265,7 @@ class SR(Base):
 
     handle = relationship(
         "Handle", back_populates="sr_history", foreign_keys=[handle_id],
-        cascade="all, delete-orphan", single_parent=True
+        single_parent=True
     )
     timestamp = Column(DateTime, nullable=False)
     tank = Column(SmallInteger)
