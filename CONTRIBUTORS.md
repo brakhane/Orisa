@@ -34,7 +34,7 @@ Orisa wouldn't be possible without the help of contributors. If you feel you are
 
 * Spanish translation
   * Adrián Hernández González
-  * "Ale"
+  * "Millo"
   * Guillem Rosset
 
 * Russian translation
