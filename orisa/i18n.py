@@ -1,4 +1,5 @@
 import gettext
+import logging
 
 from contextvars import ContextVar
 
@@ -6,6 +7,8 @@ from curious.commands.manager import CommandsManager
 from curious.core.event import EventContext
 from curious.dataclasses.message import Message
 from trio.to_thread import run_sync
+
+logger = logging.getLogger(__name__)
 
 
 DEFAULT_LOCALE = "en"
@@ -45,6 +48,7 @@ class I18NCommandsManager(CommandsManager):
             orisa = self.plugins["Orisa"]
         except KeyError:
             logger.debug("Not initialized yet, ignoring command", exc_info=True)
+            return
         # guild_config is a defaultdict, so we can just lookup, even if guild_id is None
         locale = orisa.guild_config[guild_id].locale
 
