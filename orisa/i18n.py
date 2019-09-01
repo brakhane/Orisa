@@ -52,7 +52,8 @@ class I18NCommandsManager(CommandsManager):
                 if locale:
                     user.locale = locale
                     await run_sync(session.commit)
-                else:
+                elif guild_id is None:
+                    # only change language in private messages
                     locale = user.locale
 
         CurrentLocale.set(locale or DEFAULT_LOCALE)

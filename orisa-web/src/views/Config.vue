@@ -85,11 +85,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           </b-popover>
           <hr class="hr-3">
           <b-form-group
-           horizontal  
+           horizontal
            :label="$t('cfg.lang')"
           >
             <template v-if="!lang_fully_translated" #description>
               <vue-markdown class="alert alert-warning" :source="$t('cfg.lang-incomplete-engage',
+                {lang: lang_native_name, link: 'https://weblate.orisa.rocks/engage/orisa/'})
+              " :anchorAttributes="{target: '_blank'}"/>
+            </template>
+            <template v-else-if="!lang_config_fully_translated" #description>
+              <vue-markdown class="alert alert-info" :source="$t('cfg.lang-config-incomplete-engage',
                 {lang: lang_native_name, link: 'https://weblate.orisa.rocks/engage/orisa/'})
               " :anchorAttributes="{target: '_blank'}"/>
             </template>
@@ -104,7 +109,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               <template v-if="translationInfo.incomplete.length">
                 <optgroup :label="$t('cfg.lang-incomplete')">
                   <template v-for="info in translationInfo.incomplete">
-                    <option :key="info.code" :value="info.code">{{ info.native_name }} ({{ Math.round(info.percent_translated) }}% translated)</em></option>
+                    <option :key="info.code" :value="info.code">{{ info.native_name }} ({{ Math.round(info.percent_translated) }}% translated)</option>
                   </template>
                 </optgroup>
               </template>
@@ -292,13 +297,12 @@ export default {
             console.error(error)
           }
         })
-    },
+    }
   },
 
   watch: {
-    'guild_config.locale': function(new_val, old_val) {
-      console.log("language changed from", old_val, "to", new_val)
-      i18next.changeLanguage(new_val)
+    'guild_config.locale': function (newVal, oldVal) {
+      i18next.changeLanguage(newVal)
     }
   },
 
@@ -325,14 +329,23 @@ export default {
       return this.translationInfo.complete.some((e) => e.code === this.guild_config.locale)
     },
 
-    lang_native_name () {
+    lang_config_fully_translated () {
+      return this.current_lang_info.web_percent_translated >= 90
+    },
+
+    current_lang_info () {
+      const locale = this.guild_config.locale
       let all = [...this.translationInfo.complete, ...this.translationInfo.incomplete]
       for (let el of all) {
-        if (el.code === this.guild_config.locale) {
-          return el.native_name
+        if (el.code === locale) {
+          return el
         }
       }
       throw Error(`${this.guild_config.locale} not found in translationInfo`)
+    },
+
+    lang_native_name () {
+      return this.current_lang_info.name
     }
   },
   props: ['token'],
@@ -358,6 +371,9 @@ export default {
       response => {
         this.channels = response.data.channels
         this.guild_config = response.data.guild_config
+        if (this.guild_config.locale === null) {
+          this.guild_config.locale = 'en'
+        }
         this.guild_name = response.data.guild_name
         this.guild_id = response.data.guild_id
         this.roles = response.data.roles
