@@ -142,7 +142,7 @@ def validate_config(guild, guild_config):
         ]
 
         if missing:
-            return ngettext("Orisa is missing the following permission: {missing}", "Orisa is missing the following permissions: {missing}", len(missing)).format({"missing": ", ".join(missing)})
+            return ngettext("Orisa is missing the following permission: {missing}", "Orisa is missing the following permissions: {missing}", len(missing)).format(missing=", ".join(missing))
         else:
             return None
 
