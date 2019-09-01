@@ -2,43 +2,43 @@
 
 Orisa wouldn't be possible without the help of contributors. If you feel you are missing in this list, create an issue in the bug tracker
 
-- Main programmer and Maintainer
--- Dennis Brakhane
+* Main programmer and Maintainer
+  * Dennis Brakhane
 
-- Czech translation
--- Lukas Notnword
+* Czech translation
+  * Lukas Notnword
 
-- Dutch translation
--- "Alpha"
--- Dirk Jean Bakker
+* Dutch translation
+  * "Alpha"
+  * Dirk Jean Bakker
 
-- Finnish translation
--- "Simpukka"
+* Finnish translation
+  * "Simpukka"
 
-- French translation
--- "Diable Dk"
--- "Leo"
+* French translation
+  * "Diable Dk"
+  * "Leo"
 
-- German translation
--- "AIERKUCHEN"
--- Dennis Brakhane
+* German translation
+  * "AIERKUCHEN"
+  * Dennis Brakhane
 
-- Italian translation
--- Valerio D'Onghia
+* Italian translation
+  * Valerio D'Onghia
 
-- Portuguese (Brazil) translation
--- Jean Lucas
+* Portuguese (Brazil) translation
+  * Jean Lucas
 
-- Portuguese (Portugal) translation
--- Daniel Martins
+* Portuguese (Portugal) translation
+  * Daniel Martins
 
-- Spanish translation
--- Adrián Hernández González
--- "Ale"
--- Guillem Rosset
+* Spanish translation
+  * Adrián Hernández González
+  * "Ale"
+  * Guillem Rosset
 
-- Russian translation
--- Sharanda Danila
+* Russian translation
+  * Sharanda Danila
 
 
 
