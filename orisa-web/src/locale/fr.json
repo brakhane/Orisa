@@ -13,6 +13,7 @@
         "general-settings-hdr": "Paramètres généraux pour {{ guild_name }}",
         "lang": "Langue",
         "lang-complete": "(Presque) entièrement traduit",
+        "lang-config-incomplete-engage": "",
         "lang-incomplete": "Pas encore entièrement traduit",
         "lang-incomplete-engage": "Le français n’est pas encore totalement traduit ! Les parties non traduites apparaîtront en anglais [Vous voulez nous aider ? Cliquez sur ce lien ]({{ link }})",
         "lead-info": "Le bouton d’enregistrement s’affiche lorsque vous avez des modifications non sauvegardées. Après avoir sauvegardé vos modifications, vous pouvez fermer cette fenêtre.\nSi vous avez des questions ou des suggestions, [rejoignez le discord officiel]({{ link }}).",
