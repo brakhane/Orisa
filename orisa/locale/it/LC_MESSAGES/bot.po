@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-01 18:14+0200\n"
-"PO-Revision-Date: 2019-09-01 18:35+0000\n"
+"PO-Revision-Date: 2019-09-01 21:01+0000\n"
 "Last-Translator: Daniele Giulietti <lordnocht@gmail.com>\n"
 "Language-Team: Italian <https://weblate.orisa.rocks/projects/orisa/bot/it/>\n"
 "Language: it\n"
@@ -571,12 +571,12 @@ msgstr ""
 
 #: orisa/orisa.py:1203
 msgid "I sent you a DM with the results."
-msgstr ""
+msgstr "Ti ho inviato un DM con i risultati"
 
 #. Translators: Orisa Admin must not be translated
 #: orisa/orisa.py:1215
 msgid "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!"
-msgstr ""
+msgstr "Non sono ancora configurata! Qualcuno con il ruolo 'Orisa Admin' deve scrivere '!ow config' per configurarmi prima!"
 
 #: orisa/orisa.py:1237
 msgid "I tried to send you a DM with help, but you don't allow DM from server members. I can't post it here, because it's rather long. Please allow DMs and try again."
@@ -611,7 +611,7 @@ msgstr ""
 
 #: orisa/orisa.py:1286
 msgid "Shows information about Orisa, and how you can add her to your own Discord server, or help supporting her."
-msgstr ""
+msgstr "Mostra informazioni riguardo Orisa, e come puoi aggiungerla al tuo server Discord, o aiutare a supportarla."
 
 #: orisa/orisa.py:1290
 msgid ""
