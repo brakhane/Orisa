@@ -281,9 +281,12 @@ async def save(guild_id):
 
     async def update():
         for vc in new_gi.managed_voice_categories:
-            await orisa._adjust_voice_channels(
-                client.find_channel(vc.category_id), adjust_user_limits=True
-            )
+            try:
+                await orisa._adjust_voice_channels(
+                    client.find_channel(vc.category_id), adjust_user_limits=True
+                )
+            except Exception:
+                logger.exception("Cannot initialize voice channels")
 
         async with orisa.database.session() as session:
             for user in await run_sync(
