@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-01 18:14+0200\n"
-"PO-Revision-Date: 2019-09-01 17:34+0000\n"
-"Last-Translator: Valerio D'Onghia <venom1@live.de>\n"
+"PO-Revision-Date: 2019-09-01 18:35+0000\n"
+"Last-Translator: Daniele Giulietti <lordnocht@gmail.com>\n"
 "Language-Team: Italian <https://weblate.orisa.rocks/projects/orisa/bot/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -297,11 +297,11 @@ msgstr ""
 
 #: orisa/orisa.py:711
 msgid "To complete your registration, I need your permission to ask Blizzard for your BattleTag. Please click the link above and give me permission to access your data. I only need this permission once, you can remove it later in your BattleNet account."
-msgstr "Per completare la tua registrazione, mi serve il tuo permesso di chiedere Blizzard per il tuo BattleTag. Per favore fai clic sul link sopra e dammi l'accesso ai tuoi dati. Mi serve l'accesso solo una volta, puoi toglierlo dopo nel tuo account BattleNet."
+msgstr "Per completare la tua registrazione, mi serve il tuo permesso di chiedere alla Blizzard il tuo BattleTag. Per favore fai clic sul link sopra e dammi l'accesso ai tuoi dati. Mi serve l'accesso solo una volta, puoi toglierlo dopo nel tuo account BattleNet."
 
 #: orisa/orisa.py:721
 msgid "To complete your registration, I need your permission to ask Discord for your Gamertag. Please click the link above and give me permission to access your data. Make sure you have linked your Xbox account to Discord."
-msgstr "Per completare la tua registrazione, mi serve il tuo permesso di chiedere Discord per il tuo Gamertag. Per favore fai clic sul link sopra e dammi l'accesso ai tuoi dati. Assicurati che hai il tuo account Xbox collegato a Discord."
+msgstr "Per completare la tua registrazione, mi serve il tuo permesso di chiedere a Discord il tuo Gamertag. Per favore fai clic sul link sopra e dammi l'accesso ai tuoi dati. Assicurati che hai il tuo account Xbox collegato a Discord."
 
 #: orisa/orisa.py:726
 #, python-brace-format
@@ -580,7 +580,7 @@ msgstr ""
 
 #: orisa/orisa.py:1237
 msgid "I tried to send you a DM with help, but you don't allow DM from server members. I can't post it here, because it's rather long. Please allow DMs and try again."
-msgstr "Ho provato a mandarti un DM con aiuto, ma non permetti a utenti dei server di mandarti una DM. Non posso mandarlo qui, perchè è piuttosto lungo. Per favore permetti i DM e prova di nuovo."
+msgstr "Ho provato a mandarti un DM con aiuto, ma non permetti agli utenti dei server di mandarti un DM. Non posso mandarlo qui, perché è piuttosto lungo. Per favore permetti i DM e prova di nuovo."
 
 #: orisa/orisa.py:1252
 msgid "Orisa's purpose"
