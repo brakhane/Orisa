@@ -31,6 +31,7 @@ She also can manage voice channels and create them on demand, and show fancy SR 
 Features
 --------
 
+* Supports multiple languages
 * Shows the current SR and/or rank in nicknames, e.g. ``somenick [1234-2345-3456]``. Users can configure what is shown by using flexible format strings
 * SR is automatically updated whenever a player stops playing Overwatch while being in Discord, and also every hour
 * Supports multiple BattleTags per user
