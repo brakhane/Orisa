@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-09-01 15:13+0000\n"
+"PO-Revision-Date: 2019-09-01 15:22+0000\n"
 "Last-Translator: Leo <dao3300@gmail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
@@ -159,14 +159,14 @@ msgid "[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Oris
 msgstr "[Profil Overwatch]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Serveur de Support Orisa]({SUPPORT_DISCORD}) | [Faire un don `{HEART}`]({DONATE_LINK})"
 
 #: orisa/orisa.py:559
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "The SR of the primary {type} was last updated {when}."
 msgstr "La côte de {type} a été mise à jour pour la dernière fois {when}."
 
 #: orisa/orisa.py:561
 #, python-brace-format
 msgid "The SR was last updated {when}."
-msgstr "La côté à été mise à jour pour la dernière fois {when}."
+msgstr "La côte à été mise à jour pour la dernière fois {when}."
 
 #: orisa/orisa.py:566
 msgid ""
@@ -998,13 +998,13 @@ msgid "For your own safety, get behind the barrier!"
 msgstr "Pour votre sécurité, derrière la barrière !"
 
 #: orisa/orisa.py:2153
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "**{name}** just reached **{sr} SR** as **{role}** and advanced to **{rank}**. Congratulations!"
-msgstr "***{name}** vient tout juste d’atteindre **{sr} SR** en tant que **{role}** et passe à **{rank}**. Félicitations !"
+msgstr "**{name}** vient tout juste d’atteindre **{sr} SR** en tant que **{role}** et passe au rang **{rank}**. Félicitations !"
 
 #. Translators: <@!> is discord markup and needs to be preserved
 #: orisa/orisa.py:2169
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Let's hear it for <@!{discord_id}>!"
 msgstr "Faites du bruit pour <@!{discord_id}> !"
 
@@ -1251,9 +1251,8 @@ msgid "Want to say thanks to the guy who wrote and maintains me? Why not [buy hi
 msgstr "Vous voulez dire merci au gars qui m’a écrit et qui me maintient? Pourquoi pas [lui acheter un café? ]({DONATE_LINK})"
 
 #: orisa/web.py:66
-#, fuzzy
 msgid "You can close this window."
-msgstr "Vous pouvez fermer cette fenêtre."
+msgstr "Tu peux fermer cette fenêtre."
 
 #. Translators: discord permission name
 #: orisa/web.py:129
@@ -1342,9 +1341,8 @@ msgid "I got invalid data. Please try registering again."
 msgstr "J’ai des données invalides. Essayez de vous inscrire à nouveau."
 
 #: orisa/web.py:344
-#, fuzzy
 msgid "You didn't give me permission to access your BattleTag; registration cancelled."
-msgstr "Vous ne m’avez pas donné la permission d’accéder à votre Battletag; inscription annulée."
+msgstr "Tu ne m’as pas donné la permission d’accéder à ton Battletag ; l'enregistrement a été annulé."
 
 #: orisa/web.py:384
 #, fuzzy, python-brace-format
@@ -1352,6 +1350,5 @@ msgid "I'm sorry. Something went wrong on my side. Try to reissue {register}."
 msgstr "Je suis désolé. Quelque chose s’est mal passé de mon côté. Essayez de réémettre {register}."
 
 #: orisa/web.py:391
-#, fuzzy
 msgid "Thank you! I have sent you a DM."
-msgstr "Merci! Je t'ai envoyé un message privé."
+msgstr "Merci ! Je t'ai envoyé un message privé."
