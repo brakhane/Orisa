@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-08-29 22:06+0200\n"
-"PO-Revision-Date: 2019-09-01 14:58+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
+"PO-Revision-Date: 2019-09-01 14:59+0000\n"
+"Last-Translator: Leo <dao3300@gmail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -478,9 +478,8 @@ msgid "you are not registered!"
 msgstr "Tu n'est pas enregistré !"
 
 #: orisa/orisa.py:940
-#, fuzzy
 msgid "Your nick will be updated even when you are not in an OW voice channel. Use `!ow alwaysshowsr off` to turn it off again."
-msgstr "Votre pseudonyme sera mis à jour même si vous n’êtes pas dans un canal vocal OW. Utilisez `!ow alwaysshowsr off’ pour l’éteindre à nouveau."
+msgstr "Ton pseudonyme sera mis à jour même si tu n’es pas dans un salon vocal Overwatch. Utilise `!ow alwaysshowsr off’ pour l’éteindre à nouveau."
 
 #: orisa/orisa.py:942
 #, fuzzy
@@ -630,7 +629,7 @@ msgid "Orisa's purpose"
 msgstr "Le but d’Orisa"
 
 #: orisa/orisa.py:1248
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "When joining a QP or Comp channel, you need to know the BattleTag of a channel member, or they need yours to add you. In competitive channels it also helps to know which SR the channel members have. To avoid having to ask for this information again and again when joining a channel, this bot was created. When you register with your BattleTag, your nick will automatically be updated to show your current SR and it will be kept up to date. You can also ask for other member's BattleTag, or request your own so others can easily add you in OW.\n"
 "It will also send a short message to the chat when you ranked up.\n"
@@ -641,13 +640,13 @@ msgid ""
 "If you want to use Orisa on your own server or help developing it, enter `!ow about`\n"
 "Parameters in [square brackets] are optional."
 msgstr ""
-"Lorsque vous rejoignez un Salon QP ou Comp, vous devez connaître le Battletag d’un membre du salon, ou ils ont besoin du vôtre pour vous ajouter. Dans les salon compétitif, il est également utile de savoir quel SR les membres du salon ont. Pour éviter d’avoir à demander cette information encore et encore lors de l’adhésion à un salon, ce bot a été créé. Lorsque vous vous inscrivez auprès de votre Battletag, votre pseudonyme sera automatiquement mis à jour pour afficher votre SR actuel et il sera tenu à jour. Vous pouvez également demander le Battletag d’un autre membre, ou demander le vôtre afin que d’autres puissent facilement vous ajouter dans OW.\n"
-"Il enverra également un court message à la conversation lorsque vous vous êtes classé.\n"
-"*Comme Orisa d’Overwatch, ce robot est très jeune et encore nouveau. Signalez les problèmes à @!{OWNER}>*\n"
+"Lorsque tu rejoins un salon de partie rapide ou un salon compétitif, tu dois connaître le Battletag d’un membre du salon ou alors les members du salon ont besoin du tien pour t'ajouter. Dans les salons compétitifs, il est également utile de savoir quelle côte les membres du salon ont. Ce bot a été créé pour éviter d’avoir à demander cette information encore et encore lorsque quelqu'un rejoint un salon. Lorsque tu t'inscris avec ton Battletag, ton pseudo sera automatiquement mis à jour pour afficher ta côte actuelle et elle sera tenue à jour constamment. Tu peux également demander le Battletag d’un autre membre, ou faire afficher le tien afin que d’autres puissent facilement t'ajouter dans Overwatch/BattleNet.\n"
+"Le bot enverra également un court message dans le chat lorsque tu monteras d'un rang.\n"
+"*Comme Orisa dans Overwatch, ce robot est très jeune. Tu peux signaler n'importe quel problème à @!{OWNER}>*\n"
 "\n"
-"**Les commandes ne fonctionnent que dans le canal <#{channel_id}> ou en m’envoyant un DM**\n"
-"Si vous êtes nouveau sur Orisa, vous êtes probablement à la recherche de '!ow register' ou '!ow register xbox'\n"
-"Si vous voulez utiliser Orisa sur votre propre serveur ou aider à le développer, entrez '!ow about'\n"
+"**Les commandes ne fonctionnent que dans le canal <#{channel_id}> ou par MP**\n"
+"Si tu es nouveau au sujet d'Orisa, tu es probablement à la recherche des commandes '!ow register' ou '!ow register xbox'\n"
+"Si tu veux utiliser Orisa sur ton propre serveur ou aider à le développer, utilise la commande '!ow about'\n"
 "Les paramètres de [crochets] sont optionnels."
 
 #: orisa/orisa.py:1267
