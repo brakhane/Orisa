@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-01 18:14+0200\n"
-"PO-Revision-Date: 2019-09-01 17:34+0000\n"
+"PO-Revision-Date: 2019-09-01 18:35+0000\n"
 "Last-Translator: Leo <dao3300@gmail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
@@ -288,8 +288,6 @@ msgid "I sent you a DM."
 msgstr "Je t'ai envoyé un MP."
 
 #: orisa/orisa.py:692
-#, fuzzy
-#| msgid "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. I can't post the link here because everybody who knows that link will be able to configure me for the next 30 minutes."
 msgid "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. I can't post the link here because everybody who knows that link will be able to configure me."
 msgstr "J'ai essayé de t'envoyer un MP avec le lien mais tu as désactivé les MP venant d'utilisateurs ayant un serveur en commun. Active cette option et réessaie. Je ne peux pas poster le lien ici car tous ceux qui détiendront le lien pourront me configurer pendant le temps de validité du lien."
 
@@ -538,8 +536,7 @@ msgstr "Ça ne marche pas !"
 
 #. Translators: type is BattleTag or GamerTag
 #: orisa/orisa.py:1108
-#, fuzzy, python-brace-format
-#| msgid "You primary {type} has no SR, please give a SR range you want to search for instead."
+#, python-brace-format
 msgid "Your primary {type} has no SR, please give a SR range you want to search for instead."
 msgstr "Ton compte principal {type} n’a pas de côte. Spécifie plutôt une plage de côte que tu veux rechercher."
 
@@ -648,9 +645,9 @@ msgid ""
 "`!ow orisa` will show the BattleTag of \"SG | Orisa\", \"Orisa\", or \"Orisad\"\n"
 "`!ow oirsa` and `!ow ori` will probably also show the BattleTag of \"Orisa\""
 msgstr ""
-"Affiche le Battletag pour le pseudonyme donné ou votre Battletag si aucun `pseudonyme` n’est donné. Le pseudonyme peut contenir des espaces. Une recherche floue du surnom est effectuée.\n"
+"Affiche le Battletag pour le pseudonyme donné ou ton Battletag si aucun `pseudonyme` n’est donné. Le pseudonyme peut contenir des espaces. Une recherche floue du surnom est effectuée.\n"
 "*Exemples :*\n"
-"`! ow` montrera votre Battletag\n"
+"`! ow` montrera ton Battletag\n"
 "`! ow the chosen one` montrera le Battletag de \"tHE ChOSeN ONe\"\n"
 "`! ow orisa` montrera le Battletag de \"SG | Orisa\", \"Orisa\", ou \"Orisad\"\n"
 "`! ow oirsa` et `!ow ori` montreront aussi, probablement, le Battletag de \"Orisa\""
@@ -794,13 +791,6 @@ msgid "Show Orisa's Privacy Policy"
 msgstr "Afficher la politique de confidentialité d’Orisa"
 
 #: orisa/orisa.py:1389
-#, fuzzy
-#| msgid ""
-#| "Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using, the its SR is shown in your nick\n"
-#| "The search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n"
-#| "The given BattleTag must already be registered as one of your BattleTags.\n"
-#| "*Example:*\n"
-#| "`!ow setprimary jjonak`"
 msgid ""
 "Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using: its SR is shown in your nick\n"
 "The search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n"
@@ -945,7 +935,7 @@ msgstr "Historique de côte pour {name}"
 #: orisa/orisa.py:1570
 #, python-brace-format
 msgid "Here is your SR history starting from {date}"
-msgstr "Voici ton historique de côte à partir du votre du {date}"
+msgstr "Voici ton historique de côte à partir du {date}"
 
 #. Translators: used instead of a date when user requested a SR history from the beginning (which is the usual case)
 #: orisa/orisa.py:1572
@@ -1011,7 +1001,7 @@ msgstr "*Pour éviter de te spam, je n’enverrai cet avertissement qu’une foi
 #: orisa/orisa.py:2449
 #, python-brace-format
 msgid "Hi! I just tried to update your nickname, but the result '{nick}' would be longer than 32 characters."
-msgstr "Salut ! Je viens d'essayer de mettre à jour votre pseudo mais le résultat '{nick}' serait plus long que 32 caractères."
+msgstr "Salut ! Je viens d'essayer de mettre à jour ton pseudo mais le résultat '{nick}' serait plus long que 32 caractères."
 
 #: orisa/orisa.py:2451
 msgid ""
@@ -1043,7 +1033,7 @@ msgstr "Je suis désolé, il semble que tu n'aies pas de Battletag. Utilise `!ow
 
 #: orisa/orisa.py:2653
 msgid "I couldn't find a XBox account linked to your Discord. Please link your XBox account to Discord and try again. Unfortunately, I cannot ask XBL directly for the information."
-msgstr "Je n’ai pas trouvé de compte Xbox lié à votre Discord. Lie ton compte Xbox à Discord et réessaie. Malheureusement, je ne peux pas demander l'info directement au Xbox Live."
+msgstr "Je n’ai pas trouvé de compte Xbox lié à ton Discord. Lie ton compte Xbox à Discord et réessaie. Malheureusement, je ne peux pas demander l'info directement au Xbox Live."
 
 #. Translators: type will be BattleTag or GamerTag, and it must be transformed into plural
 #: orisa/orisa.py:2675
