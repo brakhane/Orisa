@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-01 21:59+0200\n"
-"PO-Revision-Date: 2019-09-01 21:01+0000\n"
+"PO-Revision-Date: 2019-09-02 21:16+0000\n"
 "Last-Translator: Daniele Giulietti <lordnocht@gmail.com>\n"
 "Language-Team: Italian <https://weblate.orisa.rocks/projects/orisa/bot/it/>\n"
 "Language: it\n"
@@ -568,10 +568,12 @@ msgid ""
 "\n"
 "There are also {len} offline players within that range. Use the `findallplayers` command to show them as well."
 msgstr ""
+"\n"
+"Ci sono inoltre {len} giocatori offline in quel raggio. Usa il comando `findallplayers` per mostrare anche loro."
 
 #: orisa/orisa.py:1204
 msgid "I sent you a DM with the results."
-msgstr "Ti ho inviato un DM con i risultati"
+msgstr "Ti ho inviato un DM con i risultati."
 
 #. Translators: Orisa Admin must not be translated
 #: orisa/orisa.py:1216
@@ -598,6 +600,14 @@ msgid ""
 "If you want to use Orisa on your own server or help developing it, enter `!ow about`\n"
 "Parameters in [square brackets] are optional."
 msgstr ""
+"Quando entri in un canale QP o Comp, devi sapere il Battletag di un membro del canale, o loro hanno bisogno del tuo per aggiungerti. Nei canali competitivi può aiutare sapere l'SR dei membri del canale. Questo bot è stato creato per evitare di chiedere questa informazione in continuazione quando si entra nel canale. Quando ti registri con il tuo Battletag, il tuo nick verrà automaticamente aggiornato per mostrare il tuo SR e verrà tenuto aggiornato. Puoi anche chiedere per il Battletag degli altri membri, o richiedere per il tuo cosicché altri potranno più facilmente aggiungerti in OW.\n"
+"Inoltre invierà un breve messaggio in chat quando salirai di rango.\n"
+"*Come Orisa in Overwatch, questo bot è piuttosto giovane ed ancora nuovo a tutto questo. Segnala i problemi a <@!{OWNER}>*\n"
+"\n"
+"**I comandi funzioneranno solo nel canale <#{channel_id}>  o mandandomi un DM**\n"
+"Se non conosci Orisa, stai probabilmente cercando '!ow register' o '!ow register xbox'\n"
+"Se vuoi usare Orisa nel tuo server o aiutare a svilupparla, scrivi '!ow about'\n"
+"I parametri nelle [parentesi quadrate] sono opzionali."
 
 #: orisa/orisa.py:1275
 msgid ""
