@@ -1,5 +1,6 @@
 import gettext
 import logging
+import re
 
 from contextvars import ContextVar
 
@@ -41,6 +42,40 @@ TRANSLATIONS = {
     for locale in LOCALES
 }
 
+class MultiString(str):
+    """fluent inspired string that can take multiple conditions.
+
+    It can be a normal string, or, if it starts with << a special string:
+
+    <<key1>> text1
+    text1
+    text1
+    <<*key2>> text2
+    text2
+    <<key3>> text3
+
+    This will make "text2\ntext2" the default (because of the *), but it can be used like
+    a dictionary, so in a format string, one could use "foo[key1]" to get "text1\text1\text1"
+    """
+    
+    def __new__(cls, val):
+        if val.startswith("<<"):
+            value_map = {}
+            for key, text in re.findall(r"^<<([*\w]+)>> (.*?)$", val, re.MULTILINE | re.DOTALL):
+                if key.startswith("*"):
+                    default = text
+                    key = key[1:]
+                value_map[key] = text
+        else:
+            return super().__new__(cls, val)
+
+        inst = super().__new__(cls, default)
+        inst.value_map = value_map
+        return inst
+
+    def __getitem__(self, key):
+        return self.value_map[key]
+
 class I18NCommandsManager(CommandsManager):
     async def handle_commands(self, ctx: EventContext, message: Message):
         guild_id = message.guild_id
@@ -73,22 +108,25 @@ def N_(x):
     "No-op to mark strings that need to be translated, but not at this exact spot"
     return x
 
+def NP_(sing, plural):
+    return sing
+
 def _(msg):
     locale = CurrentLocale.get()
     return get_translation(locale, msg)
 
 def get_translation(locale, msg):
     if locale and locale != DEFAULT_LOCALE:
-        return TRANSLATIONS[locale].gettext(msg)
+        return MultiString(TRANSLATIONS[locale].gettext(msg))
     else:
-        return msg
+        return MultiString(msg)
 
 def ngettext(singular, plural, n):
     locale = CurrentLocale.get()
     if locale and locale != DEFAULT_LOCALE:
-        return TRANSLATIONS[locale].ngettext(singular, plural, n)
+        return MultiString(TRANSLATIONS[locale].ngettext(singular, plural, n))
     else:
-        return singular if n==0 else plural
+        return MultiString(singular if n==1 else plural)
 
 def locale_by_flag(flag):
     return FLAG_TO_LOCALE.get(flag, None)
