@@ -4,13 +4,14 @@
 # Leo <dao3300@gmail.com>, 2019.
 # Diable Dk <Kazoku.ow@gmail.com>, 2019.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
+# Titouan F. <titouan.forgeard@gmail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-01 21:59+0200\n"
-"PO-Revision-Date: 2019-09-01 18:35+0000\n"
-"Last-Translator: Leo <dao3300@gmail.com>\n"
+"PO-Revision-Date: 2019-09-02 21:16+0000\n"
+"Last-Translator: Titouan F. <titouan.forgeard@gmail.com>\n"
 "Language-Team: French <https://weblate.orisa.rocks/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -31,7 +32,7 @@ msgstr "Main tank"
 
 #: orisa/models.py:61
 msgid "Off Tank"
-msgstr "Offtank"
+msgstr "Off-tank"
 
 #. Translators: Role
 #: orisa/models.py:62 orisa/orisa.py:174 orisa/orisa.py:1492
@@ -1209,10 +1210,8 @@ msgstr "Gestion des pseudos"
 
 #. Translators: Discord permission name
 #: orisa/web.py:139
-#, fuzzy
-#| msgid "Manage Nicknames"
 msgid "Manage Channels"
-msgstr "Gestion des pseudos"
+msgstr "Gestion des salons"
 
 #: orisa/web.py:148
 #, python-brace-format
