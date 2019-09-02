@@ -2404,7 +2404,7 @@ Pornography Historian""").split("\n")
 
                 await chan.messages.upload(
                     csv_file,
-                    filename=f"ranking_{sr_kind}_{type_class.blizzard_url_type.upper()}_{pendulum.now().to_iso8601_string()[:10]}.csv",
+                    filename=f"ranking_{sr_kind}_{type_class.blizzard_url_type.upper()}_{arrow.now().isoformat()[:10]}.csv",
                 )
                 logger.debug("upload done")
             except Exception:
