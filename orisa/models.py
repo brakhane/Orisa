@@ -42,7 +42,7 @@ import sqlalchemy.types as types
 
 from .config import DATABASE_URI
 from .utils import sr_to_rank, TDS
-from .i18n import _
+from .i18n import _, N_, NP_
 
 Base = declarative_base()
 
@@ -201,7 +201,8 @@ class BattleTag(Handle):
         'polymorphic_identity': 'battletag'
     }
 
-    desc = "BattleTag"
+    # Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
+    desc = NP_("BattleTag", "BattleTags")
     blizzard_url_type = "pc"
 
     @property
@@ -233,7 +234,8 @@ class Gamertag(Handle):
         'polymorphic_identity': 'gamertag'
     }
 
-    desc = "Gamertag"
+    # Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
+    desc = NP_("Gamertag", "Gamertags")
     blizzard_url_type = "xbl"
 
     @property

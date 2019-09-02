@@ -522,14 +522,11 @@ class Orisa(Plugin):
                 handle_value = f"**{fmt(primary)}**\n"
                 handle_value += "\n".join(fmt(handle) for handle in secondary)
 
-                if multiple_handles:
-                    if multiple_handle_types:
-                        # Translators: When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
-                        handle_name = _("Tags")
-                    else:
-                        handle_name = f"{user.handles[0].desc}s"
+                if multiple_handle_types:
+                    # Translators: When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
+                    handle_name = _("Tags")
                 else:
-                    handle_name = user.handles[0].desc
+                    handle_name = ngettext(user.handles[0].desc, user.handles[0].desc + 's', len(user.handles))
 
                 embed.add_field(
                     name=handle_name, value=handle_value
@@ -564,7 +561,7 @@ class Orisa(Plugin):
                 if primary.last_update:
                     when = arrow.get(primary.last_update).humanize(locale=CurrentLocale.get())
                     if multiple_handles:
-                        footer_text = _("The SR of the primary {type} was last updated {when}.").format(type=user.handles[0].desc, when=when)
+                        footer_text = _("The SR of the primary {type} was last updated {when}.").format(type=_(user.handles[0].desc), when=when)
                     else:
                         footer_text = _("The SR was last updated {when}.").format(when=when)
                 else:
@@ -724,7 +721,7 @@ class Orisa(Plugin):
                 )
             )
         else:
-            await reply(ctx, _('Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet.').format(type=type))
+            await reply(ctx, _('Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet.').format(type=_(type)))
             return
 
         state = OAUTH_SERIALIZER.dumps((type, user_id))
@@ -836,7 +833,7 @@ class Orisa(Plugin):
                 await reply(
                     ctx,
                     # Translators: handle will be the battletag/gamertag the user tried to register, type will be BattleTag or GamerTag                   
-                    _('"{handle}" already is your primary {type}. *Going back to sleep!*').format(handle=user.handles[0].handle, type=user.handles[0].desc)
+                    _('"{handle}" already is your primary {type}. *Going back to sleep!*').format(handle=user.handles[0].handle, type=_(user.handles[0].desc))
                 )
                 return
 
@@ -1106,7 +1103,7 @@ Pornography Historian""").split("\n")
                     await reply(
                         ctx,
                         # Translators: type is BattleTag or GamerTag
-                        _("Your primary {type} has no SR, please give a SR range you want to search for instead.").format(type=asker.handles[0].desc)
+                        _("Your primary {type} has no SR, please give a SR range you want to search for instead.").format(type=_(asker.handles[0].desc))
                     )
                     return
 
@@ -2394,7 +2391,7 @@ Pornography Historian""").split("\n")
                     _("Hello! Here are the current SRs for **{role}** on {platform} . If a member has more than one "
                     "{handle_type}, only the primary {handle_type} is considered. Players with "
                     "private profiles, or those that didn't do their placements this season yet "
-                    "are not shown.").format(role=_(sr_kind.capitalize()), platform=type_class.blizzard_url_type.upper(), handle_type=type_class.desc)
+                    "are not shown.").format(role=_(sr_kind.capitalize()), platform=type_class.blizzard_url_type.upper(), handle_type=_(type_class.desc))
                 )
                 while ix < len(table_lines):
                     # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
@@ -2679,11 +2676,11 @@ Pornography Historian""").split("\n")
                 if others:
                     # Translators: type will be BattleTag or GamerTag, and it must be transformed into plural
                     desc = _("OK. People can now ask me for your {type}s **{handles}**, and I will keep track of your SR.").format(
-                        type=first.desc, handles=', '.join(h.handle for h in handles)
+                        type=_(first.desc), handles=', '.join(h.handle for h in handles)
                     )
                 else:
                     desc = _("OK. People can now ask me for your {type} **{handle}**, and I will keep track of your SR.").format(
-                        type=first.desc,
+                        type=_(first.desc),
                         handle=first.handle
                     )
                 embed = Embed(
@@ -2713,20 +2710,20 @@ Pornography Historian""").split("\n")
                         embed = Embed(
                             color=0x6DB76D,
                             # Translators: type is battletag or gamertag
-                            title=_("{type} updated").format(type=existing_handle.desc),
+                            title=_("{type} updated").format(type=_(existing_handle.desc)),
                             description=_("It seems like your {type} changed from *{old_handle}* to *{new_handle}*. I have updated my database.").format(
-                                type=existing_handle.desc, old_handle=existing_handle.handle, new_handle=new_handle.handle
+                                type=_(existing_handle.desc), old_handle=existing_handle.handle, new_handle=new_handle.handle
                             ),
                         )
                         existing_handle.handle = new_handle.handle
                         handles_to_check.append(existing_handle)
                     elif existing_handle:
                         embed = Embed(
-                            # Translators: type is GamerTag or BattleTag
-                            title=_("{type} already registered").format(type=existing_handle.desc),
+                            # Translators: type is translated GamerTag or BattleTag
+                            title=_("{type} already registered").format(type=_(existing_handle.desc)),
                             color=0x6F0808,
                             description=_("You already registered the {type} *{handle}*, so there's nothing for me to do. *Sleep mode reactivated.*\n").format(
-                                type=existing_handle.desc, handle=existing_handle.handle
+                                type=_(existing_handle.desc), handle=existing_handle.handle
                             ),
                         )
                         if type == "pc":
@@ -2742,18 +2739,18 @@ Pornography Historian""").split("\n")
                         embed = Embed(
                             color=0x6DB76D,
                             # Translators: type is GamerTag/BattleTag
-                            title=_("{type} added").format(type=new_handle.desc),
+                            title=_("{type} added").format(type=_(new_handle.desc)),
                             # Translators: {new_type}s is plural. type is BattleTag/GamerTag
                             description=_("OK. I've added **{new_handle}** to the list of your {new_type}s. **Your primary {primary_type} remains {primary_handle}**. "
                                 "To change your primary tag, use `!ow setprimary`, see help for more details.").format(
-                                    new_handle=new_handle.handle, new_type=new_handle.desc, primary_type = user.handles[0].desc, primary_handle=user.handles[0].handle
+                                    new_handle=new_handle.handle, new_type=_(new_handle.desc), primary_type = _(user.handles[0].desc), primary_handle=user.handles[0].handle
                                 )
                         )
 
             for handle in handles_to_check:
                 try:
                     # Translators: Used during registration while Orisa checks the BattleTag/GamerTag. {type} is BattleTag/GamerTag, {tag} is the tag (Foo#2345)
-                    check_msg_obj = await user_channel.messages.send(_("Checking your {type} {tag}…").format(type=handle.desc, tag=handle.handle))
+                    check_msg_obj = await user_channel.messages.send(_("Checking your {type} {tag}…").format(type=_(handle.desc), tag=handle.handle))
                     async with user_channel.typing:
                         srs, images = await get_sr(handle)
                 except InvalidBattleTag as e:
@@ -2763,7 +2760,7 @@ Pornography Historian""").split("\n")
                             # Translators: {type} is "BattleTag", {handle} is the tag (Foo#2345), {message} is some untranslated English error message
                             "Invalid {type}: {message}… Blizzard claims that the {type} {handle} has no OW account. "
                             "Play a QP or arcade game, close OW and try again, sometimes this helps.").format(
-                                type=handle.desc, handle=handle.handle, message=e.message
+                                type=_(handle.desc), handle=handle.handle, message=e.message
                         )
                     )
                     return
@@ -2777,7 +2774,7 @@ Pornography Historian""").split("\n")
                     embed.add_field(
                         # Translators: :warning: is an emoji code
                         name=_(":warning: No SR"),
-                        value=_("You don't have an SR though, your profile needs to be public for SR tracking to work… I still saved your {type}.").format(type=handle.desc),
+                        value=_("You don't have an SR though, your profile needs to be public for SR tracking to work… I still saved your {type}.").format(type=_(handle.desc)),
                     )
                     srs = TDS(None, None, None)
                 finally:
@@ -2815,7 +2812,7 @@ Pornography Historian""").split("\n")
                     name=_(":warning: Cannot update nickname"),
                     value=(
                         _("Right now I couldn't update your nickname, I will try that again later. "
-                          "People will still be able to ask for your {type}, though.").format(type=user.handles[0].desc)
+                          "People will still be able to ask for your {type}, though.").format(type=_(user.handles[0].desc))
                     ),
                 )
             finally:
