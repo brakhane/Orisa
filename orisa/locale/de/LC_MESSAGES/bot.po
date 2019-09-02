@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-02 23:10+0200\n"
-"PO-Revision-Date: 2019-09-02 21:16+0000\n"
+"PO-Revision-Date: 2019-09-03 18:10+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.orisa.rocks/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -43,15 +43,15 @@ msgstr "Unterstützer"
 #: orisa/models.py:205
 msgid "BattleTag"
 msgid_plural "BattleTags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "BattleTag"
+msgstr[1] "BattleTags"
 
 #. Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
 #: orisa/models.py:238
 msgid "Gamertag"
 msgid_plural "Gamertags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Gamertag"
+msgstr[1] "Gamertags"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:137
@@ -336,7 +336,7 @@ msgstr ":information_source: Protipp"
 
 #: orisa/orisa.py:744
 msgid "If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the account data for that account instead."
-msgstr "Wenn Du ein sekundäres/smurf BattleTag registrieren möchtest, kannst du den Link in einem privaten / inkognito-Tab öffnen (versuchen es mit einem Rechtsklick auf den Link) und stattdessen die Kontodaten für dieses Konto eingeben."
+msgstr "Wenn Du ein sekundäres/Smurf-BattleTag registrieren möchtest, kannst du den Link in einem privaten / inkognito-Tab öffnen (versuche es mit einem Rechtsklick auf den Link) und stattdessen die Kontodaten für dieses Konto eingeben."
 
 #. Translators: :video_game: is an emoji
 #: orisa/orisa.py:749
