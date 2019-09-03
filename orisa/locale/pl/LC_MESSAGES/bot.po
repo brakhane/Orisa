@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-02 23:10+0200\n"
 "PO-Revision-Date: 2019-09-03 22:45+0000\n"
-"Last-Translator: Kacper Klimas <kanyqan@gmail.com>\n"
+"Last-Translator: Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>\n"
 "Language-Team: Polish <https://weblate.orisa.rocks/projects/orisa/bot/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -403,7 +403,7 @@ msgstr "Usunięto **{handle}**!"
 #: orisa/orisa.py:808
 #, python-brace-format
 msgid "However, your new nickname \"{nickname}\" is now longer than 32 characters, which Discord doesn't allow. Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards."
-msgstr "Okazuje się, że twój nowy nickname \"{nickname}\" ma więcej niż 32 znaki, na co Discord nie pozwala. Zmień format, lub skróć twój nickname, po czym użyj `!ow forceupdate`."
+msgstr "Okazuje się, że twój nowy nick \"{nickname}\" ma więcej niż 32 znaki, na co Discord nie pozwala. Zmień format lub skróć twój nick, po czym użyj `!ow forceupdate`."
 
 #: orisa/orisa.py:814
 msgid "However, there was an error updating your nickname. I will try that again later."
