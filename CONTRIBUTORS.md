@@ -28,6 +28,7 @@ Orisa wouldn't be possible without the help of contributors. If you feel you are
 
 * Polish translations
   * Dominik Ciesiołkiewicz (aka "Kreativ")
+  * Kacper Klimas
 
 * Portuguese (Brazil) translation
   * Jean Lucas
