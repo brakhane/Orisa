@@ -74,7 +74,11 @@ class MultiString(str):
         return inst
 
     def __getitem__(self, key):
-        return self.value_map[key]
+        if isinstance(key, str):
+            return self.value_map[key]
+        else:
+            return super().__getitem__(key)
+
 
 class I18NCommandsManager(CommandsManager):
     async def handle_commands(self, ctx: EventContext, message: Message):
