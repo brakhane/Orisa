@@ -2,13 +2,14 @@
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>, 2019.
+# Kacper Klimas <kanyqan@gmail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-02 23:10+0200\n"
 "PO-Revision-Date: 2019-09-03 18:10+0000\n"
-"Last-Translator: Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>\n"
+"Last-Translator: Kacper Klimas <kanyqan@gmail.com>\n"
 "Language-Team: Polish <https://weblate.orisa.rocks/projects/orisa/bot/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -328,7 +329,7 @@ msgstr "Wysłałam ci PW."
 
 #: orisa/orisa.py:690
 msgid "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. I can't post the link here because everybody who knows that link will be able to configure me."
-msgstr ""
+msgstr "Próbowałam wysłać ci PW z linkiem, ale nie zezwalasz na wiadomości prywatne od użytkowników serwera. Zmień opcję i spróbuj ponownie. Nie mogę wysłać linku tutaj ponieważ każdy z jego pomocą byłby w stanie skonfigurować moje ustawienia."
 
 #: orisa/orisa.py:701
 #, python-brace-format
@@ -346,7 +347,7 @@ msgstr "By dokończyć rejestrację potrzebuję twojego zezwolenia by prosić Di
 #: orisa/orisa.py:724
 #, python-brace-format
 msgid "Invalid registration type \"{type}\". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet."
-msgstr ""
+msgstr "Zła komenda \"{type}\". Użyj `!ow register` lub `!ow register pc` dla PC; `!ow register xbox` dla XBOXa. Nie wspieram jeszcze PlayStation."
 
 #. Translators: type will be PC, XBOX or PSN
 #: orisa/orisa.py:737
@@ -380,7 +381,7 @@ msgstr "Rejestrując się, zgadzasz się na Politykę Prywatności Orisy; możes
 #. Translators: Check how Discord translates "Allow direct messages from server members" in your local language and use the same term
 #: orisa/orisa.py:762
 msgid "I'm not allowed to send you a DM. Please right click on the Discord server, select Privacy Settings, and enable \"Allow direct messages from server members.\" Then try again."
-msgstr ""
+msgstr "Nie mam pozwolenia na wysyłanie ci wiadomości prywatnych. Kliknij prawym przyciskiem myszy na serwer Discord, wybierz \"Ustawienia Prywatności\", następnie aktywuj \"Zezwalaj na wiadomości prywatne od członków serwerów\". Potem spróbuj jeszcze raz."
 
 #: orisa/orisa.py:767 orisa/orisa.py:1239
 msgid "I sent you a DM with instructions."
@@ -402,7 +403,7 @@ msgstr "Usunięto **{handle}**!"
 #: orisa/orisa.py:808
 #, python-brace-format
 msgid "However, your new nickname \"{nickname}\" is now longer than 32 characters, which Discord doesn't allow. Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards."
-msgstr ""
+msgstr "Okazuje się, że twój nowy nickname \"{nickname}\" ma więcej niż 32 znaki, na co Discord nie pozwala. Zmień format, lub skróć twój nickname, po czym użyj `!ow forceupdate`."
 
 #: orisa/orisa.py:814
 msgid "However, there was an error updating your nickname. I will try that again later."
