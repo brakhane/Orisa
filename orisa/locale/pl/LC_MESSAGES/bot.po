@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-02 23:10+0200\n"
-"PO-Revision-Date: 2019-09-03 18:10+0000\n"
+"PO-Revision-Date: 2019-09-03 22:45+0000\n"
 "Last-Translator: Kacper Klimas <kanyqan@gmail.com>\n"
 "Language-Team: Polish <https://weblate.orisa.rocks/projects/orisa/bot/pl/>\n"
 "Language: pl\n"
@@ -491,7 +491,7 @@ msgstr ""
 #: orisa/orisa.py:926
 #, python-brace-format
 msgid "Done. Henceforth, thou shall be knownst as \"`{new_nick}`, {title}\"."
-msgstr ""
+msgstr "Gotowe. Henceforcie, od dziś twa sława brzmi \"`{new_nick}`,{title}\"."
 
 #: orisa/orisa.py:936 orisa/orisa.py:957 orisa/orisa.py:1081
 msgid "you are not registered!"
@@ -499,11 +499,11 @@ msgstr "nie jesteś zarejestrowany!"
 
 #: orisa/orisa.py:945
 msgid "Your nick will be updated even when you are not in an OW voice channel. Use `!ow alwaysshowsr off` to turn it off again."
-msgstr ""
+msgstr "Twój nick będzie aktualizowany nawet jeśli nie przebywasz aktualnie na kanale głosowym Overwatcha. Użyj `!ow alwaysshowsr off` aby wyłączyć tą opcję."
 
 #: orisa/orisa.py:947
 msgid "Your nick will only be updated when you are in an OW voice channel. Use `!ow alwaysshowsr on` to always update your nick."
-msgstr ""
+msgstr "Twój nick będzie aktualizowany tylko jeśli dołączysz do kanału głosowego Overwatcha. Użyj `!ow alwaysshowsr on` aby twój nick był zawsze aktualizowany."
 
 #: orisa/orisa.py:973
 msgid "There were some problems updating your SR! Try again later."
@@ -565,7 +565,7 @@ msgstr "Twój główny {type} nie ma jeszcze przydzielonego RU. Podaj więc pros
 #: orisa/orisa.py:1115
 #, python-brace-format
 msgid "within {sr_diff} of {base_sr} SR"
-msgstr ""
+msgstr "pomiędzy {sr_diff} od {base_sr} RU"
 
 #: orisa/orisa.py:1128
 msgid "min and max must be between 500 and 5000, and min must not be larger than max."
@@ -617,6 +617,8 @@ msgid ""
 "\n"
 "There are also {len} offline players within that range. Use the `findallplayers` command to show them as well."
 msgstr ""
+"\n"
+"Znalazłam {len} graczy offline spełniających te kryteria. Użyj komendy `findallplayers` aby ich uwzględnić."
 
 #: orisa/orisa.py:1201
 msgid "I sent you a DM with the results."
@@ -625,7 +627,7 @@ msgstr "Wysłałam Ci PW z rezultatami."
 #. Translators: Orisa Admin must not be translated
 #: orisa/orisa.py:1213
 msgid "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!"
-msgstr ""
+msgstr "Nie zostałam jeszcze ustawiona! Osoba z rolę `Orisa Admin` musi użyć komendy `!ow config` aby mnie skonfigurować!"
 
 #: orisa/orisa.py:1235
 msgid "I tried to send you a DM with help, but you don't allow DM from server members. I can't post it here, because it's rather long. Please allow DMs and try again."
@@ -668,7 +670,7 @@ msgstr ""
 
 #: orisa/orisa.py:1284
 msgid "Shows information about Orisa, and how you can add her to your own Discord server, or help supporting her."
-msgstr ""
+msgstr "Pokazuje informacje na temat Orisy, jak możesz ją dodać na swój własny serwer Discord, lub skonfigurować."
 
 #: orisa/orisa.py:1288
 msgid ""
@@ -676,20 +678,23 @@ msgid ""
 "*Example:*\n"
 "`!ow alwaysshowsr on`"
 msgstr ""
+"Na niektórych serwerach, Orisa będzie pokazywała twoją RU w nicku jeśli połączysz się z kanałem głosowym Overwatcha, jeśli chcesz aby RU/ranga była zawsze obecna obok twojego nicku, ustaw opcję na tak.\n"
+"*Przykład:*\n"
+"`!ow alwaysshowsr on`"
 
 #. Translators: don't translate "Orisa Admin"
 #: orisa/orisa.py:1296
 msgid "This command can only be used by members with the \"Orisa Admin\" role and allows them to configure Orisa for the specific Discord server."
-msgstr ""
+msgstr "Tej komendy może użyć jedynie osoba z rolą \"Orisa Admin\", z prawami do konfiguracji Orisy dla tego konkretnego serwera Discord."
 
 #. Translators: help for !ow dumpsr
 #: orisa/orisa.py:1301
 msgid "Download your SR history as an Excel sheet"
-msgstr ""
+msgstr "Pobierz historię swojego RU w formie arkusza kalkulacyjnego Excel"
 
 #: orisa/orisa.py:1319
 msgid "Same as `!ow findplayers`, but also includes offline players."
-msgstr ""
+msgstr "Działa tak samo jak `!ow findplayers`, ale bierze pod uwagę również graczy offline."
 
 #. Translators: help !ow forceupdate
 #: orisa/orisa.py:1324
@@ -703,7 +708,7 @@ msgstr ""
 #. Translators: help !ow forgetme
 #: orisa/orisa.py:1331
 msgid "All your BattleTags will be removed from the database and your nick will not be updated anymore. You can re-register at any time."
-msgstr ""
+msgstr "Twoje wszystkie zapisane konta zostaną usunięte z bazy danych, a twój nick nie będzie już aktualizowany. Możesz wpisać się ponownie w dowolnym momencie."
 
 #. Translators: help !ow format. $placeholder can be translated, as can ${placeholder}
 #: orisa/orisa.py:1338
