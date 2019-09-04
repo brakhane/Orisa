@@ -22,6 +22,7 @@ LOCALES = [
     "fr",
     "it",
     "nl",
+    "pl",
     "pt_BR",
     "pt_PT",
     "ru",
