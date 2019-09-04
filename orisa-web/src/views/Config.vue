@@ -79,9 +79,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             v-model="guild_config.post_highscores"
           >{{ $t("cfg.post-hs") }}&nbsp;
             <font-awesome-icon id="post-highscores-help" icon="question-circle"></font-awesome-icon>
-          </b-form-checkbox>
+          </b-form-checkbox>&nbsp;
           <b-popover target="post-highscores-help" triggers="hover click">
-            <vue-markdown>{{ $t("cfg.post-hs-tt") }}</vue-markdown>
+            <vue-markdown :source="$t('cfg.post-hs-tt')"/>
           </b-popover>
           <hr class="hr-3">
           <b-form-group
