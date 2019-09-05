@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-02 23:10+0200\n"
-"PO-Revision-Date: 2019-09-04 22:32+0000\n"
+"PO-Revision-Date: 2019-09-05 17:50+0000\n"
 "Last-Translator: Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>\n"
 "Language-Team: Polish <https://weblate.orisa.rocks/projects/orisa/bot/pl/>\n"
 "Language: pl\n"
@@ -180,7 +180,7 @@ msgstr ":thinking: Potrzebujesz pomocy?"
 #: orisa/orisa.py:253 orisa/orisa.py:655 orisa/orisa.py:682 orisa/orisa.py:1218
 #, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})!"
-msgstr "Dołącz do [Discorda wsparcia]({SUPPORT_DISCORD})!"
+msgstr "Dołącz do [Discorda Wsparcia Technicznego]({SUPPORT_DISCORD})!"
 
 #: orisa/orisa.py:255
 #, python-brace-format
@@ -223,7 +223,7 @@ msgstr "Linki"
 #: orisa/orisa.py:552
 #, python-brace-format
 msgid "[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | [Orisa Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})"
-msgstr "[Profil Overwatch]({PROFILE_LINK}) | [Polajkuj Orisę]({VOTE_LINK}) | [Orisa Support Server]({SUPPORT_DISCORD}) | [Dotacja `{HEART}`]({DONATE_LINK})"
+msgstr "[Profil Overwatch]({PROFILE_LINK}) | [Polajkuj Orisę]({VOTE_LINK}) | [Serwer Wsparcia Technicznego Orisy]({SUPPORT_DISCORD}) | [Dotacja `{HEART}`]({DONATE_LINK})"
 
 #: orisa/orisa.py:564
 #, python-brace-format
@@ -241,7 +241,7 @@ msgid ""
 "BTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough."
 msgstr ""
 "\n"
-"Swoją drogą, nie musisz podawać swojego loginu by sprawdzić swoje wyniki; !ow wystarczy."
+"Swoją drogą, nie musisz podawać swojego loginu by sprawdzić swoje wyniki; wystarczy komenda \"!ow\"."
 
 #. Translators: "Do you need a hug" should be replaced by the corresponding Orisa voice line in game.
 #: orisa/orisa.py:575
@@ -437,7 +437,7 @@ msgstr "Ciąg znaków nie może zawierać nawiasów kwadratowych!"
 #. Translators: keep the $ to remind the user that placeholders start with a $ sign
 #: orisa/orisa.py:865
 msgid "format string must contain at least one $placeholder!"
-msgstr "Ciąg znaków musi zawierać przynajmniej jeden $znak_globalny!"
+msgstr "Ciąg znaków musi zawierać przynajmniej jeden $placeholder!"
 
 #: orisa/orisa.py:868
 msgid "format string missing!"
@@ -520,11 +520,11 @@ msgstr "nie jesteś zarejestrowany!"
 
 #: orisa/orisa.py:945
 msgid "Your nick will be updated even when you are not in an OW voice channel. Use `!ow alwaysshowsr off` to turn it off again."
-msgstr "Twój nick będzie aktualizowany nawet jeśli nie przebywasz aktualnie na kanale głosowym Overwatcha. Użyj `!ow alwaysshowsr off` aby wyłączyć tą opcję."
+msgstr "Od teraz twój nick będzie aktualizowany nawet jeśli nie przebywasz na kanale głosowym Overwatcha. Użyj `!ow alwaysshowsr off` aby wyłączyć tą opcję."
 
 #: orisa/orisa.py:947
 msgid "Your nick will only be updated when you are in an OW voice channel. Use `!ow alwaysshowsr on` to always update your nick."
-msgstr "Twój nick będzie aktualizowany tylko jeśli dołączysz do kanału głosowego Overwatcha. Użyj `!ow alwaysshowsr on` aby twój nick był aktualizowany od razu."
+msgstr "Od teraz twój nick będzie aktualizowany tylko jeśli dołączysz do kanału głosowego Overwatcha. Użyj `!ow alwaysshowsr on` aby twój nick był aktualizowany od razu."
 
 #: orisa/orisa.py:973
 msgid "There were some problems updating your SR! Try again later."
@@ -533,7 +533,7 @@ msgstr "Wystąpił jakiś problem przy aktualizacji twojej RU! Spróbuj ponownie
 #: orisa/orisa.py:978
 #, python-brace-format
 msgid "OK, I have updated your data. Your (primary) SR is now {sr}. If that is not correct, you need to log out of Overwatch once and try again; your profile also needs to be public for me to track your SR."
-msgstr "OK, zaktualizowałam twoje dane. RU twojego (głównego) konta to teraz {sr}. Jeżeli to się nie zgadza, musisz wylogować się z Overwatcha i spróbować ponownie; twój profil musi również być publiczny bym mogła śledzić twoją RU."
+msgstr "OK, zaktualizowałam twoje dane. RU twojego (głównego) konta to teraz {sr}. Jeżeli to się nie zgadza, musisz wylogować się z Overwatcha i spróbować ponownie; twój profil musi również być publiczny, bym mogła śledzić twoją RU."
 
 #: orisa/orisa.py:1005
 #, python-brace-format
@@ -670,9 +670,9 @@ msgid ""
 "If you want to use Orisa on your own server or help developing it, enter `!ow about`\n"
 "Parameters in [square brackets] are optional."
 msgstr ""
-"Wchodząc do kanału szybkiej gry lub gry turniejowej, musisz znać BattleTag członka kanału, bądź oni muszą znać wasz, by was dodać. W kanałach turniejowych warto wiedzieć jaki poziom RU mają inni członkowie. Ten bot został stworzony, by uniknąć proszenia o tę informację po raz kolejny i kolejny. Kiedy zarejestrujesz się ze swoim BattleTagiem, twój nick będzie automatycznie aktualizowany, by pokazywać twój obecny poziom RU. Możesz również zapytać o BattleTag innych użytkowników, bądź zaprezentować swój własny, by inni mogli was łatwo dodać w OW.\n"
+"Wchodząc do kanału szybkiej gry lub gry turniejowej, musisz znać BattleTag członka kanału, bądź oni muszą znać twój, by cię dodać. W kanałach turniejowych warto wiedzieć jaki poziom RU mają inni członkowie. Ten bot został stworzony, by uniknąć proszenia o tę informację po raz kolejny i kolejny. Kiedy zarejestrujesz się ze swoim BattleTagiem, twój nick będzie automatycznie aktualizowany, by pokazywał twój obecny poziom RU. Możesz również zapytać o BattleTag innych użytkowników, bądź zaprezentować swój własny, by inni mogli was łatwo dodać w OW.\n"
 "Zostanie również wysłana krótka informacja na czacie kiedy awansujesz w rankingach.\n"
-"*Podobnie jak Orisa w Overwatch, ten bot jest całkiem młody i dopiero się uczy. Zgłaszaj wszelkie problemy do <@!{OWNER}>*\n"
+"*Podobnie jak Orisa w Overwatchu, ten bot jest całkiem młody i dopiero się uczy. Zgłaszaj wszelkie problemy do <@!{OWNER}>*\n"
 "\n"
 "**Komendy działają tylko w kanale <#{channel_id}>, bądź poprzez wysłanie mi PW**\n"
 "Jeżeli jesteś nowym użytkownikiem Orisy, prawdopodobnie szukasz komendy `!ow register` lub `!ow register xbox`\n"
@@ -705,7 +705,7 @@ msgid ""
 "*Example:*\n"
 "`!ow alwaysshowsr on`"
 msgstr ""
-"Na niektórych serwerach, Orisa będzie pokazywała twoją RU w nicku jeśli połączysz się z kanałem głosowym Overwatcha, jeśli chcesz aby RU/ranga była zawsze obecna obok twojego nicku, ustaw opcję na tak.\n"
+"Na niektórych serwerach, Orisa będzie pokazywała twoją RU w nicku jeśli połączysz się z kanałem głosowym Overwatcha. Jeśli chcesz aby RU/ranga była zawsze obecna obok twojego nicku, włącz tę opcję.\n"
 "*Przykład:*\n"
 "`!ow alwaysshowsr on`"
 
@@ -717,7 +717,7 @@ msgstr "Tej komendy może użyć jedynie osoba z rolą \"Orisa Admin\", zezwalaj
 #. Translators: help for !ow dumpsr
 #: orisa/orisa.py:1301
 msgid "Download your SR history as an Excel sheet"
-msgstr "Pobierz historię swojego RU w formie arkusza kalkulacyjnego Excel"
+msgstr "Pobierz historię swojego RU w formie arkusza kalkulacyjnego MS Excel"
 
 #: orisa/orisa.py:1319
 msgid "Same as `!ow findplayers`, but also includes offline players."
@@ -745,7 +745,7 @@ msgid ""
 "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`."
 msgstr ""
 "Pozwala ci sprecyzować jak twoja RU, bądź ranga będzie wyglądać. Zawsze będzie wyświetlana w [kwadratowych\\u00a0nawiasach] na końcu twojej nazwy.\n"
-"W *format*, możesz pomiędzy jakimi znakami dzięki `$placeholder`, bądź `${placeholder}`."
+"W *format*, sprecyzować placeholder dzięki `$placeholder`, bądź `${placeholder}`."
 
 #: orisa/orisa.py:1342
 msgid "\\N{BLACK STAR} *ow format placeholders*"
@@ -776,22 +776,22 @@ msgid ""
 msgstr ""
 "*Podane skróty są zdefiniowane:*\n"
 "`$sr`\n"
-"pierwsze dwie cyfry twojej RU dla wszystkich trzech roli w kolejności Tank, Natarcie, Wsparcie; jeżeli posiadasz dodatkowe konta, zostanie na końcu dodana gwiazdka (\\*) . Znak zapytania jest dodawany, jeżeli stara RU jest pokazywana\n"
+"Pierwsze dwie cyfry twojej RU dla wszystkich trzech roli w kolejności Tank, Natarcie, Wsparcie; jeżeli posiadasz dodatkowe konta, zostanie na końcu dodana gwiazdka (\\*). Znak zapytania jest dodawany, jeżeli pokazana jest stara wartość RU\n"
 "\n"
 "`$fullsr`\n"
 "Podobnie jak `$sr`, lecz pokazuje wszystkie cztery cyfry\n"
 "\n"
 "`$rank`\n"
-"twoja ranga w skróconej formie dla wszystkich trzech ról w kolejności Tank, Natarcie, Wsparcie; gwiazdki i znaki zapytania działają jak w  `$sr`\n"
+"Twoja ranga w skróconej formie dla wszystkich trzech ról w kolejności Tank, Natarcie, Wsparcie; gwiazdki i znaki zapytania działają jak w  `$sr`\n"
 "\n"
 "`$tank`, `$damage`, `$support`\n"
 "Twoja pełna RU dla konkretnej roli będzie pokazana za jej symbolem. Gwiazdka i znak zapytania mają takie samo znaczenie jak w `$sr`. Z powodów technicznych symbole dla ról to kolejno `{SYMBOL_TANK}`, `{SYMBOL_DPS}`, `{SYMBOL_SUPPORT}`\n"
 "\n"
 "`$tankrank`, `$damagerank`, `$supportrank`\n"
-"jak wyżej, lecz pokazywana jest ranga.\n"
+"Jak wyżej, lecz pokazywana jest ranga.\n"
 "\n"
 "`$dps`, `$dpsrank`\n"
-"Mogą być stosowane zamiennie z kolejno `$damage` i`$damagerank`."
+"Mogą być stosowane zamiennie z kolejno `$damage` i `$damagerank`."
 
 #: orisa/orisa.py:1355
 msgid "\\N{BLACK STAR} *ow format examples*"
@@ -827,7 +827,7 @@ msgstr ""
 
 #: orisa/orisa.py:1378
 msgid "Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. Your OW account will be checked periodically and your nick will be automatically updated to show your SR or rank (see the *format* command for more info). `!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. If you register an XBL account, you have to link it to your Discord beforehand. PSN accounts are not supported yet."
-msgstr "Stwórz link do twojego konta BattleNet lub Gamertag, bądź dodaj do niego drugi BattleTag. Twoje konto OW będzie okresowo sprawdzane, a twój nick będzie automatycznie aktualizowany by pokazywać twoje RU, bądź rangę (zobacz komendę *format*, by uzyskać więcej informacji). `!ow register` i `!ow register pc`zarejestrują konto PC, natomiast `!ow register xbox` zarejestruje konto XBL. Jeżeli rejestrujesz konto XBL, musisz wcześniej połączyć je ze swoim Discordem. Konta PSN nie są jeszcze wspierane."
+msgstr "Stwórz link do twojego konta BattleNet lub Gamertag, bądź dodaj do niego drugi BattleTag. Twoje konto OW będzie okresowo sprawdzane, a twój nick będzie automatycznie aktualizowany by pokazywać twoją RU, bądź rangę (zobacz komendę *format*, by uzyskać więcej informacji). `!ow register` i `!ow register pc` zarejestrują konto PC, natomiast `!ow register xbox` zarejestruje konto XBL. Jeżeli rejestrujesz konto XBL, musisz wcześniej połączyć je ze swoim Discordem. Konta PSN nie są jeszcze wspierane."
 
 #: orisa/orisa.py:1384
 msgid "Show Orisa's Privacy Policy"
@@ -949,7 +949,7 @@ msgstr "historia-ru.xls"
 
 #: orisa/orisa.py:1505
 msgid "Here is your SR history of all your accounts as an Excel sheet."
-msgstr "Tutaj jest dostępna twoja historia RU ze wszystkich twoich kont w formacie MS Excel."
+msgstr "Tutaj dostępna jest twoja historia RU ze wszystkich twoich kont w formacie MS Excel."
 
 #. Translators: check how Discord translated "Allow DM from server members"
 #: orisa/orisa.py:1509
@@ -983,7 +983,7 @@ msgstr "Tutaj widoczna jest twoja historia RU od {date}"
 #. Translators: used instead of a date when user requested a SR history from the beginning (which is the usual case)
 #: orisa/orisa.py:1570
 msgid "when you registered"
-msgstr "kiedy się zarejestrowałeś"
+msgstr "daty rejestracji"
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
 #: orisa/orisa.py:2205
