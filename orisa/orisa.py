@@ -2345,7 +2345,7 @@ Pornography Historian""").split("\n")
                 # Translators: header for highscore table: member discord id
                 _("Member ID"), 
                 # Translators: header fdor highscore table: SR
-                _("{role} SR").format(role=sr_kind.capitalize()),
+                _("{role} SR").format(role=_(sr_kind.capitalize())),
                 # Translators: header for highscore table: SR difference
                 _("ΔSR")
             ]
