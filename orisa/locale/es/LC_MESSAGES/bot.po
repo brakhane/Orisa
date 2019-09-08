@@ -9,9 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-02 23:10+0200\n"
-"PO-Revision-Date: 2019-09-01 12:44+0000\n"
+"PO-Revision-Date: 2019-09-09 09:23+0000\n"
 "Last-Translator: Guillem Rosset <guillem.rosset@gmail.com>\n"
 "Language-Team: Spanish <https://weblate.orisa.rocks/projects/orisa/bot/es/>\n"
 "Language: es\n"
@@ -45,15 +45,15 @@ msgstr "Apoyo"
 #: orisa/models.py:205
 msgid "BattleTag"
 msgid_plural "BattleTags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "BattleTag"
+msgstr[1] "BattleTags"
 
 #. Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
 #: orisa/models.py:238
 msgid "Gamertag"
 msgid_plural "Gamertags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Gamertag"
+msgstr[1] "Gamertags"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:137
@@ -304,10 +304,8 @@ msgid "I sent you a DM."
 msgstr "Te he enviado un mensaje privado."
 
 #: orisa/orisa.py:690
-#, fuzzy
-#| msgid "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. I can't post the link here because everybody who knows that link will be able to configure me for the next 30 minutes."
 msgid "I tried to send you a DM with the link, but you disallow DM from server members. Please allow that and retry. I can't post the link here because everybody who knows that link will be able to configure me."
-msgstr "Te he intentado enviar un mensaje privado con el enlace, pero no permites MP de miembros del servidor. Por favor, permítelo y vuelve a intentarlo. No puedo publicar el enlace aquí porque todo el mundo que lo use podrá configurarme durante los siguientes 30 minutos."
+msgstr "Te he intentado enviar un mensaje privado con el enlace, pero no permites MP de miembros del servidor. Por favor, permítelo y vuelve a intentarlo. No puedo publicar el enlace aquí porque todo el mundo que lo use podrá configurarme."
 
 #: orisa/orisa.py:701
 #, python-brace-format
@@ -553,8 +551,7 @@ msgstr "¡No se puede computar!"
 
 #. Translators: type is BattleTag or GamerTag
 #: orisa/orisa.py:1106
-#, fuzzy, python-brace-format
-#| msgid "You primary {type} has no SR, please give a SR range you want to search for instead."
+#, python-brace-format
 msgid "Your primary {type} has no SR, please give a SR range you want to search for instead."
 msgstr "Tu {type} primario no tiene SR, por favor mejor escribe el rango de SR en el que quieras buscar."
 
@@ -809,13 +806,6 @@ msgid "Show Orisa's Privacy Policy"
 msgstr "Muestra la Política de Privacidad de Orisa"
 
 #: orisa/orisa.py:1387
-#, fuzzy
-#| msgid ""
-#| "Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using, the its SR is shown in your nick\n"
-#| "The search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n"
-#| "The given BattleTag must already be registered as one of your BattleTags.\n"
-#| "*Example:*\n"
-#| "`!ow setprimary jjonak`"
 msgid ""
 "Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using: its SR is shown in your nick\n"
 "The search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n"
@@ -823,7 +813,7 @@ msgid ""
 "*Example:*\n"
 "`!ow setprimary jjonak`"
 msgstr ""
-"Convierte el BattleTag secundario introducido en tu BattleTag primario. Tu BattleTag primario es el que estás usando actualmente, cuyo SR se muestra en tu apodo.\n"
+"Convierte el BattleTag secundario introducido en tu BattleTag primario. Tu BattleTag primario es el que estás usando actualmente: tu SR se muestra en tu apodo.\n"
 "La búsqueda realizada es difusa e ignora mayúsculas, así que normalmente solo necesitas introducir las primeras (pocas) letras.\n"
 "El BattleTag introducido tiene que estar previamente registrado como uno de tus BattleTags.\n"
 "*Ejemplo:*\n"
@@ -1234,10 +1224,8 @@ msgstr "Gestionar apodos"
 
 #. Translators: Discord permission name
 #: orisa/web.py:139
-#, fuzzy
-#| msgid "Manage Nicknames"
 msgid "Manage Channels"
-msgstr "Gestionar apodos"
+msgstr "Gestionar canales"
 
 #: orisa/web.py:148
 #, python-brace-format
