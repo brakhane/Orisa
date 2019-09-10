@@ -2226,7 +2226,7 @@ Pornography Historian""").split("\n")
                 logger.exception(f"Cannot send congrats for guild {guild}")
 
 
-    async def _top_players(self, session, prev_date, type_class, sr_kind: str, style="fancy_grid"):
+    async def _top_players(self, session, prev_date, type_class, sr_kind: str, style="psql"):
         def get_kind(obj):
             return getattr(obj, sr_kind)
 
