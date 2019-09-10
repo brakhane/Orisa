@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-02 23:10+0200\n"
-"PO-Revision-Date: 2019-09-01 15:13+0000\n"
+"PO-Revision-Date: 2019-09-10 20:23+0000\n"
 "Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://weblate.orisa.rocks/projects/orisa/bot/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -42,15 +42,15 @@ msgstr "Suporte"
 #: orisa/models.py:205
 msgid "BattleTag"
 msgid_plural "BattleTags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "BattleTag"
+msgstr[1] "BattleTags"
 
 #. Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
 #: orisa/models.py:238
 msgid "Gamertag"
 msgid_plural "Gamertags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Gamertag"
+msgstr[1] "Gamertaga"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:137
@@ -154,6 +154,9 @@ msgid ""
 "\n"
 "*Somebody (hopefully you) invited me to your server {guild_name}, but I couldn't find a text channel I am allowed to send messages to, so I have to message you directly*"
 msgstr ""
+"\n"
+"\n"
+"*Alguém (espero que tenhas sido tu) convidou-me para o teu servidor {guild_name}, mas não consigo encontrar um canal de texto onde possa enviar mensagens, por tanto tenho de te mandar"
 
 #. Translators: Short for Discord Nickname
 #: orisa/orisa.py:504
@@ -688,11 +691,13 @@ msgstr "Todas as tuas BattleTags serão removidas da base de dados e o teu nick 
 
 #. Translators: help !ow format. $placeholder can be translated, as can ${placeholder}
 #: orisa/orisa.py:1338
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Lets you specify how your SR or rank is displayed. It will always be shown in [square\\u00a0brackets] appended to your name.\n"
 "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`."
 msgstr ""
+"Vamos especificar como é que o teu SR ou rank são mostrados. Será sempre mostrado em [parêntesis\\u00a0retos] à frente do teu nome.\n"
+"No *formato* podes especificar os placeholders com `$placeholder` ou `${placeholder}`"
 
 #: orisa/orisa.py:1342
 msgid "\\N{BLACK STAR} *ow format placeholders*"
@@ -727,13 +732,17 @@ msgid "\\N{BLACK STAR} *ow format examples*"
 msgstr ""
 
 #: orisa/orisa.py:1357
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "`!ow format hello $sr` will result in `[hello 12-34-45]`.\n"
 "`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
 "`!ow format $damage $support` in `[1234{SYMBOL_DPS} 2345{SYMBOL_SUPPORT}]`.\n"
 "*By default, the format is `$sr`*"
 msgstr ""
+"`!ow format hello $sr` irá resultar em `[hello 12-34-45]`.\n"
+"`!ow format Potato/$fullrank` em `[Potato/Bronze-Gold-Diamond]`.\n"
+"`!ow format $damage $support` em `[1234{SYMBOL_DPS} 2345{SYMBOL_SUPPORT}]`.\n"
+"*Por norma, o formato é `$sr`*"
 
 #. Translators: headline of second help page
 #: orisa/orisa.py:1365
@@ -753,7 +762,7 @@ msgstr "Cria um link para a tua conta da Battlenet ou Gamertag, ou adiciona uma 
 
 #: orisa/orisa.py:1384
 msgid "Show Orisa's Privacy Policy"
-msgstr ""
+msgstr "Mostra a Política de Privacidade da Orisa"
 
 #: orisa/orisa.py:1387
 msgid ""
@@ -795,6 +804,8 @@ msgid ""
 "*This command can only be used by users with the Orisa Admin role!*\n"
 "Like srgraph, but shows the graph for the given user."
 msgstr ""
+"*Este comando apenas pode ser usado por quem tem o cargo Orisa Admin!*\n"
+"Funciona como o srgraph, mas mostra o gráfico para o utilizador especificado."
 
 #: orisa/orisa.py:1425
 msgid ""
@@ -815,21 +826,21 @@ msgstr ""
 
 #: orisa/orisa.py:1449
 msgid "You are not registered. Do `!ow register` first!"
-msgstr ""
+msgstr "Não estás registado. Faz `!ow register` primeiro!"
 
 #: orisa/orisa.py:1460
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{member_name} is not registered!"
-msgstr ""
+msgstr "{member_name} não está registado!"
 
 #. Translators: privacy policy is currently only availabe in English
 #: orisa/orisa.py:1473
 msgid "I sent you the privacy policy as DM."
-msgstr ""
+msgstr "Enviei-te a política de privacidade por DM."
 
 #: orisa/orisa.py:1480
 msgid "You are not registered."
-msgstr ""
+msgstr "Não estás registado."
 
 #: orisa/orisa.py:1489
 msgid "Timestamp"
@@ -838,16 +849,16 @@ msgstr ""
 #. Translators: file name of the sr history excel file to download
 #: orisa/orisa.py:1504
 msgid "sr-history.xls"
-msgstr ""
+msgstr "historico-sr.xls"
 
 #: orisa/orisa.py:1505
 msgid "Here is your SR history of all your accounts as an Excel sheet."
-msgstr ""
+msgstr "Aqui está o histórico de SR de todas as tuas contas, numa folha de Excel."
 
 #. Translators: check how Discord translated "Allow DM from server members"
 #: orisa/orisa.py:1509
 msgid "I'm not allowed to send you a DM, please make sure that you enabled \"Allow DM from server members\" in the server's privacy settings!"
-msgstr ""
+msgstr "Não estou autorizada a enviar-te DMs. Por favor certifica-te de que tens a opção \"Permitir mensagens diretas de membros do servidor\" ativada nas definições de privacidade do servidor!"
 
 #: orisa/orisa.py:1523
 #, python-brace-format
