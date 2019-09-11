@@ -2303,7 +2303,7 @@ Pornography Historian""").split("\n")
 
                 old_pos = prev_top_tags.index(tag) + 1
                 if pos == old_pos:
-                    sym = " "
+                    sym = "→"
                 elif pos > old_pos:
                     sym = "↓"
                 else:
