@@ -2226,7 +2226,7 @@ Pornography Historian""").split("\n")
                 logger.exception(f"Cannot send congrats for guild {guild}")
 
 
-    async def _top_players(self, session, prev_date, type_class, sr_kind: str, style="psql"):
+    async def _top_players(self, session, prev_date, type_class, sr_kind: str, style="fancy_grid"):
         def get_kind(obj):
             return getattr(obj, sr_kind)
 
@@ -2303,7 +2303,7 @@ Pornography Historian""").split("\n")
 
                 old_pos = prev_top_tags.index(tag) + 1
                 if pos == old_pos:
-                    sym = "→"
+                    sym = " "
                 elif pos > old_pos:
                     sym = "↓"
                 else:
