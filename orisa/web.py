@@ -309,8 +309,16 @@ async def handle_oauth():
 
     register_msg = '<p class="text-monospace">!ow register</p>'
     try:
-        logger.debug("handle_oauth with request args {request.args}")
-        type, uid = serializer.loads(request.args.get("state", ""), max_age=600)
+        logger.debug(f"handle_oauth with request args {request.args}")
+        try:
+            state = request.args["state"]
+        except KeyError:
+            return await render_message(
+                _("I got an incomplete answer from the server. This sometimes happens (for unknown reasons) when registering from a "
+                  "mobile phone. Try again with a PC or laptop. Sorry for the inconvenience"),
+                is_error=True,
+            )
+        type, uid = serializer.loads(state, max_age=600)
     except SignatureExpired:
         return await render_message(
             _('The link has expired. Please request a new link with {register}.').format(register=register_msg),
