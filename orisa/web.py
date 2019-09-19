@@ -309,7 +309,8 @@ async def handle_oauth():
 
     register_msg = '<p class="text-monospace">!ow register</p>'
     try:
-        type, uid = serializer.loads(request.args["state"], max_age=600)
+        logger.debug("handle_oauth with request args {request.args}")
+        type, uid = serializer.loads(request.args.get("state", ""), max_age=600)
     except SignatureExpired:
         return await render_message(
             _('The link has expired. Please request a new link with {register}.').format(register=register_msg),
