@@ -1624,7 +1624,7 @@ Pornography Historian""").split("\n")
                 try:
                     await self._adjust_voice_channels(parent)
                 except Exception:
-                    logger.exception(f"Can't adjust voice channel for parent {parent}")
+                    logger.warn(f"Can't adjust voice channel for parent {parent}", exc_info=True)
 
         if new_voice_state:
             if new_voice_state.channel.parent != parent:
@@ -1632,7 +1632,7 @@ Pornography Historian""").split("\n")
                     try:
                         await self._adjust_voice_channels(new_voice_state.channel.parent)
                     except Exception:
-                        logger.exception(f"Can't adjust voice channel for new state parent {new_voice_state.channel.parent}")
+                        logger.warn(f"Can't adjust voice channel for new state parent {new_voice_state.channel.parent}", exc_info=True)
 
         CurrentLocale.set(self.guild_config[member.guild_id].locale)
         async with self.database.session() as session:
@@ -1642,7 +1642,7 @@ Pornography Historian""").split("\n")
                 try:
                     await self._update_nick_for_member(member, formatted)
                 except Exception:
-                    logger.exception("Unable to update nick for member %s", member)
+                    logger.warn("Unable to update nick for member %s", member, exc_info=True)
 
     @event("message_create")
     async def _message_create(self, ctx, msg):
@@ -2163,7 +2163,7 @@ Pornography Historian""").split("\n")
                 if raise_hierachy_error:
                     raise
             except Exception as e:
-                logger.exception("error while setting nick", exc_info=True)
+                logger.warn("error while setting nick", exc_info=True)
                 raise
 
         return new_nn
@@ -2508,11 +2508,11 @@ Pornography Historian""").split("\n")
                         await run_sync(session.commit)
                     except Exception:
                         if handle:
-                            logger.exception(
-                                f"exception while syncing {handle} for {handle.user.discord_id}"
+                            logger.warn(
+                                f"exception while syncing {handle} for {handle.user.discord_id}", exc_info=True
                             )
                         else:
-                            logger.exception("Exception while getting handle for sync")
+                            logger.warn("Exception while getting handle for sync", exc_info=True)
                     finally:
                         try:
                             await run_sync(session.commit)
@@ -2810,7 +2810,7 @@ Pornography Historian""").split("\n")
                     "so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry!"),
                 )
             except Exception as e:
-                logger.exception(f"unable to update nick for user {user}")
+                logger.warn(f"unable to update nick for user {user}", exc_info=True)
                 embed.add_field(
                     name=_(":warning: Cannot update nickname"),
                     value=(
