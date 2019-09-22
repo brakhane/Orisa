@@ -2514,7 +2514,10 @@ Pornography Historian""").split("\n")
                         else:
                             logger.exception("Exception while getting handle for sync")
                     finally:
-                        await run_sync(session.commit)
+                        try:
+                            await run_sync(session.commit)
+                        except Exception:
+                            logger.exception("cannot sync session")
             
         logger.debug("channel %r closed, done", channel)
 
