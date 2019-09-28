@@ -739,7 +739,8 @@ class Orisa(Plugin):
                 await reply(ctx, _("When registering a PSN account, you need to give your Online ID, like `!ow register psn My-Cool-ID_12345`."))
                 return
             await self._handle_registration(user_id, "psn", online_id)
-            await reply(ctx, _("I sent you a DM."))
+            if not ctx.channel.private:
+                await reply(ctx, _("I sent you a DM."))
             return
         else:
             await reply(ctx, _('Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet.').format(type=_(type)))
