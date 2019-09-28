@@ -128,7 +128,7 @@ logger = logging.getLogger("orisa")
 
 OAUTH_SERIALIZER = URLSafeTimedSerializer(SIGNING_SECRET)
 
-SUPPORT_DISCORD="https://discord.gg/yb7TkPN"
+SUPPORT_DISCORD="https://discord.gg/PuC7Yc"
 VOTE_LINK="https://discordbots.org/bot/445905377712930817/vote"
 DONATE_LINK="https://ko-fi.com/R5R2PC36"
 
