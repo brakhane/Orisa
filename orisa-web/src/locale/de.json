@@ -27,6 +27,7 @@
         "not-top-role-desc": "Discord erlaubt keine Nicknameänderungen, wenn das Mitglied, dessen Nickname geändert werden soll eine höhere Rolle als Orisa besitzt. Du musst die Rolle \"Orisa\" nach ganz oben verschieben, wenn sie die Nicknamen aller Mitglieder verwalten können soll. Aktuell wird Orisa die Nicknamen von Mitgliedern {{with_the_following_roles}} nicht ändern können:",
         "not-top-role-head": "Die Rolle \"Orisa\" ist nicht die oberste Rolle!",
         "post-hs": "Poste täglich eine SR Highscoretabelle in den Orisakanal",
+        "post-hs-time": "Zeitpunkt (UTC), an dem die Tabelle gepostet wird",
         "post-hs-tt": "Wenn aktiviert, wird Orisa täglich gegen 09:00 UTC eine SR Highscoretabelle pro Rolle posten (getrennte Tabellen für PC und XBOX). Nur die SR der Hauptaccounts wird berücksichtigt, und nur Mitglieder, die momentan einen SR haben werden angezeigt. Eine CSV-Datei mit den gleichen Daten wird ebenfalls gepostet.\nFalls deine Servermitglieder sich durch die Highscoretabelle kritisiert fühlen, kannst du die Tabelle hier abschalten.",
         "reg-msg": "Nachricht beim Registrieren",
         "reg-msg-desc": "Optionaler serverspezifischer Text der in der Willkommensnachricht erscheinen soll nachdem sich ein Mitglied mittels `!ow register` registriert hat. Dieser Text wird *nicht* angezeigt, wenn ein Benutzer dem Discordserver beitritt. Im Text kann [Discord Markdown]({{ link }}) verwendet werden.",
