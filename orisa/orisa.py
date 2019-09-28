@@ -575,9 +575,9 @@ class Orisa(Plugin):
                 num_psn = sum(handle.type == "online_id" for handle in user.handles)
 
                 if num_psn == 1:
-                    footer_text += _("Orisa can neither confirm nor refute that the PSN Online ID actually belongs to this account.")
+                    footer_text += _("\nOrisa can neither confirm nor refute that the PSN Online ID actually belongs to this account.")
                 elif num_psn > 1:
-                    footer_text += _("Orisa can neither confirm nor refute that the PSN Online IDs actually belong to this account.")
+                    footer_text += _("\nOrisa can neither confirm nor refute that the PSN Online IDs actually belong to this account.")
 
                 if member == ctx.author and member_given:
                     footer_text += _("\nBTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough.")
