@@ -42,7 +42,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </transition>
     <b-container>
       <h1>{{ $t("cfg.configure-for", { guild_name }) }}</h1>
-      <vue-markdown :source="$t('cfg.lead-info', {link: 'https://discord.gg/tsNxvFh'})" class="lead" :anchorAttributes="{target: '_blank'}"/>
+      <vue-markdown :source="$t('cfg.lead-info', {link: 'https://discord.gg/PuC7Yc'})" class="lead" :anchorAttributes="{target: '_blank'}"/>
       <b-alert variant="warning" class="my-4" show dismissible v-if="higher_roles.length > 0">
         <h5 class="alert-heading">{{ $t("cfg.not-top-role-head") }}</h5>
         <vue-markdown :source="
@@ -83,6 +83,14 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <b-popover target="post-highscores-help" triggers="hover click">
             <vue-markdown :source="$t('cfg.post-hs-tt')"/>
           </b-popover>
+          <b-form-group
+            label-cols-sm="4" label-cols-lg="3"
+            :label="$t('cfg.post-hs-time')"
+            :invalid-feedback="validation_errors.post_highscore_time"
+            :disabled="!guild_config.post_highscores"
+          >
+            <b-form-input type="time" v-model="guild_config.post_highscore_time" :state="val_state(validation_errors.post_highscore_time)"/>
+          </b-form-group>
           <hr class="hr-3">
           <b-form-group
            label-cols-sm="4" label-cols-lg="3"
@@ -365,7 +373,11 @@ export default {
       save_error: false,
       roles: null,
       my_top_role: null,
-      translationInfo
+      translationInfo,
+      datePickerOptions: {
+        format: '%H:%M',
+        useCurrent: false
+      }
     }
   },
   mounted () {

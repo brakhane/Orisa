@@ -12,6 +12,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+import datetime as dt
 import json
 import logging
 import re
@@ -39,7 +40,7 @@ from .config import (
 )
 from .config_classes import GuildConfig
 from .i18n import _, ngettext, CurrentLocale
-from .models import User, GuildConfigJson
+from .models import User, GuildConfigJson, HighscoreCron
 
 logger = logging.getLogger(__name__)
 
@@ -150,6 +151,12 @@ def validate_config(guild, guild_config):
             return None
 
     CurrentLocale.set(guild_config.locale)
+
+    if guild_config.post_highscores:
+        try:
+            dt.datetime.strptime(guild_config.post_highscore_time, "%H:%M")
+        except ValueError:
+            errors["post_highscore_time"] = _("Invalid time")
 
     chan = guild.channels.get(guild_config.listen_channel_id)
     if not chan or chan.type != 0:
@@ -277,6 +284,23 @@ async def save(guild_id):
         new_config = json.dumps(new_gi.to_js_json())
         gc.config = new_config
         logger.info("New config for guild %d is %s", guild_id, new_config)
+
+        cron = await run_sync(session.query(HighscoreCron).filter_by(id=guild_id).one_or_none)
+
+        if new_gi.post_highscores:
+            if not cron:
+                cron = HighscoreCron(id=guild_id)
+                await run_sync(session.add, cron)
+            ts = dt.datetime.strptime(new_gi.post_highscore_time, "%H:%M")
+            now = dt.datetime.today()
+            ts = ts.replace(year=now.year, month=now.month, day=now.day)
+            if ts < now:
+                ts += dt.timedelta(days=1)
+            cron.next_run = ts
+        else:
+            if cron:
+                await run_sync(session.delete, cron)
+
         await run_sync(session.commit)
 
     async def update():

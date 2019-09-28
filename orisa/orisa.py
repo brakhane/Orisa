@@ -103,7 +103,7 @@ from .config import (
     ROLE_EMOJIS,
     WEB_APP_PATH,
 )
-from .models import Cron, User, BattleTag, Gamertag, SR, OnlineID, Role, GuildConfigJson, WelcomeMessage
+from .models import HighscoreCron, User, BattleTag, Gamertag, SR, OnlineID, Role, GuildConfigJson, WelcomeMessage
 from .exceptions import (
     BlizzardError,
     InvalidBattleTag,
@@ -573,8 +573,7 @@ class Orisa(Plugin):
                     footer_text = ""
 
                 num_psn = sum(handle.type == "online_id" for handle in user.handles)
-                footer_text += str(num_psn)
-                footer_text += str(list(handle.type for handle in user.handles))
+
                 if num_psn == 1:
                     footer_text += _("Orisa can neither confirm nor refute that the PSN Online ID actually belongs to this account.")
                 elif num_psn > 1:
@@ -2249,192 +2248,198 @@ Pornography Historian""").split("\n")
                 logger.exception(f"Cannot send congrats for guild {guild}")
 
 
-    async def _top_players(self, session, prev_date, type_class, sr_kind: str, style="fancy_grid"):
-        def get_kind(obj):
-            return getattr(obj, sr_kind)
+    async def _top_players(self, guild_ids, style="fancy_grid", update_cron=True):
 
         def prev_sr(tag):
             for sr in tag.sr_history[:30]:
                 prev_sr = sr
-                if sr.timestamp < prev_date:
+                if sr.timestamp < datetime.now() - timedelta(days=1):
                     break
             return prev_sr
 
+        async with self.database.session() as session:
 
-        handles = (
-            session.query(type_class)
-            .options(joinedload(type_class.user))
-            .join(type_class.current_sr)
-            .order_by(desc(get_kind(SR)))
-            .filter(get_kind(SR) != None)
-            .filter(BattleTag.position==0)
-            .all()
-        )
+            handles = {
+                (type_class, role): await run_sync(session.query(type_class)
+                        .options(joinedload(type_class.user))
+                        .join(type_class.current_sr)
+                        .order_by(desc(role))
+                        .filter(role != None)
+                        .filter(type_class.position==0)
+                        .all)
+                for role in [SR.tank, SR.damage, SR.support]
+                for type_class in [BattleTag, Gamertag, OnlineID]
+            }
 
-        handles_and_prev = [(handle, prev_sr(handle)) for handle in handles]
+            logger.debug("handles: %s", handles)
 
-        top_per_guild = {}
-
-        guilds = [guild for guild in self.client.guilds.values() if self.guild_config[guild.id].post_highscores]
-
-        for handle, prev_sr in handles_and_prev:
-            found = False
-
-            for guild in guilds:
-                try:
-                    member = guild.members[handle.user.discord_id]
-                except KeyError:
-                    continue
-
-                top_per_guild.setdefault(guild.id, []).append(
-                    (member, handle, get_kind(prev_sr))
-                )
-                found = True
-
-            @dataclass
-            class dummy:
-                name: str
-
-            if not found:
-                logger.warning(
-                    "User %i not found in any of the guilds", handle.user.discord_id
-                )
-
-        def member_name(member):
-            name = str(member.name)
-            name = re.sub(r"\[.*?\]", "", name)
-            name = re.sub(r"\{.*?\}", "", name)
-            name = re.sub(r"\s{2,}", " ", name)
-
-            return "".join(
-                ch if ord(ch) < 256 or unicodedata.category(ch)[0] != "S" else ""
-                for ch in name
-            )
-
-        for guild_id, tops in top_per_guild.items():
-            logger.debug(f"Processing guild {guild_id} for top_players")
-            CurrentLocale.set(self.guild_config[guild_id].locale)
-
-            # FIXME: wrong if there is a tie
-            prev_top_tags = [
-                top[1] for top in sorted(tops, key=lambda x: x[2] or 0, reverse=True)
+            handles_and_prev = [
+                (c, t, handle, prev_sr(handle))
+                for c in [BattleTag, Gamertag, OnlineID]
+                for t in [SR.tank, SR.damage, SR.support]
+                for handle in handles[c, t]
             ]
 
-            def prev_str(pos, tag, prev_sr):
-                if not prev_sr:
-                    return "  (——)"
+            top_per_guild = {}
+            logger.debug("%s %s %s", list(guild.id for guild in self.client.guilds.values()), guild_ids, list(guild.id in guild_ids for guild in self.client.guilds.values()))
 
-                old_pos = prev_top_tags.index(tag) + 1
-                if pos == old_pos:
-                    sym = " "
-                elif pos > old_pos:
-                    sym = "↓"
-                else:
-                    sym = "↑"
+            guilds = [guild for guild in self.client.guilds.values() if guild.id in guild_ids]
 
-                return f"{sym} ({old_pos:2})"
+            logger.debug("guilds are %s", guilds)
 
-            def delta_fmt(curr, prev):
-                if not curr or not prev or curr == prev:
-                    return ""
-                else:
-                    return f"{curr-prev:+4}"
+            for type_class, type, handle, prev_sr in handles_and_prev:
+                for guild in guilds:
+                    try:
+                        member = guild.members[handle.user.discord_id]
+                    except KeyError:
+                        continue
 
-            table_prev_sr = None
-            data = []
-            for ix, (member, handle, prev_sr) in enumerate(tops):
-                if get_kind(handle.sr) != table_prev_sr:
-                    pos = ix + 1
-                sr = get_kind(handle.sr)
-                table_prev_sr = sr
-                data.append(
-                    (
-                        pos,
-                        prev_str(ix + 1, handle, prev_sr),
-                        member_name(member),
-                        member.id,
-                        sr,
-                        delta_fmt(sr, prev_sr),
+                    top_per_guild.setdefault(guild.id, {}).setdefault((type_class, type.key), []).append(
+                        (member, handle, getattr(prev_sr, type.key))
                     )
+
+                @dataclass
+                class dummy:
+                    name: str
+
+            def member_name(member):
+                name = str(member.name)
+                name = re.sub(r"\[.*?\]", "", name)
+                name = re.sub(r"\{.*?\}", "", name)
+                name = re.sub(r"\s{2,}", " ", name)
+
+                return "".join(
+                    ch if ord(ch) < 256 or unicodedata.category(ch)[0] != "S" else ""
+                    for ch in name
                 )
 
-            headers = [
-                # Translators: header for highscore table: position (keep it short)
-                _("#"), 
-                # Translators: header for highscore table: previous position (keep it short)
-                _("prev"), 
-                # Translators: header for highscore table: member name
-                _("Member"), 
-                # Translators: header for highscore table: member discord id
-                _("Member ID"), 
-                # Translators: header fdor highscore table: SR
-                _("{role} SR").format(role=_(sr_kind.capitalize())),
-                # Translators: header for highscore table: SR difference
-                _("ΔSR")
-            ]
-            csv_file = StringIO()
-            csv_writer = csv.writer(csv_file)
-            csv_writer.writerow(headers)
-            csv_writer.writerows(data)
+            for guild_id, role_tops in top_per_guild.items():
+                logger.debug(f"Processing guild {guild_id} for top_players")
+                CurrentLocale.set(self.guild_config[guild_id].locale)
+                for type_role, tops in role_tops.items():
+                    type_class, role = type_role
 
-            csv_file = BytesIO(csv_file.getvalue().encode("utf-8"))
-            csv_file.seek(0)
+                    # FIXME: wrong if there is a tie
+                    prev_top_tags = [
+                        top[1] for top in sorted(tops, key=lambda x: x[2] or 0, reverse=True)
+                    ]
 
-            def no_id(x):
-                return x[:3] + x[4:]
+                    def prev_str(pos, tag, prev_sr):
+                        if not prev_sr:
+                            return "  (——)"
 
-            tabulate.PRESERVE_WHITESPACE = True
-            table_lines = tabulate.tabulate(
-                (no_id(e) for e in data), headers=no_id(headers), tablefmt=style
-            ).split("\n")
+                        old_pos = prev_top_tags.index(tag) + 1
+                        if pos == old_pos:
+                            sym = " "
+                        elif pos > old_pos:
+                            sym = "↓"
+                        else:
+                            sym = "↑"
 
-            # fancy_grid inserts a ├─────┼───────┤ after every line, let's get rid of it
-            if style == "fancy_grid":
-                table_lines = [line for line in table_lines if not line.startswith("├")]
+                        return f"{sym} ({old_pos:2})"
 
+                    def delta_fmt(curr, prev):
+                        if not curr or not prev or curr == prev:
+                            return ""
+                        else:
+                            return f"{curr-prev:+4}"
 
-            # Split table into submessages, because a short gap is visible after each message
-            # we want it to be in "nice" multiples
+                    table_prev_sr = None
+                    data = []
+                    for ix, (member, handle, prev_sr) in enumerate(tops):
+                        if getattr(handle.sr, role) != table_prev_sr:
+                            pos = ix + 1
+                        sr = getattr(handle.sr, role)
+                        table_prev_sr = sr
+                        data.append(
+                            (
+                                pos,
+                                prev_str(ix + 1, handle, prev_sr),
+                                member_name(member),
+                                member.id,
+                                sr,
+                                delta_fmt(sr, prev_sr),
+                            )
+                        )
 
-            ix = 0
-            lines = 20
+                    headers = [
+                        # Translators: header for highscore table: position (keep it short)
+                        _("#"), 
+                        # Translators: header for highscore table: previous position (keep it short)
+                        _("prev"), 
+                        # Translators: header for highscore table: member name
+                        _("Member"), 
+                        # Translators: header for highscore table: member discord id
+                        _("Member ID"), 
+                        # Translators: header fdor highscore table: SR
+                        _("{role} SR").format(role=_(role.capitalize())),
+                        # Translators: header for highscore table: SR difference
+                        _("ΔSR")
+                    ]
+                    csv_file = StringIO()
+                    csv_writer = csv.writer(csv_file)
+                    csv_writer.writerow(headers)
+                    csv_writer.writerows(data)
 
-            try:
-                logger.debug("trying to send highscore to %i", guild_id)
-                chan = self.client.find_channel(
-                    self.guild_config[guild_id].listen_channel_id
-                )
-                if not chan:
-                    logger.debug("no channel found")
-                    continue
-                logger.debug("found channel %s", chan)
-                send = chan.messages.send
-                # send = self.client.application_info.owner.send
-                await send(
-                    _("Hello! Here are the current SRs for **{role}** on {platform}. If a member has more than one "
-                    "{handle_type}, only the primary {handle_type} is considered. Players with "
-                    "private profiles, or those that didn't do their placements this season yet "
-                    "are not shown.").format(role=_(sr_kind.capitalize()), platform=type_class.blizzard_url_type.upper(), handle_type=_(type_class.desc))
-                )
-                while ix < len(table_lines):
-                    # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
-                    step = lines if ix else lines + 3
-                    await send_long(send, "```" + ("\n".join(table_lines[ix : ix + step]) + "```"))
-                    ix += step
+                    csv_file = BytesIO(csv_file.getvalue().encode("utf-8"))
+                    csv_file.seek(0)
 
-                await chan.messages.upload(
-                    csv_file,
-                    filename=f"ranking_{sr_kind}_{type_class.blizzard_url_type.upper()}_{arrow.now().isoformat()[:10]}.csv",
-                )
-                logger.debug("upload done")
-            except Exception:
-                logger.exception("unable to send top players to guild %i", guild_id)
+                    def no_id(x):
+                        return x[:3] + x[4:]
 
-            # wait a bit before sending the next batch to avoid running into
-            # rate limiting and sending data twice due to "timeouts"
-            logger.debug("sleeping for 5s")
-            await trio.sleep(5)
-            logger.debug("done sleeping")
+                    tabulate.PRESERVE_WHITESPACE = True
+                    table_lines = tabulate.tabulate(
+                        (no_id(e) for e in data), headers=no_id(headers), tablefmt=style
+                    ).split("\n")
+
+                    # fancy_grid inserts a ├─────┼───────┤ after every line, let's get rid of it
+                    if style == "fancy_grid":
+                        table_lines = [line for line in table_lines if not line.startswith("├")]
+
+                    # Split table into submessages, because a short gap is visible after each message
+                    # we want it to be in "nice" multiples
+
+                    ix = 0
+                    lines = 20
+
+                    try:
+                        logger.debug("trying to send highscore to %i", guild_id)
+                        chan = self.client.find_channel(
+                            self.guild_config[guild_id].listen_channel_id
+                        )
+                        if not chan:
+                            logger.debug("no channel found")
+                            continue
+                        logger.debug("found channel %s", chan)
+                        send = chan.messages.send
+                        # send = self.client.application_info.owner.send
+                        await send(
+                            _("Hello! Here are the current SRs for **{role}** on {platform}. If a member has more than one "
+                            "{handle_type}, only the primary {handle_type} is considered. Players with "
+                            "private profiles, or those that didn't do their placements this season yet "
+                            "are not shown.").format(role=_(role.capitalize()), platform=type_class.blizzard_url_type.upper(), handle_type=_(type_class.desc))
+                        )
+                        while ix < len(table_lines):
+                            # prefer splits at every "step" entry, but if it turns out too long, send a shorter message
+                            step = lines if ix else lines + 3
+                            await send_long(send, "```" + ("\n".join(table_lines[ix : ix + step]) + "```"))
+                            ix += step
+
+                        await chan.messages.upload(
+                            csv_file,
+                            filename=f"ranking_{role}_{type_class.blizzard_url_type.upper()}_{arrow.now().isoformat()[:10]}.csv",
+                        )
+                        logger.debug("upload done")
+                    except Exception:
+                        logger.exception("unable to send top players to guild %i", guild_id)
+
+                    # wait a bit before sending the next batch to avoid running into
+                    # rate limiting and sending data twice due to "timeouts"
+                    logger.debug("sleeping for 5s")
+                    await trio.sleep(5)
+                    logger.debug("done sleeping")
+                # one guild done
+
 
     async def _message_new_guilds(self):
         for guild_id, guild in self.client.guilds.copy().items():
@@ -2585,31 +2590,30 @@ Pornography Historian""").split("\n")
         while True:
             try:
                 logger.debug("checking cron...")
-                do_run = False
                 async with self.database.session() as s:
-                    threshold = datetime.now() - timedelta(hours=24)
-                    to_run = await run_sync(s.query(HighscoreCron).filter(last_run <= threshold)
+                    to_run = await run_sync(s.query(HighscoreCron).filter(HighscoreCron.next_run <= datetime.now()).all)
                     logger.debug(
-                        "now %s, to_run %s",
-                        next_run,
+                        "to_run %s",
                         to_run
                     )
-                    
-                if do_run:
+                    now = datetime.now()
+                    for hc in to_run:
+                        hc.last_run = now
+                        n = hc.next_run
+                        n = datetime.now().replace(hour=n.hour, minute=n.minute, second=n.second) + timedelta(days=1)
+                        hc.next_run = n
+                    await run_sync(s.commit)                        
+
+                    guild_ids = [h.id for h in to_run]
+
+                if guild_ids:
                     logger.debug("running highscore...")
-                    await self._cron_run_highscore([x.id for x in to_run])
+                    await self._top_players(guild_ids)
                     logger.debug("done running hiscore")
             except Exception:
                 logger.exception("Error during cron")
             await trio.sleep(1 * 60)
 
-    async def _cron_run_highscore(self, guilds):
-        prev_date = datetime.utcnow() - timedelta(days=1)
-
-        async with self.database.session() as session:
-            for type in [BattleTag, Gamertag, OnlineID]:
-                for kind in "tank damage support".split():
-                    await self._top_players(session, prev_date, type, kind)
 
     async def _web_server(self):
         config = hypercorn.config.Config()

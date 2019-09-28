@@ -19,9 +19,11 @@ __all__ = ["GuildConfig", "VoiceCategoryInfo", "PrefixConfig"]
 import json
 import typing
 
+
 from dataclasses_json import dataclass_json
 from dataclasses import dataclass, fields, is_dataclass, asdict
 from typing import List, Set, Optional, Sequence, Union, Dict
+
 
 
 @dataclass_json
@@ -29,6 +31,7 @@ from typing import List, Set, Optional, Sequence, Union, Dict
 class GuildConfig:
     show_sr_in_nicks_by_default: bool
     post_highscores: bool
+    post_highscore_time: str
     congrats_channel_id: int
     listen_channel_id: int
     locale: str
@@ -40,6 +43,7 @@ class GuildConfig:
         return cls(
             show_sr_in_nicks_by_default=True,
             post_highscores=True,
+            post_highscore_time="09:00",
             congrats_channel_id=None,
             listen_channel_id=None,
             extra_register_text=None,

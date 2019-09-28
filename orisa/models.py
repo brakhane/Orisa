@@ -86,8 +86,9 @@ class RoleType(types.TypeDecorator):
 class HighscoreCron(Base):
     __tablename__ = "highscore_cron"
 
-    id = Column(Integer, primary_key=True, index=True)
-    last_run = Column(DateTime, index=True)
+    id = Column(BigInteger, primary_key=True, index=True)
+    last_run = Column(DateTime)
+    next_run = Column(DateTime, index=True)
 
 class User(Base):
     __tablename__ = "users"
