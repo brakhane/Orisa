@@ -83,12 +83,11 @@ class RoleType(types.TypeDecorator):
             )
 
 
-class Cron(Base):
-    __tablename__ = "crontab"
+class HighscoreCron(Base):
+    __tablename__ = "highscore_cron"
 
-    id = Column(String, primary_key=True, index=True)
-    last_run = Column(DateTime, nullable=False)
-
+    id = Column(Integer, primary_key=True, index=True)
+    last_run = Column(DateTime, index=True)
 
 class User(Base):
     __tablename__ = "users"
@@ -256,6 +255,37 @@ class Gamertag(Handle):
 
     def __repr__(self):
         return f"<Gamertag(id={self.id} gamertag={self.gamertag})>"
+
+
+class OnlineID(Handle):
+    """PSN handle"""
+    online_id = Column(String)
+
+    __mapper_args__ = {
+        "polymorphic_identity": "online_id"
+    }
+
+    # Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
+    desc = NP_("Online ID", "Online IDs")
+    blizzard_url_type = "psn"
+
+    @property
+    def handle(self):
+        return self.online_id
+
+    @handle.setter
+    def handle(self, value):
+        self.online_id = value
+
+    @property
+    def external_id(self):
+        return self.handle
+
+    def __str__(self):
+        return f"PSN/{self.online_id} ({self.sr} SR)" if self.sr else f"{self.online_id} (Unranked)"
+
+    def __repr__(self):
+        return f"<OnlineID(id={self.id} online_id={self.online_id})>"
 
 
 class SR(Base):

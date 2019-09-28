@@ -103,7 +103,7 @@ from .config import (
     ROLE_EMOJIS,
     WEB_APP_PATH,
 )
-from .models import Cron, User, BattleTag, Gamertag, SR, Role, GuildConfigJson, WelcomeMessage
+from .models import Cron, User, BattleTag, Gamertag, SR, OnlineID, Role, GuildConfigJson, WelcomeMessage
 from .exceptions import (
     BlizzardError,
     InvalidBattleTag,
@@ -424,7 +424,11 @@ class Orisa(Plugin):
         logger.info("Triggered top_players %s %s", kind, type_str)
 
         async with self.database.session() as session:
-            t = BattleTag if type_str == "pc" else Gamertag
+            t = {
+                "pc": BattleTag,
+                "xbox": Gamertag,
+                "psn": OnlineID
+             }[type_str]
             await self._top_players(session, prev_date, t, kind, style)
 
     @command()
@@ -510,7 +514,8 @@ class Orisa(Plugin):
 
                 num_handles = len(user.handles)
                 multiple_handles = num_handles > 1
-                multiple_handle_types = len(set(handle.type for handle in user.handles)) > 1
+                handle_types = set(handle.type for handle in user.handles)
+                multiple_handle_types = len(handle_types) > 1
 
                 if multiple_handle_types:
                     def fmt(handle):
@@ -566,6 +571,14 @@ class Orisa(Plugin):
                         footer_text = _("The SR was last updated {when}.").format(when=when)
                 else:
                     footer_text = ""
+
+                num_psn = sum(handle.type == "online_id" for handle in user.handles)
+                footer_text += str(num_psn)
+                footer_text += str(list(handle.type for handle in user.handles))
+                if num_psn == 1:
+                    footer_text += _("Orisa can neither confirm nor refute that the PSN Online ID actually belongs to this account.")
+                elif num_psn > 1:
+                    footer_text += _("Orisa can neither confirm nor refute that the PSN Online IDs actually belong to this account.")
 
                 if member == ctx.author and member_given:
                     footer_text += _("\nBTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough.")
@@ -694,12 +707,14 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     @condition(correct_channel)
-    async def register(self, ctx, *, type: str = "pc"):
+    async def register(self, ctx, type: str = "pc", *, online_id: str = None):
         user_id = ctx.message.author_id
 
         if "#" in type:
             await reply(ctx, _("{type} looks like a BattleTag and not like pc/xbox, assuming you meant `!ow register pc`…").format(type=type))
             type = "pc"
+
+        type = type.lower()
 
         if type == "pc":
             client = WebApplicationClient(OAUTH_BLIZZARD_CLIENT_ID)
@@ -720,6 +735,13 @@ class Orisa(Plugin):
                 "the link above and give me permission to access your data. Make sure you have linked your Xbox account to Discord."
                 )
             )
+        elif type in ["psn", "ps"]:
+            if not online_id:
+                await reply(ctx, _("When registering a PSN account, you need to give your Online ID, like `!ow register psn My-Cool-ID_12345`."))
+                return
+            await self._handle_registration(user_id, "psn", online_id)
+            await reply(ctx, _("I sent you a DM."))
+            return
         else:
             await reply(ctx, _('Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet.').format(type=_(type)))
             return
@@ -747,7 +769,7 @@ class Orisa(Plugin):
             embed.add_field(
                 # Translators: :video_game: is an emoji
                 name=_(":video_game: Not on PC?"),
-                value=_("If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future.")
+                value=_("If you have an XBL account, use `!ow register xbox`. For PSN, use `!ow register psn Your_Online-ID`")
             )
         embed.set_footer(
             # Translators: The translation should mention that the privacy policy is currently only available in English
@@ -1374,12 +1396,13 @@ Pornography Historian""").split("\n")
             ),
         )
         embed.add_field(
-            name="!ow register [pc/xbox]",
+            name="!ow register [pc/xbox/psn]",
             value=_("Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. "
             "Your OW account will be checked periodically and your nick will be "
             "automatically updated to show your SR or rank (see the *format* command for more info). "
             "`!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. "
-            "If you register an XBL account, you have to link it to your Discord beforehand. PSN accounts are not supported yet.")
+            "If you register an XBL account, you have to link it to your Discord beforehand. "
+            "For PSN accounts, you have to give your Online ID as part of the command, like `!ow register psn Your_Online-ID`.")
         )
         embed.add_field(name="!ow privacy", value=_("Show Orisa's Privacy Policy"))
         embed.add_field(
@@ -2059,7 +2082,7 @@ Pornography Historian""").split("\n")
 
         def val_rank(val, short=False):
             if val is None:
-                return "∅"
+                return "⊘"
             elif val<0:
                 return (RANKS if short else FULL_RANKS)[sr_to_rank(-val)] + "?"
             else:
@@ -2388,7 +2411,7 @@ Pornography Historian""").split("\n")
                 send = chan.messages.send
                 # send = self.client.application_info.owner.send
                 await send(
-                    _("Hello! Here are the current SRs for **{role}** on {platform} . If a member has more than one "
+                    _("Hello! Here are the current SRs for **{role}** on {platform}. If a member has more than one "
                     "{handle_type}, only the primary {handle_type} is considered. Players with "
                     "private profiles, or those that didn't do their placements this season yet "
                     "are not shown.").format(role=_(sr_kind.capitalize()), platform=type_class.blizzard_url_type.upper(), handle_type=_(type_class.desc))
@@ -2557,45 +2580,34 @@ Pornography Historian""").split("\n")
             await trio.sleep(60)
 
     async def _cron_task(self):
-        "poor man's cron, hardcode all the things"
+        "poor man's cron"
 
         while True:
             try:
                 logger.debug("checking cron...")
                 do_run = False
                 async with self.database.session() as s:
-                    try:
-                        hs = await run_sync(s.query(Cron).filter_by(id="highscore").one)
-                    except NoResultFound:
-                        hs = Cron(id="highscore", last_run=datetime.utcnow())
-                        s.add(hs)
-                    next_run = datetime.today().replace(
-                        hour=9, minute=0, second=0, microsecond=0
-                    )
+                    threshold = datetime.now() - timedelta(hours=24)
+                    to_run = await run_sync(s.query(HighscoreCron).filter(last_run <= threshold)
                     logger.debug(
-                        "next_run %s, now %s, last_run %s",
+                        "now %s, to_run %s",
                         next_run,
-                        datetime.utcnow(),
-                        hs.last_run,
+                        to_run
                     )
-                    if next_run < datetime.utcnow() and hs.last_run < next_run:
-                        do_run = True
-                        hs.last_run = datetime.utcnow()
-                    await run_sync(s.commit) # might have just added the entry, so just always commit
                     
                 if do_run:
                     logger.debug("running highscore...")
-                    await self._cron_run_highscore()
+                    await self._cron_run_highscore([x.id for x in to_run])
                     logger.debug("done running hiscore")
             except Exception:
                 logger.exception("Error during cron")
             await trio.sleep(1 * 60)
 
-    async def _cron_run_highscore(self):
+    async def _cron_run_highscore(self, guilds):
         prev_date = datetime.utcnow() - timedelta(days=1)
 
         async with self.database.session() as session:
-            for type in [BattleTag, Gamertag]:
+            for type in [BattleTag, Gamertag, OnlineID]:
                 for kind in "tank damage support".split():
                     await self._top_players(session, prev_date, type, kind)
 
@@ -2629,7 +2641,6 @@ Pornography Historian""").split("\n")
                     )
 
     async def _handle_registration(self, user_id, type, data):
-
         handles_to_check = []
         async with self.database.session() as session:
             user_obj = await self.client.get_user(user_id)
@@ -2660,6 +2671,10 @@ Pornography Historian""").split("\n")
                         "Unfortunately, I cannot ask XBL directly for the information.")
                     )
                     return
+            elif type == "psn":
+                handles = [
+                    OnlineID(online_id=data)
+                ]
 
             user = await self.database.user_by_discord_id(session, user_id)
 
