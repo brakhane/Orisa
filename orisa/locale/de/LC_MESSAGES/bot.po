@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-29 01:47+0200\n"
-"PO-Revision-Date: 2019-09-03 18:10+0000\n"
+"PO-Revision-Date: 2019-09-28 23:55+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: German <https://weblate.orisa.rocks/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -57,8 +57,8 @@ msgstr[1] "Gamertags"
 #: orisa/models.py:270
 msgid "Online ID"
 msgid_plural "Online IDs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Online ID"
+msgstr[1] "Online IDs"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:137
@@ -216,12 +216,16 @@ msgid ""
 "\n"
 "Orisa can neither confirm nor refute that the PSN Online ID actually belongs to this account."
 msgstr ""
+"\n"
+"Orisa kann weder bestätigen noch widerlegen, dass die PSN Online-ID tatsächlich zu diesem Konto gehört."
 
 #: orisa/orisa.py:580
 msgid ""
 "\n"
 "Orisa can neither confirm nor refute that the PSN Online IDs actually belong to this account."
 msgstr ""
+"\n"
+"Orisa kann weder bestätigen noch widerlegen, dass die PSN Online-IDs tatsächlich zu diesem Konto gehören."
 
 #: orisa/orisa.py:583
 msgid ""
@@ -339,7 +343,7 @@ msgstr "Um deine Registrierung abzuschließen, benötige ich deine Erlaubnis, Di
 
 #: orisa/orisa.py:739
 msgid "When registering a PSN account, you need to give your Online ID, like `!ow register psn My-Cool-ID_12345`."
-msgstr ""
+msgstr "Bei der Registrierung eines PSN-Kontos musst Du Deine Online-ID angeben, z. B. `! ow register psn Meine-Coole-ID_12345`."
 
 #: orisa/orisa.py:746
 #, python-brace-format
@@ -367,10 +371,8 @@ msgid ":video_game: Not on PC?"
 msgstr ":video_game: Keinen PC?"
 
 #: orisa/orisa.py:772
-#, fuzzy
-#| msgid "If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future."
 msgid "If you have an XBL account, use `!ow register xbox`. For PSN, use `!ow register psn Your_Online-ID`"
-msgstr "Wenn Du ein XBL-Konto hast, verwende `!ow register xbox`. PSN-Konten werden derzeit nicht unterstützt, zukünftig aber schon."
+msgstr "Wenn Du ein XBL-Konto hast, verwende `!ow register xbox`. For PSN-Konten verwende `!ow register psn Deine-Online-ID`"
 
 #. Translators: The translation should mention that the privacy policy is currently only available in English
 #: orisa/orisa.py:776
@@ -812,10 +814,8 @@ msgstr ""
 "`!ow get register` sucht nach dem Nicknamen \"register\"."
 
 #: orisa/orisa.py:1400
-#, fuzzy
-#| msgid "Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. Your OW account will be checked periodically and your nick will be automatically updated to show your SR or rank (see the *format* command for more info). `!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. If you register an XBL account, you have to link it to your Discord beforehand. PSN accounts are not supported yet."
 msgid "Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. Your OW account will be checked periodically and your nick will be automatically updated to show your SR or rank (see the *format* command for more info). `!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. If you register an XBL account, you have to link it to your Discord beforehand. For PSN accounts, you have to give your Online ID as part of the command, like `!ow register psn Your_Online-ID`."
-msgstr "Verbindet Orisa mit deinem BattleNet oder Gamertag, oder fügt sekundäre BattleTags deinem Account hinzu. Dein OW Account wird periodisch überprüft und dein Nickname wird automatisch aktualisiert, um deinen SR oder Spielniveau anzuzeigen (siehe auch: *format* Befehl). Nutze `!ow register` oder `!ow register pc`, um einen PC Account registrieren, für XBL nutze `!ow register xbox. Wenn du einen XBL Account registrieren willst, musst du vorher eine Verknüpfung zwischen deinem Discord Account und XBL herstellen. PSN Accounts werden noch nicht unterstützt."
+msgstr "Verbindet Orisa mit deinem BattleNet oder Gamertag, oder fügt sekundäre BattleTags deinem Account hinzu. Dein OW Account wird periodisch überprüft und dein Nickname wird automatisch aktualisiert, um deinen SR oder Spielniveau anzuzeigen (siehe auch: *format* Befehl). Nutze `!ow register` oder `!ow register pc`, um einen PC Account registrieren, für XBL nutze `!ow register xbox. Wenn du einen XBL Account registrieren willst, musst du vorher eine Verknüpfung zwischen deinem Discord Account und XBL herstellen. Bei PSN-Accounts musst du deine Online ID an den Befehl anhängen, z. B. `!ow register psn Meine_Online-ID`."
 
 #: orisa/orisa.py:1407
 msgid "Show Orisa's Privacy Policy"
@@ -1020,8 +1020,7 @@ msgid "ΔSR"
 msgstr "ΔSR"
 
 #: orisa/orisa.py:2418
-#, fuzzy, python-brace-format
-#| msgid "Hello! Here are the current SRs for **{role}** on {platform} . If a member has more than one {handle_type}, only the primary {handle_type} is considered. Players with private profiles, or those that didn't do their placements this season yet are not shown."
+#, python-brace-format
 msgid "Hello! Here are the current SRs for **{role}** on {platform}. If a member has more than one {handle_type}, only the primary {handle_type} is considered. Players with private profiles, or those that didn't do their placements this season yet are not shown."
 msgstr "Hallo! Hier ist die aktuelle SR Tabelle für **{role}** auf **{platform}**. Wenn ein Mitglied mehr als ein {handle_type} hat, wird nur der Haupt-{handle_type} berücksichtigt. Nicht auf dieser Liste sind Spieler mit privaten Profilen, oder solche, die noch nicht ihre Platzierungsspiele für diese Saison abgeschlossen haben."
 
@@ -1252,7 +1251,7 @@ msgstr[1] "Orisa fehlen die folgenden Berechtigungen: {missing}"
 
 #: orisa/web.py:159
 msgid "Invalid time"
-msgstr ""
+msgstr "Ungültige Uhrzeit"
 
 #: orisa/web.py:163 orisa/web.py:179
 msgid "Please select a valid text channel"
@@ -1285,7 +1284,7 @@ msgstr "Dieser Name wird in dieser Kategorie bereits verwendet"
 
 #: orisa/web.py:341
 msgid "I got an incomplete answer from the server. This sometimes happens (for unknown reasons) when registering from a mobile phone. Try again with a PC or laptop. Sorry for the inconvenience"
-msgstr ""
+msgstr "Ich habe eine unvollständige Antwort vom Server erhalten. Die kann passieren, wenn Du Dich von einem Handy aus registrierst (die Gründe dafür sind unbekannt). Versuche, dich auf einem PC oder Laptop zu registrieren. Entschuldige die Unannehmlichkeiten"
 
 #: orisa/web.py:348
 #, python-brace-format
