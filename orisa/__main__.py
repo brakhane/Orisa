@@ -75,7 +75,7 @@ async def ready(ctx):
         already_loaded  = True
         await manager.load_plugin(Orisa, database, raven_client)
 
-    logger.debug(f"Guilds are {ctx.bot.guilds}")
+    logger.debug(f"I'm in {len(ctx.bot.guilds)} guilds")
 
     msg = "!ow help" if not DEVELOPMENT else ",ow help"
     await ctx.bot.change_status(game=Game(name=msg, type=GameType.LISTENING_TO))

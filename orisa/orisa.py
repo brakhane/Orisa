@@ -2273,8 +2273,6 @@ Pornography Historian""").split("\n")
                 for type_class in [BattleTag, Gamertag, OnlineID]
             }
 
-            logger.debug("handles: %s", handles)
-
             handles_and_prev = [
                 (c, t, handle, prev_sr(handle))
                 for c in [BattleTag, Gamertag, OnlineID]
@@ -2283,7 +2281,6 @@ Pornography Historian""").split("\n")
             ]
 
             top_per_guild = {}
-            logger.debug("%s %s %s", list(guild.id for guild in self.client.guilds.values()), guild_ids, list(guild.id in guild_ids for guild in self.client.guilds.values()))
 
             guilds = [guild for guild in self.client.guilds.values() if guild.id in guild_ids]
 
