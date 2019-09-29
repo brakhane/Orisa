@@ -100,8 +100,9 @@ class I18NCommandsManager(CommandsManager):
             user = await orisa.database.user_by_discord_id(session, message.author_id)
             if user:
                 if locale:
-                    user.locale = locale
-                    await run_sync(session.commit)
+                    if user.locale != locale:
+                        user.locale = locale
+                        await run_sync(session.commit)
                 elif guild_id is None:
                     # only change language in private messages
                     locale = user.locale
