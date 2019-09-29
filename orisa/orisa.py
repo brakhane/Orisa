@@ -1591,7 +1591,7 @@ Pornography Historian""").split("\n")
             title=_("SR History For {name}").format(name=name),
             description=_("Here is your SR history starting from {date}").format(
                 # Translators: used instead of a date when user requested a SR history from the beginning (which is the usual case)
-                date=_('when you registered') if not date else pendulum.instance(date).to_formatted_date_string()
+                date=_('when you registered') if not date else arrow.get(date).isoformat()[:10]
             )
         )
         embed.set_image(image_url="attachment://graph.png")
