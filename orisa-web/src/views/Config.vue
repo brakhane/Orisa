@@ -42,7 +42,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     </transition>
     <b-container>
       <h1>{{ $t("cfg.configure-for", { guild_name }) }}</h1>
-      <vue-markdown :source="$t('cfg.lead-info', {link: 'https://discord.gg/PuC7Yc'})" class="lead" :anchorAttributes="{target: '_blank'}"/>
+      <vue-markdown :source="$t('cfg.lead-info', {link: 'https://discord.gg/ZKzBEDF'})" class="lead" :anchorAttributes="{target: '_blank'}"/>
       <b-alert variant="warning" class="my-4" show dismissible v-if="higher_roles.length > 0">
         <h5 class="alert-heading">{{ $t("cfg.not-top-role-head") }}</h5>
         <vue-markdown :source="
