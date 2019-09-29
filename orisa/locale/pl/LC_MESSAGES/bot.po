@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-29 01:47+0200\n"
-"PO-Revision-Date: 2019-09-05 17:50+0000\n"
+"PO-Revision-Date: 2019-09-30 15:24+0000\n"
 "Last-Translator: Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>\n"
 "Language-Team: Polish <https://weblate.orisa.rocks/projects/orisa/bot/pl/>\n"
 "Language: pl\n"
@@ -70,9 +70,9 @@ msgstr[2] "Gamertagów"
 #: orisa/models.py:270
 msgid "Online ID"
 msgid_plural "Online IDs"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Identyfikator PSN"
+msgstr[1] "Identyfikatory PSN"
+msgstr[2] "Identyfikatory PSN"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:137
@@ -248,12 +248,16 @@ msgid ""
 "\n"
 "Orisa can neither confirm nor refute that the PSN Online ID actually belongs to this account."
 msgstr ""
+"\n"
+"Orisa nie może potwierdzić, ani zaprzeczyć iż to PSN ID należy do tego konta."
 
 #: orisa/orisa.py:580
 msgid ""
 "\n"
 "Orisa can neither confirm nor refute that the PSN Online IDs actually belong to this account."
 msgstr ""
+"\n"
+"Orisa nie może potwierdzić, ani zaprzeczyć iż te PSN ID należą do tego konta."
 
 #: orisa/orisa.py:583
 msgid ""
@@ -371,7 +375,7 @@ msgstr "By dokończyć rejestrację potrzebuję twojego zezwolenia by prosić Di
 
 #: orisa/orisa.py:739
 msgid "When registering a PSN account, you need to give your Online ID, like `!ow register psn My-Cool-ID_12345`."
-msgstr ""
+msgstr "Podczas rejestracji konta PSN musisz podać swój identyfikator PSN, jak np. `!ow register psn Moje-fajowe-ID_12345`."
 
 #: orisa/orisa.py:746
 #, python-brace-format
@@ -1294,7 +1298,7 @@ msgstr[2] "Orisie brakuje tych zezwoleń: {missing}"
 
 #: orisa/web.py:159
 msgid "Invalid time"
-msgstr ""
+msgstr "Błędny czas"
 
 #: orisa/web.py:163 orisa/web.py:179
 msgid "Please select a valid text channel"
@@ -1327,7 +1331,7 @@ msgstr "Ta nazwa jest już używana w tej kategorii"
 
 #: orisa/web.py:341
 msgid "I got an incomplete answer from the server. This sometimes happens (for unknown reasons) when registering from a mobile phone. Try again with a PC or laptop. Sorry for the inconvenience"
-msgstr ""
+msgstr "Dostałam niekompletną odpowiedź od serwera. To zdarza się czasami (z nieznanych powodów) podczas rejestracji z telefonu komórkowego. Spróbuj ze swoim laptopem bądź komputerem osobistym. Przepraszam za kłopot"
 
 #: orisa/web.py:348
 #, python-brace-format
