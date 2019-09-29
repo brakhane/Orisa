@@ -1465,25 +1465,26 @@ Pornography Historian""").split("\n")
     @ow.subcommand()
     @condition(correct_channel)
     async def srgraph(self, ctx, date: str = None):
-
-        async with self.database.session() as session:
-            user = await self.database.user_by_discord_id(session, ctx.author.id)
-            if not user:
-                await reply(ctx, _("You are not registered. Do `!ow register` first!"))
-                return
-            else:
-                await self._srgraph(ctx, user, ctx.author.name, date)
+        async with ctx.channel.typing:
+            async with self.database.session() as session:
+                user = await self.database.user_by_discord_id(session, ctx.author.id)
+                if not user:
+                    await reply(ctx, _("You are not registered. Do `!ow register` first!"))
+                    return
+                else:
+                    await self._srgraph(ctx, user, ctx.author.name, date)
 
     @ow.subcommand()
     @author_has_roles("Orisa Admin")
     async def usersrgraph(self, ctx, member: Member, date: str = None):
-        async with self.database.session() as session:
-            user = await self.database.user_by_discord_id(session, member.id)
-            if not user:
-                await reply(ctx, _("{member_name} is not registered!").format(member_name=member.name))
-                return
-            else:
-                await self._srgraph(ctx, user, member.name, date)
+        async with ctx.channel.typing:
+            async with self.database.session() as session:
+                user = await self.database.user_by_discord_id(session, member.id)
+                if not user:
+                    await reply(ctx, _("{member_name} is not registered!").format(member_name=member.name))
+                    return
+                else:
+                    await self._srgraph(ctx, user, member.name, date)
 
     @ow.subcommand()
     async def privacy(self, ctx):
