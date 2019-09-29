@@ -2590,16 +2590,16 @@ Pornography Historian""").split("\n")
             try:
                 logger.debug("checking cron...")
                 async with self.database.session() as s:
-                    to_run = await run_sync(s.query(HighscoreCron).filter(HighscoreCron.next_run <= datetime.now()).all)
+                    now = datetime.utcnow()
+                    to_run = await run_sync(s.query(HighscoreCron).filter(HighscoreCron.next_run <= now).all)
                     logger.debug(
                         "to_run %s",
                         to_run
                     )
-                    now = datetime.now()
                     for hc in to_run:
                         hc.last_run = now
                         n = hc.next_run
-                        n = datetime.now().replace(hour=n.hour, minute=n.minute, second=n.second, microsecond=0) + timedelta(days=1)
+                        n = now.replace(hour=n.hour, minute=n.minute, second=n.second, microsecond=0) + timedelta(days=1)
                         hc.next_run = n
                     await run_sync(s.commit)                        
 
