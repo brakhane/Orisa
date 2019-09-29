@@ -2599,7 +2599,7 @@ Pornography Historian""").split("\n")
                     for hc in to_run:
                         hc.last_run = now
                         n = hc.next_run
-                        n = datetime.now().replace(hour=n.hour, minute=n.minute, second=n.second) + timedelta(days=1)
+                        n = datetime.now().replace(hour=n.hour, minute=n.minute, second=n.second, microsecond=0) + timedelta(days=1)
                         hc.next_run = n
                     await run_sync(s.commit)                        
 
