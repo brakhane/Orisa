@@ -67,7 +67,7 @@ from curious.commands.plugin import Plugin
 from curious.core.event import EventContext
 from curious.core.client import Client
 from curious.core.httpclient import HTTPClient
-from curious.exc import Forbidden, HierarchyError, NotFound
+from curious.exc import Forbidden, HierarchyError, PermissionsError, NotFound
 from curious.dataclasses.channel import ChannelType
 from curious.dataclasses.embed import Embed
 from curious.dataclasses.guild import Guild
@@ -2178,7 +2178,7 @@ Pornography Historian""").split("\n")
         if nn != new_nn:
             try:
                 await member.nickname.set(new_nn)
-            except HierarchyError:
+            except (HierarchyError, PermissionsError):
                 logger.info(
                     "Cannot update nick %s to %s due to not enough permissions",
                     nn,
