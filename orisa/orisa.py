@@ -2521,7 +2521,7 @@ Pornography Historian""").split("\n")
                     self.sync_cache[handle_id] = True  # any value really
                 if not first:
                     delay = 1 + random.random() * 5
-                    logger.debug(f"rate limiting: sleeping for {delay:4.02}s")
+                    logger.debug(f"rate limiting: sleeping for {delay:3.02}s")
                     await trio.sleep(delay)
                 else:
                     first = False
