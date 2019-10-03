@@ -1569,6 +1569,7 @@ Pornography Historian""").split("\n")
                     _("I don't know what date {date} is supposed to mean. Please use "
                     "the format DD.MM.YY or YYYY-MM-DD!").format(date=date),
                 )
+                return
 
             data = data[data.index >= date]
 
@@ -1619,7 +1620,7 @@ Pornography Historian""").split("\n")
         if plays_overwatch(old_member) and (not plays_overwatch(new_member)):
             uid = new_member.user.id
             if uid in self.stopped_playing_cache:
-                logger.debug("Already handled %s, ignoring", new_member.name)
+                logger.debug("Already handled %s, ", new_member.name)
                 return
             else:
                 self.stopped_playing_cache[uid] = True
