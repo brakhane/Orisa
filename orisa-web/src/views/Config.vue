@@ -18,7 +18,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   <div v-if="loaded">
     <transition name="fade-drop">
       <div :class="'container fixed-top translucent ' + shake_if_problem" v-if="unsaved_changes">
-        <div class="card">
+        <div class="card has-background-grey-darker has-text-light">
           <div class="card-content">
             <div class="level">
               <div class="level-left">
