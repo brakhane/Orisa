@@ -56,15 +56,17 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           :title="$t('cfg.not-top-role-head')"
           v-if="higher_roles.length > 0"
         >
-          <vue-markdown
-            :source="
-            $t('cfg.not-top-role-desc', {
-              with_the_following_roles: $t('cfg.with-the-following-roles', {
-                count: higher_roles.length
-              })
-            })
-          "
-          />
+          <div class="content">
+            <vue-markdown
+              :source="
+                $t('cfg.not-top-role-desc', {
+                  with_the_following_roles: $t('cfg.with-the-following-roles', {
+                    count: higher_roles.length
+                  })
+                })
+              "
+            />
+          </div>
           <ul>
             <li v-for="role in higher_roles" :key="role">{{ role }}</li>
           </ul>
