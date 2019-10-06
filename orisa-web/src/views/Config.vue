@@ -66,10 +66,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 })
               "
             />
+            <ul>
+              <li v-for="role in higher_roles" :key="role">{{ role }}</li>
+            </ul>
           </div>
-          <ul>
-            <li v-for="role in higher_roles" :key="role">{{ role }}</li>
-          </ul>
           <vue-markdown
             :anchorAttributes="{target: '_blank', class: 'alert-link'}"
             :source="
