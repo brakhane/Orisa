@@ -192,46 +192,49 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
               </div>
             </div>
-            <!--                :label="$t('cfg.reg-msg')"
-              :message="validation_errors.extra_register_text"
-              :type="val_type(validation_errors.extra_register_text)"
-              horizontal
-            >
-            </b-field>
-            -->
-            <b-field
-              :type="val_type(validation_errors.listen_channel_id)"
-              :message="validation_errors.listen_channel_id"
-              :label="$t('cfg.listen-chan')"
-              horizontal
-              customClass="is-normal"
-            >
-              <channel-selector
-                :type="val_type(validation_errors.listen_channel_id)"
-                v-model="guild_config.listen_channel_id"
-                :channels="channels"
-              ></channel-selector>
-              <template #message>
-                <vue-markdown :source="$t('cfg.listen-chan-desc')" />
-              </template>
-            </b-field>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" v-t="'cfg.listen-chan'"></label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <channel-selector
+                    v-model="guild_config.listen_channel_id"
+                    :type="val_type(validation_errors.listen_channel_id)"
+                    :channels="channels"
+                  ></channel-selector>
+                  <div
+                    class="help is-danger"
+                    v-if="validation_errors.listen_channel_id"
+                  >{{ validation_errors.listen_channel_id }}</div>
+                  <div class="help" v-else>
+                    <vue-markdown :source="$t('cfg.listen-chan-desc')" />
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            <b-field
-              :type="val_type(validation_errors.congrats_channel_id)"
-              :message="validation_errors.congrats_channel_id"
-              :label="$t('cfg.congrats-chan')"
-              horizontal
-              customClass="is-normal"
-            >
-              <template #description>
-                <vue-markdown :source="$t('cfg.congrats-chan-desc')" />
-              </template>
-              <channel-selector
-                :type="val_type(validation_errors.congrats_channel_id)"
-                v-model="guild_config.congrats_channel_id"
-                :channels="channels"
-              ></channel-selector>
-            </b-field>
+            <div class="field is-horizontal">
+              <div class="field-label is-normal">
+                <label class="label" v-t="'cfg.congrats-chan'"></label>
+              </div>
+              <div class="field-body">
+                <div class="field">
+                  <channel-selector
+                    v-model="guild_config.congrats_channel_id"
+                    :type="val_type(validation_errors.congrats_channel_id)"
+                    :channels="channels"
+                  ></channel-selector>
+                  <div
+                    class="help is-danger"
+                    v-if="validation_errors.congrats_channel_id"
+                  >{{ validation_errors.congrats_channel_id }}</div>
+                  <div class="help" v-else>
+                    <vue-markdown :source="$t('cfg.congrats-chan-desc')" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

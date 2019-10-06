@@ -15,14 +15,16 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <template>
-  <b-select :type="type" :value="ch" @change="$emit('change', $event)" expanded>
+  <div :class="['select', 'is-fullwidth', type]">
+    <select :value="value" @change="$emit('change', $event.target.value)">
       <template v-for="chan in channels">
         <option :key="chan.id" :value="chan.id" v-if="chan.type == 0">{{ chan.name }}</option>
         <optgroup :key="chan.id" :label="chan.name" v-if="chan.type == 4">
           <option :key="child.id" :value="child.id" v-for="child in chan.children">{{ child.name }}</option>
         </optgroup>
       </template>
-  </b-select>
+    </select>
+  </div>
 </template>
 
 <script>
@@ -31,14 +33,9 @@ export default {
   data () {
     return {}
   },
-  computed: {
-    ch () {
-      return this.value
-    }
-  },
   model: {
     event: 'change'
   },
-  props: ['value', 'channels', 'state']
+  props: ['value', 'channels', 'type']
 }
 </script>
