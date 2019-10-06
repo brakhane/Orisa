@@ -15,14 +15,14 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/>.
 -->
 <template>
-  <b-form-select :state="state" :value="ch" @change="$emit('change', $event)">
-    <template v-for="chan in channels">
-      <option :key="chan.id" :value="chan.id" v-if="chan.type == 0">{{ chan.name }}</option>
-      <optgroup :key="chan.id" :label="chan.name" v-if="chan.type == 4">
-        <option :key="child.id" :value="child.id" v-for="child in chan.children">{{ child.name }}</option>
-      </optgroup>
-    </template>
-  </b-form-select>
+  <b-select :type="type" :value="ch" @change="$emit('change', $event)" expanded>
+      <template v-for="chan in channels">
+        <option :key="chan.id" :value="chan.id" v-if="chan.type == 0">{{ chan.name }}</option>
+        <optgroup :key="chan.id" :label="chan.name" v-if="chan.type == 4">
+          <option :key="child.id" :value="child.id" v-for="child in chan.children">{{ child.name }}</option>
+        </optgroup>
+      </template>
+  </b-select>
 </template>
 
 <script>

@@ -18,19 +18,19 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 
-import BootstrapVue from 'bootstrap-vue'
+import Buefy from 'buefy'
 import VueI18Next from '@panter/vue-i18next'
 import VueMarkdown from '@/components/VueMarkdown'
 import i18next from 'i18next'
 import axios from 'axios'
 
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'buefy/dist/buefy.css'
+import '@mdi/font/css/materialdesignicons.min.css'
 
 Vue.config.productionTip = false
 
 Vue.use(VueI18Next)
-Vue.use(BootstrapVue)
+Vue.use(Buefy)
 
 Vue.component('vue-markdown', VueMarkdown)
 
