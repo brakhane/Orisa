@@ -42,7 +42,6 @@ const LangResourceLoader = {
   },
 
   read (lang, ns, callback) {
-    console.debug('Loading', lang, ns)
     import(/* webpackChunkName: '[request]' */`@/locale/${lang}.json`)
       .then((data) => { callback(null, data) })
       .catch(callback)

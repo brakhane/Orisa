@@ -143,7 +143,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 </template>
 
 <script>
-import { isEmpty } from 'lodash/core'
+import { isEmpty } from 'lodash-es'
 
 export default {
   name: 'managed-voice-category',

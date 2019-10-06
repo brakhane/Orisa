@@ -287,7 +287,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 <script>
 
-import { isEqual, isEmpty, cloneDeep } from 'lodash/core'
+import { isEqual, isEmpty, cloneDeep } from 'lodash-es'
 import i18next from 'i18next'
 import translationInfo from '@/generated/translation_info.json'
 
