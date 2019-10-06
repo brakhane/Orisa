@@ -76,7 +76,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 :label="$t('mvc.chan-limit')"
               >
                 <b-numberinput
-                  :type="val_type(validation_errors.channel_limit)"
                   v-model.number="category.channel_limit"
                   min="1"
                   max="99"
