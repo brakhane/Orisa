@@ -52,6 +52,7 @@
         "prefix-placeholder": "np. Rywalizacja lub Szybka Gra",
         "remove-unknown-sr": "Usuń nieznane kanały z `#` w tej kategorii",
         "remove-unknown-sr-tt": "Jeżeli ta opcja jest aktywna, Orisa automatycznie usunie puste kanały w tej kategorii, które zawierają `#` w nazwie, jako iż prawdopodobnie zostały opuszczone. Na przykład, jeżeli zmienisz nazwę z \"Turniej\" na \"Rywalizacja\", będzie istnieć co najmniej jeden kanał *Turniej #1*, który powinien zostać usunięty.\nKiedy ta opcja jest wyłączona, Orisa będzie modyfikować kanały, o których wie, iż należą do niej (zaczynają się z `#` poprzedzoną prefiksem).\nDopóki ręcznie nie stworzyłeś kanałów zawierających `#` w tej kategorii, zalecamy pozostawić tę opcję włączoną.",
+        "settings-hdr": "Ustawienia",
         "show-sr": "Pokazuj RU członków w zarządzanych kanałach",
         "show-sr-tt": "Kiedy ta opcja jest włączona, Orisa będzie dostosowywać nazwę kanału tak, by średnia RU jego graczy była pokazywana (np. \"`Turniej #1 [12-23-34]`\"). Jeżeli opcja \"$t(cfg.allow-sr-in-nick)\" jest wyłączona, Orisa również zaktualizuje nicki każdego gracza w tym kanale tak, by pokazywał on ich RU (lub rangę, jeżeli ten użytkownik skonfigurował ją przy użyciu `!ow format`).  Niestety, zaktualizowane nicki zostaną wyświetlone na kanale dopiero po odświeżeniu Discorda, przez błąd (którego Discord nie chce naprawić).\nRekomendujemy włączenie tej opcji dla kanałów dla Overwatcha.",
         "user-limit": "Limit użytkowników",
