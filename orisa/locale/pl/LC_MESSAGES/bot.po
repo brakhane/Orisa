@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-09-29 01:47+0200\n"
-"PO-Revision-Date: 2019-09-30 15:24+0000\n"
+"PO-Revision-Date: 2019-10-08 20:24+0000\n"
 "Last-Translator: Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>\n"
 "Language-Team: Polish <https://weblate.orisa.rocks/projects/orisa/bot/pl/>\n"
 "Language: pl\n"
@@ -403,10 +403,8 @@ msgid ":video_game: Not on PC?"
 msgstr ":video_game: Nie jesteś na PC?"
 
 #: orisa/orisa.py:772
-#, fuzzy
-#| msgid "If you have an XBL account, use `!ow register xbox`. PSN accounts are currently not supported, but will be in the future."
 msgid "If you have an XBL account, use `!ow register xbox`. For PSN, use `!ow register psn Your_Online-ID`"
-msgstr "Jeżeli posiadasz konto XBL, użyj `!ow register xbox`. Konta PSN nie są obecnie wspierane, lecz będą wkrótce."
+msgstr "Jeżeli posiadasz konto XBL, użyj `!ow register xbox`. W przypadku konta PSN, użyj `!ow register psn Twoj_Identyfikator_PSN`"
 
 #. Translators: The translation should mention that the privacy policy is currently only available in English
 #: orisa/orisa.py:776
@@ -856,10 +854,8 @@ msgstr ""
 "`!ow get register` będzie szukać nicku \"register\"."
 
 #: orisa/orisa.py:1400
-#, fuzzy
-#| msgid "Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. Your OW account will be checked periodically and your nick will be automatically updated to show your SR or rank (see the *format* command for more info). `!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. If you register an XBL account, you have to link it to your Discord beforehand. PSN accounts are not supported yet."
 msgid "Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. Your OW account will be checked periodically and your nick will be automatically updated to show your SR or rank (see the *format* command for more info). `!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. If you register an XBL account, you have to link it to your Discord beforehand. For PSN accounts, you have to give your Online ID as part of the command, like `!ow register psn Your_Online-ID`."
-msgstr "Stwórz link do twojego konta BattleNet lub Gamertag, bądź dodaj do niego drugi BattleTag. Twoje konto OW będzie okresowo sprawdzane, a twój nick będzie automatycznie aktualizowany by pokazywać twoją RU, bądź rangę (zobacz komendę *format*, by uzyskać więcej informacji). `!ow register` i `!ow register pc` zarejestrują konto PC, natomiast `!ow register xbox` zarejestruje konto XBL. Jeżeli rejestrujesz konto XBL, musisz wcześniej połączyć je ze swoim Discordem. Konta PSN nie są jeszcze wspierane."
+msgstr "Stwórz link do twojego konta BattleNet lub Gamertag, bądź dodaj do niego drugi BattleTag. Twoje konto OW będzie okresowo sprawdzane, a twój nick będzie automatycznie aktualizowany by pokazywać twoją RU, bądź rangę (zobacz komendę *format*, by uzyskać więcej informacji). `!ow register` i `!ow register pc` zarejestrują konto PC, natomiast `!ow register xbox` zarejestruje konto XBL. Jeżeli rejestrujesz konto XBL, musisz wcześniej połączyć je ze swoim Discordem. W przypadku konta PSN musisz użyć swojego identyfikatora PSN jako część komendy, np. `!ow register psn Twoj_Identyfikator_PSN`."
 
 #: orisa/orisa.py:1407
 msgid "Show Orisa's Privacy Policy"
@@ -1065,10 +1061,9 @@ msgid "ΔSR"
 msgstr "ΔRU"
 
 #: orisa/orisa.py:2418
-#, fuzzy, python-brace-format
-#| msgid "Hello! Here are the current SRs for **{role}** on {platform} . If a member has more than one {handle_type}, only the primary {handle_type} is considered. Players with private profiles, or those that didn't do their placements this season yet are not shown."
+#, python-brace-format
 msgid "Hello! Here are the current SRs for **{role}** on {platform}. If a member has more than one {handle_type}, only the primary {handle_type} is considered. Players with private profiles, or those that didn't do their placements this season yet are not shown."
-msgstr "Dzień dobry! Tutaj dostępna jest lista obecnych RU dla {role[w]} na {platform}. Jeżeli użytkownik ma więcej niż jeden {handle_type}, to tylko główny {handle_type} jest brany pod uwagę. Gracze z prywatnymi profilami, bądź ci którzy nie chcą pokazywać swoich wyników w tym sezonie, nie są pokazywani."
+msgstr "Dzień dobry! Tutaj dostępna jest lista obecnych RU dla **{role[w]}** na {platform}. Jeżeli użytkownik ma więcej niż jeden {handle_type}, to tylko główny {handle_type} jest brany pod uwagę. Gracze z prywatnymi profilami, bądź ci którzy nie chcą pokazywać swoich wyników w tym sezonie, nie są pokazywani."
 
 #: orisa/orisa.py:2480
 msgid "*To avoid spamming you, I will only send out this warning once per week*\n"
