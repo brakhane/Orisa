@@ -43,7 +43,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <h1 class="title">{{ $t("cfg.configure-for", { guild_name }) }}</h1>
           <vue-markdown
             :source="$t('cfg.lead-info', {link: 'https://discord.gg/ZKzBEDF'})"
-            :anchorAttributes="{target: '_blank'}"
+            :anchorAttributes="{class: 'has-text-info', target: '_blank'}"
           />
         </div>
       </div>
@@ -270,7 +270,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
     <footer class="footer">
       <div class="content has-text-centered">
-        <p v-t="'cfg.footer'" />
+        <h1 class="title" v-t="'cfg.footer'" />
       </div>
     </footer>
   </div>
