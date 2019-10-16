@@ -131,7 +131,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 <vue-markdown
                   class="alert alert-warning"
                   :source="$t('cfg.lang-incomplete-engage',
-                  {lang: lang_native_name, link: 'https://weblate.orisa.rocks/engage/orisa/'})
+                  {lang: lang_native_name, link: 'https://hosted.weblate.org/engage/orisa/'})
                 "
                   :anchorAttributes="{target: '_blank'}"
                 />
@@ -140,7 +140,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 <vue-markdown
                   class="alert alert-info"
                   :source="$t('cfg.lang-config-incomplete-engage',
-                  {lang: lang_native_name, link: 'https://weblate.orisa.rocks/engage/orisa/'})
+                  {lang: lang_native_name, link: 'https://hosted.weblate.org/engage/orisa/'})
                 "
                   :anchorAttributes="{target: '_blank'}"
                 />
