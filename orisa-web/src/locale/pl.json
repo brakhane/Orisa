@@ -36,7 +36,10 @@
         "top-role-desc": "Orisa będzie mogła zmieniać nicki wszystkich użytkowników, za wyjątkiem właściciela serwera.",
         "top-role-head": "Rola \"Orisa\" jest najwyższą na serwerze",
         "undo": "Cofnij",
-        "unsaved": "Masz niezapisane zmiany!"
+        "unsaved": "Masz niezapisane zmiany!",
+        "with-the-following-roles_0": "z tą rolą",
+        "with-the-following-roles_1": "z tymi rolami",
+        "with-the-following-roles_2": "z tymi rolami"
     },
     "mvc": {
         "add-prefix": "Dodaj zarządzany kanał",
