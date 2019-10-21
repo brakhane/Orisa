@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
-"POT-Creation-Date: 2019-10-21 15:31+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-10-21 17:44+0200\n"
 "PO-Revision-Date: 2019-10-21 15:45+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
@@ -259,9 +259,10 @@ msgid "{member_name} not found in database! *Do you need a hug?*"
 msgstr "{member_name} ble ikke funnet i databasen. *Trenger du en klem?*"
 
 #. Translators: A headline for a tip for the user
-#: orisa/orisa.py:591
-msgid "Hint"
-msgstr "Hint"
+#. Translators: A tip/information for a user
+#: orisa/orisa.py:591 orisa/orisa.py:655
+msgid "Tip"
+msgstr "Tips"
 
 #: orisa/orisa.py:592
 #, fuzzy
@@ -329,11 +330,6 @@ msgid ""
 "configure. Don't worry, I will send you the config instructions as a DM, so "
 "others can't configure me just by watching you sending this command."
 msgstr ""
-
-#. Translators: A tip/information for a user
-#: orisa/orisa.py:655
-msgid "Tip"
-msgstr "Tips"
 
 #: orisa/orisa.py:656
 msgid ""
@@ -419,9 +415,9 @@ msgid ""
 "Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
 "pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet."
 msgstr ""
-"\"{type}\" er ikke en gyldig registreringstype. Bruk `!ow register` eller `"
-"!ow register pc` for PC, og `!ow register xbox` for XBOX. PlayStation er "
-"ikke støttet enda."
+"\"{type}\" er ikke en gyldig registreringstype. Bruk `!ow register` eller `!"
+"ow register pc` for PC, og `!ow register xbox` for XBOX. PlayStation er ikke "
+"støttet enda."
 
 #. Translators: type will be PC, XBOX or PSN
 #: orisa/orisa.py:759
@@ -1251,8 +1247,8 @@ msgid ""
 "It seems like your {type} changed from *{old_handle}* to *{new_handle}*. I "
 "have updated my database."
 msgstr ""
-"Det later til at din {type} endret seg fra *{old_handle}* til *{new_handle}*"
-". Jeg har oppdatert databasen."
+"Det later til at din {type} endret seg fra *{old_handle}* til *{new_handle}"
+"*. Jeg har oppdatert databasen."
 
 #. Translators: type is translated GamerTag or BattleTag
 #: orisa/orisa.py:2745
@@ -1385,8 +1381,8 @@ msgid ""
 "Want to say thanks to the guy who wrote and maintains me? Why not [buy him a "
 "coffee?]({DONATE_LINK})"
 msgstr ""
-"Ønsker du å takke vedkommende som skrev og vedlikeholder meg? Hvorfor ikke ["
-"spandere drikke?]({DONATE_LINK})."
+"Ønsker du å takke vedkommende som skrev og vedlikeholder meg? Hvorfor ikke "
+"[spandere drikke?]({DONATE_LINK})."
 
 #: orisa/web.py:67
 msgid "You can close this window."
@@ -1502,3 +1498,6 @@ msgstr "Noe gikk galt på min side. Prøv å utstede {register} igjen."
 #: orisa/web.py:428
 msgid "Thank you! I have sent you a DM."
 msgstr "Takk. Du har blitt tilsendt en privat melding."
+
+#~ msgid "Hint"
+#~ msgstr "Hint"

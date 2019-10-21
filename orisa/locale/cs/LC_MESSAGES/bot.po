@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 15:31+0200\n"
+"POT-Creation-Date: 2019-10-21 17:44+0200\n"
 "PO-Revision-Date: 2019-08-29 13:23+0000\n"
 "Last-Translator: Lukas Notnword <lnbatman01@gmail.com>\n"
 "Language-Team: Czech <https://weblate.orisa.rocks/projects/orisa/bot/cs/>\n"
@@ -246,8 +246,9 @@ msgid "{member_name} not found in database! *Do you need a hug?*"
 msgstr "{member_name} nenalezen v databázi! *Potřebuješ objetí?*"
 
 #. Translators: A headline for a tip for the user
-#: orisa/orisa.py:591
-msgid "Hint"
+#. Translators: A tip/information for a user
+#: orisa/orisa.py:591 orisa/orisa.py:655
+msgid "Tip"
 msgstr "Rada"
 
 #: orisa/orisa.py:592
@@ -326,11 +327,6 @@ msgstr ""
 "Příkaz config musí být použit v channelu na server kde mě chceš "
 "nakonfigurovat. Neboj se, pošlu ti instrukce jako DM, takže to ostatní "
 "neuvidí, pouze uvidí to, že jsi mi odeslal příkaz."
-
-#. Translators: A tip/information for a user
-#: orisa/orisa.py:655
-msgid "Tip"
-msgstr "Rada"
 
 #: orisa/orisa.py:656
 msgid ""
@@ -1446,3 +1442,6 @@ msgstr ""
 #: orisa/web.py:428
 msgid "Thank you! I have sent you a DM."
 msgstr ""
+
+#~ msgid "Hint"
+#~ msgstr "Rada"

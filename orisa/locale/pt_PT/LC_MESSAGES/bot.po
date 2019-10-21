@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 15:31+0200\n"
+"POT-Creation-Date: 2019-10-21 17:44+0200\n"
 "PO-Revision-Date: 2019-09-21 10:24+0000\n"
 "Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://weblate.orisa.rocks/projects/"
@@ -253,8 +253,9 @@ msgstr ""
 "abraço?*"
 
 #. Translators: A headline for a tip for the user
-#: orisa/orisa.py:591
-msgid "Hint"
+#. Translators: A tip/information for a user
+#: orisa/orisa.py:591 orisa/orisa.py:655
+msgid "Tip"
 msgstr "Dica"
 
 #: orisa/orisa.py:592
@@ -336,11 +337,6 @@ msgstr ""
 "pretendes configurar. Não te incomodes, eu irei enviar-te as instruções de "
 "configuração por DM, assim outros utilizadores não me podem configurar só "
 "por me observarem a enviar-te este comando."
-
-#. Translators: A tip/information for a user
-#: orisa/orisa.py:655
-msgid "Tip"
-msgstr "Dica"
 
 #: orisa/orisa.py:656
 msgid ""
@@ -1670,3 +1666,6 @@ msgstr ""
 #: orisa/web.py:428
 msgid "Thank you! I have sent you a DM."
 msgstr "Obrigado! Enviei-te uma DM."
+
+#~ msgid "Hint"
+#~ msgstr "Dica"

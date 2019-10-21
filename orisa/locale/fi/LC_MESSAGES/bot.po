@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 15:31+0200\n"
+"POT-Creation-Date: 2019-10-21 17:44+0200\n"
 "PO-Revision-Date: 2019-09-01 12:48+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
 "Language-Team: Finnish <https://weblate.orisa.rocks/projects/orisa/bot/fi/>\n"
@@ -246,8 +246,9 @@ msgid "{member_name} not found in database! *Do you need a hug?*"
 msgstr "{member_name} ei löytynyt tietokannasta! *Do you need a hug?*"
 
 #. Translators: A headline for a tip for the user
-#: orisa/orisa.py:591
-msgid "Hint"
+#. Translators: A tip/information for a user
+#: orisa/orisa.py:591 orisa/orisa.py:655
+msgid "Tip"
 msgstr "Vihje"
 
 #: orisa/orisa.py:592
@@ -329,11 +330,6 @@ msgstr ""
 "konfiguroida. Älä huoli, lähetän sinulle konfiguraatio ohjeistukset "
 "yksityisviestillä, jotta muut eivät voi konfiguroida minua nähdessään "
 "lähettämäsi komennon."
-
-#. Translators: A tip/information for a user
-#: orisa/orisa.py:655
-msgid "Tip"
-msgstr "Vihje"
 
 #: orisa/orisa.py:656
 msgid ""
@@ -1533,3 +1529,6 @@ msgstr ""
 #: orisa/web.py:428
 msgid "Thank you! I have sent you a DM."
 msgstr ""
+
+#~ msgid "Hint"
+#~ msgstr "Vihje"

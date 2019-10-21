@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 15:31+0200\n"
+"POT-Creation-Date: 2019-10-21 17:44+0200\n"
 "PO-Revision-Date: 2019-08-24 00:02+0000\n"
 "Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://weblate.wur.st/projects/orisa/"
@@ -252,8 +252,9 @@ msgid "{member_name} not found in database! *Do you need a hug?*"
 msgstr "{member_name} não encontrado no banco de dados! *Quer um abraço?*"
 
 #. Translators: A headline for a tip for the user
-#: orisa/orisa.py:591
-msgid "Hint"
+#. Translators: A tip/information for a user
+#: orisa/orisa.py:591 orisa/orisa.py:655
+msgid "Tip"
 msgstr "Dica"
 
 #: orisa/orisa.py:592
@@ -342,11 +343,6 @@ msgstr ""
 "deseja configurar. Não se preocupe, vou enviar-lhe as instruções de "
 "configuração por mensagem direta, desta forma os outros não poderão me "
 "configurar apenas observando você enviando este comando."
-
-#. Translators: A tip/information for a user
-#: orisa/orisa.py:655
-msgid "Tip"
-msgstr "Dica"
 
 #: orisa/orisa.py:656
 #, fuzzy
@@ -1662,6 +1658,9 @@ msgstr ""
 #| msgid "I've sent you a DM"
 msgid "Thank you! I have sent you a DM."
 msgstr "Enviei uma mensagem direta para você"
+
+#~ msgid "Hint"
+#~ msgstr "Dica"
 
 #~ msgid "Handles"
 #~ msgstr "Tags"

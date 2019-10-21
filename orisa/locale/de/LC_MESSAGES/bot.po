@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 15:31+0200\n"
+"POT-Creation-Date: 2019-10-21 17:44+0200\n"
 "PO-Revision-Date: 2019-10-21 13:29+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/orisa/bot/de/>\n"
@@ -266,8 +266,9 @@ msgstr ""
 "dich drücke?*"
 
 #. Translators: A headline for a tip for the user
-#: orisa/orisa.py:591
-msgid "Hint"
+#. Translators: A tip/information for a user
+#: orisa/orisa.py:591 orisa/orisa.py:655
+msgid "Tip"
 msgstr "Tip"
 
 #: orisa/orisa.py:592
@@ -352,11 +353,6 @@ msgstr ""
 "den Du konfigurieren möchtest. Keine Sorge, ich sende dir die "
 "Konfigurationsanweisungen als DN. Andere können mich also nicht "
 "konfigurieren, indem sie Dir beim Senden dieses Befehls zusehen."
-
-#. Translators: A tip/information for a user
-#: orisa/orisa.py:655
-msgid "Tip"
-msgstr "Tip"
 
 #: orisa/orisa.py:656
 msgid ""
@@ -1777,6 +1773,9 @@ msgstr ""
 #: orisa/web.py:428
 msgid "Thank you! I have sent you a DM."
 msgstr "Ich habe dir eine PN geschickt."
+
+#~ msgid "Hint"
+#~ msgstr "Tip"
 
 #~ msgid "The limit must be between 0 and 99"
 #~ msgstr "Das Benutzerlimit muss zwischen 0 und 99 liegen"

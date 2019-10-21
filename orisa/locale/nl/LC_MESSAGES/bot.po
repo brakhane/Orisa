@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 15:31+0200\n"
+"POT-Creation-Date: 2019-10-21 17:44+0200\n"
 "PO-Revision-Date: 2019-09-02 21:16+0000\n"
 "Last-Translator: Milan Holsgens <milan.holsgens@ziggo.nl>\n"
 "Language-Team: Dutch <https://weblate.orisa.rocks/projects/orisa/bot/nl/>\n"
@@ -263,8 +263,9 @@ msgstr ""
 "*"
 
 #. Translators: A headline for a tip for the user
-#: orisa/orisa.py:591
-msgid "Hint"
+#. Translators: A tip/information for a user
+#: orisa/orisa.py:591 orisa/orisa.py:655
+msgid "Tip"
 msgstr "Tip"
 
 #: orisa/orisa.py:592
@@ -346,11 +347,6 @@ msgstr ""
 "die jij wilt instellen. Maak je geen zorgen, ik zal je een privé bericht "
 "sturen met configuratie-instructies, zodat anderen mij niet kunnen "
 "configureren."
-
-#. Translators: A tip/information for a user
-#: orisa/orisa.py:655
-msgid "Tip"
-msgstr "Tip"
 
 #: orisa/orisa.py:656
 msgid ""
@@ -1655,6 +1651,9 @@ msgstr ""
 #: orisa/web.py:428
 msgid "Thank you! I have sent you a DM."
 msgstr "Dank je! Ik heb je een privébericht gestuurd."
+
+#~ msgid "Hint"
+#~ msgstr "Tip"
 
 #~ msgid "Handles"
 #~ msgstr "Account"

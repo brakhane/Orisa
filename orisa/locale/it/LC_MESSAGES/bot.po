@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 15:31+0200\n"
+"POT-Creation-Date: 2019-10-21 17:44+0200\n"
 "PO-Revision-Date: 2019-09-02 21:16+0000\n"
 "Last-Translator: Daniele Giulietti <lordnocht@gmail.com>\n"
 "Language-Team: Italian <https://weblate.orisa.rocks/projects/orisa/bot/it/>\n"
@@ -251,9 +251,10 @@ msgid "{member_name} not found in database! *Do you need a hug?*"
 msgstr "{member_name} non è stato trovato nel database! *Vuoi un abbraccio?*"
 
 #. Translators: A headline for a tip for the user
-#: orisa/orisa.py:591
-msgid "Hint"
-msgstr "Suggerimento"
+#. Translators: A tip/information for a user
+#: orisa/orisa.py:591 orisa/orisa.py:655
+msgid "Tip"
+msgstr ""
 
 #: orisa/orisa.py:592
 msgid "Use `!ow register` to register, or `!ow help` for more info."
@@ -325,11 +326,6 @@ msgid ""
 "The config command must be issued from a channel of the server you want to "
 "configure. Don't worry, I will send you the config instructions as a DM, so "
 "others can't configure me just by watching you sending this command."
-msgstr ""
-
-#. Translators: A tip/information for a user
-#: orisa/orisa.py:655
-msgid "Tip"
 msgstr ""
 
 #: orisa/orisa.py:656
@@ -1474,3 +1470,6 @@ msgstr ""
 #: orisa/web.py:428
 msgid "Thank you! I have sent you a DM."
 msgstr ""
+
+#~ msgid "Hint"
+#~ msgstr "Suggerimento"

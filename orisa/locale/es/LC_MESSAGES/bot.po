@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-21 15:31+0200\n"
+"POT-Creation-Date: 2019-10-21 17:44+0200\n"
 "PO-Revision-Date: 2019-10-18 15:29+0000\n"
 "Last-Translator: Ale <millito12@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/orisa/bot/es/>\n"
@@ -262,9 +262,10 @@ msgstr ""
 "¡{member_name} no existe en nuestra base de datos! *¿Necesitas un abrazo?*"
 
 #. Translators: A headline for a tip for the user
-#: orisa/orisa.py:591
-msgid "Hint"
-msgstr "Pista"
+#. Translators: A tip/information for a user
+#: orisa/orisa.py:591 orisa/orisa.py:655
+msgid "Tip"
+msgstr "Consejo"
 
 #: orisa/orisa.py:592
 msgid "Use `!ow register` to register, or `!ow help` for more info."
@@ -345,11 +346,6 @@ msgstr ""
 "quieras configurar. No te preocupes, te enviaré las instrucciones de "
 "configuración como un mensaje privado, así los demás no podrán configurarme "
 "al enviar este comando."
-
-#. Translators: A tip/information for a user
-#: orisa/orisa.py:655
-msgid "Tip"
-msgstr "Consejo"
 
 #: orisa/orisa.py:656
 msgid ""
@@ -1743,6 +1739,9 @@ msgstr ""
 #: orisa/web.py:428
 msgid "Thank you! I have sent you a DM."
 msgstr "Gracias! Te he enviado un mensaje privado."
+
+#~ msgid "Hint"
+#~ msgstr "Pista"
 
 #~ msgid "Handles"
 #~ msgstr "Cuentas"
