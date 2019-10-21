@@ -588,7 +588,7 @@ class Orisa(Plugin):
                 if member == ctx.author:
                     embed = Embed(
                         # Translators: A headline for a tip for the user
-                        title=_("Hint"),
+                        title=_("Tip"),
                         description=_("Use `!ow register` to register, or `!ow help` for more info."),
                     )
         await ctx.channel.messages.send(content=content, embed=embed)
