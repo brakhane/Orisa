@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-10-21 15:31+0200\n"
-"PO-Revision-Date: 2019-10-20 23:53+0000\n"
+"PO-Revision-Date: 2019-10-21 15:45+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
 "bot/nb_NO/>\n"
@@ -414,11 +414,14 @@ msgid ""
 msgstr ""
 
 #: orisa/orisa.py:746
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
 "pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet."
 msgstr ""
+"\"{type}\" er ikke en gyldig registreringstype. Bruk `!ow register` eller `"
+"!ow register pc` for PC, og `!ow register xbox` for XBOX. PlayStation er "
+"ikke støttet enda."
 
 #. Translators: type will be PC, XBOX or PSN
 #: orisa/orisa.py:759
@@ -603,6 +606,8 @@ msgstr ""
 #, python-brace-format
 msgid "Done. Henceforth, thou shall be knownst as \"`{new_nick}`, {title}\"."
 msgstr ""
+"Utført. I fortsettelsen vil du bli tilkjennegitt ved din tittel «{new_nick}, "
+"{title}»."
 
 #: orisa/orisa.py:958 orisa/orisa.py:979 orisa/orisa.py:1103
 msgid "you are not registered!"
@@ -613,16 +618,21 @@ msgid ""
 "Your nick will be updated even when you are not in an OW voice channel. Use "
 "`!ow alwaysshowsr off` to turn it off again."
 msgstr ""
+"Ditt kallenavn vil bli oppdatert selv når du ikke er i en OW-talekanal. Bruk "
+"`!ow alwaysshowsr off` for å skru det av igjen."
 
 #: orisa/orisa.py:969
+#, fuzzy
 msgid ""
 "Your nick will only be updated when you are in an OW voice channel. Use `!ow "
 "alwaysshowsr on` to always update your nick."
 msgstr ""
+"Ditt kallenavn vil bli kun oppdatert når du er i en OW-talekanal. Bruk `!ow "
+"alwaysshowsr on` for å alltid oppdatere kallenavnet."
 
 #: orisa/orisa.py:995
 msgid "There were some problems updating your SR! Try again later."
-msgstr ""
+msgstr "Det var problematisk å oppdatere din SR. Prøv igjen senere."
 
 #: orisa/orisa.py:1000
 #, python-brace-format
@@ -633,9 +643,9 @@ msgid ""
 msgstr ""
 
 #: orisa/orisa.py:1027
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "OK, deleted {name} from database"
-msgstr ""
+msgstr "OK, {name} slettet fra database"
 
 #: orisa/orisa.py:1032
 #, fuzzy
@@ -1088,17 +1098,19 @@ msgid ""
 "**{name}** just reached **{sr} SR** as **{role}** and advanced to **{rank}"
 "**. Congratulations!"
 msgstr ""
+"**{name}** har akkurat nådd **{sr} SR** som **{role}** og avansert til "
+"**{rank}**. Gratulerer."
 
 #. Translators: <@!> is discord markup and needs to be preserved
 #: orisa/orisa.py:2248
 #, python-brace-format
 msgid "Let's hear it for <@!{discord_id}>!"
-msgstr ""
+msgstr "En applaus for <@!{discord_id}>!"
 
 #. Translators: header for highscore table: position (keep it short)
 #: orisa/orisa.py:2367
 msgid "#"
-msgstr ""
+msgstr "#"
 
 #. Translators: header for highscore table: previous position (keep it short)
 #: orisa/orisa.py:2369
@@ -1225,7 +1237,7 @@ msgstr ""
 #: orisa/orisa.py:2721
 #, python-brace-format
 msgid ":envelope: A message from the *{guild_name}* staff"
-msgstr ""
+msgstr ":envelope: En melding fra *{guild_name}*-staben"
 
 #. Translators: type is battletag or gamertag
 #: orisa/orisa.py:2735
@@ -1234,11 +1246,13 @@ msgid "{type} updated"
 msgstr "{type} oppdatert"
 
 #: orisa/orisa.py:2736
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "It seems like your {type} changed from *{old_handle}* to *{new_handle}*. I "
 "have updated my database."
 msgstr ""
+"Det later til at din {type} endret seg fra *{old_handle}* til *{new_handle}*"
+". Jeg har oppdatert databasen."
 
 #. Translators: type is translated GamerTag or BattleTag
 #: orisa/orisa.py:2745
@@ -1252,16 +1266,20 @@ msgid ""
 "You already registered the {type} *{handle}*, so there's nothing for me to "
 "do. *Sleep mode reactivated.*\n"
 msgstr ""
+"Du har allerede registrert {type} *{handle}*, så det er ingenting for meg å "
+"foreta meg. *Er her hvis du trenger meg.*\n"
 
 #: orisa/orisa.py:2753
 msgid ":information_source: Tip"
-msgstr ""
+msgstr ":information_source: Tips"
 
 #: orisa/orisa.py:2754
 msgid ""
 "Open the URL in a private/incognito tab next time, so you can enter the "
 "credentials of the account you want."
 msgstr ""
+"Åpne nettadressen i en privat/inkognito-fane neste gang, så kan du skrive "
+"inn identitetsdetaljene for kontoen du ønsker."
 
 #. Translators: type is GamerTag/BattleTag
 #: orisa/orisa.py:2764
@@ -1282,7 +1300,7 @@ msgstr ""
 #: orisa/orisa.py:2775
 #, python-brace-format
 msgid "Checking your {type} {tag}…"
-msgstr ""
+msgstr "Sjekker din {type} {tag}…"
 
 #. Translators: {type} is "BattleTag", {handle} is the tag (Foo#2345), {message} is some untranslated English error message
 #: orisa/orisa.py:2783
@@ -1350,22 +1368,25 @@ msgid ":thumbsup: Vote for me on Discord Bot List"
 msgstr ""
 
 #: orisa/orisa.py:2846
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "If you find me useful, consider voting for me [by clicking here]"
 "({VOTE_LINK})!"
 msgstr ""
+"Hvis du synes jeg er nyttig, stem på meg ved å [klikke her]({VOTE_LINK})."
 
 #: orisa/orisa.py:2850
 msgid ":heart: Say thanks by buying a coffee"
 msgstr ":heart: Si takk ved å spandere drikke."
 
 #: orisa/orisa.py:2851
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Want to say thanks to the guy who wrote and maintains me? Why not [buy him a "
 "coffee?]({DONATE_LINK})"
 msgstr ""
+"Ønsker du å takke vedkommende som skrev og vedlikeholder meg? Hvorfor ikke ["
+"spandere drikke?]({DONATE_LINK})."
 
 #: orisa/web.py:67
 msgid "You can close this window."
@@ -1447,6 +1468,9 @@ msgid ""
 "unknown reasons) when registering from a mobile phone. Try again with a PC "
 "or laptop. Sorry for the inconvenience"
 msgstr ""
+"Fikk et ufullstendig svar fra tjeneren. Dette skjer noen ganger (uvisst av "
+"hvilken grunn) ved registrering fra mobiltelefon. Prøv igjen med en "
+"skrivebordsmaskin eller bærbar PC."
 
 #: orisa/web.py:348
 #, python-brace-format
