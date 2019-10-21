@@ -33,12 +33,27 @@ from .exceptions import (
     NicknameTooLong,
     InvalidFormat,
 )
+from .config import DATABASE_URI
+
+logger = logging.getLogger(__name__)
+
+if DATABASE_URI.startswith("sqlite://"):
+    logger.warn("""\
+*** Using SQLite with dummy run_sync. This setup does have performance and concurrency problems. 
+*** You will run into problems if multiple users send commands to Orisa at the same time, or during SR sync.
+*** ONLY USE THIS SETUP DURING DEVELOPMENT OR WITH VERY LIMITED USERS!
+*** PostgreSQL is highly recommended for production!""")
+    async def run_sync(method, *args, **kwargs):
+        """Dummy run_sync that doesn't start a thread and just executes the sync call in the calling thread.
+        Necessary for SQLite in combination with SQLAlchemy"""
+        return method(*args, **kwargs)
+else:
+    from trio.to_thread import run_sync
 
 class TDS(namedtuple('TDS', 'tank damage support')):
     def __str__(self):
         return f"{self.tank}-{self.damage}-{self.support}"
 
-logger = logging.getLogger(__name__)
 
 SR_CACHE = TTLCache(maxsize=1000, ttl=30)
 SR_LOCKS = TTLCache(

@@ -41,7 +41,7 @@ from sqlalchemy.orm import raiseload, relationship, sessionmaker
 import sqlalchemy.types as types
 
 from .config import DATABASE_URI
-from .utils import sr_to_rank, TDS
+from .utils import sr_to_rank, TDS, run_sync
 from .i18n import _, N_, NP_
 
 Base = declarative_base()
@@ -343,7 +343,10 @@ class WelcomeMessage(Base):
 
 class Database:
     def __init__(self):
-        engine = create_engine(DATABASE_URI, pool_size=20, max_overflow=10)
+        if DATABASE_URI.startswith("sqlite://"):
+            engine = create_engine(DATABASE_URI)
+        else:
+            engine = create_engine(DATABASE_URI, pool_size=20, max_overflow=10)
         self.Session = sessionmaker(bind=engine, autoflush=False)
         Base.metadata.create_all(engine)
 
@@ -355,19 +358,19 @@ class Database:
         try:
             yield session
         finally:
-            await trio.to_thread.run_sync(session.close)
+            await run_sync(session.close)
 
     async def user_by_id(self, session, id):
-        return await trio.to_thread.run_sync(session.query(User).filter_by(id=id).one_or_none)
+        return await run_sync(session.query(User).filter_by(id=id).one_or_none)
 
     async def handle_by_id(self, session, id):
-        return await trio.to_thread.run_sync(session.query(Handle).filter_by(id=id).one_or_none)
+        return await run_sync(session.query(Handle).filter_by(id=id).one_or_none)
 
     async def user_by_discord_id(self, session, discord_id):
         return session.query(User).filter_by(discord_id=discord_id).one_or_none()
 
     async def get_srs(self, session, discord_ids):
-        return await trio.to_thread.run_sync(
+        return await run_sync(
             session.query(SR)
             .join(Handle.current_sr, User)
             .filter(Handle.position == 0)
@@ -396,7 +399,7 @@ class Database:
             return timedelta(days=1)
 
     async def get_handles_to_be_synced(self, session):
-        results = await trio.to_thread.run_sync(
+        results = await run_sync(
             session.query(Handle)
             .outerjoin(Handle.current_sr)
             .filter(
@@ -411,7 +414,7 @@ class Database:
         ]
 
     async def get_welcome_message(self, session, message_id):
-        msg = await trio.to_thread.run_sync(
+        msg = await run_sync(
             session.query(WelcomeMessage)
             .filter_by(id=message_id)
             .one_or_none

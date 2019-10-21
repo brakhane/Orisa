@@ -24,7 +24,6 @@ import asks
 from itsdangerous.url_safe import URLSafeTimedSerializer
 from itsdangerous.exc import BadSignature, SignatureExpired
 from oauthlib.oauth2 import WebApplicationClient
-from trio.to_thread import run_sync
 from quart_trio import QuartTrio
 from quart import Quart, request, render_template, jsonify, Response
 
@@ -41,6 +40,7 @@ from .config import (
 from .config_classes import GuildConfig
 from .i18n import _, ngettext, CurrentLocale
 from .models import User, GuildConfigJson, HighscoreCron
+from .utils import run_sync
 
 logger = logging.getLogger(__name__)
 

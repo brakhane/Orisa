@@ -7,7 +7,8 @@ from contextvars import ContextVar
 from curious.commands.manager import CommandsManager
 from curious.core.event import EventContext
 from curious.dataclasses.message import Message
-from trio.to_thread import run_sync
+
+from .utils import run_sync
 
 logger = logging.getLogger(__name__)
 

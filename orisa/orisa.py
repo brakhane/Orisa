@@ -117,8 +117,8 @@ from .utils import (
     sort_secondaries,
     send_long,
     reply,
-    resolve_handle_or_index,
     sr_to_rank,
+    run_sync,
     TDS,
 )
 from . import web
