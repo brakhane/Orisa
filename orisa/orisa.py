@@ -118,6 +118,7 @@ from .utils import (
     send_long,
     reply,
     sr_to_rank,
+    resolve_handle_or_index,
     run_sync,
     TDS,
 )
