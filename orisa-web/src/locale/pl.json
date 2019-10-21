@@ -30,7 +30,7 @@
         "post-hs-time": "Godzina w strefie czasowej UTC o której udostępnić post",
         "post-hs-tt": "Jeżeli ta opcja jest włączona, Orisa będzie codziennie około godziny 11 czasu polskiego wysyłać tabelę z rankingami RU dla każdej z ról (osobno dla PC i Xboxa). Tylko RU głównego konta będzie brane pod uwagę i tylko użytkownicy którzy mają przyznaną RU będą pokazywani. Plik CSV z tymi samymi danymi również zostanie wysłany.",
         "reg-msg": "Wiadomość powitalna",
-        "reg-msg-desc": "Opcjonalny tekst który powinien się pojawić w wiadomości powitalnej gdy użytkownik zarejestruje się używając `!ow register`. Ta wiadomość *nie jest* pokazywana kiedy ktoś dołącza do serwera. Możesz użyć [Discord Markdown]({{ link }}).",
+        "reg-msg-desc": "Opcjonalny tekst który pojawia się w wiadomości powitalnej gdy użytkownik zarejestruje się używając `!ow register`. Ta wiadomość *nie jest* pokazywana kiedy ktoś dołącza do serwera. Możesz użyć [Discord Markdown]({{ link }}).",
         "reg-msg-placeholder": "np.\nNie zapomnij ustawić swojej roli za pomocą `!ow setroles`; i nie graj Hanzo.",
         "save": "Zapisz",
         "top-role-desc": "Orisa będzie mogła zmieniać nicki wszystkich użytkowników, za wyjątkiem właściciela serwera.",
