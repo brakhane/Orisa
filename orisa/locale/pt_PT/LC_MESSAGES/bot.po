@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-10-21 17:44+0200\n"
-"PO-Revision-Date: 2019-10-28 16:53+0000\n"
-"Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
+"PO-Revision-Date: 2019-10-29 15:30+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -57,8 +57,8 @@ msgstr[1] "Gamertaga"
 #: orisa/models.py:270
 msgid "Online ID"
 msgid_plural "Online IDs"
-msgstr[0] "Id. On-line"
-msgstr[1] "Ids. On-line"
+msgstr[0] "ID Online"
+msgstr[1] "IDs Online"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:137
@@ -157,7 +157,7 @@ msgstr ":thinking: Precisa de ajuda?"
 #: orisa/orisa.py:253 orisa/orisa.py:667 orisa/orisa.py:694 orisa/orisa.py:1240
 #, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})!"
-msgstr "Junte-se ao [Suporte do Discord]({SUPPORT_DISCORD})!"
+msgstr "Junta-te ao [Servidor de Suporte]({SUPPORT_DISCORD})!"
 
 #: orisa/orisa.py:255
 #, python-brace-format
@@ -207,7 +207,7 @@ msgid ""
 "Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})"
 msgstr ""
 "[Perfil do Overwatch]({PROFILE_LINK}) | [Faz Upvote na Orisa]({VOTE_LINK}) | "
-"[Servidor de Suporte da Orisa]({SUPPORT_DISCORD}) | [Doe "
+"[Servidor de Suporte da Orisa]({SUPPORT_DISCORD}) | [Doa-nos "
 "`{HEART}`]({DONATE_LINK})"
 
 #: orisa/orisa.py:569
