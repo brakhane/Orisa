@@ -813,7 +813,9 @@ class Orisa(Plugin):
                     )
                 )
                 return
-
+            # force loading of handles
+            list(user.handles)
+            
             removed = user.handles.pop(index)
             handle = removed.handle
             await run_sync(session.commit)
