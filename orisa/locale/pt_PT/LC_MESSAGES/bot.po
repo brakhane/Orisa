@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-21 17:44+0200\n"
 "PO-Revision-Date: 2019-10-29 15:30+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
@@ -207,8 +207,8 @@ msgid ""
 "Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})"
 msgstr ""
 "[Perfil do Overwatch]({PROFILE_LINK}) | [Faz Upvote na Orisa]({VOTE_LINK}) | "
-"[Servidor de Suporte da Orisa]({SUPPORT_DISCORD}) | [Doa-nos "
-"`{HEART}`]({DONATE_LINK})"
+"[Servidor de Suporte da Orisa]({SUPPORT_DISCORD}) | [Doa-nos `{HEART}`]"
+"({DONATE_LINK})"
 
 #: orisa/orisa.py:569
 #, python-brace-format
