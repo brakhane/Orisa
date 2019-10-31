@@ -1730,9 +1730,7 @@ Pornography Historian""").split("\n")
     @event("gateway_dispatch_received")
     async def _gw_dispatch_received(self, event_ctx: EventContext, event: str, data: dict):
         if event.startswith("MESSAGE_REACTION_"):
-            if "user_id" not in data:
-                return
-            if int(data["user_id"]) == event_ctx.bot.user.id:
+            if "user_id" in data and int(data["user_id"]) == event_ctx.bot.user.id:
                 return
             mid = int(data["message_id"])
             async with self.database.session() as session:
