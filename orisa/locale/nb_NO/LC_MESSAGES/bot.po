@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-10-21 17:44+0200\n"
 "PO-Revision-Date: 2019-10-31 03:03+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
@@ -1154,8 +1154,8 @@ msgstr ""
 msgid ""
 "*To avoid spamming you, I will only send out this warning once per week*\n"
 msgstr ""
-"*For å unngå å spamme deg, vil jeg kun sende denne advarselen én gang i uka*"
-"\n"
+"*For å unngå å spamme deg, vil jeg kun sende denne advarselen én gang i "
+"uka*\n"
 
 #: orisa/orisa.py:2480
 #, python-brace-format
