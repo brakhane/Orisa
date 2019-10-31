@@ -813,10 +813,10 @@ class Orisa(Plugin):
                     )
                 )
                 return
-            # force loading of handles
-            list(user.handles)
             
+
             removed = user.handles.pop(index)
+            removed.current_sr_id = None
             handle = removed.handle
             await run_sync(session.commit)
             await reply(ctx, _("Removed **{handle}**!").format(handle=handle))
