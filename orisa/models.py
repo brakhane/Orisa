@@ -367,7 +367,7 @@ class Database:
         return await run_sync(session.query(Handle).filter_by(id=id).one_or_none)
 
     async def user_by_discord_id(self, session, discord_id):
-        return session.query(User).filter_by(discord_id=discord_id).one_or_none()
+        return await run_sync(session.query(User).filter_by(discord_id=discord_id).one_or_none)
 
     async def get_srs(self, session, discord_ids):
         return await run_sync(
