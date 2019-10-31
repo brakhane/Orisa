@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-10-21 17:44+0200\n"
-"PO-Revision-Date: 2019-10-31 03:03+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2019-11-02 00:03+0000\n"
+"Last-Translator: Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/orisa/bot/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -1329,7 +1329,7 @@ msgid "For your own safety, get behind the barrier!"
 msgstr "Dla własnego bezpieczeństwa, schowaj się za barierą!"
 
 #: orisa/orisa.py:2232
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "**{name}** just reached **{sr} SR** as **{role}** and advanced to **{rank}"
 "**. Congratulations!"
@@ -1365,7 +1365,7 @@ msgstr "ID Użytkownika"
 
 #. Translators: header fdor highscore table: SR
 #: orisa/orisa.py:2375
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "{role} SR"
 msgstr "RU {role}"
 
@@ -1375,7 +1375,7 @@ msgid "ΔSR"
 msgstr "ΔRU"
 
 #: orisa/orisa.py:2417
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello! Here are the current SRs for **{role}** on {platform}. If a member "
 "has more than one {handle_type}, only the primary {handle_type} is "
