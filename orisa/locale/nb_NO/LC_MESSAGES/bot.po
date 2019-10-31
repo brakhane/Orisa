@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-10-21 17:44+0200\n"
-"PO-Revision-Date: 2019-10-21 15:45+0000\n"
+"PO-Revision-Date: 2019-10-31 03:03+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
 "bot/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9.1-dev\n"
+"X-Generator: Weblate 3.10-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:172 orisa/orisa.py:1513
@@ -689,16 +689,18 @@ msgstr ""
 
 #. Translators: type is BattleTag or GamerTag
 #: orisa/orisa.py:1128
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Your primary {type} has no SR, please give a SR range you want to search for "
 "instead."
 msgstr ""
+"Din primære [type] har ingen SR, angi en SR-rekkevidde du ønsker å søke "
+"etter istedenfor."
 
 #: orisa/orisa.py:1137
 #, python-brace-format
 msgid "within {sr_diff} of {base_sr} SR"
-msgstr ""
+msgstr "innen {sr_diff} av {base_sr} SR"
 
 #: orisa/orisa.py:1150
 msgid ""
@@ -710,7 +712,7 @@ msgstr ""
 #: orisa/orisa.py:1154
 #, python-brace-format
 msgid "between {min_sr} and {max_sr} SR"
-msgstr ""
+msgstr "mellom {min_sr} og"
 
 #: orisa/orisa.py:1200
 #, python-brace-format
@@ -718,6 +720,8 @@ msgid ""
 "There are no players currently online {type_msg}!\n"
 "\n"
 msgstr ""
+"Det er ingen spillere pålogget nå {type_msg}.\n"
+"\n"
 
 #: orisa/orisa.py:1202
 #, python-brace-format
@@ -725,10 +729,12 @@ msgid ""
 "**The following players are currently online and {type_msg}:**\n"
 "\n"
 msgstr ""
+"**Følgende spillere er pålogget nå og {type_msg}:**\n"
+"\n"
 
 #: orisa/orisa.py:1210
 msgid "There are no offline players within that range."
-msgstr ""
+msgstr "Det er ingen frakoblede spillere i denne rekkevidden."
 
 #: orisa/orisa.py:1212
 msgid "There are also no offline players within that range. :("
@@ -832,11 +838,11 @@ msgstr ""
 #. Translators: help for !ow dumpsr
 #: orisa/orisa.py:1323
 msgid "Download your SR history as an Excel sheet"
-msgstr ""
+msgstr "Last ned din SR-historikk som regneark"
 
 #: orisa/orisa.py:1341
 msgid "Same as `!ow findplayers`, but also includes offline players."
-msgstr ""
+msgstr "Samme som `!ow findplayers`, men inkluderer også frakoblede spillere."
 
 #. Translators: help !ow forceupdate
 #: orisa/orisa.py:1346
@@ -1055,7 +1061,7 @@ msgstr ""
 #: orisa/orisa.py:1547
 #, python-brace-format
 msgid "There is no data yet for {handle}, try again later"
-msgstr ""
+msgstr "Ingen data for {handle} enda, prøv igjen senere"
 
 #: orisa/orisa.py:1558
 msgid "I have no SR for your account stored yet."
@@ -1076,17 +1082,18 @@ msgstr "SR-historikk for {name}"
 #: orisa/orisa.py:1593
 #, python-brace-format
 msgid "Here is your SR history starting from {date}"
-msgstr ""
+msgstr "Her har du din SR-historikk fra og med {date}"
 
 #. Translators: used instead of a date when user requested a SR history from the beginning (which is the usual case)
 #: orisa/orisa.py:1595
 msgid "when you registered"
-msgstr ""
+msgstr "når du registrerte deg"
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
 #: orisa/orisa.py:2230
+#, fuzzy
 msgid "For your own safety, get behind the barrier!"
-msgstr ""
+msgstr "For din egen sikkerhet bør du komme deg bak barrieren."
 
 #: orisa/orisa.py:2232
 #, python-brace-format
@@ -1147,6 +1154,8 @@ msgstr ""
 msgid ""
 "*To avoid spamming you, I will only send out this warning once per week*\n"
 msgstr ""
+"*For å unngå å spamme deg, vil jeg kun sende denne advarselen én gang i uka*"
+"\n"
 
 #: orisa/orisa.py:2480
 #, python-brace-format
@@ -1360,8 +1369,9 @@ msgid ""
 msgstr ""
 
 #: orisa/orisa.py:2845
+#, fuzzy
 msgid ":thumbsup: Vote for me on Discord Bot List"
-msgstr ""
+msgstr ":thumbsup: Stem på meg på Discord Bot-listen"
 
 #: orisa/orisa.py:2846
 #, fuzzy, python-brace-format
@@ -1441,7 +1451,7 @@ msgstr "Velg en gyldig kategori"
 #: orisa/web.py:206 orisa/web.py:228
 #, python-brace-format
 msgid "Limit must be between {min} and {max}"
-msgstr "Grensen må være mellom {min} og"
+msgstr "Grensen må være mellom {min} og {max}"
 
 #. Translators: config screen validation error
 #: orisa/web.py:215

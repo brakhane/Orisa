@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-10-21 17:44+0200\n"
-"PO-Revision-Date: 2019-10-08 20:24+0000\n"
-"Last-Translator: Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>\n"
-"Language-Team: Polish <https://weblate.orisa.rocks/projects/orisa/bot/pl/>\n"
+"PO-Revision-Date: 2019-10-31 03:03+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/orisa/bot/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.8\n"
+"X-Generator: Weblate 3.10-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:172 orisa/orisa.py:1513
@@ -1329,13 +1329,13 @@ msgid "For your own safety, get behind the barrier!"
 msgstr "Dla własnego bezpieczeństwa, schowaj się za barierą!"
 
 #: orisa/orisa.py:2232
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "**{name}** just reached **{sr} SR** as **{role}** and advanced to **{rank}"
 "**. Congratulations!"
 msgstr ""
 "**{name}** właśnie osiągnął **{sr} RU** jako **{role}** i awansował do "
-"**{rank[w]}**. Gratulacje!"
+"**{rank}**. Gratulacje!"
 
 #. Translators: <@!> is discord markup and needs to be preserved
 #: orisa/orisa.py:2248
@@ -1365,9 +1365,9 @@ msgstr "ID Użytkownika"
 
 #. Translators: header fdor highscore table: SR
 #: orisa/orisa.py:2375
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "{role} SR"
-msgstr "RU {role[tab]}"
+msgstr "RU {role}"
 
 #. Translators: header for highscore table: SR difference
 #: orisa/orisa.py:2377
@@ -1375,14 +1375,14 @@ msgid "ΔSR"
 msgstr "ΔRU"
 
 #: orisa/orisa.py:2417
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Hello! Here are the current SRs for **{role}** on {platform}. If a member "
 "has more than one {handle_type}, only the primary {handle_type} is "
 "considered. Players with private profiles, or those that didn't do their "
 "placements this season yet are not shown."
 msgstr ""
-"Dzień dobry! Tutaj dostępna jest lista obecnych RU dla **{role[w]}** na "
+"Dzień dobry! Tutaj dostępna jest lista obecnych RU dla **{role}** na "
 "{platform}. Jeżeli użytkownik ma więcej niż jeden {handle_type}, to tylko "
 "główny {handle_type} jest brany pod uwagę. Gracze z prywatnymi profilami, "
 "bądź ci którzy nie chcą pokazywać swoich wyników w tym sezonie, nie są "

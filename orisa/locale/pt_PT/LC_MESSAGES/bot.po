@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-10-21 17:44+0200\n"
-"PO-Revision-Date: 2019-10-29 15:30+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
+"PO-Revision-Date: 2019-10-31 03:03+0000\n"
+"Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.9.1\n"
+"X-Generator: Weblate 3.10-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:172 orisa/orisa.py:1513
@@ -123,18 +123,18 @@ msgstr "Diamante"
 #. Translators: SR rank
 #: orisa/orisa.py:163
 msgid "Master"
-msgstr "Máster"
+msgstr "Mestre"
 
 #. Translators: SR rank
 #: orisa/orisa.py:165
 msgid "Grandmaster"
-msgstr "Grande máster"
+msgstr "Grão-mestre"
 
 #. Translators: Role
 #: orisa/orisa.py:170 orisa/orisa.py:1513 orisa/orisa.py:1551
 #: orisa/orisa.py:1553
 msgid "Tank"
-msgstr ""
+msgstr "Tanque"
 
 #: orisa/orisa.py:245
 msgid ""
@@ -152,7 +152,7 @@ msgstr ""
 #. Translators: :thinking: is an emoji code
 #: orisa/orisa.py:252 orisa/orisa.py:666 orisa/orisa.py:693 orisa/orisa.py:1239
 msgid ":thinking: Need help?"
-msgstr ":thinking: Precisa de ajuda?"
+msgstr ":thinking: Precisas de ajuda?"
 
 #: orisa/orisa.py:253 orisa/orisa.py:667 orisa/orisa.py:694 orisa/orisa.py:1240
 #, python-brace-format
@@ -172,7 +172,7 @@ msgstr ""
 "\n"
 "*Alguém (espero que tenhas sido tu) convidou-me para o teu servidor "
 "{guild_name}, mas não consigo encontrar um canal de texto onde possa enviar "
-"mensagens, por tanto tenho de te mandar"
+"mensagens, por tanto tenho de te mandar*"
 
 #. Translators: Short for Discord Nickname
 #: orisa/orisa.py:508
@@ -1114,10 +1114,10 @@ msgid ""
 "data."
 msgstr ""
 "*Este comando está em beta e pode ser mudado a qualquer momento; pode também "
-"conter bugs, logo se encontrares algum por favor reporta aos devs*.\n"
-"Mostra um gráfico do teu SR. Se for indicada `form_date` (no formato DD.MM."
-"AA ou AAAA-MM-DD), o gráfico começa na data indicada, caso contrário começa "
-"desde que a Orisa tem dados teus."
+"conter bugs, logo se encontrares algum por favor reporta aos devs.*\n"
+"Mostra um gráfico do teu SR. Se for indicada `form_date` (no formato "
+"DD.MM.AA ou AAAA-MM-DD), o gráfico começa na data indicada, caso contrário "
+"começa desde que a Orisa tem dados teus."
 
 #: orisa/orisa.py:1443
 msgid ""
