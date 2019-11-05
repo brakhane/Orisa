@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-10-21 17:44+0200\n"
-"PO-Revision-Date: 2019-10-31 03:03+0000\n"
+"PO-Revision-Date: 2019-11-06 09:04+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
 "bot/nb_NO/>\n"
@@ -149,6 +149,14 @@ msgid ""
 "*I will ignore all commands except `!ow help` and `!ow config` until I'm "
 "configured for this Discord!*"
 msgstr ""
+"*Vær hilset*! Jeg er henrykt over å være her :smiley:\n"
+"For å ta det første først, opprett en ny rolle kalt `Orisa Admin` (kun "
+"navnet er viktig, ingen spesialtilganger trengs) og legg til deg selv og "
+"alle som skal kunne sette meg opp.\n"
+"Skriv så `!ow config` i denne kanalen, og jeg vil sende deg en lenke for "
+"oppsett via privat melding.\n"
+"*Jeg svarer kun på `!ow help` og `!ow config` til jeg er satt opp for denne "
+"Discord-en!*"
 
 #. Translators: :thinking: must remain as is, it's an emoji
 #. Translators: :thinking: is an emoji code
@@ -565,6 +573,9 @@ msgid ""
 "characters ({len} to be exact).\n"
 "Please choose a shorter format or shorten your nickname!"
 msgstr ""
+"Når du bruker dette formatet er kallenavnet ditt begreset til 32 tegn ({len} "
+"for å ha det sagt).\n"
+"Velg et kortere format, eller forkort kallenavnet ditt."
 
 #. Translators: A list of random silly titles that will be shown in the confirmation message when a user changed his nickname format.
 #. Most of them were found on the Internet, for example
@@ -594,6 +605,24 @@ msgid ""
 "Retail Jedi\n"
 "Pornography Historian"
 msgstr ""
+"Potetgullekspert\n"
+"Lompevitenskapsmann\n"
+"Evig blomstrende heit elskov\n"
+"Sikkerhetssith\n"
+"Skynavngiver\n"
+"Ølbokstømmer\n"
+"Bjørn Sundquists lakksko\n"
+"Autoritet for revet ost\n"
+"MILF-utpeker\n"
+"Oralatoriker\n"
+"Sideflesk\n"
+"Dinosaurvaktmester\n"
+"Galaktisk forhenværende bademester\n"
+"Baconadmiral\n"
+"Pizzamagistrat\n"
+"Taco-skårunge\n"
+"Varesalgsjedi\n"
+"Børre-historiker"
 
 #. Translators: Unlike other messages, keep this message overly formal and archaic sounding to keep a funny contrast to the silly title that will be "given" to the user.
 #. So, unlike in all the other messages, if your language has a concept of "formal" vs "familiar" you, use the formal you here.
@@ -637,6 +666,9 @@ msgid ""
 "correct, you need to log out of Overwatch once and try again; your profile "
 "also needs to be public for me to track your SR."
 msgstr ""
+"OK, jeg har oppdatert din data. Din (primære) SR er nå {sr}. Hvis det er "
+"uriktig, må du logge ut av Overwatch og prøve igjen; din profil må også være "
+"offentlig for at jeg skal kunne holde oppsyn med din SR."
 
 #: orisa/orisa.py:1027
 #, fuzzy, python-brace-format
@@ -712,7 +744,7 @@ msgstr ""
 #: orisa/orisa.py:1154
 #, python-brace-format
 msgid "between {min_sr} and {max_sr} SR"
-msgstr "mellom {min_sr} og"
+msgstr "mellom {min_sr} og {max_sr} SR"
 
 #: orisa/orisa.py:1200
 #, python-brace-format
@@ -738,13 +770,15 @@ msgstr "Det er ingen frakoblede spillere i denne rekkevidden."
 
 #: orisa/orisa.py:1212
 msgid "There are also no offline players within that range. :("
-msgstr ""
+msgstr "Det er ingen frakoblede spillere i den rekkevidden. :("
 
 #: orisa/orisa.py:1214
 msgid ""
 "**The following players are within that range, but currently offline:**\n"
 "\n"
 msgstr ""
+"** Følgene spillere er i den rekkevidden, men for tiden frakoblet:**\n"
+"\n"
 
 #: orisa/orisa.py:1219
 #, python-brace-format
@@ -753,6 +787,9 @@ msgid ""
 "There are also {len} offline players within that range. Use the "
 "`findallplayers` command to show them as well."
 msgstr ""
+"\n"
+"Det er også {len} frakoblede spillere i den rekkevidden. Bruk "
+"`findallplayers`-kommandoen for å også vise dem."
 
 #: orisa/orisa.py:1223
 msgid "I sent you a DM with the results."
@@ -764,6 +801,8 @@ msgid ""
 "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue "
 "`!ow config` to configure me first!"
 msgstr ""
+"Jeg er ikke satt opp enda. Noen med rollen `Orisa Admin` må utstede `!ow "
+"config` for å sette meg opp først."
 
 #: orisa/orisa.py:1257
 msgid ""
@@ -905,7 +944,7 @@ msgstr ""
 
 #: orisa/orisa.py:1377
 msgid "\\N{BLACK STAR} *ow format examples*"
-msgstr ""
+msgstr "\\N{BLACK STAR} *eksempler for ow-format*"
 
 #: orisa/orisa.py:1379
 #, python-brace-format
@@ -919,7 +958,7 @@ msgstr ""
 #. Translators: headline of second help page
 #: orisa/orisa.py:1387
 msgid "help cont'd"
-msgstr ""
+msgstr "hjelp, fortsettelse"
 
 #: orisa/orisa.py:1393
 msgid ""
@@ -1433,7 +1472,7 @@ msgstr "Håndter kanaler"
 msgid "Orisa is missing the following permission: {missing}"
 msgid_plural "Orisa is missing the following permissions: {missing}"
 msgstr[0] "Orisa mangler følgende tilganger: {missing}"
-msgstr[1] ""
+msgstr[1] "Orisa mangler følgende tilganger: {missing}"
 
 #: orisa/web.py:159
 msgid "Invalid time"
