@@ -979,7 +979,7 @@ Pornography Historian""").split("\n")
             logger.info(f"{ctx.author.id} used forceupdate")
             user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, _("you are not registered!"))
+                await reply(ctx, _("You are not registered! Do `!ow register` first."))
             else:
                 fault = False
                 async with ctx.channel.typing:
