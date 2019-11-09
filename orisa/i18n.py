@@ -22,6 +22,7 @@ LOCALES = [
     "fi",
     "fr",
     "it",
+    "nb_NO",
     "nl",
     "pl",
     "pt_BR",
