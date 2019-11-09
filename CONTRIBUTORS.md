@@ -26,6 +26,9 @@ Orisa wouldn't be possible without the help of contributors. If you feel you are
 * Italian translation
   * Valerio D'Onghia
 
+* Norwegian translation
+  * Allan Nordhøy
+
 * Polish translations
   * Dominik Ciesiołkiewicz (aka "Kreativ")
   * Kacper Klimas
