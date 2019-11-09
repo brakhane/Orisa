@@ -58,7 +58,7 @@ class MultiString(str):
     <<key3>> text3
 
     This will make "text2\ntext2" the default (because of the *), but it can be used like
-    a dictionary, so in a format string, one could use "foo[key1]" to get "text1\text1\text1"
+    a dictionary, so in a format string, one could use "foo[key1]" to get "text1\ntext1\ntext1"
     """
     
     def __new__(cls, val):
