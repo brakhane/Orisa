@@ -1,6 +1,6 @@
 # List of Contributors
 
-Orisa wouldn't be possible without the help of contributors. If you feel you are missing in this list, create an issue in the bug tracker
+Orisa wouldn't be possible without the help of contributors. If you believe you are missing in this list, create an issue in the bug tracker
 
 * Main programmer and Maintainer
   * Dennis Brakhane
