@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-11-08 19:23+0100\n"
-"PO-Revision-Date: 2019-11-06 09:04+0000\n"
+"PO-Revision-Date: 2019-11-11 22:04+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
 "bot/nb_NO/>\n"
@@ -1471,7 +1471,7 @@ msgstr "Håndter kanaler"
 #, python-brace-format
 msgid "Orisa is missing the following permission: {missing}"
 msgid_plural "Orisa is missing the following permissions: {missing}"
-msgstr[0] "Orisa mangler følgende tilganger: {missing}"
+msgstr[0] "Orisa mangler følgende tilgang: {missing}"
 msgstr[1] "Orisa mangler følgende tilganger: {missing}"
 
 #: orisa/web.py:159
