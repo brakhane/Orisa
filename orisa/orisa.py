@@ -547,7 +547,7 @@ class Orisa(Plugin):
 
                 if user.roles:
                     # Translators: The roles a user has set with setroles (Main Tank, Damage, etc.)
-                    embed.add_field(name=_("Roles"), value=user.roles.format(ctx))
+                    embed.add_field(name=_("Roles"), inline=False, value=user.roles.format(ctx))
 
                 embed.add_field(
                     # Translators: Weblinks
