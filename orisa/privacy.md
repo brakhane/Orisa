@@ -1,4 +1,4 @@
-**Privacy Policy, last updated 2018-12-28**
+**Privacy Policy, last updated 2019-12-18**
 
 You will only be notified of major updates to this policy. Minor updates, like reformatting, rewording, etc. will not be announced.
 
@@ -38,7 +38,7 @@ Only other members of the Discord server you are a member of can access the info
 
 __**How can I obtain a copy of my personal data?**__
 
-At the moment, you'll need to contact Orisa's owner OWNER_ID; although "!ow srgraph" pretty much shows all data Orisa has stored.
+At the moment, you'll need to contact Orisa's owner OWNER_ID; although "!ow dumpsr" pretty much shows all data Orisa has stored.
 
 __**How can I delete my data?**__
 
