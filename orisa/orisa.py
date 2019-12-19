@@ -1903,7 +1903,11 @@ Pornography Historian""").split("\n")
             async with self.client.events.wait_for_manager(
                 "channel_delete", lambda chan: chan.id == id
             ):
-                await chan.delete()
+                try:
+                    await chan.delete()
+                except NotFound:
+                    logger.warn("tried to delete a channel that Discord says does not exist, removing it from cache!", exc_info=True)
+                    chan.guild._channels.pop(chan.id, None)
             made_changes = True
 
         async def add_a_channel():
@@ -2037,11 +2041,16 @@ Pornography Historian""").split("\n")
                         else:
                             new_name = f"{prefix} #{i+1}"
 
-                        if new_name != chan.name:
-                            await chan.edit(name=new_name)
-                        if adjust_user_limits:
-                            limit = prefix_info.limit
-                            await chan.edit(user_limit=limit)
+                        try:
+                            if new_name != chan.name:
+                                logger.debug(f"changing name of {chan} to {new_name}")
+                                await chan.edit(name=new_name)
+                            if adjust_user_limits:
+                                limit = prefix_info.limit
+                                await chan.edit(user_limit=limit)
+                        except NotFound:
+                            logger.warn("Tried to change a channel that Discord says does not exist, removing it from cache!", exc_info=True)
+                            chan.guild._channels.pop(chan.id, None)
 
                 final_list.extend(chans)
 
@@ -2054,7 +2063,11 @@ Pornography Historian""").split("\n")
             for i, chan in enumerate(final_list):
                 pos = start_pos + i
                 if chan.position != pos:
-                    await chan.edit(position=pos)
+                    try:
+                        await chan.edit(position=pos)
+                    except NotFound:
+                        logger.warn("Tried to change a channel that Discord says does not exist, removing from cache!", exc_info=True)
+                        chan.guild._channels.pop(chan.id, None)
 
     def _format_nick(self, user):
         primary = user.handles[0]
@@ -2861,6 +2874,8 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
     def strip_tags(name):
         return re.sub(r"^(.*?\|)?([^[{]*)((\[|\{).*)?", r"\2", str(name)).strip()
 
+    name = name.strip()
+    
     member = member_id = None
     if ctx.guild:
         guilds = [ctx.guild]
