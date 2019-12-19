@@ -2874,6 +2874,8 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
     def strip_tags(name):
         return re.sub(r"^(.*?\|)?([^[{]*)((\[|\{).*)?", r"\2", str(name)).strip()
 
+    name = name.strip()
+    
     member = member_id = None
     if ctx.guild:
         guilds = [ctx.guild]
