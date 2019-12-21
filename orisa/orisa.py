@@ -766,11 +766,13 @@ class Orisa(Plugin):
                 name=_(":information_source: Protip"),
                 value=_("If you want to register a secondary/smurf BattleTag, you can open the link in a private/incognito tab (try right clicking the link) and enter the "
                 "account data for that account instead."),
+                inline=False,
             )
             embed.add_field(
                 # Translators: :video_game: is an emoji
                 name=_(":video_game: Not on PC?"),
-                value=_("If you have an XBL account, use `!ow register xbox`. For PSN, use `!ow register psn Your_Online-ID`")
+                value=_("If you have an XBL account, use `!ow register xbox`. For PSN, use `!ow register psn Your_Online-ID`"),
+                inline=False,
             )
         embed.set_footer(
             # Translators: The translation should mention that the privacy policy is currently only available in English
@@ -2872,7 +2874,7 @@ Pornography Historian""").split("\n")
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):
     def strip_tags(name):
-        return re.sub(r"^(.*?\|)?([^[{]*)((\[|\{).*)?", r"\2", str(name)).strip()
+        return re.sub(r"^(\w*\s?\|)?([^[{]*)((\[|\{).*)?", r"\2", str(name)).strip()
 
     name = name.strip()
     
@@ -2903,14 +2905,17 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
                     score *= 2
                 return score
 
+        all_names = {
+            id: strip_tags(mem.name)
+            for guild in guilds
+            for id, mem in guild.members.items()
+        }
+        logger.debug(f"all_names {list(all_names.values())}")
+
         candidates = process.extractBests(
-            name,
-            {
-                id: strip_tags(mem.name)
-                for guild in guilds
-                for id, mem in guild.members.items()
-            },
-            scorer=scorer,
+             name,
+             all_names,
+             scorer=scorer,
         )
         logger.debug(f"candidates are {candidates}")
         if candidates:
