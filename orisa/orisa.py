@@ -695,7 +695,7 @@ class Orisa(Plugin):
         embed.add_field(
             # Translators: :thinking: is an emoji code
             name=_(":thinking: Need help?"),
-            value=_("Join the [Support Discord]({SUPPORT_DISCORD})!").format(SUPPORT_DISCORD=SUPPORT_DISCORD)
+            value=_("Join the [Support Discord]({SUPPORT_DISCORD})!").format(SUPPORT_DISCORD=SUPPORT_DISCORD),
             inline=False,
         )
         embed.set_footer(text=_("This link will be valid for 30 minutes."))
@@ -1333,7 +1333,7 @@ Pornography Historian""").split("\n")
         embed.add_field(
             name="!ow dumpsr",
             # Translators: help for !ow dumpsr
-            value=_("Download your SR history as an Excel sheet")
+            value=_("Download your SR history as an Excel sheet"),
             inline=False,
         )
         embed.add_field(
@@ -1376,7 +1376,7 @@ Pornography Historian""").split("\n")
             name="!ow format *format*",
             # Translators: help !ow format. $placeholder can be translated, as can ${placeholder}
             value=_("Lets you specify how your SR or rank is displayed. It will always be shown in [square\u00a0brackets] appended to your name.\n"
-            "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`.")
+            "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`."),
             inline=False,
         )
         embed.add_field(
@@ -1390,7 +1390,7 @@ Pornography Historian""").split("\n")
             "For technical reasons the symbols for the respective roles are `{SYMBOL_TANK}`, `{SYMBOL_DPS}`, `{SYMBOL_SUPPORT}`\n\n"
             "`$tankrank`, `$damagerank`, `$supportrank`\nlike above, but the rank is shown instead.\n\n"
             "`$dps`, `$dpsrank`\nAlias for `$damage` and `$damagerank`, respectively."
-            ).format(SYMBOL_TANK=self.SYMBOL_TANK, SYMBOL_DPS=self.SYMBOL_DPS, SYMBOL_SUPPORT=self.SYMBOL_SUPPORT)
+            ).format(SYMBOL_TANK=self.SYMBOL_TANK, SYMBOL_DPS=self.SYMBOL_DPS, SYMBOL_SUPPORT=self.SYMBOL_SUPPORT),
             inline=False,
         )
         embed.add_field(
@@ -1424,7 +1424,7 @@ Pornography Historian""").split("\n")
             "automatically updated to show your SR or rank (see the *format* command for more info). "
             "`!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. "
             "If you register an XBL account, you have to link it to your Discord beforehand. "
-            "For PSN accounts, you have to give your Online ID as part of the command, like `!ow register psn Your_Online-ID`.")
+            "For PSN accounts, you have to give your Online ID as part of the command, like `!ow register psn Your_Online-ID`."),
             inline=False,
         )
         embed.add_field(name="!ow privacy", value=_("Show Orisa's Privacy Policy"))
@@ -1468,7 +1468,7 @@ Pornography Historian""").split("\n")
         embed.add_field(
             name="!ow usersrgraph *username* [from_date]",
             value=_("*This command can only be used by users with the Orisa Admin role!*\n"
-            "Like srgraph, but shows the graph for the given user.")
+            "Like srgraph, but shows the graph for the given user."),
             inline=False,
         )
         embed.add_field(
@@ -2757,7 +2757,7 @@ Pornography Historian""").split("\n")
                     name=_(":information_source: Pro Tips"),
                     value=_("On some servers, I will only update your nick if you join a OW voice channel. If you want your nick to always show your SR, "
                     "use the `!ow alwaysshowsr` command. If you want me to show your rank instead of your SR, use `!ow format $rank`.\n"
-                    "If you have more than one account, simply issue `!ow register` again.\n")
+                    "If you have more than one account, simply issue `!ow register` again.\n"),
                     inline=False,
                 )
                 if extra_text:
@@ -2866,7 +2866,7 @@ Pornography Historian""").split("\n")
                     name=_(":warning: Nickname too long!"),
                     value=_(
                         "Adding your SR to your nickname would result in '{nickname}' and with {len} characters, be longer than Discord's maximum of 32. "
-                        "Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.").format(nickname=e.nickname, len=len(e.nickname))
+                        "Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.").format(nickname=e.nickname, len=len(e.nickname)),
                         inline=False,
                 )
             except HierarchyError as e:
@@ -2898,7 +2898,7 @@ Pornography Historian""").split("\n")
 
             embed.add_field(
                 name=_(":heart: Say thanks by buying a coffee"),
-                value=_("Want to say thanks to the guy who wrote and maintains me? Why not [buy him a coffee?]({DONATE_LINK})").format(DONATE_LINK=DONATE_LINK)
+                value=_("Want to say thanks to the guy who wrote and maintains me? Why not [buy him a coffee?]({DONATE_LINK})").format(DONATE_LINK=DONATE_LINK),
                 inline=False,
             )
 
