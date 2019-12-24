@@ -619,6 +619,7 @@ class Orisa(Plugin):
         )
         embed.add_field(
             name=_("Invite me to your own Discord"),
+            inline=False,
             value=( _(
                 "To invite me to your server, simply [click here]({LINK}), I will post a message with more "
                 "information in a channel after I have joined your server"
@@ -627,6 +628,7 @@ class Orisa(Plugin):
         )
         embed.add_field(
             name=_("Join the official Orisa Discord"),
+            inline=False,
             value=(
                 _("If you use me in your Discord server, or generally have suggestions, [join the official Orisa Discord]({SUPPORT_DISCORD}). Updates and new features "
                 "will be discussed and announced there.").format(SUPPORT_DISCORD=SUPPORT_DISCORD)
@@ -634,6 +636,7 @@ class Orisa(Plugin):
         )
         embed.add_field(
             name=_("Show your love :heart:"),
+            inline=False,
             value=(
                 _("If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK}).").format(DONATE_LINK=DONATE_LINK)
             )
@@ -693,6 +696,7 @@ class Orisa(Plugin):
             # Translators: :thinking: is an emoji code
             name=_(":thinking: Need help?"),
             value=_("Join the [Support Discord]({SUPPORT_DISCORD})!").format(SUPPORT_DISCORD=SUPPORT_DISCORD)
+            inline=False,
         )
         embed.set_footer(text=_("This link will be valid for 30 minutes."))
         try:
@@ -1305,10 +1309,12 @@ Pornography Historian""").split("\n")
                 '`!ow oirsa` and `!ow ori` will probably also show the BattleTag of "Orisa"'
                 )
             ),
+            inline=False,
         )
         embed.add_field(
             name="!ow about",
             value=_("Shows information about Orisa, and how you can add her to your own Discord server, or help supporting her."),
+            inline=False,
         )
         embed.add_field(
             name="!ow alwaysshowsr [on/off]",
@@ -1316,16 +1322,19 @@ Pornography Historian""").split("\n")
             "set this to on.\n"
             "*Example:*\n"
             "`!ow alwaysshowsr on`"),
+            inline=False,
         )
         embed.add_field(
             name="!ow config",
             # Translators: don't translate "Orisa Admin"
             value=_('This command can only be used by members with the "Orisa Admin" role and allows them to configure Orisa for the specific Discord server.'),
+            inline=False,
         )
         embed.add_field(
             name="!ow dumpsr",
             # Translators: help for !ow dumpsr
             value=_("Download your SR history as an Excel sheet")
+            inline=False,
         )
         embed.add_field(
             name="!ow findplayers [max diff] *or* !ow findplayers min max",
@@ -1340,10 +1349,12 @@ Pornography Historian""").split("\n")
             "`!ow findplayers`: finds all players that you could start a competitive queue with\n"
             "`!ow findplayers 123`: finds all players that are within 123 SR of your SR\n"
             "`!ow findplayers 1500 2300`: finds all players between 1500 and 2300 SR\n",
+            inline=False,
         )
         embed.add_field(
             name="!ow findallplayers [max diff] *or* !ow findplayers min max",
             value=_("Same as `!ow findplayers`, but also includes offline players."),
+            inline=False,
         )
         embed.add_field(
             name="!ow forceupdate",
@@ -1351,12 +1362,14 @@ Pornography Historian""").split("\n")
             value=_("Immediately checks your account data and updates your nick accordingly.\n"
             "*Checks and updates are done automatically, use this command only if "
             "you want your nick to be up to date immediately!*"),
+            inline=False,
         )
         embed.add_field(
             name="!ow forgetme",
             # Translators: help !ow forgetme
             value=_("All your BattleTags will be removed from the database and your nick "
             "will not be updated anymore. You can re-register at any time."),
+            inline=False,
         )
 
         embed.add_field(
@@ -1364,6 +1377,7 @@ Pornography Historian""").split("\n")
             # Translators: help !ow format. $placeholder can be translated, as can ${placeholder}
             value=_("Lets you specify how your SR or rank is displayed. It will always be shown in [square\u00a0brackets] appended to your name.\n"
             "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`.")
+            inline=False,
         )
         embed.add_field(
             name=_("\N{BLACK STAR} *ow format placeholders*"),
@@ -1377,6 +1391,7 @@ Pornography Historian""").split("\n")
             "`$tankrank`, `$damagerank`, `$supportrank`\nlike above, but the rank is shown instead.\n\n"
             "`$dps`, `$dpsrank`\nAlias for `$damage` and `$damagerank`, respectively."
             ).format(SYMBOL_TANK=self.SYMBOL_TANK, SYMBOL_DPS=self.SYMBOL_DPS, SYMBOL_SUPPORT=self.SYMBOL_SUPPORT)
+            inline=False,
         )
         embed.add_field(
             name=_("\N{BLACK STAR} *ow format examples*"),
@@ -1385,6 +1400,7 @@ Pornography Historian""").split("\n")
             "`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
             "`!ow format $damage $support` in `[1234{SYMBOL_DPS} 2345{SYMBOL_SUPPORT}]`.\n"
             "*By default, the format is `$sr`*").format(SYMBOL_DPS=self.SYMBOL_DPS, SYMBOL_SUPPORT=self.SYMBOL_SUPPORT),
+            inline=False,
         )
 
         embeds = [embed]
@@ -1399,6 +1415,7 @@ Pornography Historian""").split("\n")
                 "*Example:*\n"
                 '`!ow get register` will search for the nick "register".')
             ),
+            inline=False,
         )
         embed.add_field(
             name="!ow register [pc/xbox/psn]",
@@ -1408,6 +1425,7 @@ Pornography Historian""").split("\n")
             "`!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. "
             "If you register an XBL account, you have to link it to your Discord beforehand. "
             "For PSN accounts, you have to give your Online ID as part of the command, like `!ow register psn Your_Online-ID`.")
+            inline=False,
         )
         embed.add_field(name="!ow privacy", value=_("Show Orisa's Privacy Policy"))
         embed.add_field(
@@ -1417,6 +1435,7 @@ Pornography Historian""").split("\n")
             "The given BattleTag must already be registered as one of your BattleTags.\n"
             "*Example:*\n"
             "`!ow setprimary jjonak`"),
+            inline=False,
         )
         embed.add_field(
             name="!ow setprimary *index*",
@@ -1424,6 +1443,7 @@ Pornography Historian""").split("\n")
             "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen).\n"
             "*Example:*\n"
             "`!ow setprimary 1`"),
+            inline=False,
         )
         embed.add_field(
             name="!ow setroles *roles*",
@@ -1436,17 +1456,20 @@ Pornography Historian""").split("\n")
             "`!ow setroles d`: you only play DPS.\n"
             "`!ow setroles so`: you play Support and Off Tanks.\n"
             "`!ow setroles dmos`: you are a true Flex and play everything."),
+            inline=False,
         )
         embed.add_field(
             name="!ow srgraph [from_date]",
             value=_("*This command is in beta and can change at any time; it might also have bugs, report them please*\n"
             "Shows a graph of your SR. If from_date (as DD.MM.YY or YYYY-MM-DD) is given, the graph starts at that date, otherwise it starts "
             "as early as Orisa has data."),
+            inline=False,
         )
         embed.add_field(
             name="!ow usersrgraph *username* [from_date]",
             value=_("*This command can only be used by users with the Orisa Admin role!*\n"
             "Like srgraph, but shows the graph for the given user.")
+            inline=False,
         )
         embed.add_field(
             name="!ow unregister *battletag*",
@@ -1455,6 +1478,7 @@ Pornography Historian""").split("\n")
             "You cannot remove your primary BattleTag, you have to choose a different primary BattleTag first.\n"
             "*Example:*\n"
             "`!ow unregister foo`"),
+            inline=False,
         )
         embed.add_field(
             name="!ow unregister *index*",
@@ -1463,6 +1487,7 @@ Pornography Historian""").split("\n")
             "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
             "*Example:*\n"
             "`!ow unregister 1`"),
+            inline=False,
         )
 
         return embeds
@@ -2733,11 +2758,13 @@ Pornography Historian""").split("\n")
                     value=_("On some servers, I will only update your nick if you join a OW voice channel. If you want your nick to always show your SR, "
                     "use the `!ow alwaysshowsr` command. If you want me to show your rank instead of your SR, use `!ow format $rank`.\n"
                     "If you have more than one account, simply issue `!ow register` again.\n")
+                    inline=False,
                 )
                 if extra_text:
                     embed.add_field(
                         name=_(":envelope: A message from the *{guild_name}* staff").format(guild_name=guild.name),
                         value=extra_text,
+                    inline=False,
                     )
             else:
                 for new_handle in handles:
@@ -2770,6 +2797,7 @@ Pornography Historian""").split("\n")
                             embed.add_field(
                                 name=_(":information_source: Tip"),
                                 value=_("Open the URL in a private/incognito tab next time, so you can enter the credentials of the account you want."),
+                                inline=False,
                             )
                         await user_obj.send(content=None, embed=embed)
                         return
@@ -2839,12 +2867,14 @@ Pornography Historian""").split("\n")
                     value=_(
                         "Adding your SR to your nickname would result in '{nickname}' and with {len} characters, be longer than Discord's maximum of 32. "
                         "Please shorten your nick to be no longer than 28 characters. I will regularly try to update it.").format(nickname=e.nickname, len=len(e.nickname))
+                        inline=False,
                 )
             except HierarchyError as e:
                 embed.add_field(
                     name=_(":warning: Cannot update nickname"),
                     value=_('I do not have enough permissions to update your nickname. The owner needs to move the "Orisa" role higher '
                     "so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry!"),
+                    inline=False,
                 )
             except Exception as e:
                 logger.warn(f"unable to update nick for user {user}", exc_info=True)
@@ -2854,6 +2884,7 @@ Pornography Historian""").split("\n")
                         _("Right now I couldn't update your nickname, I will try that again later. "
                           "People will still be able to ask for your {type}, though.").format(type=_(user.handles[0].desc))
                     ),
+                    inline=False,
                 )
             finally:
                 with suppress(Exception):
@@ -2862,11 +2893,13 @@ Pornography Historian""").split("\n")
             embed.add_field(
                 name=_(":thumbsup: Vote for me on Discord Bot List"),
                 value=_("If you find me useful, consider voting for me [by clicking here]({VOTE_LINK})!").format(VOTE_LINK=VOTE_LINK),
+                inline=False,
             )
 
             embed.add_field(
                 name=_(":heart: Say thanks by buying a coffee"),
                 value=_("Want to say thanks to the guy who wrote and maintains me? Why not [buy him a coffee?]({DONATE_LINK})").format(DONATE_LINK=DONATE_LINK)
+                inline=False,
             )
 
             await user_channel.messages.send(content=None, embed=embed)
