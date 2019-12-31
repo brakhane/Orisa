@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2019-12-31 12:00+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
+"PO-Revision-Date: 2020-01-01 19:21+0000\n"
+"Last-Translator: Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/orisa/bot/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -257,7 +257,7 @@ msgstr "Serwer Wsparcia Technicznego Orisy"
 
 #: orisa/orisa.py:563
 msgid "Help Translate Orisa"
-msgstr ""
+msgstr "Pomóż przetłumaczyć Orisę"
 
 #: orisa/orisa.py:564
 #, python-brace-format
