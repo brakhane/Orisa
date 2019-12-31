@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2019-11-11 22:04+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2019-12-31 12:00+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
 "bot/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 3.10\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:174 orisa/orisa.py:1546
@@ -214,15 +214,15 @@ msgstr "Lenker"
 
 #: orisa/orisa.py:560
 msgid "Overwatch profile"
-msgstr ""
+msgstr "Overwatch-profil"
 
 #: orisa/orisa.py:561
 msgid "Upvote Orisa"
-msgstr ""
+msgstr "Stem opp Orisa"
 
 #: orisa/orisa.py:562
 msgid "Orisa Support Server"
-msgstr ""
+msgstr "Orisa-støttetjener"
 
 #: orisa/orisa.py:563
 msgid "Help Translate Orisa"
@@ -231,7 +231,7 @@ msgstr ""
 #: orisa/orisa.py:564
 #, python-brace-format
 msgid "Donate `{HEART}`"
-msgstr ""
+msgstr "Doner `{HEART}`"
 
 #: orisa/orisa.py:573
 #, fuzzy, python-brace-format
