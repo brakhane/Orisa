@@ -132,6 +132,7 @@ OAUTH_SERIALIZER = URLSafeTimedSerializer(SIGNING_SECRET)
 SUPPORT_DISCORD="https://discord.gg/ZKzBEDF"
 VOTE_LINK="https://discordbots.org/bot/445905377712930817/vote"
 DONATE_LINK="https://ko-fi.com/R5R2PC36"
+TRANSLATE_LINK="https://hosted.weblate.org/engage/orisa/"
 
 RANKS = (
     # Translators: 2 letter code for "Bronze" rank
@@ -554,12 +555,14 @@ class Orisa(Plugin):
                     name=_("Links"),
                     inline=False,
                     value=(
-                        _(
-                            '[Overwatch profile]({PROFILE_LINK}) | [Upvote Orisa]({VOTE_LINK}) | '
-                            '[Orisa Support Server]({SUPPORT_DISCORD}) | [Donate `{HEART}`]({DONATE_LINK})'
-                        ).format(
-                            PROFILE_LINK=f'https://playoverwatch.com/en-us/career/{primary.blizzard_url_type}/{urllib.parse.quote(primary.handle.replace("#", "-"))}',
-                            VOTE_LINK=VOTE_LINK, SUPPORT_DISCORD=SUPPORT_DISCORD, DONATE_LINK=DONATE_LINK, HEART="❤️"
+                        ' | '.join(
+                            f'[{text}]({link})' for text, link in [
+                                (_('Overwatch profile'), f'https://playoverwatch.com/en-us/career/{primary.blizzard_url_type}/{urllib.parse.quote(primary.handle.replace("#", "-"))}'),
+                                (_('Upvote Orisa'), VOTE_LINK),
+                                (_('Orisa Support Server'), SUPPORT_DISCORD),
+                                (_('Help Translate Orisa'), TRANSLATE_LINK),
+                                (_('Donate `{HEART}`').format(HEART="❤️"), DONATE_LINK),
+                            ]
                         )
                     )
                 )
