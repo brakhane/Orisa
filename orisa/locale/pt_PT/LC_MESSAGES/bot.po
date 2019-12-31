@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2019-10-31 03:03+0000\n"
-"Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
+"PO-Revision-Date: 2019-12-31 12:00+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.10-dev\n"
+"X-Generator: Weblate 3.10\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:174 orisa/orisa.py:1546
@@ -146,7 +146,7 @@ msgid ""
 "configure me via DM.\n"
 "*I will ignore all commands except `!ow help` and `!ow config` until I'm "
 "configured for this Discord!*"
-msgstr ""
+msgstr "`"
 
 #. Translators: :thinking: must remain as is, it's an emoji
 #. Translators: :thinking: is an emoji code
@@ -204,15 +204,15 @@ msgstr "Hiperligações"
 
 #: orisa/orisa.py:560
 msgid "Overwatch profile"
-msgstr ""
+msgstr "Perfil do Overwatch"
 
 #: orisa/orisa.py:561
 msgid "Upvote Orisa"
-msgstr ""
+msgstr "Faz Upvote na Orisa"
 
 #: orisa/orisa.py:562
 msgid "Orisa Support Server"
-msgstr ""
+msgstr "Servidor de Suporte da Orisa"
 
 #: orisa/orisa.py:563
 msgid "Help Translate Orisa"
@@ -221,7 +221,7 @@ msgstr ""
 #: orisa/orisa.py:564
 #, python-brace-format
 msgid "Donate `{HEART}`"
-msgstr ""
+msgstr "Doa-nos `{HEART}`"
 
 #: orisa/orisa.py:573
 #, python-brace-format
