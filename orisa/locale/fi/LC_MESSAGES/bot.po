@@ -7,17 +7,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2019-09-01 12:48+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@googlemail.com>\n"
-"Language-Team: Finnish <https://weblate.orisa.rocks/projects/orisa/bot/fi/>\n"
+"PO-Revision-Date: 2019-12-31 12:00+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/orisa/bot/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.8\n"
+"X-Generator: Weblate 3.10\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:174 orisa/orisa.py:1546
@@ -199,15 +199,15 @@ msgstr "Linkit"
 
 #: orisa/orisa.py:560
 msgid "Overwatch profile"
-msgstr ""
+msgstr "Overwatch profiili"
 
 #: orisa/orisa.py:561
 msgid "Upvote Orisa"
-msgstr ""
+msgstr "Äänestä Orisaa"
 
 #: orisa/orisa.py:562
 msgid "Orisa Support Server"
-msgstr ""
+msgstr "Orisa tuki palvelin"
 
 #: orisa/orisa.py:563
 msgid "Help Translate Orisa"
@@ -216,7 +216,7 @@ msgstr ""
 #: orisa/orisa.py:564
 #, python-brace-format
 msgid "Donate `{HEART}`"
-msgstr ""
+msgstr "Lahjoita `{HEART}`"
 
 #: orisa/orisa.py:573
 #, python-brace-format
