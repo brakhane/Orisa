@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2019-10-21 13:29+0000\n"
+"PO-Revision-Date: 2019-12-31 12:00+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9.1-dev\n"
+"X-Generator: Weblate 3.10\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:174 orisa/orisa.py:1546
@@ -212,24 +212,24 @@ msgstr "Links"
 
 #: orisa/orisa.py:560
 msgid "Overwatch profile"
-msgstr ""
+msgstr "Overwatch-Profil"
 
 #: orisa/orisa.py:561
 msgid "Upvote Orisa"
-msgstr ""
+msgstr "Orisa liken"
 
 #: orisa/orisa.py:562
 msgid "Orisa Support Server"
-msgstr ""
+msgstr "Orisa Supportserver"
 
 #: orisa/orisa.py:563
 msgid "Help Translate Orisa"
-msgstr ""
+msgstr "Hilf mit, Orisa zu übersetzen"
 
 #: orisa/orisa.py:564
 #, python-brace-format
 msgid "Donate `{HEART}`"
-msgstr ""
+msgstr "Spenden `{HEART}`"
 
 #: orisa/orisa.py:573
 #, python-brace-format
