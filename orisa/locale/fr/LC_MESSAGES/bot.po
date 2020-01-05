@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2019-12-31 12:00+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
+"PO-Revision-Date: 2020-01-06 13:21+0000\n"
+"Last-Translator: Nathan <bonnemainsnathan@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -44,22 +44,22 @@ msgstr "Soutien"
 #: orisa/models.py:205
 msgid "BattleTag"
 msgid_plural "BattleTags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "BattleTag"
+msgstr[1] "BattleTags"
 
 #. Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
 #: orisa/models.py:238
 msgid "Gamertag"
 msgid_plural "Gamertags"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Gamertag"
+msgstr[1] "Gamertags"
 
 #. Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
 #: orisa/models.py:270
 msgid "Online ID"
 msgid_plural "Online IDs"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Online ID"
+msgstr[1] "Online IDs"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:139
@@ -225,7 +225,7 @@ msgstr "Serveur de Support Orisa"
 
 #: orisa/orisa.py:563
 msgid "Help Translate Orisa"
-msgstr ""
+msgstr "Aider à traduire Orisa"
 
 #: orisa/orisa.py:564
 #, python-brace-format
@@ -248,6 +248,9 @@ msgid ""
 "Orisa can neither confirm nor refute that the PSN Online ID actually belongs "
 "to this account."
 msgstr ""
+"\n"
+"Orisa ne peut ni confirmer ni infirmer que cet Online ID de PSN appartienne "
+"à ce compte."
 
 #: orisa/orisa.py:584
 msgid ""
@@ -255,6 +258,9 @@ msgid ""
 "Orisa can neither confirm nor refute that the PSN Online IDs actually belong "
 "to this account."
 msgstr ""
+"\n"
+"Orisa ne peut ni confirmer ni infirmer que ces Online IDs de PSN "
+"appartiennent à ce compte."
 
 #: orisa/orisa.py:587
 msgid ""
