@@ -1612,7 +1612,7 @@ Pornography Historian""").split("\n")
 
         sns.lineplot(data=data, ax=ax, drawstyle="steps-post", dashes=True)
 
-        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%d.%m.%y"))
+        ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%Y-%m-%d"))
         fig.autofmt_xdate()
 
         plt.xlabel("Date")
