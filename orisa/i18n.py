@@ -35,7 +35,9 @@ CurrentLocale: ContextVar[str] = ContextVar("CurrentLocale", default=DEFAULT_LOC
 _REGIONAL_A_ORD = ord("\N{REGIONAL INDICATOR SYMBOL LETTER A}")
 
 FLAG_TO_LOCALE = {
-    ''.join(chr(ord(ch) - ord('A') + _REGIONAL_A_ORD) for ch in locale[-2:].upper()): locale
+    "".join(
+        chr(ord(ch) - ord("A") + _REGIONAL_A_ORD) for ch in locale[-2:].upper()
+    ): locale
     for locale in LOCALES
 }
 FLAG_TO_LOCALE["🇬🇧"] = "en"
@@ -44,6 +46,7 @@ TRANSLATIONS = {
     locale: gettext.translation("bot", localedir="orisa/locale", languages=[locale])
     for locale in LOCALES
 }
+
 
 class MultiString(str):
     """fluent inspired string that can take multiple conditions.
@@ -60,11 +63,13 @@ class MultiString(str):
     This will make "text2\ntext2" the default (because of the *), but it can be used like
     a dictionary, so in a format string, one could use "foo[key1]" to get "text1\ntext1\ntext1"
     """
-    
+
     def __new__(cls, val):
         if val.startswith("<<"):
             value_map = {}
-            for key, text in re.findall(r"^<<([*\w]+)>> (.*?)$", val, re.MULTILINE | re.DOTALL):
+            for key, text in re.findall(
+                r"^<<([*\w]+)>> (.*?)$", val, re.MULTILINE | re.DOTALL
+            ):
                 if key.startswith("*"):
                     default = text
                     key = key[1:]
@@ -112,16 +117,20 @@ class I18NCommandsManager(CommandsManager):
         CurrentLocale.set(locale or DEFAULT_LOCALE)
         return await super().handle_commands(ctx, message)
 
+
 def N_(x):
     "No-op to mark strings that need to be translated, but not at this exact spot"
     return x
 
+
 def NP_(sing, plural):
     return sing
+
 
 def _(msg):
     locale = CurrentLocale.get()
     return get_translation(locale, msg)
+
 
 def get_translation(locale, msg):
     if locale and locale != DEFAULT_LOCALE:
@@ -129,15 +138,18 @@ def get_translation(locale, msg):
     else:
         return MultiString(msg)
 
+
 def ngettext(singular, plural, n):
     locale = CurrentLocale.get()
     if locale and locale != DEFAULT_LOCALE:
         return MultiString(TRANSLATIONS[locale].ngettext(singular, plural, n))
     else:
-        return MultiString(singular if n==1 else plural)
+        return MultiString(singular if n == 1 else plural)
+
 
 def locale_by_flag(flag):
     return FLAG_TO_LOCALE.get(flag, None)
+
 
 def get_all_locales():
     return LOCALES + [DEFAULT_LOCALE]

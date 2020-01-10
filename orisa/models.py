@@ -61,9 +61,8 @@ class Role(Flag):
             Role.OFF_TANK: _("Off Tank"),
             Role.SUPPORT: _("Support"),
         }
-    
-        return ", ".join(names[r] for r in Role if r and r in self)
 
+        return ", ".join(names[r] for r in Role if r and r in self)
 
 
 class RoleType(types.TypeDecorator):
@@ -89,6 +88,7 @@ class HighscoreCron(Base):
     id = Column(BigInteger, primary_key=True, index=True)
     last_run = Column(DateTime)
     next_run = Column(DateTime, index=True)
+
 
 class User(Base):
     __tablename__ = "users"
@@ -147,10 +147,7 @@ class Handle(Base):
 
     error_count = Column(Integer, nullable=False, default=0)
 
-
-    __mapper_args__ = {
-        'polymorphic_on': type,
-    }
+    __mapper_args__ = {"polymorphic_on": type}
 
     @property
     def sr(self):
@@ -179,13 +176,17 @@ class Handle(Base):
             sr_obj.timestamp = timestamp
             sr_obj.values = new_srs
         else:
-            sr_obj = SR(timestamp=timestamp, tank=new_srs.tank, damage=new_srs.damage, support=new_srs.support)
+            sr_obj = SR(
+                timestamp=timestamp,
+                tank=new_srs.tank,
+                damage=new_srs.damage,
+                support=new_srs.support,
+            )
             self.sr_history.append(
                 sr_obj
             )  # sqlalchemy dynamic wrapper does not support prepend
 
         self.current_sr = sr_obj
-
 
     def __repr__(self):
         return f"<Handle(id={self.id})>"
@@ -197,9 +198,7 @@ class BattleTag(Handle):
     )  # nullable because of single table inheritance
     battle_tag = Column(String)
 
-    __mapper_args__ = {
-        'polymorphic_identity': 'battletag'
-    }
+    __mapper_args__ = {"polymorphic_identity": "battletag"}
 
     # Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
     desc = NP_("BattleTag", "BattleTags")
@@ -218,21 +217,21 @@ class BattleTag(Handle):
         return self.blizzard_id
 
     def __str__(self):
-        return f"BT/{self.battle_tag} ({self.sr} SR)" if self.sr else f"{self.battle_tag} (Unranked)"
+        return (
+            f"BT/{self.battle_tag} ({self.sr} SR)"
+            if self.sr
+            else f"{self.battle_tag} (Unranked)"
+        )
 
     def __repr__(self):
         return f"<BattleTag(id={self.id} tag={self.battle_tag})>"
 
 
 class Gamertag(Handle):
-    xbl_id = Column(
-        String, index=True
-    )
+    xbl_id = Column(String, index=True)
     gamertag = Column(String)
 
-    __mapper_args__ = {
-        'polymorphic_identity': 'gamertag'
-    }
+    __mapper_args__ = {"polymorphic_identity": "gamertag"}
 
     # Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
     desc = NP_("Gamertag", "Gamertags")
@@ -250,9 +249,12 @@ class Gamertag(Handle):
     def external_id(self):
         return self.xbl_id
 
-
     def __str__(self):
-        return f"GT/{self.gamertag} ({self.sr} SR)" if self.sr else f"{self.gamertag} (Unranked)"
+        return (
+            f"GT/{self.gamertag} ({self.sr} SR)"
+            if self.sr
+            else f"{self.gamertag} (Unranked)"
+        )
 
     def __repr__(self):
         return f"<Gamertag(id={self.id} gamertag={self.gamertag})>"
@@ -260,11 +262,10 @@ class Gamertag(Handle):
 
 class OnlineID(Handle):
     """PSN handle"""
+
     online_id = Column(String)
 
-    __mapper_args__ = {
-        "polymorphic_identity": "online_id"
-    }
+    __mapper_args__ = {"polymorphic_identity": "online_id"}
 
     # Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
     desc = NP_("Online ID", "Online IDs")
@@ -283,7 +284,11 @@ class OnlineID(Handle):
         return self.handle
 
     def __str__(self):
-        return f"PSN/{self.online_id} ({self.sr} SR)" if self.sr else f"{self.online_id} (Unranked)"
+        return (
+            f"PSN/{self.online_id} ({self.sr} SR)"
+            if self.sr
+            else f"{self.online_id} (Unranked)"
+        )
 
     def __repr__(self):
         return f"<OnlineID(id={self.id} online_id={self.online_id})>"
@@ -293,13 +298,13 @@ class SR(Base):
     __tablename__ = "srs"
 
     id = Column(Integer, primary_key=True, index=True)
-    handle_id = Column(
-        Integer, ForeignKey("handle.id"), nullable=False, index=True
-    )
+    handle_id = Column(Integer, ForeignKey("handle.id"), nullable=False, index=True)
 
     handle = relationship(
-        "Handle", back_populates="sr_history", foreign_keys=[handle_id],
-        single_parent=True
+        "Handle",
+        back_populates="sr_history",
+        foreign_keys=[handle_id],
+        single_parent=True,
     )
     timestamp = Column(DateTime, nullable=False)
     tank = Column(SmallInteger)
@@ -367,7 +372,9 @@ class Database:
         return await run_sync(session.query(Handle).filter_by(id=id).one_or_none)
 
     async def user_by_discord_id(self, session, discord_id):
-        return await run_sync(session.query(User).filter_by(discord_id=discord_id).one_or_none)
+        return await run_sync(
+            session.query(User).filter_by(discord_id=discord_id).one_or_none
+        )
 
     async def get_srs(self, session, discord_ids):
         return await run_sync(
@@ -403,20 +410,20 @@ class Database:
             session.query(Handle)
             .outerjoin(Handle.current_sr)
             .filter(
-                coalesce(SR.timestamp, datetime.min) <= datetime.utcnow() - self._min_delay
+                coalesce(SR.timestamp, datetime.min)
+                <= datetime.utcnow() - self._min_delay
             )
             .all
         )
         return [
             result.id
             for result in results
-            if (result.last_update or datetime.min) <= datetime.utcnow() - self._sync_delay(result.error_count)
+            if (result.last_update or datetime.min)
+            <= datetime.utcnow() - self._sync_delay(result.error_count)
         ]
 
     async def get_welcome_message(self, session, message_id):
         msg = await run_sync(
-            session.query(WelcomeMessage)
-            .filter_by(id=message_id)
-            .one_or_none
+            session.query(WelcomeMessage).filter_by(id=message_id).one_or_none
         )
         return msg

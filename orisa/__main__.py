@@ -61,9 +61,12 @@ client = OrisaClient(BOT_TOKEN)
 
 database = Database()
 
-manager = I18NCommandsManager.with_client(client, command_prefix="!" if not DEVELOPMENT else ",")
+manager = I18NCommandsManager.with_client(
+    client, command_prefix="!" if not DEVELOPMENT else ","
+)
 
 already_loaded = False
+
 
 @client.event("ready")
 async def ready(ctx):
@@ -72,7 +75,7 @@ async def ready(ctx):
     if already_loaded:
         logger.info("Ignoring second call to ready")
     else:
-        already_loaded  = True
+        already_loaded = True
         await manager.load_plugin(Orisa, database, raven_client)
 
     logger.debug(f"I'm in {len(ctx.bot.guilds)} guilds")

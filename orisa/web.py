@@ -124,7 +124,7 @@ def validate_config(guild, guild_config):
     errors = {}
 
     def missing_perms(permissions, required):
-        
+
         perm_names = {
             # Translators: Discord permission name
             "send_messages": _("Send Messages"),
@@ -138,15 +138,20 @@ def validate_config(guild, guild_config):
             "manage_nicknames": _("Manage Nicknames"),
             # Translators: Discord permission name
             "manage_channels": _("Manage Channels"),
-
         }
 
         missing = [
-            perm_names.get(perm, perm) for perm in required if not getattr(permissions, perm)
+            perm_names.get(perm, perm)
+            for perm in required
+            if not getattr(permissions, perm)
         ]
 
         if missing:
-            return ngettext("Orisa is missing the following permission: {missing}", "Orisa is missing the following permissions: {missing}", len(missing)).format(missing=", ".join(missing))
+            return ngettext(
+                "Orisa is missing the following permission: {missing}",
+                "Orisa is missing the following permissions: {missing}",
+                len(missing),
+            ).format(missing=", ".join(missing))
         else:
             return None
 
@@ -164,12 +169,7 @@ def validate_config(guild, guild_config):
     else:
         missing = missing_perms(
             chan.effective_permissions(guild.me),
-            [
-                "send_messages",
-                "read_messages",
-                "embed_links",
-                "attach_files",
-            ],
+            ["send_messages", "read_messages", "embed_links", "attach_files"],
         )
         if missing:
             errors["listen_channel_id"] = missing
@@ -203,7 +203,9 @@ def validate_config(guild, guild_config):
 
         if vc.channel_limit is None or not (0 <= vc.channel_limit <= 30):
             # Translators: config screen validation error
-            vc_errors["channel_limit"] = _("Limit must be between {min} and {max}").format(min=0, max=30)
+            vc_errors["channel_limit"] = _(
+                "Limit must be between {min} and {max}"
+            ).format(min=0, max=30)
 
         pe_list = []
         pe_list_has_errors = False
@@ -214,18 +216,22 @@ def validate_config(guild, guild_config):
                 # Translators: config screen validation error
                 pref_errors["name"] = _("A name is required")
             else:
-                if '#' in prefix.name:
+                if "#" in prefix.name:
                     # Translators: config screen validation error
                     pref_errors["name"] = _("The channel name must not contain a #")
                 elif prefix.name.strip() in names:
                     # Translators: config screen validation error
-                    pref_errors["name"] = _("This name is already used in this category")
+                    pref_errors["name"] = _(
+                        "This name is already used in this category"
+                    )
 
                 names.add(prefix.name.strip())
 
             if prefix.limit is None or not (0 <= prefix.limit <= 99):
                 # Translators: config screen validation error
-                pref_errors["limit"] = _("Limit must be between {min} and {max}").format(min=0, max=99)
+                pref_errors["limit"] = _(
+                    "Limit must be between {min} and {max}"
+                ).format(min=0, max=99)
 
             pe_list.append(pref_errors)
 
@@ -276,7 +282,9 @@ async def save(guild_id):
 
     async with orisa.database.session() as session:
 
-        gc = await run_sync(session.query(GuildConfigJson).filter_by(id=guild_id).one_or_none)
+        gc = await run_sync(
+            session.query(GuildConfigJson).filter_by(id=guild_id).one_or_none
+        )
         if not gc:
             gc = GuildConfigJson(id=guild_id)
             session.add(gc)
@@ -285,7 +293,9 @@ async def save(guild_id):
         gc.config = new_config
         logger.info("New config for guild %d is %s", guild_id, new_config)
 
-        cron = await run_sync(session.query(HighscoreCron).filter_by(id=guild_id).one_or_none)
+        cron = await run_sync(
+            session.query(HighscoreCron).filter_by(id=guild_id).one_or_none
+        )
 
         if new_gi.post_highscores:
             if not cron:
@@ -338,19 +348,25 @@ async def handle_oauth():
             state = request.args["state"]
         except KeyError:
             return await render_message(
-                _("I got an incomplete answer from the server. This sometimes happens (for unknown reasons) when registering from a "
-                  "mobile phone. Try again with a PC or laptop. Sorry for the inconvenience"),
+                _(
+                    "I got an incomplete answer from the server. This sometimes happens (for unknown reasons) when registering from a "
+                    "mobile phone. Try again with a PC or laptop. Sorry for the inconvenience"
+                ),
                 is_error=True,
             )
         type, uid = serializer.loads(state, max_age=600)
     except SignatureExpired:
         return await render_message(
-            _('The link has expired. Please request a new link with {register}.').format(register=register_msg),
+            _(
+                "The link has expired. Please request a new link with {register}."
+            ).format(register=register_msg),
             is_error=True,
         )
     except BadSignature:
         return await render_message(
-            _('The data I got back is invalid. Please request a new URL with {register}.').format(register=register_msg),
+            _(
+                "The data I got back is invalid. Please request a new URL with {register}."
+            ).format(register=register_msg),
             is_error=True,
         )
 
@@ -367,7 +383,9 @@ async def handle_oauth():
         client_id = OAUTH_DISCORD_CLIENT_ID
         client_secret = OAUTH_DISCORD_CLIENT_SECRET
     else:
-        return await render_message(_("I got invalid data. Please try registering again."), is_error=True)
+        return await render_message(
+            _("I got invalid data. Please try registering again."), is_error=True
+        )
 
     client = WebApplicationClient(client_id)
     logger.debug(f"got OAuth auth URL {request.url}")
@@ -378,7 +396,9 @@ async def handle_oauth():
 
     if "error=access_denied" in request_url:
         return await render_message(
-            _("You didn't give me permission to access your BattleTag; registration cancelled."),
+            _(
+                "You didn't give me permission to access your BattleTag; registration cancelled."
+            ),
             is_error=True,
         )
 
@@ -393,11 +413,7 @@ async def handle_oauth():
 
         logger.debug(f"got data {(url, headers, body)}")
 
-        resp = await asks.post(
-            url,
-            headers=headers,
-            data=body,
-        )
+        resp = await asks.post(url, headers=headers, data=body)
 
         logger.debug("got response %s", resp.text)
 
@@ -418,7 +434,9 @@ async def handle_oauth():
             exc_info=True,
         )
         return await render_message(
-            _('I\'m sorry. Something went wrong on my side. Try to reissue {register}.').format(register=register_msg),
+            _(
+                "I'm sorry. Something went wrong on my side. Try to reissue {register}."
+            ).format(register=register_msg),
             is_error=True,
         )
     logger.debug("sending to channel %s", send_ch)

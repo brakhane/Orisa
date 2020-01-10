@@ -25,7 +25,6 @@ from dataclasses import dataclass, fields, is_dataclass, asdict
 from typing import List, Set, Optional, Sequence, Union, Dict
 
 
-
 @dataclass_json
 @dataclass
 class GuildConfig:
