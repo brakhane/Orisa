@@ -222,9 +222,7 @@ class Orisa(Plugin):
 
     SYMBOL_DPS = "\N{CROSSED SWORDS}"
     SYMBOL_TANK = "\N{SHIELD}"
-    SYMBOL_SUPPORT = (
-        "\N{VERY HEAVY GREEK CROSS}"
-    )
+    SYMBOL_SUPPORT = "\N{HEAVY GREEK CROSS}"
 
     # dirty hack needed for correct_channel condition
     _instance = None
