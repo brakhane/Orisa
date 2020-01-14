@@ -845,7 +845,7 @@ class Orisa(Plugin):
             await reply(
                 ctx,
                 _(
-                    'Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported yet.'
+                    'Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX, or `!ow register psn My-Online-Id_1234` for PlayStation.'
                 ).format(type=_(type)),
             )
             return
