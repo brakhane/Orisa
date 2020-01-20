@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2019-12-31 12:00+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
+"PO-Revision-Date: 2020-01-20 22:27+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
 "bot/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:174 orisa/orisa.py:1546
@@ -226,7 +226,7 @@ msgstr "Orisa-støttetjener"
 
 #: orisa/orisa.py:563
 msgid "Help Translate Orisa"
-msgstr ""
+msgstr "Bistå i oversettelsen av Orisa"
 
 #: orisa/orisa.py:564
 #, python-brace-format
@@ -723,7 +723,7 @@ msgstr "Ferdig. Rollene dine er nå {roles}"
 
 #: orisa/orisa.py:1106
 msgid "Sorry, findplayers doesn't work with role based SR yet. Try later."
-msgstr ""
+msgstr "Findplayers fungerer ikke med rollebasert SR enda. Prøv igjen senere."
 
 #: orisa/orisa.py:1124
 msgid "SR difference must be positive!"
@@ -732,8 +732,9 @@ msgstr "SR-forskjellen må være positiv."
 #. Translators: used when Orisa is asked to find players that are more than 5000 SR below or above them, use the equivalent Orisa voiceline
 #. in your language
 #: orisa/orisa.py:1131
+#, fuzzy
 msgid "That does not compute!"
-msgstr ""
+msgstr "Dette gir ikke mening."
 
 #. Translators: type is BattleTag or GamerTag
 #: orisa/orisa.py:1140
@@ -1422,6 +1423,8 @@ msgid ""
 "Right now I couldn't update your nickname, I will try that again later. "
 "People will still be able to ask for your {type}, though."
 msgstr ""
+"Akkurat nå kan jeg ikke oppdatere kallenavnet ditt, jeg vil forsøke igjen "
+"senere. Folk vil kunne spørre etter deg for din {type} dog."
 
 #: orisa/orisa.py:2897
 #, fuzzy
