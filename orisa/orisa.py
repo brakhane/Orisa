@@ -1410,7 +1410,7 @@ Pornography Historian"""
             ),
             inline=False,
         )
-        embed.add_field(★
+        embed.add_field(
             name=_("★ *ow format examples*"),
             value=_(
                 "`!ow format hello $sr` will result in `[hello 12-34-45]`.\n"
