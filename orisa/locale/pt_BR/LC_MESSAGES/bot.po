@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2020-01-20 22:27+0000\n"
+"PO-Revision-Date: 2020-01-21 11:19+0000\n"
 "Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_BR/>\n"
@@ -308,7 +308,7 @@ msgstr ""
 "Estou escrito e mantido por Dennis Brakhane (Joghurt# 2732 no Discord) e "
 "licenciado sob [GNU Affero General Public License 3.0]({AGPL_LINK}); o "
 "[desenvolvimento é feito no Github]({GH_LINK}); a tradução em português "
-"(Brasil) foi feita por Kodivli#0155"
+"(Brasil) foi feita por Jean Lucas (Kodivli#0155 no Discord)"
 
 #: orisa/orisa.py:624
 msgid "Invite me to your own Discord"
@@ -351,7 +351,7 @@ msgstr "Se você me acha útil, [ajude com uma xícara de café]({DONATE_LINK}).
 
 #: orisa/orisa.py:649
 msgid "I've sent you a DM."
-msgstr "Enviei a você uma mensagem direta."
+msgstr "Enviei uma mensagem direta para você."
 
 #: orisa/orisa.py:657
 msgid ""
@@ -392,7 +392,7 @@ msgstr "Este link será válido por 30 minutos."
 
 #: orisa/orisa.py:707 orisa/orisa.py:751
 msgid "I sent you a DM."
-msgstr "Enviei a você uma mensagem direta."
+msgstr "Enviei uma mensagem direta para você."
 
 #: orisa/orisa.py:710
 msgid ""
@@ -1020,7 +1020,7 @@ msgid ""
 "`$dps`, `$dpsrank`\n"
 "Alias for `$damage` and `$damagerank`, respectively."
 msgstr ""
-"* Os seguintes espaços reservados são definidos: *\n"
+"*Os seguintes espaços reservados são definidos:*\n"
 "`$sr`\n"
 "os dois primeiros dígitos do seu SR para todos os três papéis em ordem "
 "Tanque, Dano, Suporte; se você tiver contas secundárias, um asterisco (\\ *) "
