@@ -38,6 +38,7 @@ Orisa wouldn't be possible without the help of contributors. If you believe you 
 
 * Portuguese (Portugal) translation
   * Daniel Martins (aka "Raving Sombra")
+  * Manuela Silva
 
 * Spanish translation
   * Adrián Hernández González
