@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2020-01-21 13:01+0000\n"
+"PO-Revision-Date: 2020-01-21 14:03+0000\n"
 "Last-Translator: Jean Lucas <jeanlucastg@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_BR/>\n"
@@ -351,7 +351,7 @@ msgstr "Se você me acha útil, [ajude com uma xícara de café]({DONATE_LINK}).
 
 #: orisa/orisa.py:649
 msgid "I've sent you a DM."
-msgstr "Enviei uma mensagem direta para você."
+msgstr "Enviei-lhe uma mensagem direta."
 
 #: orisa/orisa.py:657
 msgid ""
@@ -392,7 +392,7 @@ msgstr "Este link será válido por 30 minutos."
 
 #: orisa/orisa.py:707 orisa/orisa.py:751
 msgid "I sent you a DM."
-msgstr "Enviei uma mensagem direta para você."
+msgstr "Enviei-lhe uma mensagem direta."
 
 #: orisa/orisa.py:710
 msgid ""
@@ -821,7 +821,7 @@ msgstr ""
 
 #: orisa/orisa.py:1235
 msgid "I sent you a DM with the results."
-msgstr "Enviei a você uma mensagem direta com os resultados."
+msgstr "Enviei-lhe uma mensagem direta com os resultados."
 
 #. Translators: Orisa Admin must not be translated
 #: orisa/orisa.py:1247
@@ -882,7 +882,7 @@ msgstr ""
 "*Como a Orisa do Overwatch, esse bot também é bem jovem e ainda ainda está "
 "aprendendo. Relate quaisquer problemas para <@! {OWNER}> *\n"
 "\n"
-"** Os comandos funcionam apenas no canal <# {channel_id}> ou enviando-me uma "
+"**Os comandos funcionam apenas no canal <#{channel_id}> ou enviando-me uma "
 "mensagem direta**\n"
 "Se você é novo para a Orisa, provavelmente está procurando por `!ow "
 "registrar` ou`!ow registrar xbox`\n"
@@ -1179,9 +1179,9 @@ msgid ""
 msgstr ""
 "*Este comando está na versão beta e pode ser alterado a qualquer momento; "
 "também pode conter erros, informe-os por favor.*\n"
-"Mostra um gráfico do seu SR. Se a data (como DD.MM.YY ou AAAA-MM-DD) for "
-"fornecida, o gráfico iniciará nessa data, caso contrário, começará assim que "
-"a Orisa tiver dados."
+"Mostra um gráfico do seu SR. Se qualquer data for fornecida (como DD.MM.YY "
+"ou AAAA-MM-DD), o gráfico iniciará nessa data, caso contrário, começará "
+"assim que a Orisa tiver dados."
 
 #: orisa/orisa.py:1473
 msgid ""
