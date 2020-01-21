@@ -1185,16 +1185,6 @@ Pornography Historian"""
 
     @ow.subcommand()
     @condition(correct_channel)
-    async def findplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
-        await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=False)
-
-    @ow.subcommand()
-    @condition(correct_channel)
-    async def findallplayers(self, ctx, diff_or_min_sr: int = None, max_sr: int = None):
-        await self._findplayers(ctx, diff_or_min_sr, max_sr, findall=True)
-
-    @ow.subcommand()
-    @condition(correct_channel)
     async def setrole(self, ctx, *, roles_str: str = None):
         "Alias for setroles"
         return await self.setroles(ctx, roles_str=roles_str)
@@ -1247,161 +1237,6 @@ Pornography Historian"""
                     roles=roles.format(ctx)
                 ),
             )
-
-    async def _findplayers(
-        self, ctx, diff_or_min_sr: int = None, max_sr: int = None, *, findall
-    ):
-        await reply(
-            ctx, _("Sorry, findplayers doesn't work with role based SR yet. Try later.")
-        )
-        return
-        logger.info(
-            f"{ctx.author.id} issued findplayers {diff_or_min_sr} {max_sr} {findall}"
-        )
-
-        async with self.database.session() as session:
-            asker = await self.database.user_by_discord_id(session, ctx.author.id)
-            if not asker:
-                await reply(ctx, _("you are not registered!"))
-                return
-
-            if max_sr is None:
-                # we are looking around the askers SR
-                sr_diff = diff_or_min_sr
-
-                if sr_diff is not None:
-                    if sr_diff <= 0:
-                        await reply(ctx, _("SR difference must be positive!"))
-                        return
-
-                    if sr_diff > 5000:
-                        await reply(
-                            # Translators: used when Orisa is asked to find players that are more than 5000 SR below or above them, use the equivalent Orisa voiceline
-                            # in your language
-                            ctx,
-                            _("That does not compute!"),
-                        )
-                        return
-
-                base_sr = asker.handles[0].sr
-                if not base_sr:
-                    await reply(
-                        ctx,
-                        # Translators: type is BattleTag or GamerTag
-                        _(
-                            "Your primary {type} has no SR, please give a SR range you want to search for instead."
-                        ).format(type=_(asker.handles[0].desc)),
-                    )
-                    return
-
-                if sr_diff is None:
-                    sr_diff = 1000 if base_sr < 3500 else 500
-
-                min_sr, max_sr = base_sr - sr_diff, base_sr + sr_diff
-
-                type_msg = _("within {sr_diff} of {base_sr} SR").format(
-                    sr_diff=sr_diff, base_sr=base_sr
-                )
-
-            else:
-                # we are looking at a range
-                min_sr = diff_or_min_sr
-
-                if not (
-                    (500 <= min_sr <= 5000)
-                    and (500 <= max_sr <= 5000)
-                    and (min_sr <= max_sr)
-                ):
-                    await reply(
-                        ctx,
-                        _(
-                            "min and max must be between 500 and 5000, and min must not be larger than max."
-                        ),
-                    )
-                    return
-                # Translators: used as part of the string "Here is a list of players <between min_sr and max_sr SR>" or "there are no players <between...>"
-                type_msg = _("between {min_sr} and {max_sr} SR").format(
-                    min_sr=min_sr, max_sr=max_sr
-                )
-
-            candidates = (
-                session.query(BattleTag)
-                .join(BattleTag.current_sr)
-                .options(joinedload(BattleTag.user))
-                .filter(SR.value.between(min_sr, max_sr))
-                .all()
-            )
-
-            users = set(c.user for c in candidates)
-
-            cmap = {u.discord_id: u for u in users}
-
-            online = []
-            offline = []
-
-            for guild in self.client.guilds.values():
-
-                if ctx.author.id not in guild.members:
-                    continue
-
-                for member in guild.members.values():
-                    if member.user.id == ctx.author.id or member.user.id not in cmap:
-                        continue
-                    if member.status == Status.OFFLINE:
-                        offline.append(member)
-                    else:
-                        online.append(member)
-
-            def format_member(member):
-                nonlocal cmap
-                markup = "~~" if member.status == Status.DND else ""
-
-                if member.status == Status.IDLE:
-                    hint = "(idle)"
-                elif member.status == Status.DND:
-                    hint = "(DND)"
-                else:
-                    hint = ""
-
-                return f"{markup}{str(member.name)}\u00a0{member.mention}{markup}\u00a0{hint}\n"
-
-            msg = ""
-
-            if not online:
-                msg += _(
-                    "There are no players currently online {type_msg}!\n\n"
-                ).format(type_msg=type_msg)
-            else:
-                msg += _(
-                    "**The following players are currently online and {type_msg}:**\n\n"
-                ).format(type_msg=type_msg)
-                msg += "\n".join(format_member(m) for m in online)
-                msg += "\n"
-
-            if findall:
-
-                if not offline:
-                    if online:
-                        msg += _("There are no offline players within that range.")
-                    else:
-                        msg += _(
-                            "There are also no offline players within that range. :("
-                        )
-                else:
-                    msg += _(
-                        "**The following players are within that range, but currently offline:**\n\n"
-                    )
-                    msg += "\n".join(format_member(m) for m in offline)
-
-            else:
-                if offline:
-                    msg += _(
-                        "\nThere are also {len} offline players within that range. Use the `findallplayers` command to show them as well."
-                    ).format(len=len(offline))
-
-            await send_long(ctx.author.send, msg)
-            if not ctx.channel.private:
-                await reply(ctx, _("I sent you a DM with the results."))
 
     @ow.subcommand()
     async def help(self, ctx):
@@ -1525,26 +1360,6 @@ Pornography Historian"""
             name="!ow dumpsr",
             # Translators: help for !ow dumpsr
             value=_("Download your SR history as an Excel sheet"),
-            inline=False,
-        )
-        embed.add_field(
-            name="!ow findplayers [max diff] *or* !ow findplayers min max",
-            value="*This command is still in beta and may change at any time!*\n"
-            "This command is intended to find partners for your Competitive team and shows you all registered and online users within the specified range.\n"
-            "If `max diff` is not given, the maximum range that allows you to queue with them is used, so 1000 below 3500 SR, and 500 otherwise. "
-            "If `max diff` is given, it is used instead. `findplayers` then searches for all online players that around that range of your own SR.\n"
-            "Alternatively, you can give two parameters, `!ow findplayers min max`. In this mode, `findplayers` will search for all online players that are between "
-            "min and max.\n"
-            "Note that `findplayers` will take all registered BattleTags of players into account, not just their primary.\n"
-            "*Examples:*\n"
-            "`!ow findplayers`: finds all players that you could start a competitive queue with\n"
-            "`!ow findplayers 123`: finds all players that are within 123 SR of your SR\n"
-            "`!ow findplayers 1500 2300`: finds all players between 1500 and 2300 SR\n",
-            inline=False,
-        )
-        embed.add_field(
-            name="!ow findallplayers [max diff] *or* !ow findplayers min max",
-            value=_("Same as `!ow findplayers`, but also includes offline players."),
             inline=False,
         )
         embed.add_field(
