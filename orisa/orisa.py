@@ -1392,7 +1392,7 @@ Pornography Historian"""
             inline=False,
         )
         embed.add_field(
-            name=_("\N{BLACK STAR} *ow format placeholders*"),
+            name=_("★ *ow format placeholders*"),
             # Translators: $fullsr, $rank, etc. cannot be translated
             value=_(
                 "*The following placeholders are defined:*\n"
@@ -1410,8 +1410,8 @@ Pornography Historian"""
             ),
             inline=False,
         )
-        embed.add_field(
-            name=_("\N{BLACK STAR} *ow format examples*"),
+        embed.add_field(★
+            name=_("★ *ow format examples*"),
             value=_(
                 "`!ow format hello $sr` will result in `[hello 12-34-45]`.\n"
                 "`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"

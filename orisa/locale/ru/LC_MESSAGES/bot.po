@@ -841,7 +841,7 @@ msgid ""
 msgstr ""
 
 #: orisa/orisa.py:1386
-msgid "\\N{BLACK STAR} *ow format placeholders*"
+msgid "★ *ow format placeholders*"
 msgstr ""
 
 #. Translators: $fullsr, $rank, etc. cannot be translated
@@ -875,7 +875,7 @@ msgid ""
 msgstr ""
 
 #: orisa/orisa.py:1400
-msgid "\\N{BLACK STAR} *ow format examples*"
+msgid "★ *ow format examples*"
 msgstr ""
 
 #: orisa/orisa.py:1402

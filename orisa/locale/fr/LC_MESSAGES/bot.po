@@ -1013,8 +1013,8 @@ msgstr ""
 "ou `${placeholder}`."
 
 #: orisa/orisa.py:1386
-msgid "\\N{BLACK STAR} *ow format placeholders*"
-msgstr "\\N{BLACK STAR} *espaces réservés pour le format ow*"
+msgid "★ *ow format placeholders*"
+msgstr "★ *espaces réservés pour le format ow*"
 
 #. Translators: $fullsr, $rank, etc. cannot be translated
 #: orisa/orisa.py:1388
@@ -1072,8 +1072,8 @@ msgstr ""
 "Alias pour `$damage` et `$damagerank`, respectivement."
 
 #: orisa/orisa.py:1400
-msgid "\\N{BLACK STAR} *ow format examples*"
-msgstr "\\N{BLACK STAR} *Exemples de format ow*"
+msgid "★ *ow format examples*"
+msgstr "★ *Exemples de format ow*"
 
 #: orisa/orisa.py:1402
 #, python-brace-format

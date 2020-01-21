@@ -1003,8 +1003,8 @@ msgstr ""
 "${Platzhalter}`angegeben werden."
 
 #: orisa/orisa.py:1386
-msgid "\\N{BLACK STAR} *ow format placeholders*"
-msgstr "\\N{BLACK STAR} *ow format $Platzhalter*"
+msgid "★ *ow format placeholders*"
+msgstr "★ *ow format $Platzhalter*"
 
 #. Translators: $fullsr, $rank, etc. cannot be translated
 #: orisa/orisa.py:1388
@@ -1063,8 +1063,8 @@ msgstr ""
 "Alias für`$damage` und`$damagerank`."
 
 #: orisa/orisa.py:1400
-msgid "\\N{BLACK STAR} *ow format examples*"
-msgstr "\\N{BLACK STAR} *ow format Beispiele*"
+msgid "★ *ow format examples*"
+msgstr "★ *ow format Beispiele*"
 
 #: orisa/orisa.py:1402
 #, python-brace-format
