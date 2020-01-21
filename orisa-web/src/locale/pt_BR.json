@@ -5,7 +5,7 @@
         "allow-sr-in-nick-tt": "Quando essa configuração está ativada, a Orisa sempre atualiza os apelidos de todos os usuários registrados para mostrar seu SR no nome (`Orisa` se torna` Orisa [12-23-34] `).\nSe você sentir que os membros do seu servidor se concentram demais no SR (\"Eu não falo com pratas\"), você pode desativar essa configuração.\nQuando desativado, os membros do servidor ainda podem forçar a exibição do SR emitindo o comando `!ow alwaysshowsr`.\nSe não tiver certeza, ative essa configuração e desative-a apenas se as pessoas reagirem negativamente.",
         "configure-for": "Configure a Orisa para {{guild_name}}",
         "congrats-chan": "Canal Comemorativo",
-        "congrats-chan-desc": "Quando um membro atinge uma nova classificação mais alta (por exemplo, Prata → Ouro), a Orisa o parabeniza publicamente neste canal. É altamente recomendável selecionar o canal em que os membros conversam sobre OW (a Orisa **apenas** postará mensagens de classificação), mas também pode ser o mesmo que \"$ t (cfg.listen-chan)\".",
+        "congrats-chan-desc": "Quando um membro atinge uma nova classificação mais alta (por exemplo, Prata → Ouro), a Orisa o parabeniza publicamente neste canal. É altamente recomendável selecionar o canal em que os membros conversam sobre OW (Orisa **apenas** postará mensagens de classificação), mas também pode ser o mesmo que \"$t (cfg.listen-chan)\".",
         "drag-orisa-role": "Você pode simplesmente arrastar e soltar o cargo `Orisa` na tela *Configurações do servidor > Cargos*, [desse jeito]({{link}}). Orisa não receberá mais permissões com isso, simplesmente permite que ela altere mais apelidos.\nO apelido do proprietário do servidor não pode ser alterado por ela, faça o que fizer. **Não conceda direitos de administrador ao cargo Orisa!** Isso não ajudará e é um risco potencial à segurança se a Orisa tiver um bug explorável.",
         "error-saving": "Ocorreu um problema ao salvar, tente novamente mais tarde!",
         "fix-val-errors": "Corrija os erros de validação antes de salvar.",
@@ -18,7 +18,7 @@
         "lang-incomplete-engage": "{{ lang }} ainda não está totalmente traduzido! Strings não traduzidas aparecerão em inglês. [Clique aqui se você quiser ajudar com a tradução!]({{ link }})",
         "lead-info": "O botão de salvamento será exibido quando você tiver alterações não salvas. Depois de salvar as alterações, você pode fechar esta janela.\nSe você tiver dúvidas ou sugestões, [entre no discord oficial]({{ link }}).",
         "listen-chan": "Canal da Orisa",
-        "listen-chan-desc": "Em qual canal a Orisa deve ouvir comandos? Este canal também será usado para postar a tabela diária de recordes de SR. Orisa sempre reage aos comandos via mensagem direta. Além disso, o comando `!ow help` funcionará em qualquer canal.",
+        "listen-chan-desc": "Em qual canal a Orisa deve ouvir comandos? Este canal também será usado para postar a tabela diária de recordes de SR. Orisa sempre reage aos comandos por mensagem direta. Além disso, o comando `!ow help` funcionará em qualquer canal.",
         "load-failed": "Ocorreu um erro ao carregar os dados. Este link pode ter expirado. Tente solicitar um novo. Se isso não ajudar, tente novamente mais tarde…",
         "loading": "Carregando",
         "no-mgt-voice-chan-hdr": "Nenhum canal de voz gerenciado",
@@ -37,8 +37,8 @@
         "top-role-head": "O cargo da Orisa é o principal",
         "undo": "Desfazer",
         "unsaved": "Você tem alterações não salvas!",
-        "with-the-following-roles": "com a seguinte função",
-        "with-the-following-roles_plural": "com as seguintes funções"
+        "with-the-following-roles": "com o seguinte cargo",
+        "with-the-following-roles_plural": "com os seguintes cargos"
     },
     "mvc": {
         "add-prefix": "Adicionar um canal gerenciado",
