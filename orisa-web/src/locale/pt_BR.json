@@ -32,7 +32,7 @@
         "reg-msg": "Mensagem de registro",
         "reg-msg-desc": "Texto opcional específico do servidor mostrado na mensagem de boas-vindas depois que um membro se registra com `!ow register`. Esta mensagem *não* é mostrada quando um usuário ingressa neste servidor. [Discord Markdown]({{ link }}) pode ser usado.",
         "reg-msg-placeholder": "p. ex.\nNão se esqueça de usar `!ow setroles` para definir suas funções; e também de não jogar de Genji.",
-        "save": "Salve",
+        "save": "Salvar",
         "top-role-desc": "A Orisa poderá alterar os apelidos de todos os seus membros, com exceção do proprietário do servidor.",
         "top-role-head": "O cargo da Orisa é o principal",
         "undo": "Desfazer",
