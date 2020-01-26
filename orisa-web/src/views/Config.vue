@@ -301,7 +301,7 @@ export default {
     ManagedVoiceCategory
   },
   methods: {
-    val_errors_mvc(index) {
+    val_errors_mvc (index) {
       if (
         this.validation_errors.managed_voice_categories &&
         this.validation_errors.managed_voice_categories.length > index
@@ -312,7 +312,7 @@ export default {
       }
     },
 
-    val_type(obj) {
+    val_type (obj) {
       if (obj) {
         return 'is-danger'
       } else {
@@ -320,11 +320,11 @@ export default {
       }
     },
 
-    remove_cat(index) {
+    remove_cat (index) {
       this.guild_config.managed_voice_categories.splice(index, 1)
     },
 
-    add_cat() {
+    add_cat () {
       this.guild_config.managed_voice_categories.push({
         category_id: null,
         channel_limit: 5,
@@ -334,17 +334,17 @@ export default {
       })
     },
 
-    reset() {
+    reset () {
       this.validation_errors = {}
       this.save_error = false
       this.guild_config = cloneDeep(this.orig_guild_config)
     },
 
-    parse_time(timestr) {
+    parse_time (timestr) {
       return new Date(`2000-01-01T${timestr}:00T`)
     },
 
-    save() {
+    save () {
       if (this.saving) return
       this.saving = true
       this.validation_errors = {}
@@ -377,33 +377,33 @@ export default {
   },
 
   computed: {
-    unsaved_changes() {
+    unsaved_changes () {
       return !isEqual(this.guild_config, this.orig_guild_config)
     },
-    has_validation_errors() {
+    has_validation_errors () {
       return !isEmpty(this.validation_errors)
     },
-    shake_if_problem() {
+    shake_if_problem () {
       if (this.has_validation_errors || this.save_error) {
         return 'shake'
       } else {
         return ''
       }
     },
-    higher_roles() {
+    higher_roles () {
       var myPos = this.roles.indexOf(this.my_top_role)
       return this.roles.slice(myPos + 1)
     },
 
-    lang_fully_translated() {
+    lang_fully_translated () {
       return this.translationInfo.complete.some((e) => e.code === this.guild_config.locale)
     },
 
-    lang_config_fully_translated() {
+    lang_config_fully_translated () {
       return this.current_lang_info.web_percent_translated >= 90
     },
 
-    current_lang_info() {
+    current_lang_info () {
       const locale = this.guild_config.locale
       let all = [...this.translationInfo.complete, ...this.translationInfo.incomplete]
       for (let el of all) {
@@ -414,16 +414,16 @@ export default {
       throw Error(`${this.guild_config.locale} not found in translationInfo`)
     },
 
-    lang_native_name() {
+    lang_native_name () {
       return this.current_lang_info.name
     },
 
     post_highscore_time_jsdate: {
-      get() {
+      get () {
         return new Date(`2000-01-01T${this.guild_config.post_highscore_time}:00`)
       },
 
-      set(time) {
+      set (time) {
         const h = `0${time.getHours()}`.slice(-2)
         const m = `0${time.getMinutes()}`.slice(-2)
         this.guild_config.post_highscore_time = `${h}:${m}`
@@ -432,7 +432,7 @@ export default {
 
   },
   props: ['token'],
-  data() {
+  data () {
     return {
       saving: false,
       orig_guild_config: null,
@@ -449,7 +449,7 @@ export default {
       translationInfo
     }
   },
-  mounted() {
+  mounted () {
     this.$http.get(`config_data/${this.token}`).then(
       response => {
         this.channels = response.data.channels

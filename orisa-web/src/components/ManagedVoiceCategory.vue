@@ -147,16 +147,16 @@ import { isEmpty } from 'lodash-es'
 
 export default {
   name: 'managed-voice-category',
-  data() {
+  data () {
     return {}
   },
   computed: {
-    has_validation_errors() {
+    has_validation_errors () {
       return !isEmpty(this.validation_errors)
     }
   },
   methods: {
-    val_errors_prefixes(index) {
+    val_errors_prefixes (index) {
       if (
         this.validation_errors.prefixes &&
         this.validation_errors.prefixes.length > index
@@ -166,7 +166,7 @@ export default {
         return {}
       }
     },
-    val_type(obj) {
+    val_type (obj) {
       if (obj) {
         return 'is-danger'
       } else {
@@ -174,11 +174,11 @@ export default {
       }
     },
 
-    delete_prefix(category, index) {
+    delete_prefix (category, index) {
       category.prefixes.splice(index, 1)
     },
 
-    add_prefix(category) {
+    add_prefix (category) {
       category.prefixes.push({
         name: null,
         limit: 0
