@@ -6,18 +6,18 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2019-08-31 18:20+0000\n"
-"Last-Translator: Danila <sharanda.danila@gmail.com>\n"
-"Language-Team: Russian <https://weblate.orisa.rocks/projects/orisa/bot/ru/>\n"
+"PO-Revision-Date: 2020-02-04 11:50+0000\n"
+"Last-Translator: Nikita Belis <belisev2006@yandex.ru>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/orisa/bot/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.8\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<="
+"4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 3.11-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:174 orisa/orisa.py:1546
@@ -27,11 +27,11 @@ msgstr "Урон"
 
 #: orisa/models.py:60
 msgid "Main Tank"
-msgstr ""
+msgstr "Основной танк"
 
 #: orisa/models.py:61
 msgid "Off Tank"
-msgstr ""
+msgstr "Дополнительный танк"
 
 #. Translators: Role
 #: orisa/models.py:62 orisa/orisa.py:176 orisa/orisa.py:1546
@@ -96,7 +96,7 @@ msgstr "Ма"
 #. Translators: 2 letter code for "Grandmaster" rank
 #: orisa/orisa.py:151
 msgid "GM"
-msgstr "Зл"
+msgstr "ГМ"
 
 #. Translators: SR rank
 #: orisa/orisa.py:155
@@ -150,6 +150,14 @@ msgid ""
 "*I will ignore all commands except `!ow help` and `!ow config` until I'm "
 "configured for this Discord!*"
 msgstr ""
+"*Приветствую* Я в восторге, что ты здесь :smiley:\n"
+"Так, давай начнём, создай роль `Orisa Admin` (важно только название роли, не "
+"надо ставить специальные возможности) и добавь себе или кому-то ещё эту "
+"роль. Это должно позволить настроить меня.\n"
+"Далее пиши `!ow config` в канале, и я пошлю вам ссылку, чтобы настроить меня."
+"\n"
+"«Я буду игнорировать все команды, кроме «!ow help» и '!ow config', пока я не "
+"настроен для этого Дискорда!»"
 
 #. Translators: :thinking: must remain as is, it's an emoji
 #. Translators: :thinking: is an emoji code
@@ -157,15 +165,15 @@ msgstr ""
 #. Translators: :thinking: is an emoji code
 #: orisa/orisa.py:254 orisa/orisa.py:673 orisa/orisa.py:700 orisa/orisa.py:1251
 msgid ":thinking: Need help?"
-msgstr ""
+msgstr ":thinking: Нужна помощь?"
 
 #: orisa/orisa.py:255 orisa/orisa.py:674 orisa/orisa.py:701 orisa/orisa.py:1252
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})!"
-msgstr ""
+msgstr "Присоединяйтесь к «Дисконду поддержки» («SUPPORT_DISCORD»)!"
 
 #: orisa/orisa.py:257
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "\n"
 "\n"
@@ -173,6 +181,11 @@ msgid ""
 "couldn't find a text channel I am allowed to send messages to, so I have to "
 "message you directly*"
 msgstr ""
+"\n"
+"\n"
+"*Кто-то (надеюсь, вы) пригласил меня на ваш сервер {guild_name}, но я не "
+"смог найти текстовый канал, на который мне разрешено отправлять сообщения, "
+"так что я должна отправить вам сообщение напрямую*."
 
 #. Translators: Short for Discord Nickname
 #: orisa/orisa.py:510
@@ -202,25 +215,28 @@ msgid "Links"
 msgstr "Ссылки"
 
 #: orisa/orisa.py:560
+#, fuzzy
 msgid "Overwatch profile"
-msgstr ""
+msgstr "Профиль Overwatch"
 
 #: orisa/orisa.py:561
 msgid "Upvote Orisa"
 msgstr ""
 
 #: orisa/orisa.py:562
+#, fuzzy
 msgid "Orisa Support Server"
-msgstr ""
+msgstr "Сервер помощи Орисы"
 
 #: orisa/orisa.py:563
+#, fuzzy
 msgid "Help Translate Orisa"
-msgstr ""
+msgstr "Помощь в переводе Орисы"
 
 #: orisa/orisa.py:564
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid "Donate `{HEART}`"
-msgstr ""
+msgstr "Помощь `{HEART}`"
 
 #: orisa/orisa.py:573
 #, python-brace-format
@@ -274,11 +290,12 @@ msgstr ""
 "ow help` чтобы получить больше информации."
 
 #: orisa/orisa.py:610
+#, fuzzy
 msgid "About Me"
-msgstr ""
+msgstr "Насчет меня"
 
 #: orisa/orisa.py:614
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "I am an open source Discord bot to help manage Overwatch Discord "
 "communities.\n"
@@ -286,21 +303,31 @@ msgid ""
 "licensed under the [GNU Affero General Public License 3.0]({AGPL_LINK}); the "
 "[development is done on Github]({GH_LINK})"
 msgstr ""
+"Я - бот с открытым исходным кодом Discord, помогающий управлять сообществами "
+"Overwatch Discord.\n"
+" Я написан и поддерживаюсь Деннисом Браханом (Joghurt#2732 on Discord) и "
+"лицензирован по [GNU Affero General Public License 3.0]({AGPL_LINK}); ["
+"разработка сделана на Github]({GH_LINK})."
 
 #: orisa/orisa.py:624
+#, fuzzy
 msgid "Invite me to your own Discord"
-msgstr ""
+msgstr "Пригласи меня в твой Дискорд"
 
 #: orisa/orisa.py:627
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "To invite me to your server, simply [click here]({LINK}), I will post a "
 "message with more information in a channel after I have joined your server"
 msgstr ""
+"Чтобы пригласить меня на ваш сервер, просто «нажмите здесь»),{LINK} ,после "
+"того, как я присоединюсь к вашему серверу, я отправлю сообщение с "
+"дополнительной информацией в канале"
 
 #: orisa/orisa.py:633
+#, fuzzy
 msgid "Join the official Orisa Discord"
-msgstr ""
+msgstr "Присоединяйтесь к официальному Orisa Discord"
 
 #: orisa/orisa.py:636
 #, python-brace-format
@@ -311,8 +338,9 @@ msgid ""
 msgstr ""
 
 #: orisa/orisa.py:641
+#, fuzzy
 msgid "Show your love :heart:"
-msgstr ""
+msgstr "Покажите свою любовь :heart:"
 
 #: orisa/orisa.py:644
 #, python-brace-format
@@ -321,8 +349,9 @@ msgid ""
 msgstr ""
 
 #: orisa/orisa.py:649
+#, fuzzy
 msgid "I've sent you a DM."
-msgstr ""
+msgstr "Я оправил тебе DM."
 
 #: orisa/orisa.py:657
 msgid ""
