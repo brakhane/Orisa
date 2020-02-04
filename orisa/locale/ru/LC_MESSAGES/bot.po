@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2020-02-04 11:50+0000\n"
+"PO-Revision-Date: 2020-02-05 19:50+0000\n"
 "Last-Translator: Nikita Belis <belisev2006@yandex.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/orisa/bot/ru/>\n"
 "Language: ru\n"
@@ -168,7 +168,7 @@ msgid ":thinking: Need help?"
 msgstr ":thinking: Нужна помощь?"
 
 #: orisa/orisa.py:255 orisa/orisa.py:674 orisa/orisa.py:701 orisa/orisa.py:1252
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})!"
 msgstr "Присоединяйтесь к «Дисконду поддержки» («SUPPORT_DISCORD»)!"
 
@@ -185,7 +185,7 @@ msgstr ""
 "\n"
 "*Кто-то (надеюсь, вы) пригласил меня на ваш сервер {guild_name}, но я не "
 "смог найти текстовый канал, на который мне разрешено отправлять сообщения, "
-"так что я должна отправить вам сообщение напрямую*."
+"так что я должна отправить вам сообщение напрямую*"
 
 #. Translators: Short for Discord Nickname
 #: orisa/orisa.py:510
@@ -215,7 +215,6 @@ msgid "Links"
 msgstr "Ссылки"
 
 #: orisa/orisa.py:560
-#, fuzzy
 msgid "Overwatch profile"
 msgstr "Профиль Overwatch"
 
@@ -273,7 +272,7 @@ msgstr ""
 #: orisa/orisa.py:591
 #, python-brace-format
 msgid "{member_name} not found in database! *Do you need a hug?*"
-msgstr ""
+msgstr "{member_name} не найдено в базе данных! *Нужны объятия?*"
 
 #. Translators: A headline for a tip for the user
 #. Translators: A tip/information for a user
@@ -290,12 +289,11 @@ msgstr ""
 "ow help` чтобы получить больше информации."
 
 #: orisa/orisa.py:610
-#, fuzzy
 msgid "About Me"
 msgstr "Насчет меня"
 
 #: orisa/orisa.py:614
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "I am an open source Discord bot to help manage Overwatch Discord "
 "communities.\n"
@@ -310,12 +308,11 @@ msgstr ""
 "разработка сделана на Github]({GH_LINK})."
 
 #: orisa/orisa.py:624
-#, fuzzy
 msgid "Invite me to your own Discord"
 msgstr "Пригласи меня в твой Дискорд"
 
 #: orisa/orisa.py:627
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "To invite me to your server, simply [click here]({LINK}), I will post a "
 "message with more information in a channel after I have joined your server"
@@ -325,7 +322,6 @@ msgstr ""
 "дополнительной информацией в канале"
 
 #: orisa/orisa.py:633
-#, fuzzy
 msgid "Join the official Orisa Discord"
 msgstr "Присоединяйтесь к официальному Orisa Discord"
 
@@ -336,9 +332,11 @@ msgid ""
 "the official Orisa Discord]({SUPPORT_DISCORD}). Updates and new features "
 "will be discussed and announced there."
 msgstr ""
+"Если вы используете меня на своем сервере Discord или, как правило, имеете "
+"вопросы, присоединяйтесь к официальному Orisa Discord»(«SUPPORT_DISCORD»). "
+"Обновления и новые функции будут обсуждаться и анонсированы там."
 
 #: orisa/orisa.py:641
-#, fuzzy
 msgid "Show your love :heart:"
 msgstr "Покажите свою любовь :heart:"
 
@@ -347,9 +345,10 @@ msgstr "Покажите свою любовь :heart:"
 msgid ""
 "If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
 msgstr ""
+"Если вы обнаружите, что я полезен, купите моему разработчику чашку кофе "
+"(«DONATE_LINK»)."
 
 #: orisa/orisa.py:649
-#, fuzzy
 msgid "I've sent you a DM."
 msgstr "Я оправил тебе DM."
 
@@ -359,6 +358,10 @@ msgid ""
 "configure. Don't worry, I will send you the config instructions as a DM, so "
 "others can't configure me just by watching you sending this command."
 msgstr ""
+"Команда конфигурации должна быть выдана из канала сервера, который вы хотите "
+"настроить. Не волнуйтесь, я отправлю вам инструкции по настройке в качестве "
+"DM, так что другие не смогут настроить меня, просто наблюдая за тем, как вы "
+"посылаете эту команду."
 
 #: orisa/orisa.py:663
 msgid ""
