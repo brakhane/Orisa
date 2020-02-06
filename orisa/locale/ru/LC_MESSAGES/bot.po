@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2020-02-05 19:50+0000\n"
-"Last-Translator: Nikita Belis <belisev2006@yandex.ru>\n"
+"PO-Revision-Date: 2020-02-07 11:50+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/orisa/bot/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -156,8 +156,8 @@ msgstr ""
 "роль. Это должно позволить настроить меня.\n"
 "Далее пиши `!ow config` в канале, и я пошлю вам ссылку, чтобы настроить меня."
 "\n"
-"«Я буду игнорировать все команды, кроме «!ow help» и '!ow config', пока я не "
-"настроен для этого Дискорда!»"
+"*Я буду игнорировать все команды, кроме `!ow help` и `!ow config`, пока я не "
+"настроен для этого Дискорда!*"
 
 #. Translators: :thinking: must remain as is, it's an emoji
 #. Translators: :thinking: is an emoji code
@@ -170,7 +170,7 @@ msgstr ":thinking: Нужна помощь?"
 #: orisa/orisa.py:255 orisa/orisa.py:674 orisa/orisa.py:701 orisa/orisa.py:1252
 #, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})!"
-msgstr "Присоединяйтесь к «Дисконду поддержки» («SUPPORT_DISCORD»)!"
+msgstr "Присоединяйтесь к [Дисконду поддержки]({SUPPORT_DISCORD})!"
 
 #: orisa/orisa.py:257
 #, fuzzy, python-brace-format
@@ -317,7 +317,7 @@ msgid ""
 "To invite me to your server, simply [click here]({LINK}), I will post a "
 "message with more information in a channel after I have joined your server"
 msgstr ""
-"Чтобы пригласить меня на ваш сервер, просто «нажмите здесь»),{LINK} ,после "
+"Чтобы пригласить меня на ваш сервер, просто [нажмите здесь]({LINK}) ,после "
 "того, как я присоединюсь к вашему серверу, я отправлю сообщение с "
 "дополнительной информацией в канале"
 
@@ -333,7 +333,7 @@ msgid ""
 "will be discussed and announced there."
 msgstr ""
 "Если вы используете меня на своем сервере Discord или, как правило, имеете "
-"вопросы, присоединяйтесь к официальному Orisa Discord»(«SUPPORT_DISCORD»). "
+"вопросы, присоединяйтесь к официальному [Orisa Discord]({SUPPORT_DISCORD}). "
 "Обновления и новые функции будут обсуждаться и анонсированы там."
 
 #: orisa/orisa.py:641
@@ -345,8 +345,8 @@ msgstr "Покажите свою любовь :heart:"
 msgid ""
 "If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
 msgstr ""
-"Если вы обнаружите, что я полезен, купите моему разработчику чашку кофе "
-"(«DONATE_LINK»)."
+"Если вы обнаружите, что я полезен, [купите моему разработчику чашку "
+"кофе]({DONATE_LINK})."
 
 #: orisa/orisa.py:649
 msgid "I've sent you a DM."
