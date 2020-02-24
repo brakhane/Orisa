@@ -210,7 +210,7 @@ class BattleTag(Handle):
 
     @handle.setter
     def handle(self, value):
-        self.battletag = value
+        self.battle_tag = value
 
     @property
     def external_id(self):

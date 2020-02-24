@@ -2972,6 +2972,7 @@ Pornography Historian"""
                         )
                         existing_handle.handle = new_handle.handle
                         handles_to_check.append(existing_handle)
+                        logger.debug(f"handle name changed. handles_to_check is now {handles_to_check}")
                     elif existing_handle:
                         embed = Embed(
                             # Translators: type is translated GamerTag or BattleTag
