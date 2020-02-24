@@ -2947,10 +2947,12 @@ Pornography Historian"""
                         inline=False,
                     )
             else:
+                logger.debug(f"user {user} already has handles {user.handles}")
                 for new_handle in handles:
                     existing_handle = None
                     for handle in user.handles:
                         if handle.external_id == new_handle.external_id:
+                            logger.debug(f"found existing handle {handle}, names are {existing_handle.handle} and {new_handle.handle}")
                             existing_handle = handle
                             break
                     if existing_handle and existing_handle.handle != new_handle.handle:
