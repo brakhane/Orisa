@@ -2952,8 +2952,8 @@ Pornography Historian"""
                     existing_handle = None
                     for handle in user.handles:
                         if handle.external_id == new_handle.external_id:
-                            logger.debug(f"found existing handle {handle}, names are {existing_handle.handle} and {new_handle.handle}")
                             existing_handle = handle
+                            logger.debug(f"found existing handle {handle}, names are {existing_handle.handle} and {new_handle.handle}")
                             break
                     if existing_handle and existing_handle.handle != new_handle.handle:
                         embed = Embed(
