@@ -302,7 +302,7 @@ async def save(guild_id):
                 cron = HighscoreCron(id=guild_id)
                 await run_sync(session.add, cron)
             ts = dt.datetime.strptime(new_gi.post_highscore_time, "%H:%M")
-            now = dt.datetime.today()
+            now = dt.datetime.utcnow()
             ts = ts.replace(year=now.year, month=now.month, day=now.day)
             if ts < now:
                 ts += dt.timedelta(days=1)
