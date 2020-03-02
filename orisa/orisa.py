@@ -2953,7 +2953,9 @@ Pornography Historian"""
                     for handle in user.handles:
                         if handle.external_id == new_handle.external_id:
                             existing_handle = handle
-                            logger.debug(f"found existing handle {handle}, names are {existing_handle.handle} and {new_handle.handle}")
+                            logger.debug(
+                                f"found existing handle {handle}, names are {existing_handle.handle} and {new_handle.handle}"
+                            )
                             break
                     if existing_handle and existing_handle.handle != new_handle.handle:
                         embed = Embed(
@@ -2972,7 +2974,9 @@ Pornography Historian"""
                         )
                         existing_handle.handle = new_handle.handle
                         handles_to_check.append(existing_handle)
-                        logger.debug(f"handle name changed. handles_to_check is now {handles_to_check}")
+                        logger.debug(
+                            f"handle name changed. handles_to_check is now {handles_to_check}"
+                        )
                     elif existing_handle:
                         embed = Embed(
                             # Translators: type is translated GamerTag or BattleTag
