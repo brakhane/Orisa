@@ -300,7 +300,7 @@ class Orisa(Plugin):
         if safety != "Orisa":
             await reply(
                 ctx,
-                "If you want me to shut down, you need to issue `!ow shutdown Orisa` exactly as shown",
+                "If you want me to shut down, you need to issue `!shutdown Orisa` exactly as shown",
             )
         logger.critical("***** GOT EMERGENCY SHUTDOWN COMMAND FROM OWNER *****")
         try:
@@ -312,6 +312,20 @@ class Orisa(Plugin):
         except:
             pass
         raise SystemExit(42)
+
+    @command()
+    @condition(only_owner, bypass_owner=False)
+    async def restart(self, ctx):
+        logger.critical("***** GOT RESTART COMMAND FROM OWNER *****")
+        try:
+            await reply(ctx, "Restarting...")
+        except:
+            pass
+        try:
+            await self.client.kill()
+        except:
+            pass
+        raise SystemExit(0)
 
     @command()
     @condition(only_owner, bypass_owner=False)
