@@ -47,7 +47,7 @@ import hypercorn.trio
 import html5lib
 import matplotlib
 
-matplotlib.use("Agg")
+matplotlib.use("Agg") # noqa
 import matplotlib.pyplot as plt
 import multio
 import numpy as np
@@ -68,6 +68,7 @@ from curious.core.event import EventContext
 from curious.core.client import Client
 from curious.core.httpclient import HTTPClient
 from curious.exc import Forbidden, HierarchyError, PermissionsError, NotFound
+from curious.dataclasses.appinfo import AppInfo
 from curious.dataclasses.channel import ChannelType
 from curious.dataclasses.embed import Embed
 from curious.dataclasses.guild import Guild
@@ -285,12 +286,16 @@ class Orisa(Plugin):
 
         await self.spawn(self._sync_all_handles_task)
 
-        logger.info("spawning cron")
-        await self.spawn(self._cron_task)
 
-        await self.spawn(self._web_server)
+        logger.info("spawning cron for shard %d", self.client.my_shard_id)
+        await self.spawn(self._cron_task, self.client.my_shard_id, self.client.shard_count)
 
-        await self.spawn(self._oauth_result_listener)
+        if self.client.my_shard_id == 0:
+            await self.spawn(self._web_server)
+
+            await self.spawn(self._oauth_result_listener)
+        else:
+            logger.info("not shard 0, not spawning web server")
 
     # admin commands
 
@@ -483,6 +488,7 @@ class Orisa(Plugin):
         member_ids = [
             id for guild in self.client.guilds.values() for id in guild.members.keys()
         ]
+        guild_ids = self.client.guilds.keys()
         async with self.database.session() as session:
             registered_ids = [
                 x[0] for x in await run_sync(session.query(User.discord_id).all)
@@ -493,16 +499,33 @@ class Orisa(Plugin):
                 ctx.channel.messages.send,
                 f"there are {len(stale_ids)} stale entries: {ids}",
             )
+            registered_guilds = set(self.guild_config.keys())
+            stale_guild_configs = set(registered_guilds) - set(guild_ids)
+            ids = "\n".join(f"<@{id}>" for id in stale_guild_configs)
+            await send_long(
+                ctx.channel.messages.send,
+                f"there are {len(stale_guild_configs)} stale guild configs: {ids}",
+            )
+            
             if doit == "confirm":
                 for id in stale_ids:
                     user = await self.database.user_by_discord_id(session, id)
                     if not user:
-                        await ctx.channel.messages.send(f"{id} not found in DB???")
+                        await ctx.channel.messages.send(f"user {id} not found in DB???")
                     else:
                         await run_sync(session.delete, user)
-                        logger.info(f"deleted {id}")
+                        logger.info(f"deleted guild config {id}")
+                for id in stale_guild_configs:
+                    gc = session.query(GuildConfigJson).filter_by(id=id).one_or_none()
+                    if not gc:
+                        await ctx.channel.messages.send(f"guild config {id} not found in DB???")
+                    else:
+                        await run_sync(session.delete, gc)
+                        del self.guild_config[id]
+                        logger.info(f"deleted guild config {id}")
+                        
                 await send_long(
-                    ctx.channel.messages.send, f"Deleted {len(stale_ids)} entries"
+                    ctx.channel.messages.send, f"Deleted {len(stale_ids)} members and {len(stale_guild_configs)} guild configs"
                 )
                 await run_sync(session.commit)
             elif stale_ids:
@@ -2813,16 +2836,19 @@ Pornography Historian"""
             logger.debug("sleeping for 60s before running sync check again")
             await trio.sleep(60)
 
-    async def _cron_task(self):
+    async def _cron_task(self, shard_id: int, shard_count: int):
         "poor man's cron"
 
         while True:
             try:
-                logger.debug("checking cron...")
+                logger.debug("checking cron for shard #%d (%d total)...", shard_id, shard_count)
                 async with self.database.session() as s:
                     now = datetime.utcnow()
                     to_run = await run_sync(
-                        s.query(HighscoreCron).filter(HighscoreCron.next_run <= now).all
+                        s.query(HighscoreCron)
+                            .filter(HighscoreCron.next_run <= now)
+                            .filter(HighscoreCron.id.op(">>")(22) % shard_count == shard_id)
+                            .all
                     )
                     logger.debug("to_run %s", to_run)
                     for hc in to_run:
@@ -3228,3 +3254,22 @@ class OrisaClient(Client):
         self.__http = http
 
     http = property(_http_get, _http_set)
+
+    async def run_single_shard(self, shard_id: int, shard_count: int):
+#        if self.bot_type & BotType.BOT:
+
+        self._gw_url = await self.get_gateway_url(get_shard_count=False)
+        self.shard_count = shard_count
+        self.my_shard_id = shard_id
+
+        from curious.dataclasses.bases import allow_external_makes
+        with allow_external_makes():
+            self.application_info = AppInfo(self, **(await self.http.get_app_info(None)))
+
+        self._ready_state[shard_id] = False
+
+        async with multio.asynclib.task_manager() as tg:
+            self.task_manager = tg
+            self.events.task_manager = tg
+
+            await multio.asynclib.spawn(tg, self.handle_shard, shard_id, shard_count)
