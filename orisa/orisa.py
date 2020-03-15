@@ -2833,7 +2833,7 @@ Pornography Historian"""
             logger.debug("sleeping for 60s before running sync check again")
             await trio.sleep(60)
 
-    async def _cron_task(self, shard_id: int, shard_count: int):
+    async def _cron_task(self):
         "poor man's cron"
 
         while True:
