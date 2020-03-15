@@ -1,4 +1,5 @@
 import gettext
+import inspect
 import logging
 import re
 
