@@ -84,4 +84,4 @@ async def ready(ctx):
     await ctx.bot.change_status(game=Game(name=msg, type=GameType.LISTENING_TO))
 
 
-client.run()
+client.run(autoshard=False)
