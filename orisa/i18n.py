@@ -5,6 +5,7 @@ import re
 
 from contextvars import ContextVar
 
+from curious.commands.context import Context
 from curious.commands.manager import CommandsManager
 from curious.core.event import EventContext
 from curious.dataclasses.message import Message
