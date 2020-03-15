@@ -50,8 +50,6 @@ if DATABASE_URI.startswith("sqlite://"):
         """Dummy run_sync that doesn't start a thread and just executes the sync call in the calling thread.
         Necessary for SQLite in combination with SQLAlchemy"""
         return method(*args, **kwargs)
-
-
 else:
     from trio.to_thread import run_sync
 

@@ -1898,7 +1898,7 @@ Pornography Historian"""
 
     async def _handle_new_guild(self, guild):
         logger.info(
-            "We have a new guild %s, I'm now on %d guilds \o/",
+            r"We have a new guild %s, I'm now on %d guilds \o/",
             guild,
             len(self.client.guilds),
         )
