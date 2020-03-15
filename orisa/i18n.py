@@ -90,11 +90,44 @@ class MultiString(str):
 
 class I18NCommandsManager(CommandsManager):
     async def handle_commands(self, ctx: EventContext, message: Message):
+
+        # copy pasted from super class, we do not want to access the database every time somebody posts something
+        # so we need to do the checks first, we cannot easily hook into the middle of the superclass
+
+        # don't process messages pre-cache
+        if not message.author:
+            return
+
+        # check bot type
+        if message.author.user.bot and self.client.bot_type & 8:
+            return
+
+        if message.author.user != self.client.user and self.client.bot_type & 64:
+            return
+
+        if message.guild_id is not None and self.client.bot_type & 32:
+            return
+
+        if message.guild_id is None and self.client.bot_type & 16:
+            return
+
+        # step 1, match the messages
+        matched = self.message_check(self.client, message)
+        if inspect.isawaitable(matched):
+            matched = await matched
+
+        if matched is None:
+            return None
+
+
+        # our code starts here
+
+
         guild_id = message.guild_id
         try:
             orisa = self.plugins["Orisa"]
         except KeyError:
-            logger.debug("Not initialized yet, ignoring command %s", message)
+            logger.debug("Not initialized yet, ignoring command [%s]", message)
             return
         # guild_config is a defaultdict, so we can just lookup, even if guild_id is None
         locale = orisa.guild_config[guild_id].locale
@@ -115,8 +148,21 @@ class I18NCommandsManager(CommandsManager):
                     locale = user.locale
 
         CurrentLocale.set(locale or DEFAULT_LOCALE)
-        return await super().handle_commands(ctx, message)
 
+        # rest is copy pasted again
+
+
+        # deconstruct the tuple returned into more useful variables than a single tuple
+        command_word, tokens = matched
+
+        # step 2, create the new commands context
+        ctx = Context(event_context=ctx, message=message)
+        ctx.command_name = command_word
+        ctx.tokens = tokens
+        ctx.manager = self
+
+        # step 3, invoke the context to try and match the command and run it
+        await ctx.try_invoke()
 
 def N_(x):
     "No-op to mark strings that need to be translated, but not at this exact spot"
