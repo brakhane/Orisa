@@ -495,9 +495,10 @@ class Orisa(Plugin):
                 ctx.channel.messages.send,
                 f"there are {len(stale_ids)} stale entries: {ids}",
             )
+
             registered_guilds = set(self.guild_config.keys())
             stale_guild_configs = set(registered_guilds) - set(guild_ids)
-            ids = "\n".join(f"<@{id}>" for id in stale_guild_configs)
+            ids = "\n".join(f"{id}" for id in stale_guild_configs)
             await send_long(
                 ctx.channel.messages.send,
                 f"there are {len(stale_guild_configs)} stale guild configs: {ids}",
