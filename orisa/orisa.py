@@ -557,6 +557,9 @@ class Orisa(Plugin):
                 single_sr(ROLE_EMOJIS[ix], val) for ix, val in enumerate(sr) if val
             )
 
+        def escape_handle(handle):
+            return re.sub(r"([_*~])", r"\\\1", handle)
+
         member_given = member is not None
         if not member_given:
             member = ctx.author
@@ -583,12 +586,12 @@ class Orisa(Plugin):
                 if multiple_handle_types:
 
                     def fmt(handle):
-                        return f"{handle.handle} ({handle.blizzard_url_type.upper()})"
+                        return f"{escape_handle(handle.handle)} ({handle.blizzard_url_type.upper()})"
 
                 else:
 
                     def fmt(handle):
-                        return handle.handle
+                        return escape_handle(handle.handle)
 
                 handle_value = f"**{fmt(primary)}**\n"
                 handle_value += "\n".join(fmt(handle) for handle in secondary)
