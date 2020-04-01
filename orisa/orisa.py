@@ -1323,12 +1323,21 @@ Pornography Historian"""
             await reply(ctx, _("I sent you a DM with instructions."))
 
     def _create_help(self, ctx):
+        
         channel_id = None
+        try:
+            g_conf = self.guild_config[ctx.channel.guild_id]
+        except KeyError:
+            pass
+        else:            
+             if g_conf != GuildConfig.default():
+                 channel_id = g_conf.listen_channel_id
 
-        for guild in self.client.guilds.values():
-            if ctx.author.id in guild.members:
-                channel_id = self.guild_config[guild.id].listen_channel_id
-                break
+        if not channel_id:
+            for guild in self.client.guilds.values():
+                if ctx.author.id in guild.members:
+                    channel_id = self.guild_config[guild.id].listen_channel_id
+                    break
 
         embed = Embed(
             title=_("Orisa's purpose"),
