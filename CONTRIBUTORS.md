@@ -46,7 +46,7 @@ Orisa wouldn't be possible without the help of contributors. If you believe you 
   * Guillem Rosset
 
 * Russian translation
-  * Nikita Belis
+  * Nikita Belis (aka "Fotyn")
   * Sharanda Danila
 
 
