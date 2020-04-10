@@ -47,7 +47,7 @@ import hypercorn.trio
 import html5lib
 import matplotlib
 
-matplotlib.use("Agg") # noqa
+matplotlib.use("Agg")  # noqa
 import matplotlib.pyplot as plt
 import multio
 import numpy as np
@@ -285,7 +285,6 @@ class Orisa(Plugin):
 
         await self.spawn(self._sync_all_handles_task)
 
-
         logger.info("spawning cron")
         await self.spawn(self._cron_task)
 
@@ -455,15 +454,11 @@ class Orisa(Plugin):
 
     @command()
     @condition(only_owner)
-    async def hs(self, ctx, kind: str, type_str="pc", style: str = "fancy_grid"):
+    async def hs(self, ctx, guild_id: int, style: str = "fancy_grid"):
 
-        prev_date = datetime.utcnow() - timedelta(days=1)
+        logger.info("Triggered top_players %s on %d", style, guild_id)
 
-        logger.info("Triggered top_players %s %s", kind, type_str)
-
-        async with self.database.session() as session:
-            t = {"pc": BattleTag, "xbox": Gamertag, "psn": OnlineID}[type_str]
-            await self._top_players(session, prev_date, t, kind, style)
+        await self._top_players([guild_id], style, update_cron=False)
 
     @command()
     @condition(only_owner)
@@ -503,7 +498,7 @@ class Orisa(Plugin):
                 ctx.channel.messages.send,
                 f"there are {len(stale_guild_configs)} stale guild configs: {ids}",
             )
-            
+
             if doit == "confirm":
                 for id in stale_ids:
                     user = await self.database.user_by_discord_id(session, id)
@@ -515,14 +510,17 @@ class Orisa(Plugin):
                 for id in stale_guild_configs:
                     gc = session.query(GuildConfigJson).filter_by(id=id).one_or_none()
                     if not gc:
-                        await ctx.channel.messages.send(f"guild config {id} not found in DB???")
+                        await ctx.channel.messages.send(
+                            f"guild config {id} not found in DB???"
+                        )
                     else:
                         await run_sync(session.delete, gc)
                         del self.guild_config[id]
                         logger.info(f"deleted guild config {id}")
-                        
+
                 await send_long(
-                    ctx.channel.messages.send, f"Deleted {len(stale_ids)} members and {len(stale_guild_configs)} guild configs"
+                    ctx.channel.messages.send,
+                    f"Deleted {len(stale_ids)} members and {len(stale_guild_configs)} guild configs",
                 )
                 await run_sync(session.commit)
             elif stale_ids:
@@ -1323,15 +1321,15 @@ Pornography Historian"""
             await reply(ctx, _("I sent you a DM with instructions."))
 
     def _create_help(self, ctx):
-        
+
         channel_id = None
         try:
             g_conf = self.guild_config[ctx.channel.guild_id]
         except KeyError:
             pass
-        else:            
-             if g_conf != GuildConfig.default():
-                 channel_id = g_conf.listen_channel_id
+        else:
+            if g_conf != GuildConfig.default():
+                channel_id = g_conf.listen_channel_id
 
         if not channel_id:
             for guild in self.client.guilds.values():
@@ -3260,4 +3258,3 @@ class OrisaClient(Client):
         self.__http = http
 
     http = property(_http_get, _http_set)
-
