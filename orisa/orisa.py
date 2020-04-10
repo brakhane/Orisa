@@ -605,6 +605,11 @@ class Orisa(Plugin):
                     )
 
                 embed.add_field(name=handle_name, value=handle_value)
+
+                # Hacky workaround for Discord limitation
+                while len(sr_value) > 1024:
+                    sr_value = sr_value.rsplit("\n", 1)[0] + "…"
+
                 if any(handle.sr for handle in user.handles):
                     embed.add_field(
                         name=ngettext("SR", "SRs", num_handles), value=sr_value
