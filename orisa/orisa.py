@@ -1792,7 +1792,7 @@ Pornography Historian"""
     @event("voice_state_update")
     async def _voice_state_update(self, ctx, member, old_voice_state, new_voice_state):
         parent = None
-        if old_voice_state:
+        if old_voice_state and old_voice_state.channel:
             parent = old_voice_state.channel.parent
             if parent:
                 try:
@@ -1802,7 +1802,7 @@ Pornography Historian"""
                         f"Can't adjust voice channel for parent {parent}", exc_info=True
                     )
 
-        if new_voice_state:
+        if new_voice_state and new_voice_state.channel:
             if new_voice_state.channel.parent != parent:
                 if new_voice_state.channel.parent:
                     try:
