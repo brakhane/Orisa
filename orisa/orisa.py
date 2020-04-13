@@ -108,6 +108,7 @@ from .models import (
     User,
     BattleTag,
     Gamertag,
+    Handle,
     SR,
     OnlineID,
     Role,
@@ -2470,6 +2471,7 @@ Pornography Historian"""
                 )
 
                 embed.set_thumbnail(url=image)
+                embed.set_footer(text=f"{handle.desc} {handle.handle}")
 
                 await self.client.find_channel(
                     self.guild_config[guild.id].congrats_channel_id
@@ -2752,18 +2754,30 @@ Pornography Historian"""
             if rank is not None:
                 # get highest SR, but exclude current_sr
                 await run_sync(session.commit)
-                prev_highest_sr_value = session.query(func.max(type_to_check)).filter(
-                    SR.handle == handle, SR.id != handle.current_sr_id
+                prev_highest_sr_value = (
+                    session.query(func.max(type_to_check))
+                    .join(SR.handle)
+                    .filter(
+                        SR.id != handle.current_sr_id,
+                        Handle.user_id == handle.user_id,
+                        Handle.type == handle.type,
+                    )
                 )
+
                 prev_highest_sr = (
                     session.query(SR)
-                    .filter(type_to_check == prev_highest_sr_value)
+                    .join(SR.handle)
+                    .filter(
+                        type_to_check == prev_highest_sr_value,
+                        Handle.user_id == handle.user_id,
+                        Handle.type == handle.type,
+                    )
                     .order_by(desc(SR.timestamp))
                     .first()
                 )
 
                 logger.debug(f"prev_sr {role_ix} {prev_highest_sr} {rank}")
-                if handle.position == 0 and prev_highest_sr and rank > sr_to_rank(
+                if prev_highest_sr and rank > sr_to_rank(
                     prev_highest_sr.values[role_ix]
                 ):
                     logger.debug(
