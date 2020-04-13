@@ -2463,7 +2463,6 @@ Pornography Historian"""
                 )
 
                 embed.set_thumbnail(url=image)
-                embed.set_footer(text=f"{handle.desc} {handle.handle}")
 
                 await self.client.find_channel(
                     self.guild_config[guild.id].congrats_channel_id
@@ -2757,7 +2756,7 @@ Pornography Historian"""
                 )
 
                 logger.debug(f"prev_sr {role_ix} {prev_highest_sr} {rank}")
-                if prev_highest_sr and rank > sr_to_rank(
+                if handle.position == 0 and prev_highest_sr and rank > sr_to_rank(
                     prev_highest_sr.values[role_ix]
                 ):
                     logger.debug(
