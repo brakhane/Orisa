@@ -1746,6 +1746,13 @@ Pornography Historian"""
             image, filename="graph.png", message_embed=embed
         )
 
+
+
+    @command()
+    async def help(self, ctx):
+        """NOP to disable curious built-in help command"""
+        pass
+
     # Events
     @event("member_update")
     async def _member_update(self, ctx, old_member: Member, new_member: Member):
