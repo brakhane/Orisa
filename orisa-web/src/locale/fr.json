@@ -30,7 +30,7 @@
         "post-hs-time": "Heure en UTC quand poster",
         "post-hs-tt": "Lorsque ce paramètre est activé, Orisa affichera un tableau des côtes pour chaque rôle (séparé pour PC et XBOX) quotidiennement vers 11:00 (heure de Paris). Seul la côte du compte principal sera prise en compte et seuls les membres qui ont actuellement une côte sont indiqués. Un fichier CSV contenant ces données sera également affiché.\nSi tes membres se sentent jugés par le tableau des meilleures côtes, tu peux le désactiver ici.",
         "reg-msg": "Message d'enregistrement",
-        "reg-msg-desc": "Texte facultatif propre au serveur qui doit être affiché dans le message de bienvenue après qu’un membre se soit inscrit avec la commande `!ow register`. Ce message n’est *pas* affiché lorsqu’un utilisateur rejoint ce serveur. Peut utiliser [Discord Markdown]({{ link }}).",
+        "reg-msg-desc": "Texte facultatif propre au serveur affiché dans le message de bienvenue après qu’un membre s’inscrit avec la commande `!ow register`. Ce message n’est *pas* affiché lorsqu’un utilisateur rejoint ce serveur. [Discord Markdown]({{ link }}) peut être utilisé.",
         "reg-msg-placeholder": "Ex :\nN’oublie pas d’utiliser`!ow setroles` pour définir tes rôles ; D'ailleurs, ne joue pas Genji.",
         "save": "Sauvegarder",
         "top-role-desc": "Orisa pourra changer les pseudos de tous tes membres, à l’exception du propriétaire du serveur.",
