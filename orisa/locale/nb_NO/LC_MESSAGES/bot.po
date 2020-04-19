@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2019-12-31 12:42+0100\n"
-"PO-Revision-Date: 2020-01-20 22:27+0000\n"
+"PO-Revision-Date: 2020-04-20 13:01+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
 "bot/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.11-dev\n"
+"X-Generator: Weblate 4.0.2-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:174 orisa/orisa.py:1546
@@ -1391,6 +1391,8 @@ msgid ""
 "You don't have an SR though, your profile needs to be public for SR tracking "
 "to work… I still saved your {type}."
 msgstr ""
+"Har ikke dog ikke nok SR, din profil må være offentlig for at SR-sporing "
+"skal virke… Jeg lagret likevel din {type}."
 
 #. Translators: :warning: is emoji code
 #: orisa/orisa.py:2869
@@ -1398,12 +1400,15 @@ msgid ":warning: Nickname too long!"
 msgstr ":warning: Kallenavnet er for langt."
 
 #: orisa/orisa.py:2871
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgid ""
 "Adding your SR to your nickname would result in '{nickname}' and with {len} "
 "characters, be longer than Discord's maximum of 32. Please shorten your nick "
 "to be no longer than 28 characters. I will regularly try to update it."
 msgstr ""
+"Å legge til SR i kallenavnet ditt ville resultert i «{nickname}» med {len} "
+"tegn, noe som er lenger enn Discords maksimum på 32. Forkort det til mindre "
+"enn 28 tegn. Jeg vil jevnlig forsøke å oppdatere det."
 
 #: orisa/orisa.py:2877 orisa/orisa.py:2885
 msgid ":warning: Cannot update nickname"
