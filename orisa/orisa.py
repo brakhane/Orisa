@@ -1621,56 +1621,57 @@ Pornography Historian"""
 
     @ow.subcommand()
     async def dumpsr(self, ctx):
-        async with self.database.session() as session:
-            user = await self.database.user_by_discord_id(session, ctx.author.id)
-            if not user:
-                await reply(ctx, _("You are not registered."))
-                return
-
-            with tempfile.NamedTemporaryFile(suffix=".xls") as tmp:
-                filename = tmp.name
-                with pd.ExcelWriter(filename, engine="openpyxl") as xls_wr:
-                    for handle in user.handles:
-                        df = pd.DataFrame.from_records(
-                            [
-                                (sr.timestamp, sr.tank, sr.damage, sr.support)
-                                for sr in handle.sr_history
-                            ],
-                            columns=[
-                                _("Timestamp"),
-                                _("Tank"),
-                                _("Damage"),
-                                _("Support"),
-                            ],
-                        )
-                        df.to_excel(xls_wr, sheet_name=handle.handle, index=False)
-                        xls_wr.sheets[handle.handle].column_dimensions["A"].width = 25
-
-                tmp.file.seek(0)
-                data = tmp.file.read()
-            try:
-                if ctx.channel.private:
-                    chan = ctx.channel
-                else:
-                    chan = await ctx.author.user.open_private_channel()
-                await chan.messages.upload(
-                    data,
-                    # Translators: file name of the sr history excel file to download
-                    filename=_("sr-history.xls"),
-                    message_content=_(
-                        "Here is your SR history of all your accounts as an Excel sheet."
-                    ),
-                )
-            except Forbidden:
-                # Translators: check how Discord translated "Allow DM from server members"
-                await reply(
-                    ctx,
-                    _(
-                        "I'm not allowed to send you a DM, please make sure that you enabled \"Allow DM from server members\" in the server's privacy settings!"
-                    ),
-                )
-            if not ctx.channel.private:
-                await reply(ctx, "I sent you a DM.")
+        async with ctx.channel.typing:
+            async with self.database.session() as session:
+                user = await self.database.user_by_discord_id(session, ctx.author.id)
+                if not user:
+                    await reply(ctx, _("You are not registered."))
+                    return
+    
+                with tempfile.NamedTemporaryFile(suffix=".xls") as tmp:
+                    filename = tmp.name
+                    with pd.ExcelWriter(filename, engine="openpyxl") as xls_wr:
+                        for handle in user.handles:
+                            df = pd.DataFrame.from_records(
+                                [
+                                    (sr.timestamp, sr.tank, sr.damage, sr.support)
+                                    for sr in handle.sr_history
+                                ],
+                                columns=[
+                                    _("Timestamp"),
+                                    _("Tank"),
+                                    _("Damage"),
+                                    _("Support"),
+                                ],
+                            )
+                            df.to_excel(xls_wr, sheet_name=handle.handle, index=False)
+                            xls_wr.sheets[handle.handle].column_dimensions["A"].width = 25
+    
+                    tmp.file.seek(0)
+                    data = tmp.file.read()
+                try:
+                    if ctx.channel.private:
+                        chan = ctx.channel
+                    else:
+                        chan = await ctx.author.user.open_private_channel()
+                    await chan.messages.upload(
+                        data,
+                        # Translators: file name of the sr history excel file to download
+                        filename=_("sr-history.xls"),
+                        message_content=_(
+                            "Here is your SR history of all your accounts as an Excel sheet."
+                        ),
+                    )
+                except Forbidden:
+                    # Translators: check how Discord translated "Allow DM from server members"
+                    await reply(
+                        ctx,
+                        _(
+                            "I'm not allowed to send you a DM, please make sure that you enabled \"Allow DM from server members\" in the server's privacy settings!"
+                        ),
+                    )
+                if not ctx.channel.private:
+                    await reply(ctx, "I sent you a DM.")
 
     async def _srgraph(self, ctx, user, name, date: str = None):
         sns.set()
