@@ -360,7 +360,7 @@ class Orisa(Plugin):
                     await u.send(message)
                 except:
                     logger.exception(f"Could not send to {user.discord_id}")
-            logger.debug("Sent")
+            logger.debug("All messages sent")
 
     @command()
     @condition(only_owner, bypass_owner=False)
@@ -380,7 +380,7 @@ class Orisa(Plugin):
         for guild in ctx.bot.guilds.values():
             try:
                 logger.info(
-                    "working on %s guild with the owner %s (%s)",
+                    "working on guild %s with owner %s (%s)",
                     guild,
                     guild.owner,
                     guild.owner.name,
@@ -390,7 +390,7 @@ class Orisa(Plugin):
                 )
                 await guild.owner.send(message)
             except Exception:
-                logger.exception("unable to send to the owner of the %s guild", guild)
+                logger.exception("unable to send to owner of guild %s", guild)
 
     @command()
     @condition(only_owner, bypass_owner=False)
@@ -719,7 +719,7 @@ class Orisa(Plugin):
             description=(
                 # Translators: feel free to add "and the translation for this language was done by name"
                 _(
-                    "I am a libre software Discord bot to help manage Overwatch Discord communities.\n"
+                    "I am an open source Discord bot to help manage Overwatch Discord communities.\n"
                     "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord) and licensed under the "
                     "[GNU Affero General Public License 3.0+]({AGPL_LINK}); "
                     "[development happens on GitHub]({GH_LINK})"
@@ -735,7 +735,7 @@ class Orisa(Plugin):
             value=(
                 _(
                     "To invite me to your server, simply [click here]({LINK}), I will post a message with more "
-                    "info in a channel after I have joined your server"
+                    "information in a channel after I have joined your server"
                 ).format(LINK="https://orisa.rocks/invite")
             ),
         )
@@ -886,7 +886,7 @@ class Orisa(Plugin):
             await reply(
                 ctx,
                 _(
-                    'Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC Master Race; `!ow register xbox` for Xbox, or `!ow register psn My-Online-Id_1234` for PlayStation.'
+                    'Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for Xbox, or `!ow register psn My-Online-Id_1234` for PlayStation.'
                 ).format(type=_(type)),
             )
             return
@@ -1409,7 +1409,7 @@ Pornography Historian"""
         embed.add_field(
             name="!ow dumpsr",
             # Translators: help for !ow dumpsr
-            value=_("Download your SR history as a spreadsheet"),
+            value=_("Download your SR history as an Excel spreadsheet"),
             inline=False,
         )
         embed.add_field(
@@ -1661,7 +1661,7 @@ Pornography Historian"""
                         # Translators: file name of the sr history excel file to download
                         filename=_("sr-history.xls"),
                         message_content=_(
-                            "Here is your SR history of all your accounts as a spreadsheet."
+                            "Here is your SR history of all your accounts as an Excel spreadsheet."
                         ),
                     )
                 except Forbidden:
@@ -1847,7 +1847,7 @@ Pornography Historian"""
     @event("guild_leave")
     async def _guild_leave(self, ctx, guild):
         logger.info(
-            "I was removed from the %s guild. I'm now in %d guilds",
+            "I was removed from guild %s, I'm now in %d guilds",
             guild,
             len(self.client.guilds),
         )
@@ -1867,7 +1867,7 @@ Pornography Historian"""
         )
         if member.id == ctx.bot.user.id:
             # seems we got the remove_member event instead of the member_leave event?
-            logger.info("Seems like I was kicked from the %s guild", member.guild)
+            logger.info("Seems like I was kicked from guild %s", member.guild)
             await self._guild_leave(ctx, member.guild)
             return
         else:
@@ -1942,7 +1942,7 @@ Pornography Historian"""
 
     async def _handle_new_guild(self, guild):
         logger.info(
-            r"We have a new %s guild, I'm now on %d guilds \o/",
+            r"We have a new guild %s, I'm now on %d guilds \o/",
             guild,
             len(self.client.guilds),
         )
@@ -1962,12 +1962,12 @@ Pornography Historian"""
                 and channel.effective_permissions(guild.me).send_messages
                 and channel.effective_permissions(guild.me).read_messages
             ):
-                logger.debug('found the hello channel "%s"', channel)
+                logger.debug("found hello channel %s", channel)
                 async with self.database.session() as session:
                     try:
                         # no need to translate here, as we will provide reactions to translate for this one
                         message = await channel.messages.send(self._welcome_text)
-                        logger.debug("message sent")
+                        logger.debug("message successfully sent")
                     except Exception:
                         logger.exception(
                             "Got exception when trying to send to channel %s, checking another one",
@@ -2420,7 +2420,7 @@ Pornography Historian"""
                 if raise_hierachy_error:
                     raise
             except Exception as e:
-                logger.warn("could not set nick", exc_info=True)
+                logger.warn("error while setting nick", exc_info=True)
                 raise
 
         return new_nn
@@ -2437,7 +2437,7 @@ Pornography Historian"""
             return True
 
         if member.voice:
-            logger.debug("the user %s currently has voice", member)
+            logger.debug("user %s is currently in voice", member)
             gi = self.guild_config[member.guild.id]
             logger.debug(
                 "user is in %s with parent %s",
@@ -2683,7 +2683,7 @@ Pornography Historian"""
                         logger.debug("upload done")
                     except Exception:
                         logger.exception(
-                            "unable to send top players to the %i guild", guild_id
+                            "unable to send top players to guild %i", guild_id
                         )
 
                     # wait a bit before sending the next batch to avoid running into
@@ -2809,7 +2809,7 @@ Pornography Historian"""
                             await self._sync_handle(session, handle)
                         else:
                             logger.warn(
-                                f"Could not find a handle for the {handle_id} ID. It was probably deleted"
+                                f"No handle for id {handle_id} found, probably deleted"
                             )
                         await run_sync(session.commit)
                     except Exception:
@@ -2819,7 +2819,9 @@ Pornography Historian"""
                                 exc_info=True,
                             )
                         else:
-                            logger.warn("Could not get handle for sync", exc_info=True)
+                            logger.warn(
+                                "Exception while getting handle for sync", exc_info=True
+                            )
                     finally:
                         try:
                             await run_sync(session.commit)
@@ -3147,7 +3149,7 @@ Pornography Historian"""
                     name=_(":warning: Nickname too long!"),
                     value=_(
                         "Adding your SR to your nickname as '{nickname}', would make it {len} characters, which is longer than Discord's maximum of 32."
-                        "Please shorten it to 28 characters or less, and look for it to be updated."
+                        "Please shorten it to 28 characters or less. I will regularly try to update it."
                     ).format(nickname=e.nickname, len=len(e.nickname)),
                     inline=False,
                 )
