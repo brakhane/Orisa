@@ -305,7 +305,7 @@ class Orisa(Plugin):
             )
         logger.critical("***** GOT EMERGENCY SHUTDOWN COMMAND FROM OWNER *****")
         try:
-            await reply(ctx, "Shutting down...")
+            await reply(ctx, "Shutting down…")
         except:
             pass
         try:
@@ -319,7 +319,7 @@ class Orisa(Plugin):
     async def restart(self, ctx):
         logger.critical("***** GOT RESTART COMMAND FROM OWNER *****")
         try:
-            await reply(ctx, "Restarting...")
+            await reply(ctx, "Restarting…")
         except:
             pass
         try:
@@ -359,8 +359,8 @@ class Orisa(Plugin):
                     u = await self.client.get_user(user.discord_id)
                     await u.send(message)
                 except:
-                    logger.exception(f"Error while sending to {user.discord_id}")
-            logger.debug("Done sending")
+                    logger.exception(f"Could not send to {user.discord_id}")
+            logger.debug("Sent")
 
     @command()
     @condition(only_owner, bypass_owner=False)
@@ -380,7 +380,7 @@ class Orisa(Plugin):
         for guild in ctx.bot.guilds.values():
             try:
                 logger.info(
-                    "working on guild %s with owner %s (%s)",
+                    "working on %s guild with the owner %s (%s)",
                     guild,
                     guild.owner,
                     guild.owner.name,
@@ -390,7 +390,7 @@ class Orisa(Plugin):
                 )
                 await guild.owner.send(message)
             except Exception:
-                logger.exception("unable to send to owner of guild %s", guild)
+                logger.exception("unable to send to the owner of the %s guild", guild)
 
     @command()
     @condition(only_owner, bypass_owner=False)
@@ -596,7 +596,7 @@ class Orisa(Plugin):
                 handle_value += "\n".join(fmt(handle) for handle in secondary)
 
                 if multiple_handle_types:
-                    # Translators: When a user has BattleTags and GamerTags registered, this is shown instead of "Battletags"
+                    # Translators: When a user has BattleTags and Gamertags registered, this is shown instead of "BattleTags"
                     handle_name = _("Tags")
                 else:
                     handle_name = ngettext(
@@ -719,10 +719,10 @@ class Orisa(Plugin):
             description=(
                 # Translators: feel free to add "and the translation for this language was done by name"
                 _(
-                    "I am an open source Discord bot to help manage Overwatch Discord communities.\n"
+                    "I am a libre software Discord bot to help manage Overwatch Discord communities.\n"
                     "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord) and licensed under the "
-                    "[GNU Affero General Public License 3.0]({AGPL_LINK}); the "
-                    "[development is done on Github]({GH_LINK})"
+                    "[GNU Affero General Public License 3.0+]({AGPL_LINK}); "
+                    "[development happens on GitHub]({GH_LINK})"
                 ).format(
                     AGPL_LINK="https://www.gnu.org/licenses/agpl-3.0.en.html",
                     GH_LINK="https://github.com/brakhane/Orisa",
@@ -735,7 +735,7 @@ class Orisa(Plugin):
             value=(
                 _(
                     "To invite me to your server, simply [click here]({LINK}), I will post a message with more "
-                    "information in a channel after I have joined your server"
+                    "info in a channel after I have joined your server"
                 ).format(LINK="https://orisa.rocks/invite")
             ),
         )
@@ -775,7 +775,7 @@ class Orisa(Plugin):
                     # Translators: A tip/information for a user
                     title=_("Tip"),
                     description=_(
-                        "`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin only channel."
+                        "`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin-only channel."
                     ),
                 ),
             )
@@ -845,7 +845,7 @@ class Orisa(Plugin):
             await reply(
                 ctx,
                 _(
-                    "{type} looks like a BattleTag and not like pc/xbox, assuming you meant `!ow register pc`…"
+                    "{type} looks like a BattleTag and not like PC/Xbox, assuming you meant `!ow register pc`…"
                 ).format(type=type),
             )
             type = "pc"
@@ -886,7 +886,7 @@ class Orisa(Plugin):
             await reply(
                 ctx,
                 _(
-                    'Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for XBOX, or `!ow register psn My-Online-Id_1234` for PlayStation.'
+                    'Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC Master Race; `!ow register xbox` for Xbox, or `!ow register psn My-Online-Id_1234` for PlayStation.'
                 ).format(type=_(type)),
             )
             return
@@ -939,7 +939,7 @@ class Orisa(Plugin):
                 # Translators: Check how Discord translates "Allow direct messages from server members" in your local language and use the same term
                 _(
                     "I'm not allowed to send you a DM. Please right click on the Discord server, "
-                    'select Privacy Settings, and enable "Allow direct messages from server members." Then try again.'
+                    "select \"Privacy Settings\", and enable \"Allow direct messages from server members.\" Then try again."
                 ),
             )
         else:
@@ -988,7 +988,7 @@ class Orisa(Plugin):
             await reply(
                 ctx,
                 _(
-                    'However, your new nickname "{nickname}" is now longer than 32 characters, which Discord doesn\'t allow. '
+                    "However, your new nickname \"{nickname}\" is now longer than 32 characters, which Discord doesn\'t allow. "
                     "Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards."
                 ).format(nickname=e.nickname),
             )
@@ -1018,7 +1018,7 @@ class Orisa(Plugin):
             if index == 0:
                 await reply(
                     ctx,
-                    # Translators: handle will be the battletag/gamertag the user tried to register, type will be BattleTag or GamerTag
+                    # Translators: handle will be the BattleTag/Gamertag the user tried to register, type will be BattleTag or GamerTag
                     _(
                         '"{handle}" already is your primary {type}. *Going back to sleep!*'
                     ).format(
@@ -1247,7 +1247,7 @@ Pornography Historian"""
                 # Translators: the identifiers m o d s must not be translated
                 _(
                     "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). "
-                    "They can be combined, eg. `ds` would mean Damage + Support."
+                    "They can be combined, e.g. `ds` would mean Damage + Support."
                 ),
             )
             return
@@ -1260,7 +1260,7 @@ Pornography Historian"""
                     ctx,
                     _(
                         "Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main Tank), `o` (Off Tank), "
-                        "`d` (Damage), `s` (Support). They can be combined, eg. `ds` would mean Damage + Support."
+                        "`d` (Damage), `s` (Support). They can be combined, e.g. `ds` would mean Damage + Support."
                     ).format(role=role),
                 )
                 return
@@ -1402,14 +1402,14 @@ Pornography Historian"""
             name="!ow config",
             # Translators: don't translate "Orisa Admin"
             value=_(
-                'This command can only be used by members with the "Orisa Admin" role and allows them to configure Orisa for the specific Discord server.'
+                "This command can only be used by members with the \"Orisa Admin\" role and allows them to configure Orisa for the specific Discord server."
             ),
             inline=False,
         )
         embed.add_field(
             name="!ow dumpsr",
             # Translators: help for !ow dumpsr
-            value=_("Download your SR history as an Excel sheet"),
+            value=_("Download your SR history as a spreadsheet"),
             inline=False,
         )
         embed.add_field(
@@ -1548,7 +1548,7 @@ Pornography Historian"""
         embed.add_field(
             name="!ow usersrgraph *username* [from_date]",
             value=_(
-                "*This command can only be used by users with the Orisa Admin role!*\n"
+                "*This command can only be used by users with the \"Orisa Admin\" role!*\n"
                 "Like srgraph, but shows the graph for the given user."
             ),
             inline=False,
@@ -1617,7 +1617,7 @@ Pornography Historian"""
         await send_long(ctx.author.send, text)
         if not ctx.channel.private:
             # Translators: privacy policy is currently only availabe in English
-            await reply(ctx, _("I sent you the privacy policy as DM."))
+            await reply(ctx, _("I DM'ed you the privacy policy."))
 
     @ow.subcommand()
     async def dumpsr(self, ctx):
@@ -1627,7 +1627,7 @@ Pornography Historian"""
                 if not user:
                     await reply(ctx, _("You are not registered."))
                     return
-    
+
                 with tempfile.NamedTemporaryFile(suffix=".xls") as tmp:
                     filename = tmp.name
                     with pd.ExcelWriter(filename, engine="openpyxl") as xls_wr:
@@ -1646,7 +1646,7 @@ Pornography Historian"""
                             )
                             df.to_excel(xls_wr, sheet_name=handle.handle, index=False)
                             xls_wr.sheets[handle.handle].column_dimensions["A"].width = 25
-    
+
                     tmp.file.seek(0)
                     data = tmp.file.read()
                 try:
@@ -1659,7 +1659,7 @@ Pornography Historian"""
                         # Translators: file name of the sr history excel file to download
                         filename=_("sr-history.xls"),
                         message_content=_(
-                            "Here is your SR history of all your accounts as an Excel sheet."
+                            "Here is your SR history of all your accounts as a spreadsheet."
                         ),
                     )
                 except Forbidden:
@@ -1752,7 +1752,7 @@ Pornography Historian"""
 
     @command()
     async def help(self, ctx):
-        """NOP to disable curious built-in help command"""
+        """NOP to turn off the curious built-in help command"""
         pass
 
     # Events
@@ -1847,7 +1847,7 @@ Pornography Historian"""
     @event("guild_leave")
     async def _guild_leave(self, ctx, guild):
         logger.info(
-            "I was removed from guild %s, I'm now in %d guilds",
+            "I was removed from the %s guild. I'm now in %d guilds",
             guild,
             len(self.client.guilds),
         )
@@ -1867,7 +1867,7 @@ Pornography Historian"""
         )
         if member.id == ctx.bot.user.id:
             # seems we got the remove_member event instead of the member_leave event?
-            logger.info("Seems like I was kicked from guild %s", member.guild)
+            logger.info("Seems like I was kicked from the %s guild", member.guild)
             await self._guild_leave(ctx, member.guild)
             return
         else:
@@ -1942,7 +1942,7 @@ Pornography Historian"""
 
     async def _handle_new_guild(self, guild):
         logger.info(
-            r"We have a new guild %s, I'm now on %d guilds \o/",
+            r"We have a new %s guild, I'm now on %d guilds \o/",
             guild,
             len(self.client.guilds),
         )
@@ -1962,12 +1962,12 @@ Pornography Historian"""
                 and channel.effective_permissions(guild.me).send_messages
                 and channel.effective_permissions(guild.me).read_messages
             ):
-                logger.debug("found hello channel %s", channel)
+                logger.debug("found the hello channel \"%s\"", channel)
                 async with self.database.session() as session:
                     try:
                         # no need to translate here, as we will provide reactions to translate for this one
                         message = await channel.messages.send(self._welcome_text)
-                        logger.debug("message successfully sent")
+                        logger.debug("message sent")
                     except Exception:
                         logger.exception(
                             "Got exception when trying to send to channel %s, checking another one",
@@ -2011,7 +2011,7 @@ Pornography Historian"""
                         break
         else:
             logger.debug(
-                "no valid hello channel found. Falling back to DM to owner for %s",
+                "no valid \"hello\" channel found. Falling back to DM to owner for %s",
                 guild,
             )
             async with self.database.session() as session:
@@ -2023,7 +2023,7 @@ Pornography Historian"""
                         )
                     )
                 except Exception:
-                    logger.exception("Unable to send mail to owner, oh well...")
+                    logger.exception("Unable to send e-mail to owner, oh well…")
                 else:
                     wm_info = WelcomeMessage(
                         id=message.id, is_private_message=True, guild_name=guild.name
@@ -2413,14 +2413,14 @@ Pornography Historian"""
                 await member.nickname.set(new_nn)
             except (HierarchyError, PermissionsError):
                 logger.info(
-                    "Cannot update nick %s to %s due to not enough permissions",
+                    "Cannot update nick %s to %s due to insufficient permissions",
                     nn,
                     new_nn,
                 )
                 if raise_hierachy_error:
                     raise
             except Exception as e:
-                logger.warn("error while setting nick", exc_info=True)
+                logger.warn("could not set nick", exc_info=True)
                 raise
 
         return new_nn
@@ -2437,7 +2437,7 @@ Pornography Historian"""
             return True
 
         if member.voice:
-            logger.debug("user %s is currently in voice", member)
+            logger.debug("the user %s currently has voice", member)
             gi = self.guild_config[member.guild.id]
             logger.debug(
                 "user is in %s with parent %s",
@@ -2644,7 +2644,7 @@ Pornography Historian"""
                     lines = 20
 
                     try:
-                        logger.debug("trying to send highscore to %i", guild_id)
+                        logger.debug("trying to send highscore to %i…", guild_id)
                         chan = self.client.find_channel(
                             self.guild_config[guild_id].listen_channel_id
                         )
@@ -2683,7 +2683,7 @@ Pornography Historian"""
                         logger.debug("upload done")
                     except Exception:
                         logger.exception(
-                            "unable to send top players to guild %i", guild_id
+                            "unable to send top players to the %i guild", guild_id
                         )
 
                     # wait a bit before sending the next batch to avoid running into
@@ -2702,7 +2702,7 @@ Pornography Historian"""
         try:
             srs, images = await get_sr(handle)
         except UnableToFindSR:
-            logger.debug(f"No SR for {handle}, oh well...")
+            logger.debug(f"No SR for {handle}, oh well…")
             srs = TDS(None, None, None)
             images = [None] * 3
         except Exception:
@@ -2782,7 +2782,7 @@ Pornography Historian"""
                     prev_highest_sr.values[role_ix]
                 ):
                     logger.debug(
-                        f"handle {handle} role {role_ix} old SR {prev_highest_sr}, new rank {rank}, sending congrats..."
+                        f"handle {handle} role {role_ix} old SR {prev_highest_sr}, new rank {rank}, sending congrats…"
                     )
                     await self._send_congrats(handle, role_ix, sr, rank, image)
 
@@ -2809,7 +2809,7 @@ Pornography Historian"""
                             await self._sync_handle(session, handle)
                         else:
                             logger.warn(
-                                f"No handle for id {handle_id} found, probably deleted"
+                                f"Could not find a handle for the {handle_id} ID. It was probably deleted"
                             )
                         await run_sync(session.commit)
                     except Exception:
@@ -2820,7 +2820,7 @@ Pornography Historian"""
                             )
                         else:
                             logger.warn(
-                                "Exception while getting handle for sync", exc_info=True
+                                "Could not get handle for sync", exc_info=True
                             )
                     finally:
                         try:
@@ -2858,7 +2858,7 @@ Pornography Historian"""
         logger.info("done syncing")
 
     async def _sync_all_handles_task(self):
-        logger.debug("started waiting...")
+        logger.debug("started waiting…")
         await trio.sleep(10)
         while True:
             try:
@@ -2874,7 +2874,7 @@ Pornography Historian"""
 
         while True:
             try:
-                logger.debug("checking cron...")
+                logger.debug("checking Cron…")
                 async with self.database.session() as s:
                     now = datetime.utcnow()
                     to_run = await run_sync(
@@ -2893,9 +2893,9 @@ Pornography Historian"""
                     guild_ids = [h.id for h in to_run]
 
                 if guild_ids:
-                    logger.debug("running highscore...")
+                    logger.debug("running highscores…")
                     await self._top_players(guild_ids)
-                    logger.debug("done running hiscore")
+                    logger.debug("done running highscores")
             except Exception:
                 logger.exception("Error during cron")
             await trio.sleep(1 * 60)
@@ -2914,14 +2914,14 @@ Pornography Historian"""
                 await hypercorn.trio.serve(web.app, config)
             except Exception:
                 logger.exception("hypercorn crashed!")
-            logger.error("hypercorn serve stopped, restarting in 10s...")
+            logger.error("hypercorn serve stopped, restarting in 10s…")
             await trio.sleep(10)
 
     async def _oauth_result_listener(self):
         async with self.web_recv_ch as recv_ch:
             async for uid, type, data in recv_ch:
                 logger.debug(
-                    f"got OAuth response data {data} of type {type} for uid {uid}"
+                    f"got OAuth response data {data} of type {type} for UID {uid}"
                 )
                 try:
                     with trio.move_on_after(60):
@@ -2945,7 +2945,7 @@ Pornography Historian"""
                 if battle_tag is None:
                     await user_channel.messages.send(
                         _(
-                            "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` to register an XBOX account."
+                            "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` to register an Xbox account."
                         )
                     )
                     return
@@ -2962,8 +2962,8 @@ Pornography Historian"""
                 if not handles:
                     await user_channel.messages.send(
                         _(
-                            "I couldn't find a XBox account linked to your Discord. Please link your XBox account to Discord and try again. "
-                            "Unfortunately, I cannot ask XBL directly for the information."
+                            "I couldn't find a Xbox account linked to your Discord. Please link your Xbox account to Discord and try again. "
+                            "Unfortunately, I cannot ask Xbox Live for the info."
                         )
                     )
                     return
@@ -3148,8 +3148,8 @@ Pornography Historian"""
                     # Translators: :warning: is emoji code
                     name=_(":warning: Nickname too long!"),
                     value=_(
-                        "Adding your SR to your nickname would result in '{nickname}' and with {len} characters, be longer than Discord's maximum of 32. "
-                        "Please shorten your nick to be no longer than 28 characters. I will regularly try to update it."
+                        "Adding your SR to your nickname as '{nickname}', would make it {len} characters, which is longer than Discord's maximum of 32."
+                        "Please shorten it to 28 characters or less, and look for it to be updated."
                     ).format(nickname=e.nickname, len=len(e.nickname)),
                     inline=False,
                 )
@@ -3157,7 +3157,7 @@ Pornography Historian"""
                 embed.add_field(
                     name=_(":warning: Cannot update nickname"),
                     value=_(
-                        'I do not have enough permissions to update your nickname. The owner needs to move the "Orisa" role higher '
+                        'I do not have sufficient permissions to update your nickname. The owner needs to move the "Orisa" role higher, '
                         "so that is higher than your highest role. If you are the owner of this server, there is no way for me to update your nickname, sorry!"
                     ),
                     inline=False,
@@ -3250,7 +3250,7 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
 
     if member is None:
         raise ConversionFailedError(
-            ctx, name, Member, "Cannot find member with that name"
+            ctx, name, Member, "Cannot find any member with that name"
         )
     else:
         return member
