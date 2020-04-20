@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-20 16:31+0200\n"
 "PO-Revision-Date: 2020-04-20 15:49+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
@@ -304,9 +304,9 @@ msgstr ""
 "Ich bin ein Open Source Discord-Bot, der dabei hilft, Overwatch Discord "
 "Gemeinschaften zu managen.\n"
 "Ich werde entwickelt und gewartet von Dennis Brakhane (Joghurt#2732 in "
-"Discord) und bin under der [GNU Affero General Public License "
-"3.0]({AGPL_LINK}) lizenziert; die [Entwicklung findet auf GitHub "
-"statt]({GH_LINK})"
+"Discord) und bin under der [GNU Affero General Public License 3.0]"
+"({AGPL_LINK}) lizenziert; die [Entwicklung findet auf GitHub statt]"
+"({GH_LINK})"
 
 #: orisa/orisa.py:733
 msgid "Invite me to your own Discord"
@@ -454,8 +454,8 @@ msgid ""
 "Id_1234` for PlayStation."
 msgstr ""
 "Ungültiger Registrierungstyp \"{type}\". Verwende `!ow register` oder `!ow "
-"register pc` für einen PC Account. `! ow registrier xbox` für XBox, oder `"
-"!ow register psn Meine-Online-ID_1234` für PlayStation."
+"register pc` für einen PC Account. `! ow registrier xbox` für XBox, oder `!"
+"ow register psn Meine-Online-ID_1234` für PlayStation."
 
 #. Translators: type will be PC, XBOX or PSN
 #: orisa/orisa.py:904
@@ -508,8 +508,9 @@ msgid ""
 "members.\" Then try again."
 msgstr ""
 "Ich darf dir keine DN schicken. Klicke mit der rechten Maustaste auf den "
-"Discord-Server, wähle \"Datenschutzeinstellungen\" und aktiviere \""
-"Direktnachrichten von Servermitgliedern erlauben\". Dann versuche es nochmal."
+"Discord-Server, wähle \"Datenschutzeinstellungen\" und aktiviere "
+"\"Direktnachrichten von Servermitgliedern erlauben\". Dann versuche es "
+"nochmal."
 
 #: orisa/orisa.py:947 orisa/orisa.py:1327
 msgid "I sent you a DM with instructions."
@@ -696,9 +697,9 @@ msgid ""
 "(Off Tank), `d` (Damage), `s` (Support). They can be combined, e.g. `ds` "
 "would mean Damage + Support."
 msgstr ""
-"Fehlende Rollenkennung. Gültige Rollenbezeichnungen sind: `m` (Main-Tank),`o`"
-" (Off-Tank),`d` (Schaden),`s` (Unterstützer). Sie können kombiniert werden, "
-"z.B. `ds` würde Schaden + Unterstützung bedeuten."
+"Fehlende Rollenkennung. Gültige Rollenbezeichnungen sind: `m` (Main-Tank),"
+"`o` (Off-Tank),`d` (Schaden),`s` (Unterstützer). Sie können kombiniert "
+"werden, z.B. `ds` würde Schaden + Unterstützung bedeuten."
 
 #: orisa/orisa.py:1262
 #, python-brace-format
@@ -1307,8 +1308,8 @@ msgid ""
 "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` "
 "to register an Xbox account."
 msgstr ""
-"Es tut mir leid, es sieht so aus, als ob du kein BattleTag hast. Benutze `"
-"!ow register xbox`, um einen XBox Account zu registrieren."
+"Es tut mir leid, es sieht so aus, als ob du kein BattleTag hast. Benutze `!"
+"ow register xbox`, um einen XBox Account zu registrieren."
 
 #: orisa/orisa.py:2965
 msgid ""
