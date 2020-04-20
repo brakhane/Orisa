@@ -939,7 +939,7 @@ class Orisa(Plugin):
                 # Translators: Check how Discord translates "Allow direct messages from server members" in your local language and use the same term
                 _(
                     "I'm not allowed to send you a DM. Please right click on the Discord server, "
-                    "select \"Privacy Settings\", and enable \"Allow direct messages from server members.\" Then try again."
+                    'select "Privacy Settings", and enable "Allow direct messages from server members." Then try again.'
                 ),
             )
         else:
@@ -988,7 +988,7 @@ class Orisa(Plugin):
             await reply(
                 ctx,
                 _(
-                    "However, your new nickname \"{nickname}\" is now longer than 32 characters, which Discord doesn\'t allow. "
+                    'However, your new nickname "{nickname}" is now longer than 32 characters, which Discord doesn\'t allow. '
                     "Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards."
                 ).format(nickname=e.nickname),
             )
@@ -1402,7 +1402,7 @@ Pornography Historian"""
             name="!ow config",
             # Translators: don't translate "Orisa Admin"
             value=_(
-                "This command can only be used by members with the \"Orisa Admin\" role and allows them to configure Orisa for the specific Discord server."
+                'This command can only be used by members with the "Orisa Admin" role and allows them to configure Orisa for the specific Discord server.'
             ),
             inline=False,
         )
@@ -1548,7 +1548,7 @@ Pornography Historian"""
         embed.add_field(
             name="!ow usersrgraph *username* [from_date]",
             value=_(
-                "*This command can only be used by users with the \"Orisa Admin\" role!*\n"
+                '*This command can only be used by users with the "Orisa Admin" role!*\n'
                 "Like srgraph, but shows the graph for the given user."
             ),
             inline=False,
@@ -1645,7 +1645,9 @@ Pornography Historian"""
                                 ],
                             )
                             df.to_excel(xls_wr, sheet_name=handle.handle, index=False)
-                            xls_wr.sheets[handle.handle].column_dimensions["A"].width = 25
+                            xls_wr.sheets[handle.handle].column_dimensions[
+                                "A"
+                            ].width = 25
 
                     tmp.file.seek(0)
                     data = tmp.file.read()
@@ -1747,8 +1749,6 @@ Pornography Historian"""
         await ctx.channel.messages.upload(
             image, filename="graph.png", message_embed=embed
         )
-
-
 
     @command()
     async def help(self, ctx):
@@ -1962,7 +1962,7 @@ Pornography Historian"""
                 and channel.effective_permissions(guild.me).send_messages
                 and channel.effective_permissions(guild.me).read_messages
             ):
-                logger.debug("found the hello channel \"%s\"", channel)
+                logger.debug('found the hello channel "%s"', channel)
                 async with self.database.session() as session:
                     try:
                         # no need to translate here, as we will provide reactions to translate for this one
@@ -2011,7 +2011,7 @@ Pornography Historian"""
                         break
         else:
             logger.debug(
-                "no valid \"hello\" channel found. Falling back to DM to owner for %s",
+                'no valid "hello" channel found. Falling back to DM to owner for %s',
                 guild,
             )
             async with self.database.session() as session:
@@ -2819,9 +2819,7 @@ Pornography Historian"""
                                 exc_info=True,
                             )
                         else:
-                            logger.warn(
-                                "Could not get handle for sync", exc_info=True
-                            )
+                            logger.warn("Could not get handle for sync", exc_info=True)
                     finally:
                         try:
                             await run_sync(session.commit)
