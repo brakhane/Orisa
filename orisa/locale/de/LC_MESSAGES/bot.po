@@ -4,12 +4,13 @@
 # Weblate Admin <brakhane+weblateadmin@gmail.com>, 2019.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
 # Cynthia <cynti-ebert@web.de>, 2019.
+# Dennis Brakhane <brakhane@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-04-20 16:31+0200\n"
-"PO-Revision-Date: 2019-12-31 12:00+0000\n"
+"PO-Revision-Date: 2020-04-20 15:49+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.10\n"
+"X-Generator: Weblate 4.0.2-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1643
@@ -292,13 +293,7 @@ msgid "About Me"
 msgstr "Über Mich"
 
 #: orisa/orisa.py:722
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "I am an open source Discord bot to help manage Overwatch Discord "
-#| "communities.\n"
-#| "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord) "
-#| "and licensed under the [GNU Affero General Public License 3.0]"
-#| "({AGPL_LINK}); the [development is done on Github]({GH_LINK})"
+#, python-brace-format
 msgid ""
 "I am an open source Discord bot to help manage Overwatch Discord "
 "communities.\n"
@@ -309,9 +304,9 @@ msgstr ""
 "Ich bin ein Open Source Discord-Bot, der dabei hilft, Overwatch Discord "
 "Gemeinschaften zu managen.\n"
 "Ich werde entwickelt und gewartet von Dennis Brakhane (Joghurt#2732 in "
-"Discord) und bin under der [GNU Affero General Public License 3.0]"
-"({AGPL_LINK}) lizenziert; die [Entwicklung findet auf GitHub statt]"
-"({GH_LINK})"
+"Discord) und bin under der [GNU Affero General Public License "
+"3.0]({AGPL_LINK}) lizenziert; die [Entwicklung findet auf GitHub "
+"statt]({GH_LINK})"
 
 #: orisa/orisa.py:733
 msgid "Invite me to your own Discord"
@@ -371,10 +366,6 @@ msgstr ""
 "konfigurieren, indem sie Dir beim Senden dieses Befehls zusehen."
 
 #: orisa/orisa.py:778
-#, fuzzy
-#| msgid ""
-#| "`!ow config` works in *any* channel (that I'm allowed to read messages "
-#| "in, of course), so you can also use an admin only channel."
 msgid ""
 "`!ow config` works in *any* channel (that I'm allowed to read messages in, "
 "of course), so you can also use an admin-only channel."
@@ -415,10 +406,7 @@ msgstr ""
 "nicht posten, da jeder, der diesen Link hat, mich konfigurieren kann."
 
 #: orisa/orisa.py:848
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "{type} looks like a BattleTag and not like pc/xbox, assuming you meant `!"
-#| "ow register pc`…"
+#, python-brace-format
 msgid ""
 "{type} looks like a BattleTag and not like PC/Xbox, assuming you meant `!ow "
 "register pc`…"
@@ -459,19 +447,15 @@ msgstr ""
 "B. `! ow register psn Meine-Coole-ID_12345`."
 
 #: orisa/orisa.py:889
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
-#| "pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported "
-#| "yet."
+#, python-brace-format
 msgid ""
 "Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
 "pc` for PC; `!ow register xbox` for Xbox, or `!ow register psn My-Online-"
 "Id_1234` for PlayStation."
 msgstr ""
 "Ungültiger Registrierungstyp \"{type}\". Verwende `!ow register` oder `!ow "
-"register pc` für einen PC Account. `! ow registrier xbox` für XBOX. "
-"PlayStation wird noch nicht unterstützt."
+"register pc` für einen PC Account. `! ow registrier xbox` für XBox, oder `"
+"!ow register psn Meine-Online-ID_1234` für PlayStation."
 
 #. Translators: type will be PC, XBOX or PSN
 #: orisa/orisa.py:904
@@ -518,20 +502,14 @@ msgstr ""
 "Datenschutzbestimmungen sind momentan nur in Englisch verfügbar."
 
 #: orisa/orisa.py:941
-#, fuzzy
-#| msgid ""
-#| "I'm not allowed to send you a DM. Please right click on the Discord "
-#| "server, select Privacy Settings, and enable \"Allow direct messages from "
-#| "server members.\" Then try again."
 msgid ""
 "I'm not allowed to send you a DM. Please right click on the Discord server, "
 "select \"Privacy Settings\", and enable \"Allow direct messages from server "
 "members.\" Then try again."
 msgstr ""
 "Ich darf dir keine DN schicken. Klicke mit der rechten Maustaste auf den "
-"Discord-Server, wähle \"Datenschutzeinstellungen\" und aktiviere "
-"\"Direktnachrichten von Servermitgliedern erlauben\". Dann versuche es "
-"nochmal."
+"Discord-Server, wähle \"Datenschutzeinstellungen\" und aktiviere \""
+"Direktnachrichten von Servermitgliedern erlauben\". Dann versuche es nochmal."
 
 #: orisa/orisa.py:947 orisa/orisa.py:1327
 msgid "I sent you a DM with instructions."
@@ -713,26 +691,17 @@ msgid "you are not registered anyway, so there's nothing for me to forget…"
 msgstr "Du bist sowieso nicht registriert, also gibt es nichts zu vergessen…"
 
 #: orisa/orisa.py:1249
-#, fuzzy
-#| msgid ""
-#| "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), "
-#| "`o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. "
-#| "`ds` would mean Damage + Support."
 msgid ""
 "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` "
 "(Off Tank), `d` (Damage), `s` (Support). They can be combined, e.g. `ds` "
 "would mean Damage + Support."
 msgstr ""
-"Fehlende Rollenkennung. Gültige Rollenbezeichnungen sind: `m` (Main-Tank),"
-"`o` (Off-Tank),`d` (Schaden),`s` (Unterstützer). Sie können kombiniert "
-"werden, z.B. `ds` würde Schaden + Unterstützung bedeuten."
+"Fehlende Rollenkennung. Gültige Rollenbezeichnungen sind: `m` (Main-Tank),`o`"
+" (Off-Tank),`d` (Schaden),`s` (Unterstützer). Sie können kombiniert werden, "
+"z.B. `ds` würde Schaden + Unterstützung bedeuten."
 
 #: orisa/orisa.py:1262
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main "
-#| "Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, "
-#| "eg. `ds` would mean Damage + Support."
+#, python-brace-format
 msgid ""
 "Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main "
 "Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, e."
@@ -872,8 +841,6 @@ msgstr ""
 
 #. Translators: help for !ow dumpsr
 #: orisa/orisa.py:1412
-#, fuzzy
-#| msgid "Download your SR history as an Excel sheet"
 msgid "Download your SR history as an Excel spreadsheet"
 msgstr "Laden Deinen SR-Verlauf als Excel-Tabelle herunter"
 
@@ -1106,10 +1073,6 @@ msgstr ""
 "ansonsten so früh wie Orisa Daten hat."
 
 #: orisa/orisa.py:1551
-#, fuzzy
-#| msgid ""
-#| "*This command can only be used by users with the Orisa Admin role!*\n"
-#| "Like srgraph, but shows the graph for the given user."
 msgid ""
 "*This command can only be used by users with the \"Orisa Admin\" role!*\n"
 "Like srgraph, but shows the graph for the given user."
@@ -1166,8 +1129,6 @@ msgstr "{member_name} ist nicht registriert!"
 
 #. Translators: privacy policy is currently only availabe in English
 #: orisa/orisa.py:1620
-#, fuzzy
-#| msgid "I sent you the privacy policy as DM."
 msgid "I DM'ed you the privacy policy."
 msgstr ""
 "Ich habe dir die Datenschutzbestimmungen als DN geschickt; diese gibt es "
@@ -1187,8 +1148,6 @@ msgid "sr-history.xls"
 msgstr "sr-historie.xls"
 
 #: orisa/orisa.py:1664
-#, fuzzy
-#| msgid "Here is your SR history of all your accounts as an Excel sheet."
 msgid "Here is your SR history of all your accounts as an Excel spreadsheet."
 msgstr "Hier ist deine SR Historie aller deiner Accounts als Excelsheet."
 
@@ -1344,23 +1303,14 @@ msgstr ""
 "getan ist. Ich entschuldige mich für die Unannehmlichkeiten."
 
 #: orisa/orisa.py:2948
-#, fuzzy
-#| msgid ""
-#| "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register "
-#| "xbox` to register an XBOX account."
 msgid ""
 "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` "
 "to register an Xbox account."
 msgstr ""
-"Es tut mir leid, es sieht so aus, als ob du kein BattleTag hast. Benutze `!"
-"ow register xbox`, um einen XBOX Account zu registrieren."
+"Es tut mir leid, es sieht so aus, als ob du kein BattleTag hast. Benutze `"
+"!ow register xbox`, um einen XBox Account zu registrieren."
 
 #: orisa/orisa.py:2965
-#, fuzzy
-#| msgid ""
-#| "I couldn't find a XBox account linked to your Discord. Please link your "
-#| "XBox account to Discord and try again. Unfortunately, I cannot ask XBL "
-#| "directly for the information."
 msgid ""
 "I couldn't find a Xbox account linked to your Discord. Please link your Xbox "
 "account to Discord and try again. Unfortunately, I cannot ask Xbox Live for "
@@ -1368,7 +1318,7 @@ msgid ""
 msgstr ""
 "Leider konnte ich keinen mit Discord verknüften XBox-Account finden. Bitte "
 "verknüpfe deinen XBox-Account mit Discord und versuche es erneut. Leider "
-"kann ich XBL nicht direkt nach deinem Accountnamen fragen."
+"kann ich XBox Live nicht direkt nach deinem Accountnamen fragen."
 
 #: orisa/orisa.py:2991
 #, python-brace-format
@@ -1523,12 +1473,7 @@ msgid ":warning: Nickname too long!"
 msgstr ":warning: Nickname ist zu lang!"
 
 #: orisa/orisa.py:3151
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Adding your SR to your nickname would result in '{nickname}' and with "
-#| "{len} characters, be longer than Discord's maximum of 32. Please shorten "
-#| "your nick to be no longer than 28 characters. I will regularly try to "
-#| "update it."
+#, python-brace-format
 msgid ""
 "Adding your SR to your nickname as '{nickname}', would make it {len} "
 "characters, which is longer than Discord's maximum of 32.Please shorten it "
@@ -1536,7 +1481,7 @@ msgid ""
 msgstr ""
 "Wenn ich dein SR zu deinem Nicknamen hinzufüge, ergibt das '{nickname}', "
 "welches mit {len} Zeichen länger als Discords maximal erlaubte 32 ist. Bitte "
-"kürze deinen Nicknamen, so dass es nicht länger als 28 Zeichen ist. Ich "
+"kürze deinen Nicknamen, so dass er nicht länger als 28 Zeichen ist. Ich "
 "werde regelmäßig versuchen, deinen Nicknamen zu aktualisieren."
 
 #: orisa/orisa.py:3158 orisa/orisa.py:3168
@@ -1544,12 +1489,6 @@ msgid ":warning: Cannot update nickname"
 msgstr ":warning: Kann Nicknamen nicht aktualisieren"
 
 #: orisa/orisa.py:3160
-#, fuzzy
-#| msgid ""
-#| "I do not have enough permissions to update your nickname. The owner needs "
-#| "to move the \"Orisa\" role higher so that is higher than your highest "
-#| "role. If you are the owner of this server, there is no way for me to "
-#| "update your nickname, sorry!"
 msgid ""
 "I do not have sufficient permissions to update your nickname. The owner "
 "needs to move the \"Orisa\" role higher, so that is higher than your highest "
