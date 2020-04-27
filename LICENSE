@@ -16,5 +16,5 @@ there are certain restrictions on running your own instance:
 3. If you allow your instance to be added to servers not under your control (by
    setting the bot to "public" in the Discord interface), you have to modify the
    welcome message it sends when joining ("Welcome! I'm excited to be here…") to
-   prominently display that your instance is not the official bot that include a
-   link to the official repository (https://github.com/brakhane/Orisa)
+   prominently display that your instance is not the official bot, and that includes
+   a link to the official repository (https://github.com/brakhane/Orisa)
