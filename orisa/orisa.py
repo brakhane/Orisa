@@ -2128,10 +2128,6 @@ Pornography Historian"""
         def is_managed(chan):
             return bool(re.search(r" #\d+( \[.+?\])?\s*$", chan.name))
 
-        voice_channels = [
-            chan for chan in parent.children if chan.type == ChannelType.VOICE
-        ]
-
         sorted_channels = sorted(
             filter(is_managed, parent.children), key=attrgetter("name")
         )
