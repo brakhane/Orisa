@@ -58,6 +58,12 @@ You can simply invite Orisa to your discord by visiting `this link <https://oris
 Installation of your own instance
 ---------------------------------
 
+.. warning::
+
+   Orisa has become a quite popular bot, and Discord requires that popular bots become verified.
+
+   To prevent imposter bots, there are certain restrictions on running your own instance, check the LICENSE for more information.
+
 **This information here is outdated, setting Orisa up is not trivial currently.**
 
 You need to use Discords developer pages to create a link you can use to allow
@@ -72,10 +78,12 @@ group you use for your regular members.
 
 License
 -------
-Orisa is licensed under the GNU AGPL version 3.
+Orisa's code is licensed under the GNU AGPL version 3.
 
 Basically it means that you have to give every user of your bot (which is every discord user on
 your server) the same rights you got; the right to see and modify the source.
 
-If you make modifications, you are required to disclose them to the users of your modified bot.
+If you make modifications, you are required to disclose them to the users of your modified bot,
+you also must make it obvious that your bot is not the official Orisa bot.
 
+Be sure to check the LICENSE file for further restrictions on using this bot.
