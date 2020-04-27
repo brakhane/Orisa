@@ -4,7 +4,8 @@ While the code of Orisa is licensed under the terms of the AGPL (see LICENSE.AGP
 
 2. You must make it obvious that your instance is not the official bot, by doing at least:
   
-  a) choose a different name than just "Orisa" (eg. "NotOrisa", "OrisaClone", "OverwatchBot"), and
+  a) choose a different name than just "Orisa" that makes it obvious it's not official 
+     (eg. "NotOrisa", "OrisaClone", "OverwatchBot", but not "OrisaV2" as that would imply it's a successor), and
   
   b) add a disclaimer to the "!ow register" answer text and "!ow about" info that your bot is not the official Orisa bot
 
