@@ -377,7 +377,7 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner, bypass_owner=False)
     async def messageserverowners(self, ctx, *, message: str):
-        for guild in ctx.bot.guilds.values():
+        for guild in self._configured_guilds():
             try:
                 logger.info(
                     "working on guild %s with owner %s (%s)",
@@ -1199,7 +1199,7 @@ Pornography Historian"""
                 logger.info(f"{ctx.author.name} ({ctx.author.id}) requested removal")
                 user_id = user.discord_id
                 try:
-                    for guild in self.client.guilds.values():
+                    for guild in self._configured_guilds():
                         try:
                             nn = str(guild.members[user_id].name)
                         except KeyError:
@@ -1339,7 +1339,7 @@ Pornography Historian"""
                 channel_id = g_conf.listen_channel_id
 
         if not channel_id:
-            for guild in self.client.guilds.values():
+            for guild in self._configured_guilds():
                 if ctx.author.id in guild.members:
                     channel_id = self.guild_config[guild.id].listen_channel_id
                     break
@@ -2354,7 +2354,7 @@ Pornography Historian"""
         user_id = user.discord_id
         exception = new_nn = None
 
-        for guild in self.client.guilds.values():
+        for guild in self._configured_guilds():
             try:
                 member = guild.members[user_id]
             except KeyError:
@@ -2416,7 +2416,7 @@ Pornography Historian"""
                 )
                 if raise_hierachy_error:
                     raise
-            except Exception as e:
+            except Exception:
                 logger.warn("error while setting nick", exc_info=True)
                 raise
 
@@ -2450,7 +2450,7 @@ Pornography Historian"""
 
     async def _send_congrats(self, handle, role_idx, sr, rank, image):
         user = handle.user
-        for guild in self.client.guilds.values():
+        for guild in self._configured_guilds():
             try:
                 if user.discord_id not in guild.members:
                     continue
@@ -2975,7 +2975,7 @@ Pornography Historian"""
                 handles_to_check = handles
 
                 extra_text = ""
-                for guild in self.client.guilds.values():
+                for guild in self._configured_guilds():
                     if user_id in guild.members:
                         extra_text = (
                             self.guild_config[guild.id].extra_register_text or ""
@@ -3192,6 +3192,10 @@ Pornography Historian"""
             )
 
             await user_channel.messages.send(content=None, embed=embed)
+
+
+    def _configured_guilds(self):
+        return [guild for guild in self.client.guilds.values() if guild.id in self.guild_config]
 
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):
