@@ -1078,12 +1078,13 @@ class Orisa(Plugin):
                     )
                     await run_sync(session.rollback)
                 except NicknameTooLong as e:
+                    logger.info(f"Cannot set nickname {e.nickname}, it's too long")
                     await reply(
                         ctx,
                         _(
-                            "Sorry, using this format would make your nickname be longer than 32 characters ({len} to be exact).\n"
+                            "Sorry, using this format would make your nickname `{nickname}` be longer than 32 characters ({len} to be exact).\n"
                             "Please choose a shorter format or shorten your nickname!"
-                        ).format(len=len(e.nickname)),
+                        ).format(nickname=e.nickname, len=len(e.nickname)),
                     )
                     await run_sync(session.rollback)
                 else:
