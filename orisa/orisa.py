@@ -1841,7 +1841,7 @@ Pornography Historian"""
     async def _message_create(self, ctx, msg):
         # logger.debug(f"got message {msg.author} {msg.channel} {msg.content} {msg.snowflake_timestamp}")
         if msg.content.startswith("!ow"):
-            logger.info(f"{msg.author.name} (msg.author.id} in {msg.channel} issued {msg.content}")
+            logger.info(f"{msg.author.name} ({msg.author.id}) in {msg.channel} issued {msg.content}")
         if msg.content.startswith("!"):
             return
 
