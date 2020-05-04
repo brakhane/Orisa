@@ -1,8 +1,8 @@
-.. image:: https://discordbots.org/api/widget/status/445905377712930817.svg?noavatar=true
-   :target: https://discordbots.org/bot/445905377712930817
+.. image:: https://top.gg/api/widget/status/445905377712930817.svg?noavatar=true
+   :target: https://top.gg/bot/445905377712930817
    
-.. image:: https://discordbots.org/api/widget/servers/445905377712930817.svg?noavatar=true
-   :target: https://discordbots.org/bot/445905377712930817
+.. image:: https://top.gg/api/widget/servers/445905377712930817.svg?noavatar=true
+   :target: https://top.gg/bot/445905377712930817
 
 .. image:: https://hosted.weblate.org/widgets/orisa/-/svg-badge.svg
    :target: https://hosted.weblate.org/engage/orisa/?utm_source=widget
@@ -60,7 +60,7 @@ Installation of your own instance
 
 .. warning::
 
-   Orisa is a verified Discord bot because she has become a quite popular bot, and Discord requires that popular bots are verified.
+   Orisa is a verified Discord bot (Discord requires that popular bots are verified).
 
    To prevent imposter bots, there are certain restrictions on running your own instance, check the LICENSE for more information.
 
