@@ -439,7 +439,7 @@ class Orisa(Plugin):
     @condition(only_owner, bypass_owner=False)
     async def delete(self, ctx, channel_id: str, message_id: int = None):
         match = re.match(
-            r"https://discordapp.com/channels/[0-9]+/([0-9]+)/([0-9]+)", channel_id
+            r"https://discord.com/channels/[0-9]+/([0-9]+)/([0-9]+)", channel_id
         )
         if match:
             channel_id = int(match.group(1))
@@ -863,7 +863,7 @@ class Orisa(Plugin):
             )
         elif type == "xbox":
             client = WebApplicationClient(OAUTH_DISCORD_CLIENT_ID)
-            oauth_url = "https://discordapp.com/oauth2/authorize"
+            oauth_url = "https://discord.com/oauth2/authorize"
             scope = ["connections"]
             description = _(
                 "To complete your registration, I need your permission to ask Discord for your Gamertag. Please click "

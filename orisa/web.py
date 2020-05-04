@@ -377,8 +377,8 @@ async def handle_oauth():
         client_secret = OAUTH_BLIZZARD_CLIENT_SECRET
         scope = []
     elif type == "xbox":
-        token_url = "https://discordapp.com/api/oauth2/token"
-        endpoint = "https://discordapp.com/api/v6/users/@me/connections"
+        token_url = "https://discord.com/api/oauth2/token"
+        endpoint = "https://discord.com/api/v6/users/@me/connections"
         scope = ["connections"]
         client_id = OAUTH_DISCORD_CLIENT_ID
         client_secret = OAUTH_DISCORD_CLIENT_SECRET
