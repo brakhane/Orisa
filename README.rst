@@ -60,7 +60,7 @@ Installation of your own instance
 
 .. warning::
 
-   Orisa has become a quite popular bot, and Discord requires that popular bots become verified.
+   Orisa is a verified Discord bot because she has become a quite popular bot, and Discord requires that popular bots are verified.
 
    To prevent imposter bots, there are certain restrictions on running your own instance, check the LICENSE for more information.
 
