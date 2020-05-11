@@ -48,6 +48,7 @@ Orisa wouldn't be possible without the help of contributors. If you believe you 
 * Russian translation
   * Nikita Belis (aka "Fotyn")
   * Sharanda Danila
+  * "Mr_Tank"
 
 
 
