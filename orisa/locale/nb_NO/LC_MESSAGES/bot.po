@@ -1,14 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# Allan Nordhøy <epost@anotheragency.no>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-04-30 12:42+0200\n"
-"PO-Revision-Date: 2020-04-20 13:01+0000\n"
+"PO-Revision-Date: 2020-05-11 20:23+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
 "bot/nb_NO/>\n"
@@ -17,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.0.2-dev\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1644
@@ -581,18 +580,14 @@ msgid "Invalid format string: unknown placeholder \"{key}\"!"
 msgstr "Ugyldig formatstreng: Ukjent plassholder \"{key}\"."
 
 #: orisa/orisa.py:1085
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Sorry, using this format would make your nickname be longer than 32 "
-#| "characters ({len} to be exact).\n"
-#| "Please choose a shorter format or shorten your nickname!"
+#, python-brace-format
 msgid ""
 "Sorry, using this format would make your nickname `{nickname}` be longer "
 "than 32 characters ({len} to be exact).\n"
 "Please choose a shorter format or shorten your nickname!"
 msgstr ""
-"Når du bruker dette formatet er kallenavnet ditt begreset til 32 tegn ({len} "
-"for å ha det sagt).\n"
+"Når du bruker dette formatet er kallenavnet ditt {nickname} begreset til 32 "
+"tegn ({len} for å ha det sagt).\n"
 "Velg et kortere format, eller forkort kallenavnet ditt."
 
 #: orisa/orisa.py:1099
