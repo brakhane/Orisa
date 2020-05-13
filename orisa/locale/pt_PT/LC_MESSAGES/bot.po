@@ -3,12 +3,13 @@
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Daniel Martins <dafm200936@gmail.com>, 2019.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
+# Dennis Brakhane <brakhane@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-04-30 12:42+0200\n"
-"PO-Revision-Date: 2020-01-11 20:29+0000\n"
+"PO-Revision-Date: 2020-05-13 15:20+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_PT/>\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.10.1\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1644
@@ -147,6 +148,14 @@ msgid ""
 "*I will ignore all commands except `!ow help` and `!ow config` until I'm "
 "configured for this Discord!*"
 msgstr ""
+"*Saudações*! Estou animado para estar aqui :smiley:\n"
+"Para começar, crie um novo papel chamado `Orisa Admin` (apenas o nome é "
+"importante, ele não precisa de nenhuma permissão especial) e adicione a si "
+"mesmo e a todos que devem ser autorizados a me configurar.\n"
+"Em seguida, escrever `!ow config` neste canal e vou enviar-lhe um link para "
+"me configurar via DM.\n"
+"*Eu vou ignorar todos os comandos, exceto `!ow help` e `!ow config` até que "
+"eu estou configurado para esta Discord!*"
 
 #. Translators: :thinking: must remain as is, it's an emoji
 #. Translators: :thinking: is an emoji code
