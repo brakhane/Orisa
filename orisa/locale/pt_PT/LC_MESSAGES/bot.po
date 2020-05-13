@@ -1,7 +1,7 @@
 # Translation files for Orisa
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
-# Daniel Martins <dafm200936@gmail.com>, 2019.
+# Daniel Martins <dafm200936@gmail.com>, 2019, 2020.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
 # Dennis Brakhane <brakhane@gmail.com>, 2020.
 msgid ""
@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-04-30 12:42+0200\n"
-"PO-Revision-Date: 2020-05-13 15:20+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
+"PO-Revision-Date: 2020-05-13 17:03+0000\n"
+"Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -138,6 +138,7 @@ msgid "Tank"
 msgstr "Tanque"
 
 #: orisa/orisa.py:256
+#, fuzzy
 msgid ""
 "*Greetings*! I am excited to be here :smiley:\n"
 "To get started, create a new role named `Orisa Admin` (only the name is "
@@ -148,14 +149,14 @@ msgid ""
 "*I will ignore all commands except `!ow help` and `!ow config` until I'm "
 "configured for this Discord!*"
 msgstr ""
-"*Saudações*! Estou animado para estar aqui :smiley:\n"
-"Para começar, crie um novo papel chamado `Orisa Admin` (apenas o nome é "
-"importante, ele não precisa de nenhuma permissão especial) e adicione a si "
-"mesmo e a todos que devem ser autorizados a me configurar.\n"
-"Em seguida, escrever `!ow config` neste canal e vou enviar-lhe um link para "
-"me configurar via DM.\n"
-"*Eu vou ignorar todos os comandos, exceto `!ow help` e `!ow config` até que "
-"eu estou configurado para esta Discord!*"
+"*Saudações*! Estou animada por estar aqui :smiley:\n"
+"Para começar, cria um novo cargo chamado `Orisa Admin` (apenas importa o "
+"nome, não precisa de nenhuma permissão especial) e adiciona-o a ti e a todos "
+"os que devem ser autorizados configurar-me.\n"
+"Em seguida, escreve `!ow config` neste canal e irei enviar via DM um link "
+"para me configurares.\n"
+"*Eu vou ignorar todos os comandos, exceto `!ow help` e `!ow config` até "
+"estar configurada neste Servidor de Discord!*"
 
 #. Translators: :thinking: must remain as is, it's an emoji
 #. Translators: :thinking: is an emoji code
@@ -222,7 +223,7 @@ msgstr "Servidor de Suporte da Orisa"
 
 #: orisa/orisa.py:655
 msgid "Help Translate Orisa"
-msgstr ""
+msgstr "Ajuda na Tradução da Orisa"
 
 #: orisa/orisa.py:656
 #, python-brace-format
@@ -396,7 +397,6 @@ msgid "I sent you a DM."
 msgstr "Enviei-te uma DM."
 
 #: orisa/orisa.py:834
-#, fuzzy
 msgid ""
 "I tried to send you a DM with the link, but you disallow DM from server "
 "members. Please allow that and retry. I can't post the link here because "
@@ -404,18 +404,16 @@ msgid ""
 msgstr ""
 "Eu tentei enviar-te uma DM com o link, mas não permites DMs de membros do "
 "servidor. Por favor, reverte essa opção e tenta novamente. Não posso colocar "
-"aqui o link porque assim durante os próximos 30 minutos, quem souber que cm"
+"aqui o link porque assim durante os próximos 30 minutos, qualquer pessoa "
+"poderá configurar-me."
 
 #: orisa/orisa.py:848
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "{type} looks like a BattleTag and not like pc/xbox, assuming you meant `!"
-#| "ow register pc`…"
+#, python-brace-format
 msgid ""
 "{type} looks like a BattleTag and not like PC/Xbox, assuming you meant `!ow "
 "register pc`…"
 msgstr ""
-"{type} parece ser uma BattleTag e não a plataforma (pc/xbox). Assumo que "
+"{type} parece ser uma BattleTag e não a plataforma (PC/Xbox). Assumo que "
 "querias fazer `!ow register pc`…"
 
 #: orisa/orisa.py:860
@@ -431,7 +429,6 @@ msgstr ""
 "tarde removê-la na tua conta da BattleNet."
 
 #: orisa/orisa.py:869
-#, fuzzy
 msgid ""
 "To complete your registration, I need your permission to ask Discord for "
 "your Gamertag. Please click the link above and give me permission to access "
@@ -447,21 +444,19 @@ msgid ""
 "When registering a PSN account, you need to give your Online ID, like `!ow "
 "register psn My-Cool-ID_12345`."
 msgstr ""
+"Quando fizeres o registo de uma conta PSN, precisas de indicar o teu Online "
+"ID, como `!ow register psn My-Cool-ID_12345`."
 
 #: orisa/orisa.py:889
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
-#| "pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported "
-#| "yet."
+#, python-brace-format
 msgid ""
 "Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
 "pc` for PC; `!ow register xbox` for Xbox, or `!ow register psn My-Online-"
 "Id_1234` for PlayStation."
 msgstr ""
 "O tipo de registo \"{type}\" é inválido. Usa `!ow register` ou `!ow register "
-"pc` para PC; `!ow register xbox` para XBOX. PlayStation ainda não é ainda "
-"suportado."
+"pc` para PC; `!ow register xbox` para Xbox, ou `!ow register psn My-Cool-"
+"ID_12345` para PlayStation."
 
 #. Translators: type will be PC, XBOX or PSN
 #: orisa/orisa.py:904
@@ -482,7 +477,7 @@ msgid ""
 msgstr ""
 "Se quiseres registar uma BattleTag secundária/smurf, podes abrir o link numa "
 "aba privada/incógnito (tenta carregar no link com o botão direito) e "
-"introduz os dados necessários para essa conta."
+"introduzir os dados necessários para essa conta."
 
 #. Translators: :video_game: is an emoji
 #: orisa/orisa.py:921
@@ -490,16 +485,12 @@ msgid ":video_game: Not on PC?"
 msgstr ":video_game: Não estás no PC?"
 
 #: orisa/orisa.py:923
-#, fuzzy
-#| msgid ""
-#| "If you have an XBL account, use `!ow register xbox`. PSN accounts are "
-#| "currently not supported, but will be in the future."
 msgid ""
 "If you have an XBL account, use `!ow register xbox`. For PSN, use `!ow "
 "register psn Your_Online-ID`"
 msgstr ""
-"Se tens uma conta XBL, usa `!ow register xbox`. Contas PSN não são "
-"atualmente suportadas, mas serão no futuro."
+"Se tens uma conta XBL, usa `!ow register xbox`. Para PSN, usa `!ow register "
+"psn My-Cool-ID_12345`"
 
 #: orisa/orisa.py:930
 msgid ""
@@ -511,18 +502,13 @@ msgstr ""
 "Inglês)"
 
 #: orisa/orisa.py:941
-#, fuzzy
-#| msgid ""
-#| "I'm not allowed to send you a DM. Please right click on the Discord "
-#| "server, select Privacy Settings, and enable \"Allow direct messages from "
-#| "server members.\" Then try again."
 msgid ""
 "I'm not allowed to send you a DM. Please right click on the Discord server, "
 "select \"Privacy Settings\", and enable \"Allow direct messages from server "
 "members.\" Then try again."
 msgstr ""
 "Eu não tenho permissão para te enviar uma DM. Por favor clica com o botão "
-"direito no servidor do Discord, seleciona Configuração de Privacidade e "
+"direito no servidor do Discord, seleciona _Configuração de Privacidade_ e "
 "ativa \"Permitir mensagens diretas de membros do servidor.\". Depois tenta "
 "outra vez."
 
@@ -605,18 +591,14 @@ msgid "Invalid format string: unknown placeholder \"{key}\"!"
 msgstr "Cadeia de formatação inválida: placeholder \"{key}\" desconhecido!"
 
 #: orisa/orisa.py:1085
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Sorry, using this format would make your nickname be longer than 32 "
-#| "characters ({len} to be exact).\n"
-#| "Please choose a shorter format or shorten your nickname!"
+#, python-brace-format
 msgid ""
 "Sorry, using this format would make your nickname `{nickname}` be longer "
 "than 32 characters ({len} to be exact).\n"
 "Please choose a shorter format or shorten your nickname!"
 msgstr ""
-"Desculpa, este formato iria deixar o teu nickname com mais de 32 caracteres "
-"({len} para ser exato).\n"
+"Desculpa, este formato iria deixar o teu nickname `{nickname}` com mais de "
+"32 caracteres ({len} para ser exato).`\n"
 "Por favor escolhe um formato mais pequeno ou abrevia o teu nickname!"
 
 #: orisa/orisa.py:1099
@@ -1559,7 +1541,7 @@ msgstr ""
 #. Translators: config screen validation error
 #: orisa/web.py:221
 msgid "The channel name must not contain a #"
-msgstr ""
+msgstr "O nome do canal não deve conter um #"
 
 #: orisa/web.py:225
 msgid "This name is already used in this category"
