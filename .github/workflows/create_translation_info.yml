@@ -25,8 +25,8 @@ jobs:
           ${{ runner.os }}-build-
           ${{ runner.os }}-
     
-    - name: Install Pyhton and Pybabel
-      run: apt install python3 python3-babel
+    - name: Install Python and Pybabel
+      run: sudo apt install python3 python3-babel
       
     - name: Update translation info
       run: python create_translation_info.py
