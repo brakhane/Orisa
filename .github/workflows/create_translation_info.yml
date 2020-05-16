@@ -1,0 +1,38 @@
+name: Create translation info
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Install poetry
+      uses: dschep/install-poetry-action@v1.3
+
+    - name: Cache
+      uses: actions/cache@v1
+      env:
+        cache-name: cache-poetry
+      with:
+        path: ~/.cache/pypoetry
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+    
+    - name: Update translation info
+      run: poetry run python create_translation_info.py
+      
+    - name: Commit updated
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: Update translation info
