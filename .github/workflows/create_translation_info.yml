@@ -32,6 +32,9 @@ jobs:
           ${{ runner.os }}-build-
           ${{ runner.os }}-
     
+    - name: Install dependencies
+      run: poetry install
+      
     - name: Update translation info
       run: poetry run python create_translation_info.py
       
