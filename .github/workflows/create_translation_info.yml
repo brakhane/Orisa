@@ -29,7 +29,7 @@ jobs:
       run: sudo apt install python3 python3-babel
       
     - name: Update translation info
-      run: python create_translation_info.py
+      run: python3 create_translation_info.py
       
     - name: Commit updated
       uses: stefanzweifel/git-auto-commit-action@v4
