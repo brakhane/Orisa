@@ -330,7 +330,8 @@ export default {
         channel_limit: 5,
         remove_unknown: true,
         prefixes: [],
-        show_sr_in_nicks: true
+        show_sr_in_nicks: true,
+        managed_position: false
       })
     },
 

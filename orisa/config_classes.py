@@ -126,3 +126,8 @@ class VoiceCategoryInfo:
     # the SR/rank when in this category,
     # even when change_nicks_by_default is False?
     show_sr_in_nicks: bool
+    # Place managed channels at the top or bottom?
+    # Normally this should be "bottom", because it causes channels
+    # to jump quite a lot during repositioning, but some users
+    # want this functionality
+    managed_position: str

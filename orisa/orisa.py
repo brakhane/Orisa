@@ -992,7 +992,7 @@ class Orisa(Plugin):
                     "Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards."
                 ).format(nickname=e.nickname),
             )
-        except:
+        except Exception:
             await reply(
                 ctx,
                 _(
@@ -1167,7 +1167,7 @@ Pornography Historian"""
                     for handle in user.handles:
                         try:
                             await self._sync_handle(session, handle)
-                        except Exception as e:
+                        except Exception:
                             if self.raven_client:
                                 self.raven_client.captureException()
                             logger.exception(f"exception while syncing {handle}")
@@ -2261,16 +2261,22 @@ Pornography Historian"""
 
                 final_list.extend(chans)
 
-            start_pos = (
-                max(chan.position for chan in unmanaged_channels) + 1
-                if unmanaged_channels
-                else 1
-            )
+
+            if cat.managed_position == "top":
+                start_pos = 0
+                final_list.extend(sorted(unmanaged_channels, key=attrgetter("position")))
+            else:
+                start_pos = (
+                    max(chan.position for chan in unmanaged_channels) + 1
+                    if unmanaged_channels
+                    else 1
+                )
 
             for i, chan in enumerate(final_list):
                 pos = start_pos + i
                 if chan.position != pos:
                     try:
+                        logger.debug("setting pos of %s to %d", chan.name, pos)
                         await chan.edit(position=pos)
                     except NotFound:
                         logger.warn(

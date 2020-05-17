@@ -29,14 +29,22 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               >
                 <b-select v-model="category.category_id" expanded>
                   <template v-for="chan in channels">
-                    <option :key="chan.id" :value="chan.id" v-if="chan.type == 4">{{ chan.name }}</option>
+                    <option
+                      :key="chan.id"
+                      :value="chan.id"
+                      v-if="chan.type == 4"
+                      >{{ chan.name }}</option
+                    >
                   </template>
                 </b-select>
               </b-field>
             </div>
           </div>
           <div class="card-header-icon">
-            <b-button type="is-danger is-outlined" @click="$emit('delete-cat-clicked')">
+            <b-button
+              type="is-danger is-outlined"
+              @click="$emit('delete-cat-clicked')"
+            >
               <b-icon icon="trash-can" />
             </b-button>
           </div>
@@ -47,7 +55,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               <div class="card-header-title" v-t="'mvc.settings-hdr'"></div>
             </div>
             <div class="card-content">
-              <b-switch v-model="category.show_sr_in_nicks">{{ $t("mvc.show-sr") }}&nbsp;</b-switch>
+              <b-switch v-model="category.show_sr_in_nicks"
+                >{{ $t("mvc.show-sr") }}&nbsp;</b-switch
+              >
               <b-dropdown>
                 <b-icon icon="help-circle" slot="trigger"></b-icon>
                 <b-dropdown-item custom>
@@ -58,7 +68,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               </b-dropdown>
               <br />
               <b-switch v-model="category.remove_unknown">
-                <vue-markdown class="is-inline-block" :source="$t('mvc.remove-unknown-sr')" />&nbsp;
+                <vue-markdown
+                  class="is-inline-block"
+                  :source="$t('mvc.remove-unknown-sr')"
+                />&nbsp;
               </b-switch>
               <b-dropdown>
                 <b-icon icon="help-circle" slot="trigger"></b-icon>
@@ -69,6 +82,31 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 </b-dropdown-item>
               </b-dropdown>
               <hr class="hr-4" />
+              <b-field horizontal>
+                <template #label>
+                  <div>
+                    {{ $t("mvc.mngt-pos") }}&nbsp;
+                    <b-dropdown>
+                      <b-icon icon="help-circle" slot="trigger"></b-icon>
+                      <b-dropdown-item custom>
+                        <div class="container">
+                          <vue-markdown :source="$t('mvc.mngt-pos-tt')" />
+                        </div>
+                      </b-dropdown-item>
+                    </b-dropdown>
+                  </div>
+                </template>
+                <b-radio-button
+                  v-model="category.managed_position"
+                  native-value="top"
+                  >{{ $t("mvc.mngt-pos-top") }}
+                </b-radio-button>
+                <b-radio-button
+                  v-model="category.managed_position"
+                  native-value="bottom"
+                  >{{ $t("mvc.mngt-pos-bottom") }}</b-radio-button
+                >
+              </b-field>
               <b-field
                 horizontal
                 :type="val_type(validation_errors.channel_limit)"
@@ -92,7 +130,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               <b-message
                 type="is-warning"
                 v-if="category.prefixes.length == 0"
-              >{{ $t('mvc.no-prefixes') }}</b-message>
+                >{{ $t("mvc.no-prefixes") }}</b-message
+              >
               <div
                 :key="index"
                 v-for="(prefix, index) in category.prefixes"
@@ -105,7 +144,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                         <b-field
                           :type="val_type(val_errors_prefixes(index).name)"
                           :label="$t('mvc.chan-name')"
-                          :message="val_errors_prefixes(index).name || $t('mvc.chan-name-desc')"
+                          :message="
+                            val_errors_prefixes(index).name ||
+                              $t('mvc.chan-name-desc')
+                          "
                         >
                           <b-input
                             v-model="prefix.name"
@@ -117,14 +159,24 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                         <b-field
                           :type="val_type(val_errors_prefixes(index).limit)"
                           :label="$t('mvc.user-limit')"
-                          :message="val_errors_prefixes(index).limit || $t('mvc.user-limit-desc')"
+                          :message="
+                            val_errors_prefixes(index).limit ||
+                              $t('mvc.user-limit-desc')
+                          "
                         >
-                          <b-numberinput v-model.number="prefix.limit" min="0" max="99"></b-numberinput>
+                          <b-numberinput
+                            v-model.number="prefix.limit"
+                            min="0"
+                            max="99"
+                          ></b-numberinput>
                         </b-field>
                       </div>
                     </div>
 
-                    <b-button type="is-danger is-outlined" @click="delete_prefix(category, index)">
+                    <b-button
+                      type="is-danger is-outlined"
+                      @click="delete_prefix(category, index)"
+                    >
                       <b-icon icon="trash-can" />
                     </b-button>
                   </div>
@@ -184,7 +236,6 @@ export default {
         limit: 0
       })
     }
-
   },
   props: ['category', 'validation_errors', 'channels', 'index']
 }
