@@ -6,20 +6,21 @@
 # Guillem Rosset <guillem.rosset@gmail.com>, 2019, 2020.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
 # Adrián Hernández González <adrianhernandezgonzalez24@gmail.com>, 2019.
+# Dennis Brakhane <brakhane@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-04-30 12:42+0200\n"
-"PO-Revision-Date: 2020-04-20 15:49+0000\n"
-"Last-Translator: guillem.rosset <guillem.rosset@gmail.com>\n"
+"PO-Revision-Date: 2020-05-17 19:02+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/orisa/bot/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.0.2-dev\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1644
@@ -410,7 +411,7 @@ msgid ""
 "register pc`…"
 msgstr ""
 "{type} parece un BattleTag y no de PC/Xbox, asumo que querías decir `!ow "
-"register  pc`…"
+"register pc`…"
 
 #: orisa/orisa.py:860
 msgid ""
@@ -584,18 +585,14 @@ msgid "Invalid format string: unknown placeholder \"{key}\"!"
 msgstr "Formato de cadena no válido: placeholder desconocido \"{key}\"!"
 
 #: orisa/orisa.py:1085
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Sorry, using this format would make your nickname be longer than 32 "
-#| "characters ({len} to be exact).\n"
-#| "Please choose a shorter format or shorten your nickname!"
+#, python-brace-format
 msgid ""
 "Sorry, using this format would make your nickname `{nickname}` be longer "
 "than 32 characters ({len} to be exact).\n"
 "Please choose a shorter format or shorten your nickname!"
 msgstr ""
-"Lo sentimos, usando este formato tu apodo sería más largo de 32 caracteres "
-"({len} para ser exactos).\n"
+"Lo sentimos, usando este formato tu apodo `{nickname}` sería más largo de 32 "
+"caracteres ({len} para ser exactos).\n"
 "Por favor, selecciona un formato más corto o acorta tu apodo!"
 
 #: orisa/orisa.py:1099
@@ -1465,7 +1462,7 @@ msgid ""
 "characters, which is longer than Discord's maximum of 32.Please shorten it "
 "to 28 characters or less. I will regularly try to update it."
 msgstr ""
-"Añadir tu SR a tu apodo '{nickname}' tendría {len} caracteres,  siendo más "
+"Añadir tu SR a tu apodo '{nickname}' tendría {len} caracteres, siendo más "
 "largo que el máximo de 32 permitido por Discord. Por favor acorta tu apodo "
 "para que no sea más largo de 28 caracteres. Intentaré actualizarlo de manera "
 "regular."
