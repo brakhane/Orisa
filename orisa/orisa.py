@@ -1841,7 +1841,9 @@ Pornography Historian"""
     async def _message_create(self, ctx, msg):
         # logger.debug(f"got message {msg.author} {msg.channel} {msg.content} {msg.snowflake_timestamp}")
         if msg.content.startswith("!ow"):
-            logger.info(f"{msg.author.name} ({msg.author.id}) in {msg.channel} issued {msg.content}")
+            logger.info(
+                f"{msg.author.name} ({msg.author.id}) in {msg.channel} issued {msg.content}"
+            )
         if msg.content.startswith("!"):
             return
 
@@ -2263,7 +2265,9 @@ Pornography Historian"""
 
             if cat.managed_position == "top":
                 start_pos = 0
-                final_list.extend(sorted(unmanaged_channels, key=attrgetter("position")))
+                final_list.extend(
+                    sorted(unmanaged_channels, key=attrgetter("position"))
+                )
             else:
                 start_pos = (
                     max(chan.position for chan in unmanaged_channels) + 1
@@ -3197,9 +3201,12 @@ Pornography Historian"""
 
             await user_channel.messages.send(content=None, embed=embed)
 
-
     def _configured_guilds(self):
-        return [guild for guild in self.client.guilds.values() if guild.id in self.guild_config]
+        return [
+            guild
+            for guild in self.client.guilds.values()
+            if guild.id in self.guild_config
+        ]
 
 
 def fuzzy_nick_match(ann, ctx: Context, name: str):

@@ -121,9 +121,7 @@ class I18NCommandsManager(CommandsManager):
         if matched is None:
             return None
 
-
         # our code starts here
-
 
         guild_id = message.guild_id
         try:
@@ -153,7 +151,6 @@ class I18NCommandsManager(CommandsManager):
 
         # rest is copy pasted again
 
-
         # deconstruct the tuple returned into more useful variables than a single tuple
         command_word, tokens = matched
 
@@ -165,6 +162,7 @@ class I18NCommandsManager(CommandsManager):
 
         # step 3, invoke the context to try and match the command and run it
         await ctx.try_invoke()
+
 
 def N_(x):
     "No-op to mark strings that need to be translated, but not at this exact spot"
