@@ -1,4 +1,4 @@
-name: Create translation info
+name: Update translation_info.json
 
 on:
   push:
@@ -34,3 +34,4 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
         commit_message: Update translation info
+        commit_author: Dennis Brakhane <brakhane@gmail.com>
