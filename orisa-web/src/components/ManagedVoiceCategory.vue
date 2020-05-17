@@ -82,30 +82,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 </b-dropdown-item>
               </b-dropdown>
               <hr class="hr-4" />
-              <b-field horizontal>
-                <template #label>
-                  <div>
-                    {{ $t("mvc.mngt-pos") }}&nbsp;
-                    <b-dropdown>
-                      <b-icon icon="help-circle" slot="trigger"></b-icon>
-                      <b-dropdown-item custom>
-                        <div class="container">
-                          <vue-markdown :source="$t('mvc.mngt-pos-tt')" />
-                        </div>
-                      </b-dropdown-item>
-                    </b-dropdown>
-                  </div>
-                </template>
-                <b-radio-button
-                  v-model="category.managed_position"
-                  native-value="top"
-                  >{{ $t("mvc.mngt-pos-top") }}
-                </b-radio-button>
-                <b-radio-button
-                  v-model="category.managed_position"
-                  native-value="bottom"
-                  >{{ $t("mvc.mngt-pos-bottom") }}</b-radio-button
-                >
+              <b-field
+                horizontal
+                :label="$t('mvc.mngt-pos')"
+                :message="$t('mvc.mngt-pos-tt')"
+              >
+                <b-field horizontal>
+                  <b-radio-button
+                    v-model="category.managed_position"
+                    native-value="top"
+                    >{{ $t("mvc.mngt-pos-top") }}
+                  </b-radio-button>
+                  <b-radio-button
+                    v-model="category.managed_position"
+                    native-value="bottom"
+                    >{{ $t("mvc.mngt-pos-bottom") }}</b-radio-button
+                  >
+                </b-field>
               </b-field>
               <b-field
                 horizontal

@@ -12,7 +12,7 @@
     "@mdi/font": "^4.8.95",
     "@panter/vue-i18next": "^0.15.1",
     "axios": "^0.18.1",
-    "buefy": "^0.8.10",
+    "buefy": "^0.8.19",
     "i18next": "^17.3.1",
     "i18next-browser-languagedetector": "^3.1.1",
     "lodash-es": "^4.17.15",
