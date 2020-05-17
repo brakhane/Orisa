@@ -4,20 +4,21 @@
 # Valerio D'Onghia <venom1@live.de>, 2019.
 # Weblate Admin <brakhane+weblate@gmail.com>, 2019.
 # Daniele Giulietti <lordnocht@gmail.com>, 2019.
+# Dennis Brakhane <brakhane@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-04-30 12:42+0200\n"
-"PO-Revision-Date: 2019-09-02 21:16+0000\n"
-"Last-Translator: Daniele Giulietti <lordnocht@gmail.com>\n"
-"Language-Team: Italian <https://weblate.orisa.rocks/projects/orisa/bot/it/>\n"
+"PO-Revision-Date: 2020-05-17 19:02+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/orisa/bot/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.8\n"
+"X-Generator: Weblate 4.1-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1644
@@ -292,9 +293,9 @@ msgid ""
 msgstr ""
 "Sono un bot Discord open source per aiutare a gestire le community di "
 "Overwatch.\n"
-"Sono scritto e mantenuto da Dennis Brakhane (Joghurt#2732  su Discord) e "
-"sotto licenda in base alla [GNU Affero General Public License 3.0]"
-"({AGPL_LINK}); lo [sviluppo è fatto su Github]({GH_LINK})\n"
+"Sono scritto e mantenuto da Dennis Brakhane (Joghurt#2732 su Discord) e "
+"sotto licenda in base alla [GNU Affero General Public License "
+"3.0]({AGPL_LINK}); lo [sviluppo è fatto su Github]({GH_LINK})\n"
 "La traduzione Italiana è stata fatta da SigmaTheArcticFox"
 
 #: orisa/orisa.py:733
@@ -649,8 +650,8 @@ msgid ""
 "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue "
 "`!ow config` to configure me first!"
 msgstr ""
-"Non sono ancora configurata! Qualcuno con il ruolo 'Orisa Admin' deve "
-"scrivere '!ow config' per configurarmi prima!"
+"Non sono ancora configurata! Qualcuno con il ruolo `Orisa Admin` deve "
+"scrivere `!ow config` per configurarmi prima!"
 
 #: orisa/orisa.py:1323
 msgid ""
@@ -704,10 +705,10 @@ msgstr ""
 "\n"
 "**I comandi funzioneranno solo nel canale <#{channel_id}>  o mandandomi un "
 "DM**\n"
-"Se non conosci Orisa, stai probabilmente cercando '!ow register' o '!ow "
-"register xbox'\n"
-"Se vuoi usare Orisa nel tuo server o aiutare a svilupparla, scrivi '!ow "
-"about'\n"
+"Se non conosci Orisa, stai probabilmente cercando `!ow register` o `!ow "
+"register xbox`\n"
+"Se vuoi usare Orisa nel tuo server o aiutare a svilupparla, scrivi `!ow "
+"about`\n"
 "I parametri nelle [parentesi quadrate] sono opzionali."
 
 #: orisa/orisa.py:1374
