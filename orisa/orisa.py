@@ -2261,7 +2261,6 @@ Pornography Historian"""
 
                 final_list.extend(chans)
 
-
             if cat.managed_position == "top":
                 start_pos = 0
                 final_list.extend(sorted(unmanaged_channels, key=attrgetter("position")))
@@ -2276,7 +2275,6 @@ Pornography Historian"""
                 pos = start_pos + i
                 if chan.position != pos:
                     try:
-                        logger.debug("setting pos of %s to %d", chan.name, pos)
                         await chan.edit(position=pos)
                     except NotFound:
                         logger.warn(
