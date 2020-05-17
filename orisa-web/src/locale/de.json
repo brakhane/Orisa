@@ -47,6 +47,7 @@
         "chan-name": "Kanalname",
         "chan-name-desc": "Der Text, der vor die Kanalnummer und dem SR (sofern \"Zeige SR\" aktiviert ist) eingefügt wird",
         "mngt-pos": "Platziere verwaltete Kanäle",
+        "mngt-pos-bottom": "an das Ende (empfohlen)",
         "mngt-pos-top": "an den Anfang",
         "mngt-pos-tt": "Falls diese Kategorie auch Kanäle enthält, die nicht von Orisa verwaltet werden, müssen sich die verwalteten Kanäle entweder am Anfang oder am Ende der Kanalliste befinden. Es wird empfohlen, diese Orisa ans Ende platzieren zu lassen, da dies die Anzahl der \"Sprünge\" reduziert, die beim Erstellen oder Entfernen von Kanälen auftritt.\nWenn diese Kategorie nur von Orisa verwaltete Kanäle enthält, hat diese Einstellung keine Auswirkung.",
         "mngt-prefixes": "Verwaltete Präfixe",
