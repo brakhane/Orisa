@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-25 14:52+0200\n"
+"POT-Creation-Date: 2020-05-25 15:06+0200\n"
 "PO-Revision-Date: 2020-05-13 17:03+0000\n"
 "Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
@@ -1166,8 +1166,7 @@ msgstr ""
 
 #: orisa/orisa.py:1775
 msgid ""
-"I'm not allowed to upload images in this channel, so I've sent you a DM "
-"instead."
+"I'm not allowed to upload images in this channel, so I sent you a DM instead."
 msgstr ""
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
