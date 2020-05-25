@@ -1772,7 +1772,7 @@ Pornography Historian"""
                 await reply(
                     ctx,
                     _(
-                        "I'm not allowed to upload images in this channel, so I've sent you a DM instead."
+                        "I'm not allowed to upload images in this channel, so I sent you a DM instead."
                     ),
                 )
 
