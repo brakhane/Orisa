@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
-"PO-Revision-Date: 2020-05-25 12:55+0000\n"
+"PO-Revision-Date: 2020-05-25 13:08+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -1207,10 +1207,6 @@ msgid "Sorry, I'm not allowed to send you files…"
 msgstr "Es tut mir leid, ich darf dir keine Dateien senden…"
 
 #: orisa/orisa.py:1775
-#, fuzzy
-#| msgid ""
-#| "I'm not allowed to upload images in this channel, so I've sent you a DM "
-#| "instead."
 msgid ""
 "I'm not allowed to upload images in this channel, so I sent you a DM instead."
 msgstr ""
