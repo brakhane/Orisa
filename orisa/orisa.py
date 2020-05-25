@@ -1004,7 +1004,15 @@ class Orisa(Plugin):
 
     @ow.subcommand()
     @condition(correct_channel)
-    async def setprimary(self, ctx, handle_or_index: str):
+    async def setprimary(self, ctx, handle_or_index: str = None):
+        if handle_or_index is None:
+            await reply(
+                ctx,
+                _(
+                    "`setprimary` requires the first few letters of the handle you want to make your primary as a parameter, e.g. `!ow setprimary foo`"
+                ),
+            )
+            return
         async with self.database.session() as session:
             user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
