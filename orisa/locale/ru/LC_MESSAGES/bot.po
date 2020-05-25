@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-05-18 00:32+0200\n"
+"POT-Creation-Date: 2020-05-25 14:52+0200\n"
 "PO-Revision-Date: 2020-05-17 22:25+0000\n"
 "Last-Translator: Yurii Radzievskiy <radzievskiyura96@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/orisa/bot/ru/>\n"
@@ -21,8 +21,8 @@ msgstr ""
 "X-Generator: Weblate 4.1-dev\n"
 
 #. Translators: Role
-#: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1644
-#: orisa/orisa.py:1696 orisa/orisa.py:1700
+#: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1652
+#: orisa/orisa.py:1704 orisa/orisa.py:1708
 msgid "Damage"
 msgstr "Урон"
 
@@ -35,8 +35,8 @@ msgid "Off Tank"
 msgstr "Дополнительный танк"
 
 #. Translators: Role
-#: orisa/models.py:62 orisa/orisa.py:187 orisa/orisa.py:1645
-#: orisa/orisa.py:1696 orisa/orisa.py:1700
+#: orisa/models.py:62 orisa/orisa.py:187 orisa/orisa.py:1653
+#: orisa/orisa.py:1704 orisa/orisa.py:1708
 msgid "Support"
 msgstr "Поддержка"
 
@@ -135,8 +135,8 @@ msgid "Grandmaster"
 msgstr "Элита"
 
 #. Translators: Role
-#: orisa/orisa.py:183 orisa/orisa.py:1643 orisa/orisa.py:1696
-#: orisa/orisa.py:1700
+#: orisa/orisa.py:183 orisa/orisa.py:1651 orisa/orisa.py:1704
+#: orisa/orisa.py:1708
 msgid "Tank"
 msgstr "Танк"
 
@@ -162,11 +162,11 @@ msgstr ""
 
 #. Translators: :thinking: must remain as is, it's an emoji
 #. Translators: :thinking: is an emoji code
-#: orisa/orisa.py:263 orisa/orisa.py:789 orisa/orisa.py:820 orisa/orisa.py:1301
+#: orisa/orisa.py:263 orisa/orisa.py:789 orisa/orisa.py:820 orisa/orisa.py:1309
 msgid ":thinking: Need help?"
 msgstr ":thinking: Нужна помощь?"
 
-#: orisa/orisa.py:264 orisa/orisa.py:790 orisa/orisa.py:821 orisa/orisa.py:1303
+#: orisa/orisa.py:264 orisa/orisa.py:790 orisa/orisa.py:821 orisa/orisa.py:1311
 #, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})!"
 msgstr "Присоединяйтесь к [Поддержке в Discord]({SUPPORT_DISCORD})!"
@@ -507,7 +507,7 @@ msgstr ""
 "мыши на сервере Discord, выберите «Настройки конфиденциальности» и включите "
 "«Разрешить прямые сообщения от участников сервера». Тогда попробуйте еще раз."
 
-#: orisa/orisa.py:947 orisa/orisa.py:1328
+#: orisa/orisa.py:947 orisa/orisa.py:1336
 msgid "I sent you a DM with instructions."
 msgstr "Я отправила вам личное сообщение с инструкциями."
 
@@ -547,46 +547,52 @@ msgid ""
 msgstr ""
 "Однако при обновлении вашего никнейма произошла ошибка. Я попробую это позже."
 
-#: orisa/orisa.py:1011
+#: orisa/orisa.py:1012
+msgid ""
+"`setprimary` requires the first few letters of the handle you want to make "
+"your primary as a parameter, e.g. `!ow setprimary foo`"
+msgstr ""
+
+#: orisa/orisa.py:1019
 msgid "You are not registered. Use `!ow register` first."
 msgstr "Вы не зарегистрированы. Сначала используйте `!ow register`."
 
-#: orisa/orisa.py:1023
+#: orisa/orisa.py:1031
 #, python-brace-format
 msgid "\"{handle}\" already is your primary {type}. *Going back to sleep!*"
 msgstr "\"{handle}\" уже является вашим основным {type}. *Возвращаюсь ко сну!*"
 
 #. Translators: handle will be the battletag/gamertag the user registered, type will be BattleTag or GamerTag
-#: orisa/orisa.py:1043
+#: orisa/orisa.py:1051
 #, python-brace-format
 msgid "Done. Your primary {type} is now **{handle}**."
 msgstr "Выполнено. Ваш основной {type} теперь ** {handle} **."
 
-#: orisa/orisa.py:1053
+#: orisa/orisa.py:1061
 msgid "format string may not contain square brackets!"
 msgstr "строка формата может не содержать квадратных скобок!"
 
 #. Translators: keep the $ to remind the user that placeholders start with a $ sign
-#: orisa/orisa.py:1057
+#: orisa/orisa.py:1065
 msgid "format string must contain at least one $placeholder!"
 msgstr ""
 "строка формата должна содержать хотя бы один $placeholder(параметр) "
 "оформления!"
 
-#: orisa/orisa.py:1060
+#: orisa/orisa.py:1068
 msgid "format string missing!"
 msgstr "отсутствует строка формата!"
 
-#: orisa/orisa.py:1066
+#: orisa/orisa.py:1074
 msgid "you must register first!"
 msgstr "Вы в первую очередь должны зарегистрироваться!"
 
-#: orisa/orisa.py:1075
+#: orisa/orisa.py:1083
 #, python-brace-format
 msgid "Invalid format string: unknown placeholder \"{key}\"!"
 msgstr "Неверная строка формата: неизвестный параметр \"{key}\"!"
 
-#: orisa/orisa.py:1085
+#: orisa/orisa.py:1093
 #, python-brace-format
 msgid ""
 "Sorry, using this format would make your nickname `{nickname}` be longer "
@@ -597,7 +603,7 @@ msgstr ""
 "длиннее 32 символов ({len} строго говоря).\n"
 "Пожалуйста, выберите более короткий формат или сократите свой никнейм!"
 
-#: orisa/orisa.py:1099
+#: orisa/orisa.py:1107
 msgid ""
 "Smarties Expert\n"
 "Bread Scientist\n"
@@ -637,16 +643,16 @@ msgstr ""
 "Кто-то из откуда-то там\n"
 "Porn Expert"
 
-#: orisa/orisa.py:1127
+#: orisa/orisa.py:1135
 #, python-brace-format
 msgid "Done. Henceforth, thou shall be knownst as \"`{new_nick}`, {title}\"."
 msgstr "Выполнено. Отныне вы будете известны как \"`{new_nick}`, {title}\"."
 
-#: orisa/orisa.py:1138
+#: orisa/orisa.py:1146
 msgid "you are not registered!"
 msgstr "Вы не зарегистрированы!"
 
-#: orisa/orisa.py:1148
+#: orisa/orisa.py:1156
 msgid ""
 "Your nick will be updated even when you are not in an OW voice channel. Use "
 "`!ow alwaysshowsr off` to turn it off again."
@@ -654,7 +660,7 @@ msgstr ""
 "Ваш ник будет обновлен, даже если вы не находитесь в голосовом канале OW. "
 "Используйте `!ow alwaysshowsr off`, чтобы выключить эту опцию."
 
-#: orisa/orisa.py:1152
+#: orisa/orisa.py:1160
 msgid ""
 "Your nick will only be updated when you are in an OW voice channel. Use `!ow "
 "alwaysshowsr on` to always update your nick."
@@ -663,16 +669,16 @@ msgstr ""
 "канале OW. Используйте `!ow alwaysshowsr on`, чтобы ваш никнейм обновлялся "
 "всегда."
 
-#: orisa/orisa.py:1163 orisa/orisa.py:1272
+#: orisa/orisa.py:1171 orisa/orisa.py:1280
 msgid "You are not registered! Do `!ow register` first."
 msgstr "Вы не зарегистрированы! Сделайте это `!ow register`."
 
-#: orisa/orisa.py:1180
+#: orisa/orisa.py:1188
 msgid "There were some problems updating your SR! Try again later."
 msgstr ""
 "Были некоторые проблемы с обновлением вашего рейтинга! Попробуйте позже."
 
-#: orisa/orisa.py:1187
+#: orisa/orisa.py:1195
 #, python-brace-format
 msgid ""
 "OK, I have updated your data. Your (primary) SR is now {sr}. If that is not "
@@ -683,16 +689,16 @@ msgstr ""
 "правильно, вам нужно выйти из Overwatch и повторить попытку; Ваш профиль "
 "также должен быть общедоступным, чтобы я могла отслеживать ваш рейтинг."
 
-#: orisa/orisa.py:1217
+#: orisa/orisa.py:1225
 #, python-brace-format
 msgid "OK, deleted {name} from database"
 msgstr "ОК, из базы данных был удален {name}"
 
-#: orisa/orisa.py:1224
+#: orisa/orisa.py:1232
 msgid "you are not registered anyway, so there's nothing for me to forget…"
 msgstr "Так или иначе вы не зарегистрированы, поэтому мне нечего забывать…"
 
-#: orisa/orisa.py:1250
+#: orisa/orisa.py:1258
 msgid ""
 "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` "
 "(Off Tank), `d` (Damage), `s` (Support). They can be combined, e.g. `ds` "
@@ -702,7 +708,7 @@ msgstr ""
 "Танк), `o` (Дополнительный Танк), `d` (Урон), `s` (Поддержка). Их можно "
 "комбинировать, например, `ds` будет означать Урон + Поддержка."
 
-#: orisa/orisa.py:1263
+#: orisa/orisa.py:1271
 #, python-brace-format
 msgid ""
 "Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main "
@@ -713,12 +719,12 @@ msgstr ""
 "(Основной Танк), `o` (Дополнительный Танк), `d` (Урон), `s` (Поддержка). Их "
 "можно комбинировать, например, `ds` будет означать Урон + Поддержка."
 
-#: orisa/orisa.py:1278
+#: orisa/orisa.py:1286
 #, python-brace-format
 msgid "Done. Your roles are now **{roles}**"
 msgstr "Выполнено. Ваши роли теперь **{roles}**"
 
-#: orisa/orisa.py:1294
+#: orisa/orisa.py:1302
 msgid ""
 "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue "
 "`!ow config` to configure me first!"
@@ -726,7 +732,7 @@ msgstr ""
 "Я еще не настроена! Кто-то с ролью `Orisa Admin` должен вписать `!ow config, "
 "чтобы сначала настроить меня!"
 
-#: orisa/orisa.py:1323
+#: orisa/orisa.py:1331
 msgid ""
 "I tried to send you a DM with help, but you don't allow DM from server "
 "members. I can't post it here, because it's rather long. Please allow DMs "
@@ -737,11 +743,11 @@ msgstr ""
 "разместить это здесь, потому что это будет занимать много места в канале. "
 "Пожалуйста, откройте личные сообщения и попробуйте снова."
 
-#: orisa/orisa.py:1348
+#: orisa/orisa.py:1356
 msgid "Orisa's purpose"
 msgstr "Предназначение Orisa"
 
-#: orisa/orisa.py:1352
+#: orisa/orisa.py:1360
 #, python-brace-format
 msgid ""
 "When joining a QP or Comp channel, you need to know the BattleTag of a "
@@ -785,7 +791,7 @@ msgstr ""
 "его разработке, введите `!ow about`\n"
 "Параметры в [квадратных скобках] являются необязательными."
 
-#: orisa/orisa.py:1374
+#: orisa/orisa.py:1382
 msgid ""
 "Shows the BattleTag for the given nickname, or your BattleTag if no nickname "
 "is given. `nick` can contain spaces. A fuzzy search for the nickname is "
@@ -807,7 +813,7 @@ msgstr ""
 "\"\n"
 "`!ow oirsa` и `!ow ori` вероятно, также покажут BattleTag of \"Orisa\""
 
-#: orisa/orisa.py:1388
+#: orisa/orisa.py:1396
 msgid ""
 "Shows information about Orisa, and how you can add her to your own Discord "
 "server, or help supporting her."
@@ -815,7 +821,7 @@ msgstr ""
 "Показывает информацию об Orisa и о том, как вы можете добавить ее на свой "
 "собственный сервер Discord или помочь поддержать ее."
 
-#: orisa/orisa.py:1395
+#: orisa/orisa.py:1403
 msgid ""
 "On some servers, Orisa will only show your SR or rank in your nick when you "
 "are in an OW voice channel. If you want your nick to always show your SR or "
@@ -830,7 +836,7 @@ msgstr ""
 "*Пример:*\n"
 "`!ow alwaysshowsr on`"
 
-#: orisa/orisa.py:1406
+#: orisa/orisa.py:1414
 msgid ""
 "This command can only be used by members with the \"Orisa Admin\" role and "
 "allows them to configure Orisa for the specific Discord server."
@@ -839,11 +845,11 @@ msgstr ""
 "позволяет им настраивать Orisa для конкретного сервера Discord."
 
 #. Translators: help for !ow dumpsr
-#: orisa/orisa.py:1413
+#: orisa/orisa.py:1421
 msgid "Download your SR history as an Excel spreadsheet"
 msgstr "Загрузите свою историю рейтинга как электронную таблицу Excel"
 
-#: orisa/orisa.py:1420
+#: orisa/orisa.py:1428
 msgid ""
 "Immediately checks your account data and updates your nick accordingly.\n"
 "*Checks and updates are done automatically, use this command only if you "
@@ -854,7 +860,7 @@ msgstr ""
 "*Проверки и обновления выполняются автоматически, используйте эту команду, "
 "только если вы хотите, чтобы ваш ник немедленно обновился!*"
 
-#: orisa/orisa.py:1430
+#: orisa/orisa.py:1438
 msgid ""
 "All your BattleTags will be removed from the database and your nick will not "
 "be updated anymore. You can re-register at any time."
@@ -862,7 +868,7 @@ msgstr ""
 "Все ваши BattleTags будут удалены из базы данных, и ваш ник больше не будет "
 "обновляться. Вы можете снова зарегистрироваться в любое время."
 
-#: orisa/orisa.py:1440
+#: orisa/orisa.py:1448
 #, python-brace-format
 msgid ""
 "Lets you specify how your SR or rank is displayed. It will always be shown "
@@ -875,11 +881,11 @@ msgstr ""
 "В *format* вы можете указать параметры оформления с помощью `$placeholder` "
 "или`${placeholder}`."
 
-#: orisa/orisa.py:1446
+#: orisa/orisa.py:1454
 msgid "★ *ow format placeholders*"
 msgstr "★ *параметры формата ow*"
 
-#: orisa/orisa.py:1449
+#: orisa/orisa.py:1457
 #, python-brace-format
 msgid ""
 "*The following placeholders are defined:*\n"
@@ -932,11 +938,11 @@ msgstr ""
 "`$dps`, `$dpsrank`\n"
 "Никнеймы для `$damage` и `$damagerank`, соответственно."
 
-#: orisa/orisa.py:1465
+#: orisa/orisa.py:1473
 msgid "★ *ow format examples*"
 msgstr "★ *пример формата OW*"
 
-#: orisa/orisa.py:1467
+#: orisa/orisa.py:1475
 #, python-brace-format
 msgid ""
 "`!ow format hello $sr` will result in `[hello 12-34-45]`.\n"
@@ -951,11 +957,11 @@ msgstr ""
 "*По умолчанию используется формат `$sr`*"
 
 #. Translators: headline of second help page
-#: orisa/orisa.py:1477
+#: orisa/orisa.py:1485
 msgid "help cont'd"
 msgstr "продолжение (подсказки)"
 
-#: orisa/orisa.py:1484
+#: orisa/orisa.py:1492
 msgid ""
 "Same as `!ow [nick]`, (only) useful when the nick is the same as a command.\n"
 "*Example:*\n"
@@ -966,7 +972,7 @@ msgstr ""
 "*Пример:*\n"
 "`!ow get register` будет искать ник \"register\"."
 
-#: orisa/orisa.py:1494
+#: orisa/orisa.py:1502
 msgid ""
 "Create a link to your BattleNet or Gamertag account, or adds a secondary "
 "BattleTag to your account. Your OW account will be checked periodically and "
@@ -988,11 +994,11 @@ msgstr ""
 "записей PSN вы должны указать свой Online идентификатор как часть команды, "
 "например `!ow register psn Your_Online-ID`."
 
-#: orisa/orisa.py:1503
+#: orisa/orisa.py:1511
 msgid "Show Orisa's Privacy Policy"
 msgstr "Показать Политику конфиденциальности Orisa"
 
-#: orisa/orisa.py:1507
+#: orisa/orisa.py:1515
 msgid ""
 "Makes the given secondary BattleTag your primary BattleTag. Your primary "
 "BattleTag is the one you are currently using: its SR is shown in your nick\n"
@@ -1012,7 +1018,7 @@ msgstr ""
 "*Пример:*\n"
 "`!ow setprimary jjonak`"
 
-#: orisa/orisa.py:1518
+#: orisa/orisa.py:1526
 msgid ""
 "Like `!ow setprimary battletag`, but uses numbers, 1 is your first "
 "secondary, 2 your seconds etc. The order is shown by `!ow` (alphabetical)\n"
@@ -1032,7 +1038,7 @@ msgstr ""
 "*Пример:*\n"
 "`!ow setprimary 1`"
 
-#: orisa/orisa.py:1529
+#: orisa/orisa.py:1537
 msgid ""
 "Sets the role you can/want to play. It will be shown in `!ow` and will also "
 "be used to update the number of roles in voice channels you join.\n"
@@ -1056,7 +1062,7 @@ msgstr ""
 "`!ow setroles so`: вы играете на поддержке и дополнительном танке.\n"
 "`!ow setroles dmos`: вы настоящий киберспортсмен и играете на всем."
 
-#: orisa/orisa.py:1543
+#: orisa/orisa.py:1551
 msgid ""
 "*This command is in beta and can change at any time; it might also have "
 "bugs, report them please*\n"
@@ -1070,7 +1076,7 @@ msgstr ""
 "DD.MM.YY или YYYY-MM-DD), график начинается с этой даты, в противном случае "
 "он начинается с последних данных Orisa."
 
-#: orisa/orisa.py:1552
+#: orisa/orisa.py:1560
 msgid ""
 "*This command can only be used by users with the \"Orisa Admin\" role!*\n"
 "Like srgraph, but shows the graph for the given user."
@@ -1079,7 +1085,7 @@ msgstr ""
 "Admin»!*\n"
 "Подобно `!ow srgraph`, но показывает график для конкретного пользователя."
 
-#: orisa/orisa.py:1560
+#: orisa/orisa.py:1568
 msgid ""
 "If you have secondary BattleTags, you can remove the given BattleTag from "
 "the list. The search is performed fuzzy, so you normally only have to "
@@ -1097,7 +1103,7 @@ msgstr ""
 "*Пример:*\n"
 "`!ow unregister foo`"
 
-#: orisa/orisa.py:1571
+#: orisa/orisa.py:1579
 msgid ""
 "Like `unregister battletag`, but removes the battletag by number. Your first "
 "secondary is 1, your second 2, etc.\n"
@@ -1117,39 +1123,39 @@ msgstr ""
 "*Пример:*\n"
 "`!ow unregister 1`"
 
-#: orisa/orisa.py:1590
+#: orisa/orisa.py:1598
 msgid "You are not registered. Do `!ow register` first!"
 msgstr "Вы не зарегистрированы. Сначала зарегистрируйтесь `!ow register`!"
 
-#: orisa/orisa.py:1605
+#: orisa/orisa.py:1613
 #, python-brace-format
 msgid "{member_name} is not registered!"
 msgstr "{member_name} не зарегистрирован!"
 
 #. Translators: privacy policy is currently only availabe in English
-#: orisa/orisa.py:1621
+#: orisa/orisa.py:1629
 msgid "I DM'ed you the privacy policy."
 msgstr "Я переслала вам Политику конфиденциальности."
 
-#: orisa/orisa.py:1629
+#: orisa/orisa.py:1637
 msgid "You are not registered."
 msgstr "Вы не зарегистрированы."
 
-#: orisa/orisa.py:1642
+#: orisa/orisa.py:1650
 msgid "Timestamp"
 msgstr "Отметка времени"
 
 #. Translators: file name of the sr history excel file to download
-#: orisa/orisa.py:1663
+#: orisa/orisa.py:1671
 msgid "sr-history.xls"
 msgstr "рейтинговая-история.xls"
 
-#: orisa/orisa.py:1665
+#: orisa/orisa.py:1673
 msgid "Here is your SR history of all your accounts as an Excel spreadsheet."
 msgstr ""
 "Вот ваша история рейтинга с всех ваших учетных записей в виде таблицы Excel."
 
-#: orisa/orisa.py:1673
+#: orisa/orisa.py:1681
 msgid ""
 "I'm not allowed to send you a DM, please make sure that you enabled \"Allow "
 "DM from server members\" in the server's privacy settings!"
@@ -1158,16 +1164,16 @@ msgstr ""
 "вы включили «Разрешение на отправление личных сообщений от участников "
 "сервера» в настройках конфиденциальности сервера!"
 
-#: orisa/orisa.py:1688
+#: orisa/orisa.py:1696
 #, python-brace-format
 msgid "There is no data yet for {handle}, try again later"
 msgstr "Для {handle} еще нет данных, попробуйте позже"
 
-#: orisa/orisa.py:1705
+#: orisa/orisa.py:1713
 msgid "I have no SR for your account stored yet."
 msgstr "У меня еще нет данных рейтинга для вашего аккаунта."
 
-#: orisa/orisa.py:1717
+#: orisa/orisa.py:1725
 #, python-brace-format
 msgid ""
 "I don't know what date {date} is supposed to mean. Please use the format DD."
@@ -1176,27 +1182,37 @@ msgstr ""
 "Я не знаю, что означает эта дата {date}. Пожалуйста, используйте формат DD."
 "MM.YY или YYYY-MM-DD!"
 
-#: orisa/orisa.py:1741
+#: orisa/orisa.py:1749
 #, python-brace-format
 msgid "SR History For {name}"
 msgstr "Рейтинговая история для {name}"
 
-#: orisa/orisa.py:1742
+#: orisa/orisa.py:1750
 #, python-brace-format
 msgid "Here is your SR history starting from {date}"
 msgstr "Вот ваша рейтинговая история, начиная с {date}"
 
 #. Translators: used instead of a date when user requested a SR history from the beginning (which is the usual case)
-#: orisa/orisa.py:1744
+#: orisa/orisa.py:1752
 msgid "when you registered"
 msgstr "когда вы зарегистрировались"
 
+#: orisa/orisa.py:1766
+msgid "Sorry, I'm not allowed to send you files…"
+msgstr ""
+
+#: orisa/orisa.py:1775
+msgid ""
+"I'm not allowed to upload images in this channel, so I've sent you a DM "
+"instead."
+msgstr ""
+
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
-#: orisa/orisa.py:2467
+#: orisa/orisa.py:2492
 msgid "For your own safety, get behind the barrier!"
 msgstr "Укройтесь за барьером, это для вашей безопасности!"
 
-#: orisa/orisa.py:2469
+#: orisa/orisa.py:2494
 #, python-brace-format
 msgid ""
 "**{name}** just reached **{sr} SR** as **{role}** and advanced to **{rank}"
@@ -1206,43 +1222,43 @@ msgstr ""
 "до **{rank}**. Поздравляем!"
 
 #. Translators: <@!> is discord markup and needs to be preserved
-#: orisa/orisa.py:2486
+#: orisa/orisa.py:2511
 #, python-brace-format
 msgid "Let's hear it for <@!{discord_id}>!"
 msgstr "Аплодисменты для <@!{discord_id}>!"
 
 #. Translators: header for highscore table: position (keep it short)
-#: orisa/orisa.py:2611
+#: orisa/orisa.py:2636
 msgid "#"
 msgstr "#"
 
 #. Translators: header for highscore table: previous position (keep it short)
-#: orisa/orisa.py:2613
+#: orisa/orisa.py:2638
 msgid "prev"
 msgstr "пред"
 
 #. Translators: header for highscore table: member name
-#: orisa/orisa.py:2615
+#: orisa/orisa.py:2640
 msgid "Member"
 msgstr "Пользователь"
 
 #. Translators: header for highscore table: member discord id
-#: orisa/orisa.py:2617
+#: orisa/orisa.py:2642
 msgid "Member ID"
 msgstr "ID Пользователя"
 
 #. Translators: header fdor highscore table: SR
-#: orisa/orisa.py:2619
+#: orisa/orisa.py:2644
 #, python-brace-format
 msgid "{role} SR"
 msgstr "{role} РТ"
 
 #. Translators: header for highscore table: SR difference
-#: orisa/orisa.py:2621
+#: orisa/orisa.py:2646
 msgid "ΔSR"
 msgstr "ΔРТ"
 
-#: orisa/orisa.py:2664
+#: orisa/orisa.py:2689
 #, python-brace-format
 msgid ""
 "Hello! Here are the current SRs for **{role}** on {platform}. If a member "
@@ -1255,14 +1271,14 @@ msgstr ""
 "основной {handle_type}. Игроки с закрытыми профилями или те, кто еще не "
 "занимал места в рейтинговой таблице в этом сезоне, не отображаются."
 
-#: orisa/orisa.py:2737
+#: orisa/orisa.py:2762
 msgid ""
 "*To avoid spamming you, I will only send out this warning once per week*\n"
 msgstr ""
 "*Чтобы избежать спама, я буду отправлять это предупреждение только один раз "
 "в неделю*\n"
 
-#: orisa/orisa.py:2740
+#: orisa/orisa.py:2765
 #, python-brace-format
 msgid ""
 "Hi! I just tried to update your nickname, but the result '{nick}' would be "
@@ -1271,7 +1287,7 @@ msgstr ""
 "Привет! Я просто попыталась обновить ваш никнейм, но в результатате '{nick}' "
 "будет длиннее 32 символов."
 
-#: orisa/orisa.py:2743
+#: orisa/orisa.py:2768
 msgid ""
 "\n"
 "Please shorten your nickname."
@@ -1279,7 +1295,7 @@ msgstr ""
 "\n"
 "Пожалуйста, сократите свой никнейм."
 
-#: orisa/orisa.py:2746
+#: orisa/orisa.py:2771
 msgid ""
 "\n"
 "Try to use the $sr format (you can type `!ow format $sr` into this DM "
@@ -1289,7 +1305,7 @@ msgstr ""
 "Попробуйте воспользоваться форматом $sr (вы можете ввести `!ow format $sr` в "
 "этом канале личных сообщений) или сократить свой никнейм."
 
-#: orisa/orisa.py:2749
+#: orisa/orisa.py:2774
 msgid ""
 "\n"
 "Your nickname cannot be updated until this is done. I'm sorry for the "
@@ -1299,7 +1315,7 @@ msgstr ""
 "Ваш никнейм не может быть обновлен, пока это не будет сделано. Извините за "
 "неудобства."
 
-#: orisa/orisa.py:2953
+#: orisa/orisa.py:2978
 msgid ""
 "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` "
 "to register an Xbox account."
@@ -1307,7 +1323,7 @@ msgstr ""
 "Извините, похоже, у вас нет BattleTag. Используйте `!ow register xbox` для "
 "регистрации учетной записи Xbox."
 
-#: orisa/orisa.py:2970
+#: orisa/orisa.py:2995
 msgid ""
 "I couldn't find a Xbox account linked to your Discord. Please link your Xbox "
 "account to Discord and try again. Unfortunately, I cannot ask Xbox Live for "
@@ -1317,7 +1333,7 @@ msgstr ""
 "свяжите свою учетную запись Xbox с Discord и попробуйте снова. К сожалению, "
 "я не могу запросить информацию у Xbox Live."
 
-#: orisa/orisa.py:2996
+#: orisa/orisa.py:3021
 #, python-brace-format
 msgid ""
 "OK. People can now ask me for your {type}s **{handles}**, and I will keep "
@@ -1326,7 +1342,7 @@ msgstr ""
 "ХОРОШО. Теперь люди могут спросить меня о ваших {type}ах **{handles}**, и я "
 "буду отслеживать ваш рейтинг."
 
-#: orisa/orisa.py:3002
+#: orisa/orisa.py:3027
 #, python-brace-format
 msgid ""
 "OK. People can now ask me for your {type} **{handle}**, and I will keep "
@@ -1335,15 +1351,15 @@ msgstr ""
 "ХОРОШО. Теперь люди могут спросить меня о вашем {type} **{handle}**, и я "
 "буду отслеживать ваш рейтинг."
 
-#: orisa/orisa.py:3005
+#: orisa/orisa.py:3030
 msgid "Registration successful"
 msgstr "Регистрация прошла успешно"
 
-#: orisa/orisa.py:3008
+#: orisa/orisa.py:3033
 msgid ":information_source: Pro Tips"
 msgstr ":information_source: профессиональные советы"
 
-#: orisa/orisa.py:3010
+#: orisa/orisa.py:3035
 msgid ""
 "On some servers, I will only update your nick if you join a OW voice "
 "channel. If you want your nick to always show your SR, use the `!ow "
@@ -1358,18 +1374,18 @@ msgstr ""
 "ow format $rank`.\n"
 "Если у вас более одной учетной записи, просто снова введите `!ow register`\n"
 
-#: orisa/orisa.py:3019
+#: orisa/orisa.py:3044
 #, python-brace-format
 msgid ":envelope: A message from the *{guild_name}* staff"
 msgstr ":envelope: Сообщение от сотрудника *{guild_name}*"
 
 #. Translators: type is battletag or gamertag
-#: orisa/orisa.py:3039
+#: orisa/orisa.py:3064
 #, python-brace-format
 msgid "{type} updated"
 msgstr "{type} обновленный"
 
-#: orisa/orisa.py:3043
+#: orisa/orisa.py:3068
 #, python-brace-format
 msgid ""
 "It seems like your {type} changed from *{old_handle}* to *{new_handle}*. I "
@@ -1379,12 +1395,12 @@ msgstr ""
 "свою базу данных."
 
 #. Translators: type is translated GamerTag or BattleTag
-#: orisa/orisa.py:3058
+#: orisa/orisa.py:3083
 #, python-brace-format
 msgid "{type} already registered"
 msgstr "{type} уже зарегистрирован"
 
-#: orisa/orisa.py:3063
+#: orisa/orisa.py:3088
 #, python-brace-format
 msgid ""
 "You already registered the {type} *{handle}*, so there's nothing for me to "
@@ -1393,11 +1409,11 @@ msgstr ""
 "Вы уже зарегистрировали {type} *{handle}*, поэтому мне нечего делать. *Режим "
 "сна возобновлен.*\n"
 
-#: orisa/orisa.py:3071
+#: orisa/orisa.py:3096
 msgid ":information_source: Tip"
 msgstr ":information_source: Подсказка"
 
-#: orisa/orisa.py:3073
+#: orisa/orisa.py:3098
 msgid ""
 "Open the URL in a private/incognito tab next time, so you can enter the "
 "credentials of the account you want."
@@ -1406,12 +1422,12 @@ msgstr ""
 "могли ввести данные для другой учётной записи."
 
 #. Translators: type is GamerTag/BattleTag
-#: orisa/orisa.py:3085
+#: orisa/orisa.py:3110
 #, python-brace-format
 msgid "{type} added"
 msgstr "{type} добавленный"
 
-#: orisa/orisa.py:3088
+#: orisa/orisa.py:3113
 #, python-brace-format
 msgid ""
 "OK. I've added **{new_handle}** to the list of your {new_type}s. **Your "
@@ -1423,13 +1439,13 @@ msgstr ""
 "используйте `!ow setprimary`, для получения более подробной информации см. "
 "Справку."
 
-#: orisa/orisa.py:3102
+#: orisa/orisa.py:3127
 #, python-brace-format
 msgid "Checking your {type} {tag}…"
 msgstr "Проверка вашего {type} {tag}…"
 
 #. Translators: {type} is "BattleTag", {handle} is the tag (Foo#2345), {message} is some untranslated English error message
-#: orisa/orisa.py:3113
+#: orisa/orisa.py:3138
 #, python-brace-format
 msgid ""
 "Invalid {type}: {message}… Blizzard claims that the {type} {handle} has no "
@@ -1440,7 +1456,7 @@ msgstr ""
 "не имеет учетной записи OW. Сыграйте в быструю или же в аркадную игру, "
 "закройте Overwatch и попробуйте снова. Иногда это помогает."
 
-#: orisa/orisa.py:3124
+#: orisa/orisa.py:3149
 #, python-brace-format
 msgid ""
 "Sorry, but it seems like Blizzard's site has some problems currently ({e}), "
@@ -1450,11 +1466,11 @@ msgstr ""
 "проблемы в настоящее время ({e}), пожалуйста, попробуйте позже!"
 
 #. Translators: :warning: is an emoji code
-#: orisa/orisa.py:3131
+#: orisa/orisa.py:3156
 msgid ":warning: No SR"
 msgstr ":warning: Нет РТ"
 
-#: orisa/orisa.py:3133
+#: orisa/orisa.py:3158
 #, python-brace-format
 msgid ""
 "You don't have an SR though, your profile needs to be public for SR tracking "
@@ -1464,11 +1480,11 @@ msgstr ""
 "отслеживание рейтинга было возможно ... Я все равно сохранил ваш {type}."
 
 #. Translators: :warning: is emoji code
-#: orisa/orisa.py:3154
+#: orisa/orisa.py:3179
 msgid ":warning: Nickname too long!"
 msgstr ":warning: Никнейм слишком длинный!"
 
-#: orisa/orisa.py:3156
+#: orisa/orisa.py:3181
 #, python-brace-format
 msgid ""
 "Adding your SR to your nickname as '{nickname}', would make it {len} "
@@ -1480,11 +1496,11 @@ msgstr ""
 "Пожалуйста, сократите свой никнейм, чтобы он не превышал 28 символов. Я буду "
 "регулярно пытаться обновить его."
 
-#: orisa/orisa.py:3163 orisa/orisa.py:3173
+#: orisa/orisa.py:3188 orisa/orisa.py:3198
 msgid ":warning: Cannot update nickname"
 msgstr ":warning: Невозможно обновить никнейм"
 
-#: orisa/orisa.py:3165
+#: orisa/orisa.py:3190
 msgid ""
 "I do not have sufficient permissions to update your nickname. The owner "
 "needs to move the \"Orisa\" role higher, so that is higher than your highest "
@@ -1496,7 +1512,7 @@ msgstr ""
 "ролей. Если вы являетесь владельцем этого сервера, я не могу обновить ваш "
 "ник, извините!"
 
-#: orisa/orisa.py:3176
+#: orisa/orisa.py:3201
 #, python-brace-format
 msgid ""
 "Right now I couldn't update your nickname, I will try that again later. "
@@ -1505,11 +1521,11 @@ msgstr ""
 "Я не могу обновить ваш никнейм прямо сейчас. Я постараюсь сделать это позже. "
 "Пользователи по-прежнему могут запрашивать ваш {type}."
 
-#: orisa/orisa.py:3187
+#: orisa/orisa.py:3212
 msgid ":thumbsup: Vote for me on Discord Bot List"
 msgstr ":thumbsup: Проголосуй за меня в списках Discord Bot"
 
-#: orisa/orisa.py:3189
+#: orisa/orisa.py:3214
 #, python-brace-format
 msgid ""
 "If you find me useful, consider voting for me [by clicking here]"
@@ -1518,11 +1534,11 @@ msgstr ""
 "Если вы считаете меня полезной, пожалуйста, проголосуйте за меня [нажав "
 "здесь]({VOTE_LINK})!"
 
-#: orisa/orisa.py:3195
+#: orisa/orisa.py:3220
 msgid ":heart: Say thanks by buying a coffee"
 msgstr ":heart: Спасибо за покупку кофе"
 
-#: orisa/orisa.py:3197
+#: orisa/orisa.py:3222
 #, python-brace-format
 msgid ""
 "Want to say thanks to the guy who wrote and maintains me? Why not [buy him a "
