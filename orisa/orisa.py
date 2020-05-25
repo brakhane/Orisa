@@ -1755,9 +1755,26 @@ Pornography Historian"""
             ),
         )
         embed.set_image(image_url="attachment://graph.png")
-        await ctx.channel.messages.upload(
-            image, filename="graph.png", message_embed=embed
-        )
+        try:
+            await ctx.channel.messages.upload(
+                image, filename="graph.png", message_embed=embed
+            )
+        except PermissionsError as e:
+            if e.permission_required == "attach_files":
+                # we assume this message came from a guild channel, if not, there's nothing we can do anyway
+                if ctx.channel.private:
+                    await reply(ctx, _("Sorry, I'm not allowed to send you files…"))
+                else:
+                    chan = await ctx.author.user.open_private_channel()
+                    await chan.messages.upload(
+                        image, filename="graph.png", message_embed=embed
+                    )
+                await reply(
+                    ctx,
+                    _(
+                        "I'm not allowed to upload images in this channel, so I've sent you a DM instead."
+                    ),
+                )
 
     @command()
     async def help(self, ctx):
