@@ -280,7 +280,6 @@ class Orisa(Plugin):
 
     async def load(self):
 
-        logger.debug("Loading config")
         async with self.database.session() as session:
             for config in await run_sync(
                 session.query(GuildConfigJson)
@@ -290,7 +289,6 @@ class Orisa(Plugin):
                 self.guild_config[config.id] = data = GuildConfig.from_json2(
                     config.config
                 )
-                logger.debug("Configured %d as %s", config.id, data)
 
         logger.warn("TEMPORARILY NOT SENDING MESSAGES TO GUILDS!")
         # await self.spawn(self._message_new_guilds)
@@ -1812,7 +1810,7 @@ Pornography Historian"""
         if plays_overwatch(old_member) and (not plays_overwatch(new_member)):
             uid = new_member.user.id
             if uid in self.stopped_playing_cache:
-                logger.debug("Already handled %s, ", new_member.name)
+                logger.debug("Already handled %s, nothing to do", new_member.name)
                 return
             else:
                 self.stopped_playing_cache[uid] = True
@@ -2196,7 +2194,7 @@ Pornography Historian"""
                         if not any(member for member in chan.voice_members):
                             await delete_channel(chan)
                 continue
-            logger.debug("voicemembers %s", [chan.voice_members for chan in chans])
+            # logger.debug("voicemembers %s", [chan.voice_members for chan in chans])
             empty_channels = [
                 chan
                 for chan in chans
@@ -2896,7 +2894,6 @@ Pornography Historian"""
         first = True
         async with channel:
             async for handle_id in channel:
-                logger.debug("got %s from channel %r", handle_id, channel)
                 if handle_id in self.sync_cache:
                     logger.debug("Already updated, not doing it again")
                     continue
@@ -2934,7 +2931,6 @@ Pornography Historian"""
                         except Exception:
                             logger.exception("cannot sync session")
 
-        logger.debug("channel %r closed, done", channel)
 
     async def _sync_check(self):
         async with self.database.session() as session:
@@ -2947,9 +2943,6 @@ Pornography Historian"""
 
     async def _sync_handles(self, ids_to_sync):
         send_ch, receive_ch = trio.open_memory_channel(len(ids_to_sync))
-        logger.debug(
-            "preparing to sync handles: %s into channel %r", ids_to_sync, send_ch
-        )
 
         async with send_ch:
             for tag_id in ids_to_sync:
@@ -2968,11 +2961,9 @@ Pornography Historian"""
         await trio.sleep(10)
         while True:
             try:
-                logger.debug("running sync check")
                 await self._sync_check()
             except Exception as e:
                 logger.exception(f"something went wrong during _sync_check")
-            logger.debug("sleeping for 60s before running sync check again")
             await trio.sleep(60)
 
     async def _cron_task(self):
@@ -3348,7 +3339,7 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
             for guild in guilds
             for id, mem in guild.members.items()
         }
-        logger.debug(f"all_names {list(all_names.values())}")
+        # logger.debug(f"all_names {list(all_names.values())}")
 
         candidates = process.extractBests(name, all_names, scorer=scorer)
         logger.debug(f"candidates are {candidates}")
