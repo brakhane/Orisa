@@ -2251,7 +2251,8 @@ Pornography Historian"""
 
                 combined = np.array([sr.values for sr in srs], dtype=np.float)
 
-                if not any(x is not None for x in combined):
+                # Only update channel name if there's more than one person with ratings
+                if sum(x is not None for x in combined) < 2:
                     return ""
 
                 # hide useless warning in case we take the mean of an empty slice
