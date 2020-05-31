@@ -22,6 +22,7 @@ import re
 import random
 import os
 import tempfile
+import time
 import traceback
 import unicodedata
 import urllib.parse
@@ -227,6 +228,12 @@ def only_owner_all_channels(ctx):
         # application_info is None
         return False
 
+@dataclass
+class ChannelRenameLimit:
+    lock: trio.Lock
+    reset_time: float
+    remaining: int
+
 
 # Main Orisa code
 class Orisa(Plugin):
@@ -249,7 +256,11 @@ class Orisa(Plugin):
         self.stopped_playing_cache = cachetools.TTLCache(maxsize=1000, ttl=10)
 
         self.guild_config = defaultdict(GuildConfig.default)
-        self._welcome_language = cachetools.Cache(maxsize=100)
+
+        self._new_channel_name = {}
+        self._channel_rename_limit = cachetools.LRUCache(maxsize=1000)
+
+        self._welcome_language = cachetools.LRUCache(maxsize=500)
 
         # Translators: sent by Orisa when she joins a new server
         self._welcome_text = N_(
@@ -2273,9 +2284,7 @@ Pornography Historian"""
                             new_name = f"{prefix} #{i+1}"
 
                         try:
-                            if new_name != chan.name:
-                                logger.debug(f"changing name of {chan} to {new_name}")
-                                await chan.edit(name=new_name)
+                            await self._rename_channel(chan, new_name)
                             if adjust_user_limits:
                                 limit = prefix_info.limit
                                 await chan.edit(user_limit=limit)
@@ -2382,6 +2391,67 @@ Pornography Historian"""
             )
         except KeyError as e:
             raise InvalidFormat(e.args[0]) from e
+
+
+        
+    async def _rename_channel(self, channel, new_name):
+        """
+        Discord only allows 2 renames within 10 minutes (per channel), so we have to enforce that
+        limit somehow
+        """
+        logger.debug("got a request to rename channel %s to %s", channel, new_name)
+
+        self._new_channel_name[channel.id] = new_name
+
+        async def perform_rename():
+            # 10 minutes + 5 seconds safety margin
+            reset_interval = 605
+            try:
+                try:
+                    limit = self._channel_rename_limit[channel.id]
+                except KeyError:
+                    limit = ChannelRenameLimit(lock=trio.Lock(), reset_time=time.time() + reset_interval, remaining=2)
+                    self._channel_rename_limit[channel.id] = limit
+
+                logger.debug("Trying to acquire lock for channel %s", channel)
+                async with limit.lock:
+                    logger.debug("Lock for channel %s acquired", channel)
+                    if not limit.remaining:
+                        to_sleep = limit.reset_time - time.time()
+                        if to_sleep >=0:
+                            logger.debug("Rate limit for channel %s reached, sleeping %f s", channel, to_sleep)
+                            await trio.sleep(to_sleep)
+                        
+                        # reset limits
+                        limit.reset_time = time.time() + reset_interval
+                        limit.remaining = 2
+                    
+                    new_name = self._new_channel_name.get(channel.id)
+                    logger.debug("got new_name %s from %s", new_name, self._new_channel_name)
+
+                    if not new_name:
+                        logger.debug("no new name for channel %s, assuming it has already been renamed", channel)
+                        return
+
+                    # channel object/name might have changed in the meantime, so acquire it again
+
+                    up_to_date_channel = channel.guild.channels.get(channel.id)
+                    if not up_to_date_channel:
+                        logger.debug("Channel %s not found in channels list, assuming it has been deleted by now", channel)
+                        return
+
+                    if up_to_date_channel.name == new_name:
+                        logger.debug("no need to rename channel %s to %s, as it already has the correct name", up_to_date_channel, new_name)
+                    else:
+                        logger.debug("renaming channel %s to %s", up_to_date_channel, new_name)
+                        await up_to_date_channel.edit(name=new_name)
+                        limit.remaining -= 1
+
+                    del self._new_channel_name[channel.id]
+            except Exception:
+                logger.exception("Unhandled exception in perform_rename")            
+
+        await self.spawn(perform_rename)    
 
     async def _update_nick(self, user, *, force=False, raise_hierachy_error=False):
         user_id = user.discord_id
