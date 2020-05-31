@@ -11,6 +11,7 @@ dummy.py
 
 # Setuptools
 .eggs
+orisa.egg-info
 
 # Editors
 .*.swp
