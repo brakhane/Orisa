@@ -2205,12 +2205,12 @@ Pornography Historian"""
             logger.debug("empty channels %s", empty_channels)
 
             if create_all_channels:
-                while len(chans) < cat.channel_limit:
+                while len(chans) < cat.channel_limit and len(parent.children) < 50:
                     await add_a_channel()
                     chans.append("dummy")  # value doesn't matter
 
             elif not empty_channels:
-                if len(chans) < cat.channel_limit:
+                if len(chans) < cat.channel_limit and len(parent.children) < 50:
                     await add_a_channel()
 
             elif len(empty_channels) == 1:
@@ -2444,7 +2444,14 @@ Pornography Historian"""
                         logger.debug("no need to rename channel %s to %s, as it already has the correct name", up_to_date_channel, new_name)
                     else:
                         logger.debug("renaming channel %s to %s", up_to_date_channel, new_name)
-                        await up_to_date_channel.edit(name=new_name)
+                        try:
+                            await up_to_date_channel.edit(name=new_name)
+                        except NotFound:
+                            logger.warn(
+                                "Tried to change a channel that Discord says does not exist, removing from cache!",
+                                exc_info=True,
+                            )
+                            channel.guild._channels.pop(channel.id, None)         
                         limit.remaining -= 1
 
                     del self._new_channel_name[channel.id]
