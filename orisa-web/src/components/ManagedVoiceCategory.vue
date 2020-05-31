@@ -109,7 +109,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
                 <b-numberinput
                   v-model.number="category.channel_limit"
                   min="1"
-                  max="99"
+                  max="50"
                 ></b-numberinput>
               </b-field>
             </div>
