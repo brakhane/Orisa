@@ -2427,7 +2427,6 @@ Pornography Historian"""
                         limit.remaining = 2
                     
                     new_name = self._new_channel_name.get(channel.id)
-                    logger.debug("got new_name %s from %s", new_name, self._new_channel_name)
 
                     if not new_name:
                         logger.debug("no new name for channel %s, assuming it has already been renamed", channel)
