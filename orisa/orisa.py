@@ -2402,13 +2402,13 @@ Pornography Historian"""
         self._new_channel_name[channel.id] = new_name
 
         async def perform_rename():
-            # 10 minutes + 5 seconds safety margin
-            reset_interval = 605
+            # 10 minutes + 2 seconds safety margin
+            reset_interval = 602
             try:
                 try:
                     limit = self._channel_rename_limit[channel.id]
                 except KeyError:
-                    limit = ChannelRenameLimit(lock=trio.Lock(), reset_time=time.time() + reset_interval, remaining=2)
+                    limit = ChannelRenameLimit(lock=trio.Lock(), reset_time=None, remaining=2)
                     self._channel_rename_limit[channel.id] = limit
 
                 logger.debug("Trying to acquire lock for channel %s", channel)
@@ -2421,7 +2421,7 @@ Pornography Historian"""
                             await trio.sleep(to_sleep)
                         
                         # reset limits
-                        limit.reset_time = time.time() + reset_interval
+                        limit.reset_time = None
                         limit.remaining = 2
                     
                     new_name = self._new_channel_name.get(channel.id)
@@ -2448,7 +2448,9 @@ Pornography Historian"""
                                 "Tried to change a channel that Discord says does not exist, removing from cache!",
                                 exc_info=True,
                             )
-                            channel.guild._channels.pop(channel.id, None)         
+                            channel.guild._channels.pop(channel.id, None)
+                        if limit.reset_time is None:
+                            limit.reset_time = time.time() + reset_interval
                         limit.remaining -= 1
 
                     del self._new_channel_name[channel.id]
