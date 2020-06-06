@@ -2439,6 +2439,7 @@ Pornography Historian"""
 
                     if up_to_date_channel.name == new_name:
                         # logger.debug("no need to rename channel %s to %s, as it already has the correct name", up_to_date_channel, new_name)
+                        pass
                     else:
                         logger.debug("renaming channel %s to %s", up_to_date_channel, new_name)
                         try:
