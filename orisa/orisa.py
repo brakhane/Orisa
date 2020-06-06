@@ -2435,9 +2435,8 @@ Pornography Historian"""
                     up_to_date_channel = channel.guild.channels.get(channel.id)
                     if not up_to_date_channel:
                         # logger.debug("Channel %s not found in channels list, assuming it has been deleted by now", channel)
-                        return
-
-                    if up_to_date_channel.name == new_name:
+                        pass
+                    elif up_to_date_channel.name == new_name:
                         # logger.debug("no need to rename channel %s to %s, as it already has the correct name", up_to_date_channel, new_name)
                         pass
                     else:
