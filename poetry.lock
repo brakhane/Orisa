@@ -11,8 +11,8 @@ category = "main"
 description = "High level compatibility layer for multiple asynchronous event loop implementations"
 name = "anyio"
 optional = false
-python-versions = ">= 3.5.3"
-version = "1.0.0"
+python-versions = ">=3.5.3"
+version = "1.3.1"
 
 [package.dependencies]
 async-generator = "*"
@@ -199,6 +199,7 @@ typing_inspect = ">=0.2.0"
 reference = "orisa-triows"
 type = "git"
 url = "https://github.com/brakhane/curious.git"
+
 [[package]]
 category = "main"
 description = "Dodgy: Searches for dodgy looking lines in Python code"
@@ -994,7 +995,7 @@ python-versions = "^3.7"
 
 [metadata.hashes]
 aiofiles = ["021ea0ba314a86027c166ecc4b4c07f2d40fc0f4b3a950d1868a0f2571c2bbee", "1e644c2573f953664368de28d2aa4c89dfd64550429d0c27c4680ccd3aa4985d"]
-anyio = ["0f47b5ea774cc9d403935c617ff27c7673f87cda0688cd1aab3137ac86283a68", "49059434c06dbfa472d972edb366497e2400ada668643c3ae89e450ce114334e"]
+anyio = ["a46bb2b7743455434afd9adea848a3c4e0b7321aee3e9d08844b11d348d3b5a0", "f21b4fafeec1b7db81e09a907e44e374a1e39718d782a488fdfcdcf949c8950c"]
 appdirs = ["9e5896d1372858f8dd3344faf4e5014d21849c756c8d5701f78f8a103b372d92", "d8b24664561d0d34ddfaec54636d502d7cea6e29c3eaf68f3df6180863e2166e"]
 arrow = ["8c53fad4e723a56c02d8df75fd7a879800148d6e51df4713f91502e70a65e1be", "9f1503d359011a74cd41169652f0eb0232822f58c67c414229f4174a15ae71f9"]
 asks = ["b0cbfaac83383ada2c1d22044d22797bc7b4cbedf8d0518dfa53203603812733"]
