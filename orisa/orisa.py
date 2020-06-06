@@ -2397,7 +2397,7 @@ Pornography Historian"""
         Discord only allows 2 renames within 10 minutes (per channel), so we have to enforce that
         limit somehow
         """
-        logger.debug("got a request to rename channel %s to %s", channel, new_name)
+        # logger.debug("got a request to rename channel %s to %s", channel, new_name)
 
         self._new_channel_name[channel.id] = new_name
 
@@ -2411,9 +2411,9 @@ Pornography Historian"""
                     limit = ChannelRenameLimit(lock=trio.Lock(), reset_time=None, remaining=2)
                     self._channel_rename_limit[channel.id] = limit
 
-                logger.debug("Trying to acquire lock for channel %s", channel)
+                # logger.debug("Trying to acquire lock for channel %s", channel)
                 async with limit.lock:
-                    logger.debug("Lock for channel %s acquired", channel)
+                    # logger.debug("Lock for channel %s acquired", channel)
                     if not limit.remaining:
                         to_sleep = limit.reset_time - time.time()
                         if to_sleep >=0:
@@ -2427,18 +2427,18 @@ Pornography Historian"""
                     new_name = self._new_channel_name.get(channel.id)
 
                     if not new_name:
-                        logger.debug("no new name for channel %s, assuming it has already been renamed", channel)
+                        # logger.debug("no new name for channel %s, assuming it has already been renamed", channel)
                         return
 
                     # channel object/name might have changed in the meantime, so acquire it again
 
                     up_to_date_channel = channel.guild.channels.get(channel.id)
                     if not up_to_date_channel:
-                        logger.debug("Channel %s not found in channels list, assuming it has been deleted by now", channel)
+                        # logger.debug("Channel %s not found in channels list, assuming it has been deleted by now", channel)
                         return
 
                     if up_to_date_channel.name == new_name:
-                        logger.debug("no need to rename channel %s to %s, as it already has the correct name", up_to_date_channel, new_name)
+                        # logger.debug("no need to rename channel %s to %s, as it already has the correct name", up_to_date_channel, new_name)
                     else:
                         logger.debug("renaming channel %s to %s", up_to_date_channel, new_name)
                         try:
