@@ -4,11 +4,12 @@ there are certain restrictions on running your own instance:
 1. You must give any member of the server you run her on access to the source code 
    and your modifications (this follows from the AGPL)
 
-2. You must make it obvious that your instance is not the official bot, by at least: 
+2. You must make it obvious that your instance is not the official bot, by at least
+   both of: 
   
     a) choosing a different name than just "Orisa" that makes it obvious it's not
        official (eg. "NotOrisa", "MyOrisa", "OverwatchBot", but not "OrisaV2"
-       as that would imply it's a successor), and
+       as that would imply it's a successor), AND
   
     b) adding a disclaimer to the "!ow register" answer text and "!ow about" info
        that your bot is not the official Orisa bot
