@@ -5,20 +5,21 @@
 # Diable Dk <Kazoku.ow@gmail.com>, 2019.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
 # Titouan F. <titouan.forgeard@gmail.com>, 2019.
+# J. Lavoie <j.lavoie@net-c.ca>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
-"PO-Revision-Date: 2020-01-11 20:35+0000\n"
-"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
+"PO-Revision-Date: 2020-07-06 02:41+0000\n"
+"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 3.10.1\n"
+"X-Generator: Weblate 4.2-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1652
@@ -346,7 +347,7 @@ msgstr ""
 
 #: orisa/orisa.py:753
 msgid "Show your love :heart:"
-msgstr "Montre nous ton soutien :heart:"
+msgstr "Montre-nous ton soutien :heart:"
 
 #: orisa/orisa.py:757
 #, python-brace-format
