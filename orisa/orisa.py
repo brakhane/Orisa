@@ -2350,9 +2350,9 @@ Pornography Historian"""
             if val is None:
                 return "⊘"
             elif val < 0:
-                return f"{int(-val//100):02}?" if short else f"{-val:04}?"
+                return f"{int(-val//100):02}?" if short else f"{-val:4}?"
             else:
-                return f"{int(val//100,):02}" if short else f"{val:04}"
+                return f"{int(val//100,):02}" if short else f"{val:4}"
 
         def val_rank(val, short=False):
             if val is None:
