@@ -1893,6 +1893,10 @@ Pornography Historian"""
             if gc:
                 logger.info("That guild was configured")
                 session.delete(gc)
+            cron = session.query(HighscoreCron).filter_by(id=guild.id).one_or_none()
+            if cron:
+                logger.info("That guild had a cron configured")
+                session.delete(cron)
             with suppress(KeyError):
                 del self.guild_config[guild.id]
             await run_sync(session.commit)
