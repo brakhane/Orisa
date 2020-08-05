@@ -6,13 +6,14 @@
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
 # Titouan F. <titouan.forgeard@gmail.com>, 2019.
 # J. Lavoie <j.lavoie@net-c.ca>, 2020.
+# Dennis Brakhane <brakhane@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
-"PO-Revision-Date: 2020-07-06 02:41+0000\n"
-"Last-Translator: J. Lavoie <j.lavoie@net-c.ca>\n"
+"PO-Revision-Date: 2020-08-06 12:32+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -732,19 +733,14 @@ msgid "you are not registered anyway, so there's nothing for me to forget…"
 msgstr "Tu n'es pas inscrit de toute façon alors je n’ai rien à supprimer…"
 
 #: orisa/orisa.py:1258
-#, fuzzy
-#| msgid ""
-#| "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), "
-#| "`o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. "
-#| "`ds` would mean Damage + Support."
 msgid ""
 "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` "
 "(Off Tank), `d` (Damage), `s` (Support). They can be combined, e.g. `ds` "
 "would mean Damage + Support."
 msgstr ""
-"Identificateur de rôles manquant. Les identificateurs de rôle valides sont : "
+"Identificateur de rôles manquant. Les identificateurs de rôle valides sont : "
 "`m` (Main Tank), `o` (Off Tank), ` d` (dégâts),`s` (Soutien). Il est "
-"possible de les combiner,  ex; « ds » signifie Dégâts + Soutien."
+"possible de les combiner, ex ; « ds » signifie Dégâts + Soutien."
 
 #: orisa/orisa.py:1271
 #, fuzzy, python-brace-format
