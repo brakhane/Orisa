@@ -46,6 +46,10 @@
         "chan-limit": "Número máximo de canais por prefixo",
         "chan-name": "Nome do Canal",
         "chan-name-desc": "O texto antes do número (e SR se a opção \"Mostrar SR\" estiver ativa)",
+        "mngt-pos": "Colocar os canais gerenciados",
+        "mngt-pos-bottom": "no fim (recomendado)",
+        "mngt-pos-top": "no topo",
+        "mngt-pos-tt": "No caso desta categoria também conter canais que não são gerenciados pela Orisa, os canais gerenciados têm de estar ou no topo ou no fim da lista de canais. É recomendado que a Orisa os coloque no fim, uma vez que reduz a quantidade de \"saltos\" que ocorrem quando são criados ou removidos canais.\nSe esta categoria apenas contém canais geridos pela Orisa, esta definição não tem efeito.",
         "mngt-prefixes": "Prefixos gerenciados",
         "no-prefixes": "Ainda não existem prefixos configurados!",
         "prefix-placeholder": "ex: \"Comp\" ou \"Jogo Rápido\"",
@@ -53,7 +57,7 @@
         "remove-unknown-sr-tt": "Com esta opção ativa, a Orisa irá remover automaticamente qualquer canal livre que tenha um `#`, por serem provavelmente canais esquecidos. Por exemplo, se mudares o nome \"Comp\" para \"Competitive\", agora irá haver pelo menos um canal *Comp #1* que devia ser apagado.\nQuando esta opção está desativada, a Orisa irá apenas mexer em canais que sabe que são dela (começam com o prefixo seguido de `#`).\nA não ser que tenhas criado canais nesta categoria que contêm `#`, é recomendado deixar esta opção ativa.",
         "settings-hdr": "Definições",
         "show-sr": "Mostra o SR dos membros em canais gerenciados",
-        "show-sr-tt": "Quando esta opção está ativa, a Orisa irá ajustar o nome do canal de forma a mostrar a média de SR dos seus membros (ex: \"`Comp#1 [12-23-34]`\"). Se a opção `$t(cfg.allow-sr-in-nick)` estiver desativada, apenas será mudado o nickname de cada membro naquele canal que mostre o seu SR (ou rank, se o membro o tiver configurado pelo `!ow format`). Infelizmente, esses nicknames atualizados apenas serão mostrados na lista de canais depois de recarregar o Discord devido a um bug do Discord (que o Discord não está disposto a resolver).\nÉ recomendado ativar esta opção nas categorias de canais de Overwatch.",
+        "show-sr-tt": "Quando esta opção está ativa, a Orisa irá ajustar o nome do canal de forma a mostrar a média de SR dos seus membros (ex: \"`Comp#1 [12-23-34]`\"). Se a opção `$t(cfg.allow-sr-in-nick)` estiver desativada, apenas será mudado o nickname de cada membro naquele canal que mostre o seu SR (ou rank, se o membro o tiver configurado pelo `!ow format`).\nÉ recomendado ativar esta opção nas categorias de canais de Overwatch.\nO Discord impõe limites na frequência com que o nome de um canal pode ser alterado, por tanto o nome do canal pode não estar sempre atualizado.",
         "user-limit": "Limite de utilizadores",
         "user-limit-desc": "O número máximo de pessoas permitido nos canais de voz criados. 0 significa sem limite."
     }
