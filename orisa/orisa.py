@@ -2570,10 +2570,12 @@ Pornography Historian"""
 
     async def _send_congrats(self, handle, role_idx, sr, rank, image):
         user = handle.user
+
         for guild in self._configured_guilds():
             try:
                 if user.discord_id not in guild.members:
                     continue
+                CurrentLocale.set(self.guild_config[guild_id].locale)
                 embed = Embed(
                     # Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
                     title=_("For your own safety, get behind the barrier!"),
@@ -2594,12 +2596,9 @@ Pornography Historian"""
                 await self.client.find_channel(
                     self.guild_config[guild.id].congrats_channel_id
                 ).messages.send(
-                    content=i18n.get_translation(
-                        self.guild_config[guild.id].locale,
-                        # Translators: <@!> is discord markup and needs to be preserved
-                        N_("Let's hear it for <@!{discord_id}>!").format(
-                            discord_id=user.discord_id
-                        ),
+                    # Translators: <@!> is discord markup and needs to be preserved
+                    content=_("Let's hear it for <@!{discord_id}>!").format(
+                        discord_id=user.discord_id
                     ),
                     embed=embed,
                 )
