@@ -228,6 +228,7 @@ def only_owner_all_channels(ctx):
         # application_info is None
         return False
 
+
 @dataclass
 class ChannelRenameLimit:
     lock: trio.Lock
@@ -2394,8 +2395,6 @@ Pornography Historian"""
         except KeyError as e:
             raise InvalidFormat(e.args[0]) from e
 
-
-        
     async def _rename_channel(self, channel, new_name):
         """
         Discord only allows 2 renames within 10 minutes (per channel), so we have to enforce that
@@ -2412,7 +2411,9 @@ Pornography Historian"""
                 try:
                     limit = self._channel_rename_limit[channel.id]
                 except KeyError:
-                    limit = ChannelRenameLimit(lock=trio.Lock(), reset_time=None, remaining=2)
+                    limit = ChannelRenameLimit(
+                        lock=trio.Lock(), reset_time=None, remaining=2
+                    )
                     self._channel_rename_limit[channel.id] = limit
 
                 # logger.debug("Trying to acquire lock for channel %s", channel)
@@ -2420,14 +2421,18 @@ Pornography Historian"""
                     # logger.debug("Lock for channel %s acquired", channel)
                     if not limit.remaining:
                         to_sleep = limit.reset_time - time.time()
-                        if to_sleep >=0:
-                            logger.debug("Rate limit for channel %s reached, sleeping %f s", channel, to_sleep)
+                        if to_sleep >= 0:
+                            logger.debug(
+                                "Rate limit for channel %s reached, sleeping %f s",
+                                channel,
+                                to_sleep,
+                            )
                             await trio.sleep(to_sleep)
-                        
+
                         # reset limits
                         limit.reset_time = None
                         limit.remaining = 2
-                    
+
                     new_name = self._new_channel_name.get(channel.id)
 
                     if not new_name:
@@ -2444,7 +2449,9 @@ Pornography Historian"""
                         # logger.debug("no need to rename channel %s to %s, as it already has the correct name", up_to_date_channel, new_name)
                         pass
                     else:
-                        logger.debug("renaming channel %s to %s", up_to_date_channel, new_name)
+                        logger.debug(
+                            "renaming channel %s to %s", up_to_date_channel, new_name
+                        )
                         try:
                             await up_to_date_channel.edit(name=new_name)
                         except NotFound:
@@ -2459,9 +2466,9 @@ Pornography Historian"""
 
                     del self._new_channel_name[channel.id]
             except Exception:
-                logger.exception("Unhandled exception in perform_rename")            
+                logger.exception("Unhandled exception in perform_rename")
 
-        await self.spawn(perform_rename)    
+        await self.spawn(perform_rename)
 
     async def _update_nick(self, user, *, force=False, raise_hierachy_error=False):
         user_id = user.discord_id
@@ -2587,9 +2594,12 @@ Pornography Historian"""
                 await self.client.find_channel(
                     self.guild_config[guild.id].congrats_channel_id
                 ).messages.send(
-                    # Translators: <@!> is discord markup and needs to be preserved
-                    content=_("Let's hear it for <@!{discord_id}>!").format(
-                        discord_id=user.discord_id
+                    content=i18n.get_translation(
+                        self.guild_config[guild.id].locale,
+                        # Translators: <@!> is discord markup and needs to be preserved
+                        N_("Let's hear it for <@!{discord_id}>!").format(
+                            discord_id=user.discord_id
+                        ),
                     ),
                     embed=embed,
                 )
@@ -2936,7 +2946,6 @@ Pornography Historian"""
                             await run_sync(session.commit)
                         except Exception:
                             logger.exception("cannot sync session")
-
 
     async def _sync_check(self):
         async with self.database.session() as session:
