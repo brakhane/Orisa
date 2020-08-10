@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
-"PO-Revision-Date: 2020-08-07 15:32+0000\n"
+"PO-Revision-Date: 2020-08-11 22:32+0000\n"
 "Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_PT/>\n"
@@ -1229,9 +1229,8 @@ msgstr "#"
 
 #. Translators: header for highscore table: previous position (keep it short)
 #: orisa/orisa.py:2638
-#, fuzzy
 msgid "prev"
-msgstr "prévio"
+msgstr "prévia"
 
 #. Translators: header for highscore table: member name
 #: orisa/orisa.py:2640
