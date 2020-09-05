@@ -28,7 +28,7 @@
         "not-top-role-head": "Rola \"Orisa\" nie jest najwyższą na serwerze!",
         "post-hs": "Wysyłaj codziennie tabelę wyników RU na kanał Orisy",
         "post-hs-time": "Godzina w strefie czasowej UTC o której udostępnić post",
-        "post-hs-tt": "Jeżeli ta opcja jest włączona, Orisa będzie codziennie około godziny 11 czasu polskiego wysyłać tabelę z rankingami RU dla każdej z ról (osobno dla PC i Xboxa). Tylko RU głównego konta będzie brane pod uwagę i tylko użytkownicy którzy mają przyznaną RU będą pokazywani. Plik CSV z tymi samymi danymi również zostanie wysłany.",
+        "post-hs-tt": "Jeżeli ta opcja jest włączona, Orisa będzie codziennie około godziny 11 czasu polskiego wysyłać tabelę z rankingami RU dla każdej z ról (osobno dla PC, Xboxa i PlayStation) w okolicach skonfigurowanego czasu. Tylko RU głównego konta będzie brane pod uwagę i tylko użytkownicy którzy mają przyznaną RU będą pokazywani. Plik CSV z tymi samymi danymi również zostanie wysłany.",
         "reg-msg": "Wiadomość powitalna",
         "reg-msg-desc": "Opcjonalny tekst który pojawia się w wiadomości powitalnej gdy użytkownik zarejestruje się używając `!ow register`. Ta wiadomość *nie jest* pokazywana kiedy ktoś dołącza do serwera. Możesz użyć [Discord Markdown]({{ link }}).",
         "reg-msg-placeholder": "np.\nNie zapomnij ustawić swojej roli za pomocą `!ow setroles`; i nie graj Hanzo.",
@@ -47,6 +47,10 @@
         "chan-limit": "Maksymalna liczba kanałów na prefiks",
         "chan-name": "Nazwa kanału",
         "chan-name-desc": "Tekst przed numerem (i RU, jeżeli opcja \"Pokaż RU\" jest włączona)",
+        "mngt-pos": "Ustaw zarządzane kanały",
+        "mngt-pos-bottom": "na dole (rekomendowane)",
+        "mngt-pos-top": "na górze",
+        "mngt-pos-tt": "W przypadku gdy ta kategoria zawiera kanały którymi nie zarządza Orisa, jej kanały będą musiały znaleźć się albo na początku, albo na końcu listy. Rekomendujemy by Orisa ustawiała je na końcu, gdyż redukuje to ilość \"skakania\" które występuje, gdy kanały są tworzone lub kasowane.\nTo ustawienie nic nie zmienia, gdy kategoria zawiera tylko kanały zarządzane przez Orisę.",
         "mngt-prefixes": "Zarządzane prefiksy",
         "no-prefixes": "Nie ma jeszcze żadnych skonfigurowanych prefiksów!",
         "prefix-placeholder": "np. Rywalizacja lub Szybka Gra",
@@ -54,7 +58,7 @@
         "remove-unknown-sr-tt": "Jeżeli ta opcja jest aktywna, Orisa automatycznie usunie puste kanały w tej kategorii, które zawierają `#` w nazwie, jako iż prawdopodobnie zostały opuszczone. Na przykład, jeżeli zmienisz nazwę z \"Turniej\" na \"Rywalizacja\", będzie istnieć co najmniej jeden kanał *Turniej #1*, który powinien zostać usunięty.\nKiedy ta opcja jest wyłączona, Orisa będzie modyfikować kanały, o których wie, iż należą do niej (zaczynają się z `#` poprzedzoną prefiksem).\nDopóki ręcznie nie stworzyłeś kanałów zawierających `#` w tej kategorii, zalecamy pozostawić tę opcję włączoną.",
         "settings-hdr": "Ustawienia",
         "show-sr": "Pokazuj RU członków w zarządzanych kanałach",
-        "show-sr-tt": "Kiedy ta opcja jest włączona, Orisa będzie dostosowywać nazwę kanału tak, by średnia RU jego graczy była pokazywana (np. \"`Turniej #1 [12-23-34]`\"). Jeżeli opcja \"$t(cfg.allow-sr-in-nick)\" jest wyłączona, Orisa również zaktualizuje nicki każdego gracza w tym kanale tak, by pokazywał on ich RU (lub rangę, jeżeli ten użytkownik skonfigurował ją przy użyciu `!ow format`).  Niestety, zaktualizowane nicki zostaną wyświetlone na kanale dopiero po odświeżeniu Discorda, przez błąd (którego Discord nie chce naprawić).\nRekomendujemy włączenie tej opcji dla kanałów dla Overwatcha.",
+        "show-sr-tt": "Kiedy ta opcja jest włączona, Orisa będzie dostosowywać nazwę kanału tak, by średnia RU jego graczy była pokazywana (np. \"`Turniej #1 [12-23-34]`\"). Jeżeli opcja \"$t(cfg.allow-sr-in-nick)\" jest wyłączona, Orisa również zaktualizuje nicki każdego gracza w tym kanale tak, by pokazywał on ich RU (lub rangę, jeżeli ten użytkownik skonfigurował ją przy użyciu `!ow format`). \nRekomendujemy włączenie tej opcji dla kanałów Overwatch.\nDiscord limituje częstość aktualizacji nazw kanałów, więc zmiana może nie być od razu widoczna.",
         "user-limit": "Limit użytkowników",
         "user-limit-desc": "Maksymalna liczba użytkowników na jednym ze stworzonych kanałów głosowych. 0 oznacza brak limitu."
     }
