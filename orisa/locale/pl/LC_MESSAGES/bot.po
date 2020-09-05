@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
-"PO-Revision-Date: 2020-05-07 14:12+0000\n"
+"PO-Revision-Date: 2020-09-06 18:36+0000\n"
 "Last-Translator: Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/orisa/bot/pl/>\n"
 "Language: pl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1652
@@ -579,6 +579,8 @@ msgid ""
 "`setprimary` requires the first few letters of the handle you want to make "
 "your primary as a parameter, e.g. `!ow setprimary foo`"
 msgstr ""
+"`setprimary` wymaga podania kilku pierwszych liter uchwytu którego chcesz "
+"użyć jako podstawowego jako parametru, np. `!ow setprimary foo`"
 
 #: orisa/orisa.py:1019
 msgid "You are not registered. Use `!ow register` first."
@@ -1220,12 +1222,12 @@ msgstr "daty rejestracji"
 
 #: orisa/orisa.py:1766
 msgid "Sorry, I'm not allowed to send you files…"
-msgstr ""
+msgstr "Przykro mi, nie wolno mi wysyłać ci plików…"
 
 #: orisa/orisa.py:1775
 msgid ""
 "I'm not allowed to upload images in this channel, so I sent you a DM instead."
-msgstr ""
+msgstr "Nie wolno mi wrzucać obrazków na ten kanał, więc wysłałam ci go na PW."
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
 #: orisa/orisa.py:2492
