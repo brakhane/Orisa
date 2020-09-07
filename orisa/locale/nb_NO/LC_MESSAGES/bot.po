@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
-"PO-Revision-Date: 2020-05-11 20:23+0000\n"
+"PO-Revision-Date: 2020-09-08 00:36+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
 "bot/nb_NO/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.3-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1652
@@ -1286,7 +1286,7 @@ msgstr ""
 msgid ""
 "Sorry, but it seems like Blizzard's site has some problems currently ({e}), "
 "please try again later!"
-msgstr ""
+msgstr "Blizzard-siden har problemer ({e}). Prøv igjen senere."
 
 #. Translators: :warning: is an emoji code
 #: orisa/orisa.py:3156
