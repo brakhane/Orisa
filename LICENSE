@@ -8,7 +8,9 @@ there are certain restrictions on running your own instance:
   
     1. choosing a different name than just "Orisa" that makes it obvious it's not
        official (eg. "NotOrisa", "MyOrisa", "OverwatchBot", but not "OrisaV2"
-       as that would imply it's a successor), AND
+       as that would imply it's a successor)
+       
+    AND
   
     2. adding a disclaimer to the "!ow register" answer text and "!ow about" info
        that your bot is not the official Orisa bot
