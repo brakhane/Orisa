@@ -14,39 +14,41 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # Dennis Brakhane <brakhane@gmail.com>, 2020.
+# 윤종호 <chrisjonghoyun1130@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: Orisa 1.0\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2020-10-23 12:26+0000\n"
+"Last-Translator: 윤종호 <chrisjonghoyun1130@gmail.com>\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/orisa/bot/ko/>\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.3.1\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1652
 #: orisa/orisa.py:1704 orisa/orisa.py:1708
 msgid "Damage"
-msgstr ""
+msgstr "데미지"
 
 #: orisa/models.py:60
 msgid "Main Tank"
-msgstr ""
+msgstr "매인 탱커"
 
 #: orisa/models.py:61
 msgid "Off Tank"
-msgstr ""
+msgstr "부탱커"
 
 #. Translators: Role
 #: orisa/models.py:62 orisa/orisa.py:187 orisa/orisa.py:1653
 #: orisa/orisa.py:1704 orisa/orisa.py:1708
 msgid "Support"
-msgstr ""
+msgstr "힐러"
 
 #. Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
 #: orisa/models.py:204
