@@ -2317,6 +2317,7 @@ Pornography Historian"""
                 if chan.position != pos:
                     try:
                         await chan.edit(position=pos)
+                        await trio.sleep(0.5) #  FIXME: temporary hack
                     except NotFound:
                         logger.warn(
                             "Tried to change a channel that Discord says does not exist, removing from cache!",
@@ -3324,9 +3325,12 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
     if ctx.guild:
         guilds = [ctx.guild]
     else:
-        guilds = [
-            guild for guild in ctx.bot.guilds.values() if ctx.author.id in guild.members
-        ]
+        raise ConversionFailedError(ctx, name, Member, _('This command must be issued from the Orisa channel in the Discord server if you give a name as argument, so I know where to look. Omit the name argument if you mean "myself"; that works even in DMs'))
+        #logger.debug("collecting guilds...")
+        #guilds = [
+        #    guild for guild in ctx.bot.guilds.values() if ctx.author.id in guild.members
+        #]
+        #logger.debug("done collecting guilds")
 
     if name.startswith("<@") and name.endswith(">"):
         id = name[2:-1]

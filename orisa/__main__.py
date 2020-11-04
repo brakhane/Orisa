@@ -23,6 +23,7 @@ import trio
 
 import raven
 from curious.dataclasses.presence import Game, GameType, Status
+from curious.commands.exc import ConversionFailedError
 
 from . import web
 from .config import SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN, MASHERY_API_KEY, DEVELOPMENT
@@ -83,5 +84,21 @@ async def ready(ctx):
     msg = "!ow help" if not DEVELOPMENT else ",ow help"
     await ctx.bot.change_status(game=Game(name=msg, type=GameType.LISTENING_TO))
 
+    class Logger:
+        def before_task_step(self, task):
+            logger.debug(f">>> task step {task.name}")
+
+        def task_exited(self, task):
+            logger.debug(f"<<< task end {task.name}")
+
+    # trio.hazmat.add_instrument(Logger())
+
+@client.event("command_error")
+async def command_error(ev_ctx, ctx, err):
+    if isinstance(err, ConversionFailedError):
+        await ctx.channel.messages.send(str(err))
+    else:
+        fmtted = ''.join(traceback.format_exception(type(err), err, err.__traceback__))
+        logger.error(f"Error in command!\n{fmtted}")
 
 client.run(autoshard=False)
