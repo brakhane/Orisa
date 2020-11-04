@@ -2642,8 +2642,6 @@ Pornography Historian"""
                 guild for guild in self.client.guilds.values() if guild.id in guild_ids
             ]
 
-            logger.debug("guilds are %s", guilds)
-
             for type_class, type, handle, prev_sr in handles_and_prev:
                 for guild in guilds:
                     try:
@@ -2654,10 +2652,6 @@ Pornography Historian"""
                     top_per_guild.setdefault(guild.id, {}).setdefault(
                         (type_class, type.key), []
                     ).append((member, handle, getattr(prev_sr, type.key)))
-
-                @dataclass
-                class dummy:
-                    name: str
 
             def member_name(member):
                 name = str(member.name)
