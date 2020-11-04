@@ -2629,14 +2629,19 @@ Pornography Historian"""
                 for type_class in [BattleTag, Gamertag, OnlineID]
             }
 
-            handles_and_prev = [
-                (c, t, handle, prev_sr(handle))
-                for c in [BattleTag, Gamertag, OnlineID]
-                for t in [SR.tank, SR.damage, SR.support]
-                for handle in handles[c, t]
-            ]
+            def create_h_a_p():
+
+                return [
+                    (c, t, handle, prev_sr(handle))
+                    for c in [BattleTag, Gamertag, OnlineID]
+                    for t in [SR.tank, SR.damage, SR.support]
+                    for handle in handles[c, t]
+                ]
+
+            handles_and_prev = await run_sync(create_h_a_p)
 
             top_per_guild = {}
+
 
             guilds = [
                 guild for guild in self.client.guilds.values() if guild.id in guild_ids
