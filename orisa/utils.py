@@ -102,6 +102,7 @@ async def get_sr(handle):
             raise BlizzardError(f"got status code {result.status_code} from Blizz")
 
         document = html.fromstring(result.content)
+        await trio.sleep(0)
 
         role_divs = document.xpath(
             '(//div[@class="competitive-rank"])[1]/div[@class="competitive-rank-role"]'

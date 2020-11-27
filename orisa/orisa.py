@@ -24,7 +24,7 @@ import os
 import tempfile
 import time
 import traceback
-import unicodedata
+import unicodedata2 as unicodedata
 import urllib.parse
 import warnings
 
@@ -198,6 +198,10 @@ COLORS = (
     0xF1D592,  # Grand Master
 )
 
+
+PROFILER = __import__("cProfile").Profile()
+PROFILER.disable()
+
 # Conditions
 
 
@@ -303,7 +307,21 @@ class Orisa(Plugin):
 
         await self.spawn(self._oauth_result_listener)
 
-    # admin commands
+    # admin commandsa
+
+    @command()
+    @condition(only_owner, bypass_owner=False)
+    async def startp(self, ctx):
+        PROFILER.enable()
+        await reply(ctx, "starting profiling")
+
+    @command()
+    @condition(only_owner, bypass_owner=False)
+    async def stopp(self, ctx):
+        PROFILER.disable()
+        PROFILER.dump_stats("/tmp/orisaprof")
+        await reply(ctx, "stopped profiling")
+
 
     @command()
     @condition(only_owner, bypass_owner=False)
@@ -1840,25 +1858,29 @@ Pornography Historian"""
         if old_voice_state and old_voice_state.channel:
             parent = old_voice_state.channel.parent
             if parent:
-                try:
-                    await self._adjust_voice_channels(parent)
-                except Exception:
-                    logger.warn(
-                        f"Can't adjust voice channel for parent {parent}", exc_info=True
-                    )
+                async def task():
+                    try:
+                        await self._adjust_voice_channels(parent)
+                    except Exception:
+                        logger.warn(
+                            f"Can't adjust voice channel for parent {parent}", exc_info=True
+                        )
+                await self.spawn(task)
 
         if new_voice_state and new_voice_state.channel:
             if new_voice_state.channel.parent != parent:
                 if new_voice_state.channel.parent:
-                    try:
-                        await self._adjust_voice_channels(
-                            new_voice_state.channel.parent
-                        )
-                    except Exception:
-                        logger.warn(
-                            f"Can't adjust voice channel for new state parent {new_voice_state.channel.parent}",
-                            exc_info=True,
-                        )
+                    async def task():
+                        try:
+                            await self._adjust_voice_channels(
+                                new_voice_state.channel.parent
+                            )
+                        except Exception:
+                            logger.warn(
+                                f"Can't adjust voice channel for new state parent {new_voice_state.channel.parent}",
+                                exc_info=True,
+                            )
+                    await self.spawn(task)
 
         CurrentLocale.set(self.guild_config[member.guild_id].locale)
         async with self.database.session() as session:
@@ -2915,7 +2937,7 @@ Pornography Historian"""
                 else:
                     self.sync_cache[handle_id] = True  # any value really
                 if not first:
-                    delay = 1 + random.random() * 5
+                    delay = 5 + random.random() * 10
                     logger.debug(f"rate limiting: sleeping for {delay:3.02}s")
                     await trio.sleep(delay)
                 else:
@@ -2978,7 +3000,7 @@ Pornography Historian"""
                 await self._sync_check()
             except Exception as e:
                 logger.exception(f"something went wrong during _sync_check")
-            await trio.sleep(60)
+            await trio.sleep(5 * 60)
 
     async def _cron_task(self):
         "poor man's cron"
@@ -3350,14 +3372,14 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
                 if s2.startswith(s1):
                     score *= 2
                 return score
-
+        logger.debug("collecting names")
         all_names = {
             id: strip_tags(mem.name)
             for guild in guilds
             for id, mem in guild.members.items()
         }
         # logger.debug(f"all_names {list(all_names.values())}")
-
+        logger.debug("names collected, getting candidates")
         candidates = process.extractBests(name, all_names, scorer=scorer)
         logger.debug(f"candidates are {candidates}")
         if candidates:
