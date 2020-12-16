@@ -18,7 +18,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Orisa 1.0\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
 "PO-Revision-Date: 2020-10-23 12:26+0000\n"
 "Last-Translator: 윤종호 <chrisjonghoyun1130@gmail.com>\n"

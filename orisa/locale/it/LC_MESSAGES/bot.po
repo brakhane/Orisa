@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
 "PO-Revision-Date: 2020-12-16 09:29+0000\n"
 "Last-Translator: Luca De Filippo <luca.defilippo@translationcommons.org>\n"
@@ -616,7 +616,8 @@ msgstr ""
 #: orisa/orisa.py:1135
 #, python-brace-format
 msgid "Done. Henceforth, thou shall be knownst as \"`{new_nick}`, {title}\"."
-msgstr "Fatto. Henceforth, ora sarai riconosciuto come `{new_nick}`, {title}\"."
+msgstr ""
+"Fatto. Henceforth, ora sarai riconosciuto come `{new_nick}`, {title}\"."
 
 #: orisa/orisa.py:1146
 msgid "you are not registered!"
@@ -821,8 +822,8 @@ msgid ""
 "*Checks and updates are done automatically, use this command only if you "
 "want your nick to be up to date immediately!*"
 msgstr ""
-"Controlla subito il dati del tuo account e aggiorna il tuo nome regolarmente."
-"\n"
+"Controlla subito il dati del tuo account e aggiorna il tuo nome "
+"regolarmente.\n"
 "*Controlli e aggiornamenti sono automatici, usa questo comando solo se vuoi "
 "che il tuo nome sia aggionato immediatamente*"
 
@@ -844,8 +845,8 @@ msgid ""
 msgstr ""
 "Ti chiariamo come viene mostrato il tuo SR o livello. Sarà sempre mostrato "
 "in [square\\u00a0brackets] accanto al tuo nome.\n"
-"In *format* puoi specificare i placeholders con`$placeholder` or "
-"`${placeholder}`."
+"In *format* puoi specificare i placeholders con`$placeholder` or `"
+"${placeholder}`."
 
 #: orisa/orisa.py:1454
 msgid "★ *ow format placeholders*"
