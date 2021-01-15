@@ -5,13 +5,14 @@
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
 # Dennis Brakhane <brakhane@gmail.com>, 2020.
 # ssantos <ssantos@web.de>, 2020.
+# Carlos Pinto <srcarlzy0@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
-"PO-Revision-Date: 2020-08-20 14:36+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"PO-Revision-Date: 2021-01-16 13:32+0000\n"
+"Last-Translator: Carlos Pinto <srcarlzy0@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.2.1-dev\n"
+"X-Generator: Weblate 4.5-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1652
@@ -151,6 +152,13 @@ msgid ""
 "configured for this Discord!*"
 msgstr ""
 "*Saudações*! Estou animada por estar aqui :smiley:\n"
+"Para começar, cria um novo cargo chamado `Orisa Admin` (apenas importa o "
+"nome, não precisa de nenhuma permissão especial) e adiciona-o a ti e a todos "
+"os que devem ser autorizados configurar-me.\n"
+"Em seguida, escreve `!ow config` neste canal e irei enviar via DM um link "
+"para me configurares.\n"
+"*Eu vou ignorar todos os comandos, exceto `!ow help` e `!ow config` até "
+"estar configurada neste Servidor de Discord!*\n"
 "Para começar, cria um novo cargo chamado `Orisa Admin` (apenas importa o "
 "nome, não precisa de nenhuma permissão especial) e adiciona-o a ti e a todos "
 "os que devem ser autorizados configurar-me.\n"
