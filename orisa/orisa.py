@@ -1876,10 +1876,16 @@ Pornography Historian"""
                                 new_voice_state.channel.parent
                             )
                         except Exception:
-                            logger.warn(
-                                f"Can't adjust voice channel for new state parent {new_voice_state.channel.parent}",
-                                exc_info=True,
-                            )
+                            if new_voice_state.channel:
+                                logger.warn(
+                                    f"Can't adjust voice channel for new state parent {new_voice_state.channel.parent}",
+                                    exc_info=True,
+                                )
+                            else:
+                                logger.warn(
+                                    f"Can't adjust voice channel for new state (channel is none) {new_voice_state}",
+                                    exc_info=True,
+                                )
                     await self.spawn(task)
 
         CurrentLocale.set(self.guild_config[member.guild_id].locale)
@@ -3101,7 +3107,7 @@ Pornography Historian"""
                     )
                     return
             elif type == "psn":
-                handles = [OnlineID(online_id=data)]
+                handles = [OnlineID(online_id=data.replace('\\', ''))]
 
             user = await self.database.user_by_discord_id(session, user_id)
 
