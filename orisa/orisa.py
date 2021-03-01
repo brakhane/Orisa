@@ -560,6 +560,13 @@ class Orisa(Plugin):
     async def ping(self, ctx):
         await reply(ctx, "pong")
 
+
+    # easter egg
+    @command()
+    @condition(correct_channel)
+    async def owo(self, ctx, *, ignored: str = None):
+        await reply(ctx, "uwu")
+
     # ow commands
 
     @command()
@@ -2141,7 +2148,7 @@ Pornography Historian"""
 
         for cat in self.guild_config[guild.id].managed_voice_categories:
             if cat.category_id == parent.id:
-                prefix_map = {prefix.name: prefix for prefix in cat.prefixes}
+                prefix_map = {prefix.name.strip(): prefix for prefix in cat.prefixes}
                 break
         else:
             logger.debug("channel is not managed")
@@ -2181,7 +2188,7 @@ Pornography Historian"""
         async def add_a_channel():
             nonlocal made_changes, chans, cat, guild
 
-            name = f"{prefix} #{len(chans)+1}"
+            name = f"{prefix.strip()} #{len(chans)+1}"
             logger.debug("creating a new channel %s", name)
 
             limit = prefix_map[prefix].limit
