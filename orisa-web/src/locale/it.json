@@ -49,7 +49,7 @@
         "mngt-pos": "Posizione il canale gestito",
         "mngt-pos-bottom": "In fondo (Raccomandato)",
         "mngt-pos-top": "In alto",
-        "mngt-pos-tt": "In questo caso, questa categoria conterrà anche i canali non gestiti da Orisa, i canali gestiti devono essere all'inizio e alla fine della lista canali. E' consigliato lasciare che Orisa li posizioni in fondo, per ridurre il numero di \"salti\" che avvengono quando i canali vengono creati o rimossi.\nIn questa categoria sono contenuti solo i canali gestiti da Orisa, questa funzione non ha nessun effetto.",
+        "mngt-pos-tt": "In questo caso, questa categoria conterrà anche i canali non gestiti da Orisa, i canali gestiti devono essere all'inizio e alla fine della lista canali. È consigliato lasciare che Orisa li posizioni in fondo, per ridurre il numero di «salti» che avvengono quando i canali vengono creati o rimossi.\nIn questa categoria sono contenuti solo i canali gestiti da Orisa, questa funzione non ha nessun effetto.",
         "mngt-prefixes": "Prefissaggi gestiti",
         "no-prefixes": "Non ci sono prefissaggi configurati!",
         "prefix-placeholder": "Ex- Comp, o Partita Rapida",
