@@ -322,7 +322,6 @@ class Orisa(Plugin):
         PROFILER.dump_stats("/tmp/orisaprof")
         await reply(ctx, "stopped profiling")
 
-
     @command()
     @condition(only_owner, bypass_owner=False)
     async def shutdown(self, ctx, safety: str = None):
@@ -559,7 +558,6 @@ class Orisa(Plugin):
     @condition(correct_channel)
     async def ping(self, ctx):
         await reply(ctx, "pong")
-
 
     # easter egg
     @command()
@@ -1210,6 +1208,15 @@ Pornography Historian"""
                     for handle in user.handles:
                         try:
                             await self._sync_handle(session, handle)
+                        except InvalidBattleTag:
+                            await reply(
+                                ctx,
+                                _(
+                                    "Blizzard says your {type} {handle} does not exist. Did you change it? Use `!ow register` to update it".format(
+                                        type=handle.desc, handle=handle.handle
+                                    )
+                                ),
+                            )
                         except Exception:
                             if self.raven_client:
                                 self.raven_client.captureException()
@@ -1865,18 +1872,22 @@ Pornography Historian"""
         if old_voice_state and old_voice_state.channel:
             parent = old_voice_state.channel.parent
             if parent:
+
                 async def task():
                     try:
                         await self._adjust_voice_channels(parent)
                     except Exception:
                         logger.warn(
-                            f"Can't adjust voice channel for parent {parent}", exc_info=True
+                            f"Can't adjust voice channel for parent {parent}",
+                            exc_info=True,
                         )
+
                 await self.spawn(task)
 
         if new_voice_state and new_voice_state.channel:
             if new_voice_state.channel.parent != parent:
                 if new_voice_state.channel.parent:
+
                     async def task():
                         try:
                             await self._adjust_voice_channels(
@@ -1893,6 +1904,7 @@ Pornography Historian"""
                                     f"Can't adjust voice channel for new state (channel is none) {new_voice_state}",
                                     exc_info=True,
                                 )
+
                     await self.spawn(task)
 
         CurrentLocale.set(self.guild_config[member.guild_id].locale)
@@ -2352,7 +2364,7 @@ Pornography Historian"""
                 if chan.position != pos:
                     try:
                         await chan.edit(position=pos)
-                        await trio.sleep(0.5) #  FIXME: temporary hack
+                        await trio.sleep(0.5)  #  FIXME: temporary hack
                     except NotFound:
                         logger.warn(
                             "Tried to change a channel that Discord says does not exist, removing from cache!",
@@ -2678,7 +2690,6 @@ Pornography Historian"""
 
             top_per_guild = {}
 
-
             guilds = [
                 guild for guild in self.client.guilds.values() if guild.id in guild_ids
             ]
@@ -2830,11 +2841,11 @@ Pornography Historian"""
                             )
                             ix += step
 
-                        await chan.messages.upload(
-                            csv_file,
-                            filename=f"ranking_{role}_{type_class.blizzard_url_type.upper()}_{arrow.now().isoformat()[:10]}.csv",
-                        )
-                        logger.debug("upload done")
+                        # await chan.messages.upload(
+                        #    csv_file,
+                        #    filename=f"ranking_{role}_{type_class.blizzard_url_type.upper()}_{arrow.now().isoformat()[:10]}.csv",
+                        # )
+                        # logger.debug("upload done")
                     except Exception:
                         logger.exception(
                             "unable to send top players to guild %i", guild_id
@@ -3114,7 +3125,7 @@ Pornography Historian"""
                     )
                     return
             elif type == "psn":
-                handles = [OnlineID(online_id=data.replace('\\', ''))]
+                handles = [OnlineID(online_id=data.replace("\\", ""))]
 
             user = await self.database.user_by_discord_id(session, user_id)
 
@@ -3360,12 +3371,19 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
     if ctx.guild:
         guilds = [ctx.guild]
     else:
-        raise ConversionFailedError(ctx, name, Member, _('This command must be issued from the Orisa channel in the Discord server if you give a name as argument, so I know where to look. Omit the name argument if you mean "myself"; that works even in DMs'))
-        #logger.debug("collecting guilds...")
-        #guilds = [
+        raise ConversionFailedError(
+            ctx,
+            name,
+            Member,
+            _(
+                'This command must be issued from the Orisa channel in the Discord server if you give a name as argument, so I know where to look. Omit the name argument if you mean "myself"; that works even in DMs'
+            ),
+        )
+        # logger.debug("collecting guilds...")
+        # guilds = [
         #    guild for guild in ctx.bot.guilds.values() if ctx.author.id in guild.members
-        #]
-        #logger.debug("done collecting guilds")
+        # ]
+        # logger.debug("done collecting guilds")
 
     if name.startswith("<@") and name.endswith(">"):
         id = name[2:-1]
@@ -3385,6 +3403,7 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
                 if s2.startswith(s1):
                     score *= 2
                 return score
+
         logger.debug("collecting names")
         all_names = {
             id: strip_tags(mem.name)
