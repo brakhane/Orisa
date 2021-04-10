@@ -1212,11 +1212,12 @@ Pornography Historian"""
                             await reply(
                                 ctx,
                                 _(
-                                    "Blizzard says your {type} {handle} does not exist. Did you change it? Use `!ow register` to update it".format(
+                                    "Blizzard says your {type} {handle} does not exist. Did you change it? Use `!ow register` to update it.".format(
                                         type=handle.desc, handle=handle.handle
                                     )
                                 ),
                             )
+                            fault = True
                         except Exception:
                             if self.raven_client:
                                 self.raven_client.captureException()
