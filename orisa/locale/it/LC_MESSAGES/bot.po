@@ -4,7 +4,7 @@
 # Valerio D'Onghia <venom1@live.de>, 2019.
 # Weblate Admin <brakhane+weblate@gmail.com>, 2019.
 # Daniele Giulietti <lordnocht@gmail.com>, 2019.
-# Dennis Brakhane <brakhane@gmail.com>, 2020.
+# Dennis Brakhane <brakhane@gmail.com>, 2020, 2021.
 # Luca De Filippo <luca.defilippo@translationcommons.org>, 2020.
 # Alessandro Mandelli <mandelli.alessandro@ngi.it>, 2021.
 # Matteo Schettini <matthewschettini@gmail.com>, 2021.
@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
 "PO-Revision-Date: 2021-04-17 04:50+0000\n"
-"Last-Translator: Matteo Schettini <matthewschettini@gmail.com>\n"
+"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/orisa/bot/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -183,8 +183,8 @@ msgstr ""
 "\n"
 "\n"
 "*Qualcuno (spero tu) mi ha invitato nel tuo server {guild_name}, ma non ho "
-"trovato un canale test dove sono autorizzata a inviare messaggi, per questo "
-"ti contatto direttamente."
+"trovato un canale di testo dove sono autorizzata a inviare messaggi, quindi "
+"ti sto contattando personalmente.*"
 
 #. Translators: Short for Discord Nickname
 #: orisa/orisa.py:573
@@ -333,8 +333,8 @@ msgid ""
 "will be discussed and announced there."
 msgstr ""
 "Se mi usi nel tuo server Discord o hai dei consigli, [Entra nel Orisa "
-"Discord ufficiale]({SUPPORT_DISCORD} ).\n"
-"Aggiornamenti e novità verranno discussi e annunciati qui."
+"Discord ufficiale]({SUPPORT_DISCORD} ). Aggiornamenti e novità verranno "
+"discussi e annunciati qui."
 
 #: orisa/orisa.py:753
 msgid "Show your love :heart:"
