@@ -24,6 +24,7 @@ Orisa wouldn't be possible without the help of contributors. If you believe you 
   * Dennis Brakhane
 
 * Italian translation
+  * Matteo Schettini
   * Valerio D'Onghia
 
 * Norwegian translation
