@@ -1,7 +1,7 @@
 # Translation files for Orisa
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
-# Daniel Martins <dafm200936@gmail.com>, 2019, 2020.
+# Daniel Martins <dafm200936@gmail.com>, 2019, 2020, 2021.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
 # Dennis Brakhane <brakhane@gmail.com>, 2020.
 # ssantos <ssantos@web.de>, 2020.
@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
-"PO-Revision-Date: 2021-01-16 13:32+0000\n"
-"Last-Translator: Carlos Pinto <srcarlzy0@gmail.com>\n"
+"PO-Revision-Date: 2021-04-17 16:13+0000\n"
+"Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.6-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1652
@@ -140,7 +140,6 @@ msgid "Tank"
 msgstr "Tanque"
 
 #: orisa/orisa.py:256
-#, fuzzy
 msgid ""
 "*Greetings*! I am excited to be here :smiley:\n"
 "To get started, create a new role named `Orisa Admin` (only the name is "
@@ -152,13 +151,6 @@ msgid ""
 "configured for this Discord!*"
 msgstr ""
 "*Saudações*! Estou animada por estar aqui :smiley:\n"
-"Para começar, cria um novo cargo chamado `Orisa Admin` (apenas importa o "
-"nome, não precisa de nenhuma permissão especial) e adiciona-o a ti e a todos "
-"os que devem ser autorizados configurar-me.\n"
-"Em seguida, escreve `!ow config` neste canal e irei enviar via DM um link "
-"para me configurares.\n"
-"*Eu vou ignorar todos os comandos, exceto `!ow help` e `!ow config` até "
-"estar configurada neste Servidor de Discord!*\n"
 "Para começar, cria um novo cargo chamado `Orisa Admin` (apenas importa o "
 "nome, não precisa de nenhuma permissão especial) e adiciona-o a ti e a todos "
 "os que devem ser autorizados configurar-me.\n"
@@ -588,9 +580,8 @@ msgstr "A cadeia de formatação não pode conter parêntesis retos!"
 
 #. Translators: keep the $ to remind the user that placeholders start with a $ sign
 #: orisa/orisa.py:1065
-#, fuzzy
 msgid "format string must contain at least one $placeholder!"
-msgstr "A cadeia de formatação deve conter pelo menos um $campo!"
+msgstr "A string de formatação deve conter pelo menos um $campo!"
 
 #: orisa/orisa.py:1068
 msgid "format string missing!"
@@ -756,7 +747,7 @@ msgid "Orisa's purpose"
 msgstr "O propósito da Orisa"
 
 #: orisa/orisa.py:1360
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "When joining a QP or Comp channel, you need to know the BattleTag of a "
 "channel member, or they need yours to add you. In competitive channels it "
@@ -1153,11 +1144,10 @@ msgid "sr-history.xls"
 msgstr "historico-sr.xls"
 
 #: orisa/orisa.py:1673
-#, fuzzy
-#| msgid "Here is your SR history of all your accounts as an Excel sheet."
 msgid "Here is your SR history of all your accounts as an Excel spreadsheet."
 msgstr ""
-"Aqui está o histórico de SR de todas as tuas contas, numa folha de Excel."
+"Aqui está o histórico de SR de todas as tuas contas, numa folha de cálculo "
+"do Excel."
 
 #: orisa/orisa.py:1681
 msgid ""
@@ -1530,7 +1520,7 @@ msgstr ""
 
 #: orisa/orisa.py:3212
 msgid ":thumbsup: Vote for me on Discord Bot List"
-msgstr ""
+msgstr ":thumbsup: Vota em mim no Discord Bot List"
 
 #: orisa/orisa.py:3214
 #, python-brace-format
@@ -1538,6 +1528,8 @@ msgid ""
 "If you find me useful, consider voting for me [by clicking here]"
 "({VOTE_LINK})!"
 msgstr ""
+"Se achas que sou útil, considera votar em mim [ao carregar "
+"aqui]({VOTE_LINK})!"
 
 #: orisa/orisa.py:3220
 msgid ":heart: Say thanks by buying a coffee"
