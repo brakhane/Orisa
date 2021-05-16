@@ -4,13 +4,13 @@
 # Weblate Admin <brakhane+weblateadmin@gmail.com>, 2019.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
 # Cynthia <cynti-ebert@web.de>, 2019.
-# Dennis Brakhane <brakhane@gmail.com>, 2020.
+# Dennis Brakhane <brakhane@gmail.com>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2020-05-25 15:06+0200\n"
-"PO-Revision-Date: 2020-05-25 13:08+0000\n"
+"PO-Revision-Date: 2021-05-16 21:42+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:185 orisa/orisa.py:1652
@@ -1184,8 +1184,8 @@ msgid ""
 "I don't know what date {date} is supposed to mean. Please use the format DD."
 "MM.YY or YYYY-MM-DD!"
 msgstr ""
-"Ich weiss nicht, welches was {date} für ein Datum sein soll. Bitte nutze das "
-"Format TT.MM.JJ oder JJJJ-MM-TT!"
+"Ich weiß nicht, was {date} für ein Datum sein soll. Bitte nutze das Format "
+"TT.MM.JJ oder JJJJ-MM-TT!"
 
 #: orisa/orisa.py:1749
 #, python-brace-format
