@@ -3406,7 +3406,7 @@ def fuzzy_nick_match(ann, ctx: Context, name: str):
             name,
             Member,
             _(
-                'This command must be issued from the Orisa channel in the Discord server if you give a name as argument, so I know where to look. Omit the name argument if you mean "myself"; that works even in DMs'
+                'This command must be issued from the Orisa channel in the Discord server if you give a name as argument, so I know where to look. Omit the name argument if you mean "myself"; that works even in DMs.'
             ),
         )
         # logger.debug("collecting guilds...")
