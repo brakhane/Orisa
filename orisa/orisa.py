@@ -1522,9 +1522,8 @@ Pornography Historian"""
                 "`$rank`\nyour rank in shortened form for all 3 roles in order Tank, Damage, Support; asterisk and question marks work like in `$sr`\n\n"
                 "`$tank`, `$damage`, `$support`\nYour full SR for the respective role followed by its symbol. Asterisk and question mark have the same meaning like in `$sr`. "
                 "For technical reasons the symbols for the respective roles are `{SYMBOL_TANK}`, `{SYMBOL_DPS}`, `{SYMBOL_SUPPORT}`\n\n"
-		"`$shorttank`, `$shortdamage`, `$shortsupport`\nSame as above, but only the first two digits are shown.\n\n"
                 "`$tankrank`, `$damagerank`, `$supportrank`\nlike above, but the rank is shown instead.\n\n"
-		"`$shorttankrank`, `$shortdamagerank`, `$shortsupportrank`\nlike above, but the rank is abbreviated.\n\n"
+                "`$shorttank`, `$shorttankrank` etc.\nshow only 2 digits/letters of the respective SR/rank.\n\n"
                 "`$dps`, `$dpsrank`, `$shortdps`, `$shortdpsrank` \nAlias for `$damage`, `$damagerank` etc."
             ).format(
                 SYMBOL_TANK=self.SYMBOL_TANK,
@@ -1538,7 +1537,8 @@ Pornography Historian"""
             value=_(
                 "`!ow format hello $sr` will result in `[hello 12-34-45]`.\n"
                 "`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
-                "`!ow format $damage $support` in `[1234{SYMBOL_DPS} 2345{SYMBOL_SUPPORT}]`.\n"
+                "`!ow format $damage $support` in `[{SYMBOL_DPS}1234 {SYMBOL_SUPPORT}2345]`.\n"
+                "`!ow format $shortdamage` in `[{SYMBOL_DPS}12]`.\n"
                 "*By default, the format is `$sr`*"
             ).format(SYMBOL_DPS=self.SYMBOL_DPS, SYMBOL_SUPPORT=self.SYMBOL_SUPPORT),
             inline=False,
