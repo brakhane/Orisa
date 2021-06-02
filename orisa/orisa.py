@@ -1524,6 +1524,7 @@ Pornography Historian"""
                 "For technical reasons the symbols for the respective roles are `{SYMBOL_TANK}`, `{SYMBOL_DPS}`, `{SYMBOL_SUPPORT}`\n\n"
 		"`$shorttank`, `$shortdamage`, `$shortsupport`\nSame as above, but only the first two digits are shown.\n\n"
                 "`$tankrank`, `$damagerank`, `$supportrank`\nlike above, but the rank is shown instead.\n\n"
+		"`$shorttankrank`, `$shortdamagerank`, `$shortsupportrank`\nlike above, but the rank is abbreviated.\n\n"
                 "`$dps`, `$dpsrank`, `$shortdps`, `$shortdpsrank` \nAlias for `$damage`, `$damagerank` etc."
             ).format(
                 SYMBOL_TANK=self.SYMBOL_TANK,
