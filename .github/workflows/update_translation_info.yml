@@ -3,7 +3,7 @@ name: Update translation_info.json
 on:
   push:
     branches: 
-      - master
+      - main
 
 jobs:
   build:
