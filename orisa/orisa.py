@@ -1196,10 +1196,14 @@ Pornography Historian"""
 
     @ow.subcommand()
     @condition(correct_channel, bypass_owner=False)
-    async def forceupdate(self, ctx):
+    async def forceupdate(self, ctx, discord_id=None):
         async with self.database.session() as session:
-            logger.info(f"{ctx.author.id} used forceupdate")
-            user = await self.database.user_by_discord_id(session, ctx.author.id)
+            if discord_id is None or ctx.author.id != self.client.application_info.owner.id:
+                logger.info(f"{ctx.author.id} used forceupdate")
+                discord_id = ctx.author.id
+            else:
+                logger.info(f"{ctx.author.id} (owner) used forceupdate with discord_id {discord_id}")
+            user = await self.database.user_by_discord_id(session, discord_id)
             if not user:
                 await reply(ctx, _("You are not registered! Do `!ow register` first."))
             else:
@@ -1367,6 +1371,7 @@ Pornography Historian"""
                 forbidden = True
                 break
 
+
         if forbidden:
             await reply(
                 ctx,
@@ -1375,8 +1380,22 @@ Pornography Historian"""
                     "I can't post it here, because it's rather long. Please allow DMs and try again."
                 ),
             )
-        elif not ctx.channel.private:
-            await reply(ctx, _("I sent you a DM with instructions."))
+        else:
+            try:
+                await ctx.author.send(
+                   content=None,
+                   embed=Embed(
+                       title=_(":thinking: Need help?"),
+                       description=_(
+                           "Join the [Support Discord]({SUPPORT_DISCORD})!"
+                       ).format(SUPPORT_DISCORD=SUPPORT_DISCORD),
+                   ),
+               )
+            except Exception:
+               logger.exception("Unable to send help embed")
+
+            if not ctx.channel.private:
+                await reply(ctx, _("I sent you a DM with instructions."))
 
     def _create_help(self, ctx):
 
@@ -1503,8 +1522,9 @@ Pornography Historian"""
                 "`$rank`\nyour rank in shortened form for all 3 roles in order Tank, Damage, Support; asterisk and question marks work like in `$sr`\n\n"
                 "`$tank`, `$damage`, `$support`\nYour full SR for the respective role followed by its symbol. Asterisk and question mark have the same meaning like in `$sr`. "
                 "For technical reasons the symbols for the respective roles are `{SYMBOL_TANK}`, `{SYMBOL_DPS}`, `{SYMBOL_SUPPORT}`\n\n"
+		"`$shorttank`, `$shortdamage`, `$shortsupport`\nSame as above, but only the first two digits are shown.\n\n
                 "`$tankrank`, `$damagerank`, `$supportrank`\nlike above, but the rank is shown instead.\n\n"
-                "`$dps`, `$dpsrank`\nAlias for `$damage` and `$damagerank`, respectively."
+                "`$dps`, `$dpsrank`, `$shortdps`, `$shortdpsrank` \nAlias for `$damage`, `$damagerank` etc."
             ).format(
                 SYMBOL_TANK=self.SYMBOL_TANK,
                 SYMBOL_DPS=self.SYMBOL_DPS,
@@ -2431,13 +2451,21 @@ Pornography Historian"""
                     rank=rank_str,
                     fullrank=full_rank_str,
                     dps=self.SYMBOL_DPS + val_str(all_sr.damage),
+                    shortdps=self.SYMBOL_DPS + val_str(all_sr.damage, short=True),
                     dpsrank=self.SYMBOL_DPS + val_rank(all_sr.damage),
+                    shortdpsrank=self.SYMBOL_DPS + val_rank(all_sr.damage, short=True),
                     damage=self.SYMBOL_DPS + val_str(all_sr.damage),
+                    shortdamage=self.SYMBOL_DPS + val_str(all_sr.damage, short=True),
                     damagerank=self.SYMBOL_DPS + val_rank(all_sr.damage),
+                    shortdamagerank=self.SYMBOL_DPS + val_rank(all_sr.damage, short=True),
                     tank=self.SYMBOL_TANK + val_str(all_sr.tank),
+                    shorttank=self.SYMBOL_TANK + val_str(all_sr.tank, short=True),
                     tankrank=self.SYMBOL_TANK + val_rank(all_sr.tank),
+                    shorttankrank=self.SYMBOL_TANK + val_rank(all_sr.tank, short=True),
                     support=self.SYMBOL_SUPPORT + val_str(all_sr.support),
+                    shortsupport=self.SYMBOL_SUPPORT + val_str(all_sr.support, short=True),
                     supportrank=self.SYMBOL_SUPPORT + val_rank(all_sr.support),
+                    shortsupportrank=self.SYMBOL_SUPPORT + val_rank(all_sr.support, short=True),
                 )
                 + sec_mark
             )
