@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-06-02 23:16+0200\n"
-"PO-Revision-Date: 2021-06-02 21:17+0000\n"
+"PO-Revision-Date: 2021-06-02 21:18+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -1574,11 +1574,6 @@ msgstr ""
 "bedanken? Warum [spendest du ihm nicht eine Tasse Kaffe?]({DONATE_LINK})"
 
 #: orisa/orisa.py:3409
-#, fuzzy
-#| msgid ""
-#| "This command must be issued from the Orisa channel in the Discord server "
-#| "if you give a name as argument, so I know where to look. Omit the name "
-#| "argument if you mean \"myself\"; that works even in DMs"
 msgid ""
 "This command must be issued from the Orisa channel in the Discord server if "
 "you give a name as argument, so I know where to look. Omit the name argument "
