@@ -1522,7 +1522,7 @@ Pornography Historian"""
                 "`$rank`\nyour rank in shortened form for all 3 roles in order Tank, Damage, Support; asterisk and question marks work like in `$sr`\n\n"
                 "`$tank`, `$damage`, `$support`\nYour full SR for the respective role followed by its symbol. Asterisk and question mark have the same meaning like in `$sr`. "
                 "For technical reasons the symbols for the respective roles are `{SYMBOL_TANK}`, `{SYMBOL_DPS}`, `{SYMBOL_SUPPORT}`\n\n"
-		"`$shorttank`, `$shortdamage`, `$shortsupport`\nSame as above, but only the first two digits are shown.\n\n
+		"`$shorttank`, `$shortdamage`, `$shortsupport`\nSame as above, but only the first two digits are shown.\n\n"
                 "`$tankrank`, `$damagerank`, `$supportrank`\nlike above, but the rank is shown instead.\n\n"
                 "`$dps`, `$dpsrank`, `$shortdps`, `$shortdpsrank` \nAlias for `$damage`, `$damagerank` etc."
             ).format(
