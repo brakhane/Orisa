@@ -1,13 +1,13 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Allan Nordhøy <epost@anotheragency.no>, 2020.
+# Allan Nordhøy <epost@anotheragency.no>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-06-02 23:16+0200\n"
-"PO-Revision-Date: 2020-09-08 00:36+0000\n"
+"PO-Revision-Date: 2021-06-04 00:37+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
 "bot/nb_NO/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.7-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:186 orisa/orisa.py:1716
@@ -1342,6 +1342,9 @@ msgid ""
 "role. If you are the owner of this server, there is no way for me to update "
 "your nickname, sorry!"
 msgstr ""
+"Mangler tilstrekkelig tilgang til å oppdatere kallenavnet ditt. Eieren må "
+"flytte «Orisa»-rollen høyere, slik at den er høyere enn din høyeste rolle. "
+"Hvis du eier denne tjeneren, kan ikke kallenavnet ditt oppdateres."
 
 #: orisa/orisa.py:3358
 #, python-brace-format
@@ -1384,6 +1387,10 @@ msgid ""
 "you give a name as argument, so I know where to look. Omit the name argument "
 "if you mean \"myself\"; that works even in DMs."
 msgstr ""
+"Denne kommandoen må utstedes fra Orisa-kanalen i Discord-tjeneren hvis du "
+"angir navn som argument, slik at den vet hvor den skal lete. Unnlat å bruke "
+"navn som argument hvis du mener \"meg selv\"; dette virker selv i "
+"direktemeldinger."
 
 #: orisa/web.py:67
 msgid "You can close this window."
