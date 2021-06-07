@@ -177,7 +177,10 @@ async def send_long(send_func, msg):
 
 
 async def reply(ctx, msg):
-    return await ctx.channel.messages.send(f"<@!{ctx.author.id}> {msg}")
+    if ctx.message and ctx.guild and ctx.guild.me and ctx.channel.effective_permissions(ctx.guild.me).read_message_history:
+        return await ctx.channel.messages.send(msg, in_reply_to=ctx.message.id)
+    else:
+        return await ctx.channel.messages.send(f"<@!{ctx.author.id}> {msg}")
 
 
 def resolve_handle_or_index(user, handle_or_index):
