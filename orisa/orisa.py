@@ -1146,16 +1146,13 @@ Namer of Clouds
 Scourge of Beer Cans
 Muse of Jeff Kaplan
 Shredded Cheese Authority
-MILF Commander
-Cunning Linguist
 Pork Rind Expert
 Dinosaur Supervisor
 Galactic Viceroy of C9
 Earl of Bacon
 Dean of Pizza
 Duke of Tacos
-Retail Jedi
-Pornography Historian"""
+Retail Jedi"""
                     ).split("\n")
                     # reset if SR should not be shown normally
                     await self._update_nick(user)
