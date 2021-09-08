@@ -9,9 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-06-08 14:57+0200\n"
-"PO-Revision-Date: 2021-04-17 16:13+0000\n"
+"PO-Revision-Date: 2021-09-09 15:35+0000\n"
 "Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_PT/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.8.1-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:186 orisa/orisa.py:1713
@@ -375,7 +375,6 @@ msgstr ""
 "logo podes usar também num canal apenas para admins."
 
 #: orisa/orisa.py:831
-#, fuzzy
 msgid ""
 "This command can only be used by members with the `Orisa Admin` role! Only "
 "the name of the role is important, it doesn't need any permissions."
@@ -403,7 +402,7 @@ msgid ""
 msgstr ""
 "Tentei enviar-te uma DM com a ligação, mas não permites DMs de membros do "
 "servidor. Por favor, muda essa opção e tenta novamente. Não posso pôr a "
-"ligaçãoaqui porque assim durante os próximos 30 minutos qualquer pessoa "
+"ligação aqui porque assim durante os próximos 30 minutos qualquer pessoa "
 "poderá configurar-me."
 
 #: orisa/orisa.py:881
@@ -553,7 +552,6 @@ msgstr ""
 "mais tarde."
 
 #: orisa/orisa.py:1045
-#, fuzzy
 msgid ""
 "`setprimary` requires the first few letters of the handle you want to make "
 "your primary as a parameter, e.g. `!ow setprimary foo`"
@@ -610,7 +608,6 @@ msgstr ""
 "Por favor escolhe um formato mais pequeno ou abrevia o teu nickname!"
 
 #: orisa/orisa.py:1140
-#, fuzzy
 msgid ""
 "Smarties Expert\n"
 "Bread Scientist\n"
@@ -639,8 +636,7 @@ msgstr ""
 "Vice-rei de Kamabakka\n"
 "Conde da Beterraba\n"
 "Segurança do Chuck Norris\n"
-"Devorador de Caracteres\n"
-"Historiador Pornográfico"
+"Devorador de Caracteres"
 
 #: orisa/orisa.py:1165
 #, python-brace-format
@@ -677,6 +673,8 @@ msgid ""
 "Blizzard says your {type} {handle} does not exist. Did you change it? Use `!"
 "ow register` to update it."
 msgstr ""
+"A Blizzard diz que a tua {type} {handle} não existe. Mudaste-a? Usa `!ow "
+"register` para a atualizar."
 
 #: orisa/orisa.py:1232
 msgid "There were some problems updating your SR! Try again later."
@@ -684,7 +682,7 @@ msgstr ""
 "Ocorreram alguns problemas ao atualizar o teu SR. Tenta novamente mais tarde."
 
 #: orisa/orisa.py:1239
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "OK, I have updated your data. Your (primary) SR is now {sr}. If that is not "
 "correct, you need to log out of Overwatch once and try again; your profile "
@@ -853,7 +851,6 @@ msgid "Download your SR history as an Excel spreadsheet"
 msgstr "Transfere o teu histórico de SR numa folha de cálculo do Excel"
 
 #: orisa/orisa.py:1487
-#, fuzzy
 msgid ""
 "Immediately checks your account data and updates your nick accordingly.\n"
 "*Checks and updates are done automatically, use this command only if you "
@@ -890,7 +887,7 @@ msgid "★ *ow format placeholders*"
 msgstr "★ *ow format - campos*"
 
 #: orisa/orisa.py:1516
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "*The following placeholders are defined:*\n"
 "`$sr`\n"
@@ -923,13 +920,11 @@ msgstr ""
 "*Os campos seguintes são definidos por:*\n"
 "`$sr`\n"
 "Os primeiros dois dígitos do teu SR para os 3 cargos pela ordem Tanque, "
-"Dano, Suporte; se tiveres contas secundárias, é adicionado um asterisco "
-"(\\*) no fim. É colocado um ponto de interrogação se for mostrado um SR "
-"antigo\n"
+"Dano, Suporte; se tiveres contas secundárias, é adicionado um asterisco (\\*)"
+" no fim. É colocado um ponto de interrogação se for mostrado um SR antigo\n"
 "\n"
 "`$fullsr`\n"
 "Igual a `$sr` mas são mostrados os 4 dígitos\n"
-"\n"
 "`$rank`\n"
 "O teu rank na forma abreviada para os 3 roles pela ordem Tanque, Dano, "
 "Suporte; asteriscos e pontos de interrogação funcionam como em `$sr`\n"
@@ -943,21 +938,18 @@ msgstr ""
 "`$tankrank`, `$damagerank`, `$supportrank`\n"
 "Como acima, mas é antes mostrado o rank.\n"
 "\n"
-"`$dps`, `$dpsrank`\n"
-"Pseudónimo para `$damage` e `$damagerank`, respetivamente."
+"`$shorttank`, `$shorttankrank` etc\n"
+"Apenas mostra 2 dígitos/letras do respetivo SR/rank.\n"
+"\n"
+"`$dps`, `$dpsrank, `$shortdps`, `$shortdpsrank`\n"
+"Pseudónimo para `$damage` e `$damagerank` etc"
 
 #: orisa/orisa.py:1533
 msgid "★ *ow format examples*"
 msgstr "★ *ow format - exemplos*"
 
 #: orisa/orisa.py:1535
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "`!ow format hello $sr` will result in `[hello 12-34-45]`.\n"
-#| "`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
-#| "`!ow format $damage $support` in `[1234{SYMBOL_DPS} "
-#| "2345{SYMBOL_SUPPORT}]`.\n"
-#| "*By default, the format is `$sr`*"
+#, python-brace-format
 msgid ""
 "`!ow format hello $sr` will result in `[hello 12-34-45]`.\n"
 "`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
@@ -967,7 +959,8 @@ msgid ""
 msgstr ""
 "`!ow format hello $sr` irá resultar em `[hello 12-34-45]`.\n"
 "`!ow format Potato/$fullrank` em `[Potato/Bronze-Gold-Diamond]`.\n"
-"`!ow format $damage $support` em `[1234{SYMBOL_DPS} 2345{SYMBOL_SUPPORT}]`.\n"
+"`!ow format $damage $support` em `[{SYMBOL_DPS}1234 {SYMBOL_SUPPORT}2345]`.\n"
+"`!ow format $shortdamage` in `[{SYMBOL_DPS}12]`.\n"
 "*Por norma, o formato é `$sr`*"
 
 #. Translators: headline of second help page
@@ -1326,10 +1319,6 @@ msgstr ""
 "incómodo."
 
 #: orisa/orisa.py:3132
-#, fuzzy
-#| msgid ""
-#| "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register "
-#| "xbox` to register an XBOX account."
 msgid ""
 "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` "
 "to register an Xbox account."
@@ -1566,6 +1555,10 @@ msgid ""
 "you give a name as argument, so I know where to look. Omit the name argument "
 "if you mean \"myself\"; that works even in DMs."
 msgstr ""
+"Este comando deve ser executado no canal da Orisa neste servidor de Discord "
+"se indicares um nome como argumento, para saber onde procurar. Omite o "
+"argumento \"nome\" se te queres referir a \"mim próprio(a)\"; isso funciona, "
+"mesmo em DMs."
 
 #: orisa/web.py:67
 msgid "You can close this window."
