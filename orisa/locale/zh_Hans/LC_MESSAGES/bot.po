@@ -14,51 +14,54 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 # Dennis Brakhane <brakhane@gmail.com>, 2021.
+# shi fan <lovestephy7v@gmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: Orisa 1.0\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-06-08 14:57+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2021-09-10 20:35+0000\n"
+"Last-Translator: shi fan <lovestephy7v@gmail.com>\n"
+"Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
+"orisa/bot/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.9-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:186 orisa/orisa.py:1713
 #: orisa/orisa.py:1765 orisa/orisa.py:1769
 msgid "Damage"
-msgstr ""
+msgstr "伤害"
 
 #: orisa/models.py:60
 msgid "Main Tank"
-msgstr ""
+msgstr "主坦"
 
 #: orisa/models.py:61
 msgid "Off Tank"
-msgstr ""
+msgstr "副坦"
 
 #. Translators: Role
 #: orisa/models.py:62 orisa/orisa.py:188 orisa/orisa.py:1714
 #: orisa/orisa.py:1765 orisa/orisa.py:1769
 msgid "Support"
-msgstr ""
+msgstr "支援"
 
 #. Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
 #: orisa/models.py:204
 msgid "BattleTag"
 msgid_plural "BattleTags"
-msgstr[0] ""
+msgstr[0] "战网名字"
 
 #. Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
 #: orisa/models.py:237
 msgid "Gamertag"
 msgid_plural "Gamertags"
-msgstr[0] ""
+msgstr[0] "游戏名字"
 
 #. Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
 #: orisa/models.py:271
@@ -69,78 +72,78 @@ msgstr[0] ""
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:151
 msgid "Br"
-msgstr ""
+msgstr "青铜"
 
 #. Translators: 2 letter code for "Silver" rank
 #: orisa/orisa.py:153
 msgid "Si"
-msgstr ""
+msgstr "白银"
 
 #. Translators: 2 letter code for "Gold" rank
 #: orisa/orisa.py:155
 msgid "Go"
-msgstr ""
+msgstr "黄金"
 
 #. Translators: 2 letter code for "Platinum" rank
 #: orisa/orisa.py:157
 msgid "Pt"
-msgstr ""
+msgstr "白金"
 
 #. Translators: 2 letter code for "Diamond" rank
 #: orisa/orisa.py:159
 msgid "Dm"
-msgstr ""
+msgstr "钻石"
 
 #. Translators: 2 letter code for "Master" rank
 #: orisa/orisa.py:161
 msgid "Ma"
-msgstr ""
+msgstr "大师"
 
 #. Translators: 2 letter code for "Grandmaster" rank
 #: orisa/orisa.py:163
 msgid "GM"
-msgstr ""
+msgstr "宗师"
 
 #. Translators: SR rank
 #: orisa/orisa.py:167
 msgid "Bronze"
-msgstr ""
+msgstr "青铜"
 
 #. Translators: SR rank
 #: orisa/orisa.py:169
 msgid "Silver"
-msgstr ""
+msgstr "白银"
 
 #. Translators: SR rank
 #: orisa/orisa.py:171
 msgid "Gold"
-msgstr ""
+msgstr "黄金"
 
 #. Translators: SR rank
 #: orisa/orisa.py:173
 msgid "Platinum"
-msgstr ""
+msgstr "白金"
 
 #. Translators: SR rank
 #: orisa/orisa.py:175
 msgid "Diamond"
-msgstr ""
+msgstr "钻石"
 
 #. Translators: SR rank
 #: orisa/orisa.py:177
 msgid "Master"
-msgstr ""
+msgstr "大师"
 
 #. Translators: SR rank
 #: orisa/orisa.py:179
 msgid "Grandmaster"
-msgstr ""
+msgstr "宗师"
 
 #. Translators: Role
 #: orisa/orisa.py:184 orisa/orisa.py:1712 orisa/orisa.py:1765
 #: orisa/orisa.py:1769
 msgid "Tank"
-msgstr ""
+msgstr "坦克"
 
 #: orisa/orisa.py:272
 msgid ""
@@ -153,19 +156,23 @@ msgid ""
 "*I will ignore all commands except `!ow help` and `!ow config` until I'm "
 "configured for this Discord!*"
 msgstr ""
+"*Greetings*!我很高兴来到这里 :smiley:\n"
+"为了开始，创建一个新的角色，命名为`Orisa Admin`（只有名字是重要的，它不需要任何特殊的权限）并添加你自己和所有应该被允许配置我的人。\n"
+"然后，在这个频道中写下`！ow config`，我将通过私信给你发送一个配置我的链接。\n"
+"*我将忽略所有的命令，除了`！ow help`和`！ow config`，直到我在这个Discord被配置！*"
 
 #. Translators: :thinking: must remain as is, it's an emoji
 #. Translators: :thinking: is an emoji code
 #: orisa/orisa.py:279 orisa/orisa.py:822 orisa/orisa.py:853 orisa/orisa.py:1353
 #: orisa/orisa.py:1385
 msgid ":thinking: Need help?"
-msgstr ""
+msgstr ":thinking: 需要帮助吗？"
 
 #: orisa/orisa.py:280 orisa/orisa.py:823 orisa/orisa.py:854 orisa/orisa.py:1355
 #: orisa/orisa.py:1387
 #, python-brace-format
 msgid "Join the [Support Discord]({SUPPORT_DISCORD})!"
-msgstr ""
+msgstr "加入 [Support Discord]({SUPPORT_DISCORD})!"
 
 #: orisa/orisa.py:282
 #, python-brace-format
@@ -180,30 +187,30 @@ msgstr ""
 #. Translators: Short for Discord Nickname
 #: orisa/orisa.py:606
 msgid "Nick"
-msgstr ""
+msgstr "昵称"
 
 #. Translators: When a user has BattleTags and Gamertags registered, this is shown instead of "BattleTags"
 #: orisa/orisa.py:633
 msgid "Tags"
-msgstr ""
+msgstr "战网名字"
 
 #: orisa/orisa.py:649
 msgid "SR"
 msgid_plural "SRs"
-msgstr[0] ""
+msgstr[0] "天梯分"
 
 #: orisa/orisa.py:671
 msgid "Roles"
-msgstr ""
+msgstr "位置"
 
 #. Translators: Weblinks
 #: orisa/orisa.py:676
 msgid "Links"
-msgstr ""
+msgstr "链接"
 
 #: orisa/orisa.py:683
 msgid "Overwatch profile"
-msgstr ""
+msgstr "守望先锋个人资料"
 
 #: orisa/orisa.py:686
 msgid "Upvote Orisa"
@@ -214,13 +221,14 @@ msgid "Orisa Support Server"
 msgstr ""
 
 #: orisa/orisa.py:688
+#, fuzzy
 msgid "Help Translate Orisa"
-msgstr ""
+msgstr "帮助翻译Orisa"
 
 #: orisa/orisa.py:689
 #, python-brace-format
 msgid "Donate `{HEART}`"
-msgstr ""
+msgstr "捐赠`{HEART}`"
 
 #: orisa/orisa.py:701
 #, python-brace-format
@@ -230,7 +238,7 @@ msgstr ""
 #: orisa/orisa.py:704
 #, python-brace-format
 msgid "The SR was last updated {when}."
-msgstr ""
+msgstr "天梯分数最后一次更新是在 {when}."
 
 #: orisa/orisa.py:714
 msgid ""
@@ -247,30 +255,33 @@ msgid ""
 msgstr ""
 
 #: orisa/orisa.py:723
+#, fuzzy
 msgid ""
 "\n"
 "BTW, you do not need to specify your nickname if you want your own "
 "BattleTag; just !ow is enough."
 msgstr ""
+"\n"
+"顺便说一句，如果您想要自己的战网名字，则不需要指定您的昵称；只要 !ow 就足够了。"
 
 #: orisa/orisa.py:729
 #, python-brace-format
 msgid "{member_name} not found in database! *Do you need a hug?*"
-msgstr ""
+msgstr "{member_name} 在数据库中找不到！ *你需要一个拥抱吗？*"
 
 #. Translators: A headline for a tip for the user
 #. Translators: A tip/information for a user
 #: orisa/orisa.py:734 orisa/orisa.py:809
 msgid "Tip"
-msgstr ""
+msgstr "小贴士"
 
 #: orisa/orisa.py:736
 msgid "Use `!ow register` to register, or `!ow help` for more info."
-msgstr ""
+msgstr "使用`!ow register`进行注册，或`!ow help`获取更多信息。"
 
 #: orisa/orisa.py:751
 msgid "About Me"
-msgstr ""
+msgstr "关于我"
 
 #: orisa/orisa.py:755
 #, python-brace-format
@@ -281,21 +292,24 @@ msgid ""
 "licensed under the [GNU Affero General Public License 3.0+]({AGPL_LINK}); "
 "[development happens on GitHub]({GH_LINK})"
 msgstr ""
+"我是一个开源的Discord机器人，帮助管理守望先锋Discord社区。\n"
+"我是由Dennis Brakhane (Joghurt#2732 on Discord)编写和维护的，授权于[GNU Affero General "
+"Public License 3.0+]({AGPL_LINK})；[开发在GitHub上进行]({GH_LINK})"
 
 #: orisa/orisa.py:766
 msgid "Invite me to your own Discord"
-msgstr ""
+msgstr "邀请我加入你自己的 Discord频道"
 
 #: orisa/orisa.py:770
 #, python-brace-format
 msgid ""
 "To invite me to your server, simply [click here]({LINK}), I will post a "
 "message with more information in a channel after I have joined your server"
-msgstr ""
+msgstr "要邀请我加入你的服务器，只需[点击这里]({LINK})，在我加入你的服务器后，我将在频道中发布消息，提供更多信息"
 
 #: orisa/orisa.py:776
 msgid "Join the official Orisa Discord"
-msgstr ""
+msgstr "加入官方的Orisa Discord频道"
 
 #: orisa/orisa.py:780
 #, python-brace-format
@@ -313,11 +327,11 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
-msgstr ""
+msgstr "如果你觉得我有用，[请我喝杯咖啡吧]({DONATE_LINK})."
 
 #: orisa/orisa.py:796
 msgid "I've sent you a DM."
-msgstr ""
+msgstr "我已经给你发了一个私信。"
 
 #: orisa/orisa.py:804
 msgid ""
