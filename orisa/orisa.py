@@ -652,15 +652,13 @@ class Orisa(Plugin):
                 if primary.sr is not None:
                     embed.colour = COLORS[
                         sr_to_rank(
-                            np.nanmean(
-                                np.array(
-                                    [
-                                        primary.sr.tank,
-                                        primary.sr.damage,
-                                        primary.sr.support,
-                                    ],
-                                    dtype=float,
-                                )
+                            max(
+                                x or 0
+                                for x in [
+                                    primary.sr.tank,
+                                    primary.sr.damage,
+                                    primary.sr.support,
+                                ]
                             )
                         )
                     ]
