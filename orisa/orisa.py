@@ -1195,11 +1195,16 @@ Retail Jedi"""
     @condition(correct_channel, bypass_owner=False)
     async def forceupdate(self, ctx, discord_id=None):
         async with self.database.session() as session:
-            if discord_id is None or ctx.author.id != self.client.application_info.owner.id:
+            if (
+                discord_id is None
+                or ctx.author.id != self.client.application_info.owner.id
+            ):
                 logger.info(f"{ctx.author.id} used forceupdate")
                 discord_id = ctx.author.id
             else:
-                logger.info(f"{ctx.author.id} (owner) used forceupdate with discord_id {discord_id}")
+                logger.info(
+                    f"{ctx.author.id} (owner) used forceupdate with discord_id {discord_id}"
+                )
             user = await self.database.user_by_discord_id(session, discord_id)
             if not user:
                 await reply(ctx, _("You are not registered! Do `!ow register` first."))
@@ -1368,7 +1373,6 @@ Retail Jedi"""
                 forbidden = True
                 break
 
-
         if forbidden:
             await reply(
                 ctx,
@@ -1380,16 +1384,16 @@ Retail Jedi"""
         else:
             try:
                 await ctx.author.send(
-                   content=None,
-                   embed=Embed(
-                       title=_(":thinking: Need help?"),
-                       description=_(
-                           "Join the [Support Discord]({SUPPORT_DISCORD})!"
-                       ).format(SUPPORT_DISCORD=SUPPORT_DISCORD),
-                   ),
-               )
+                    content=None,
+                    embed=Embed(
+                        title=_(":thinking: Need help?"),
+                        description=_(
+                            "Join the [Support Discord]({SUPPORT_DISCORD})!"
+                        ).format(SUPPORT_DISCORD=SUPPORT_DISCORD),
+                    ),
+                )
             except Exception:
-               logger.exception("Unable to send help embed")
+                logger.exception("Unable to send help embed")
 
             if not ctx.channel.private:
                 await reply(ctx, _("I sent you a DM with instructions."))
@@ -2916,8 +2920,10 @@ Retail Jedi"""
             # not much we can do, just ignore
             pass
         except NicknameTooLong as e:
-            if handle.user.last_problematic_nickname_warning is None or handle.user.last_problematic_nickname_warning < datetime.utcnow() - timedelta(
-                days=7
+            if (
+                handle.user.last_problematic_nickname_warning is None
+                or handle.user.last_problematic_nickname_warning
+                < datetime.utcnow() - timedelta(days=7)
             ):
                 handle.user.last_problematic_nickname_warning = datetime.utcnow()
                 msg = _(
