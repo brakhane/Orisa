@@ -412,9 +412,9 @@ class Orisa(Plugin):
                     guild.owner,
                     guild.owner.name,
                 )
-                await ctx.author.send(
-                    f"sending to {guild.owner.mention} ({guild.owner.name}) of {guild}"
-                )
+                # await ctx.author.send(
+                #     f"sending to {guild.owner.mention} ({guild.owner.name}) of {guild}"
+                # )
                 await guild.owner.send(message)
             except Exception:
                 logger.exception("unable to send to owner of guild %s", guild)
