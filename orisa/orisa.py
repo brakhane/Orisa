@@ -2173,8 +2173,6 @@ Retail Jedi"""
     async def _adjust_voice_channels(
         self, parent, *, create_all_channels=False, adjust_user_limits=False
     ):
-        logger.info("adjust disabled due to discord bug")
-        return
         logger.debug("adjusting parent %s", parent)
         guild = parent.guild
         if not guild:
@@ -2223,8 +2221,6 @@ Retail Jedi"""
         async def add_a_channel():
             nonlocal made_changes, chans, cat, guild
 
-            logger.info("Discord bug, not creating voice channels for now!")
-            return
             name = f"{prefix.strip()} #{len(chans)+1}"
             logger.debug("creating a new channel %s", name)
 
