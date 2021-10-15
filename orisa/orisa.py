@@ -554,6 +554,21 @@ class Orisa(Plugin):
             elif stale_ids:
                 await ctx.channel.messages.send("issue `!cleanup confirm` to delete.")
 
+
+    @command()
+    @condition(only_owner, bypass_owner=False)
+    async def fixdiscordbug(self, ctx, guild_id:int, category_id: int, prefix: str):
+        guild = self.client.guilds[guild_id]
+        for chan in list(guild.channels.values()):
+            if not chan.parent or chan.type != ChannelType.VOICE or chan.parent.id != category_id :
+                continue
+            if chan.name.startswith(prefix):
+                logger.info(f"deleting channel {chan}")
+                await chan.delete()
+
+
+
+
     @command()
     @condition(correct_channel)
     async def ping(self, ctx):
