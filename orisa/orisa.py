@@ -561,7 +561,7 @@ class Orisa(Plugin):
         logger.info(f"fixdiscordbug {guild_id} {category_id} {prefix}")
         guild = self.client.guilds[guild_id]
         for chan in list(guild.channels.values()):
-            if not chan.parent or chan.type != ChannelType.VOICE or chan.parent.id != category_id :
+            if not chan.parent or chan.type != ChannelType.VOICE or chan.parent.id != category_id:
                 continue
             if chan.name.startswith(prefix):
                 logger.info(f"deleting channel {chan}")
