@@ -558,6 +558,7 @@ class Orisa(Plugin):
     @command()
     @condition(only_owner, bypass_owner=False)
     async def fixdiscordbug(self, ctx, guild_id:int, category_id: int, prefix: str):
+        logger.info(f"fixdiscordbug {guild_id} {category_id} {prefix}")
         guild = self.client.guilds[guild_id]
         for chan in list(guild.channels.values()):
             if not chan.parent or chan.type != ChannelType.VOICE or chan.parent.id != category_id :
