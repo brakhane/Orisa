@@ -12,12 +12,16 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+import atexit
 import logging
-import re
+import logging.config
+import logging.handlers
+import queue
 
 from bisect import bisect
 from collections import namedtuple
 from operator import attrgetter
+from typing import List
 
 import asks
 import trio
@@ -215,3 +219,18 @@ RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
 def sr_to_rank(sr):
     # there is no 0 SR, so if sr is false-ish, it's None
     return sr and bisect(RANK_CUTOFF, sr)
+
+
+class QueueHandler(logging.handlers.QueueHandler):
+    def __init__(self, handlers):
+        q = queue.Queue(-1)
+        # don't exactly know why it's necessary, but I don't care anymore
+        handlers = [handlers[i] for i in range(len(handlers))]
+
+        super().__init__(q)
+        
+        listener = logging.handlers.QueueListener(
+            q, *handlers, respect_handler_level=True
+        )
+        listener.start()
+        atexit.register(listener.stop)
