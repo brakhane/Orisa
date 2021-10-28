@@ -11,7 +11,7 @@
     "@babel/runtime": "^7.8.3",
     "@mdi/font": "^4.8.95",
     "@panter/vue-i18next": "^0.15.1",
-    "axios": "^0.18.1",
+    "axios": "^0.21.2",
     "buefy": "^0.8.19",
     "i18next": "^17.3.1",
     "i18next-browser-languagedetector": "^3.1.1",
