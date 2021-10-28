@@ -38,6 +38,7 @@ from io import BytesIO, StringIO
 from operator import attrgetter, itemgetter
 from string import Template
 from typing import Optional
+from typing_extensions import Literal
 
 import asks
 import arrow
@@ -3137,7 +3138,7 @@ Retail Jedi"""
                         exc_info=True,
                     )
 
-    async def _handle_registration(self, user_id, type, data):
+    async def _handle_registration(self, user_id, type: Literal["pc", "xbox", "psn"], data):
         handles_to_check = []
         async with self.database.session() as session:
             user_obj = await self.client.get_user(user_id)
