@@ -397,7 +397,7 @@ msgid "This link will be valid for 30 minutes."
 msgstr "Este link será válido por 30 minutos."
 
 #: orisa/orisa.py:862 orisa/orisa.py:916
-msgid "I sent you a DM."
+msgid "I've sent you a DM."
 msgstr "Enviei-lhe uma mensagem direta."
 
 #: orisa/orisa.py:867
@@ -527,7 +527,7 @@ msgstr ""
 "Após isso, tente novamente."
 
 #: orisa/orisa.py:980 orisa/orisa.py:1395
-msgid "I sent you a DM with instructions."
+msgid "I've sent you a DM with instructions."
 msgstr "Eu te mandei uma mensagem direta com as instruções."
 
 #: orisa/orisa.py:989
@@ -1220,7 +1220,7 @@ msgstr "{member_name} não está registrado!"
 #. Translators: privacy policy is currently only availabe in English
 #: orisa/orisa.py:1690
 #, fuzzy
-#| msgid "I sent you the privacy policy as DM."
+#| msgid "I've sent you the privacy policy as DM."
 msgid "I DM'ed you the privacy policy."
 msgstr "Enviei a você a política de privacidade por mensagem direta."
 
@@ -1293,7 +1293,7 @@ msgstr "Desculpe, não posso te enviar arquivos…"
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
 msgstr "Não posso carregar imagens neste canal, então te enviei um DM."
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
@@ -1840,7 +1840,7 @@ msgstr "Obrigado! Enviei-lhe uma mensagem direta."
 #~ "Também há {len} jogadores off-line nesse intervalo. Use o comando "
 #~ "`procurartodosjogadores` para mostrá-los também."
 
-#~ msgid "I sent you a DM with the results."
+#~ msgid "I've sent you a DM with the results."
 #~ msgstr "Enviei-lhe uma mensagem direta com os resultados."
 
 #~ msgid "Same as `!ow findplayers`, but also includes offline players."

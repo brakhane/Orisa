@@ -379,7 +379,7 @@ msgid "This link will be valid for 30 minutes."
 msgstr "Tämä linkki on voimassa 30 minuuttia."
 
 #: orisa/orisa.py:862 orisa/orisa.py:916
-msgid "I sent you a DM."
+msgid "I've sent you a DM."
 msgstr "Lähetin sinulle yksityisviestin."
 
 #: orisa/orisa.py:867
@@ -517,7 +517,7 @@ msgstr ""
 "uudelleen."
 
 #: orisa/orisa.py:980 orisa/orisa.py:1395
-msgid "I sent you a DM with instructions."
+msgid "I've sent you a DM with instructions."
 msgstr "Lähetin sinulle ohjeet yksityisviestillä."
 
 #: orisa/orisa.py:989
@@ -1106,7 +1106,7 @@ msgstr ""
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
 msgstr ""
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
@@ -1575,7 +1575,7 @@ msgstr ""
 #~ "On myös {len} pelaajaa tältä väliltä offline-tilassa. Käytä "
 #~ "`findallplayers` komentoa nähdäksesi myös heidät."
 
-#~ msgid "I sent you a DM with the results."
+#~ msgid "I've sent you a DM with the results."
 #~ msgstr "Lähetin sinulle tulokset yksityisviestillä."
 
 #~ msgid ""

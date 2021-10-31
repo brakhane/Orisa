@@ -874,7 +874,7 @@ class Orisa(Plugin):
         embed.set_footer(text=_("This link will be valid for 30 minutes."))
         try:
             await ctx.author.send(content=None, embed=embed)
-            await reply(ctx, _("I sent you a DM."))
+            await reply(ctx, _("I've sent you a DM."))
         except Forbidden:
             await reply(
                 ctx,
@@ -928,7 +928,7 @@ class Orisa(Plugin):
                 return
             await self._handle_registration(user_id, "psn", online_id)
             if not ctx.channel.private:
-                await reply(ctx, _("I sent you a DM."))
+                await reply(ctx, _("I've sent you a DM."))
             return
         else:
             await reply(
@@ -992,7 +992,7 @@ class Orisa(Plugin):
             )
         else:
             if not ctx.channel.private:
-                await reply(ctx, _("I sent you a DM with instructions."))
+                await reply(ctx, _("I've sent you a DM with instructions."))
 
     @ow.subcommand()
     @condition(correct_channel)
@@ -1411,7 +1411,7 @@ Retail Jedi"""
                 logger.exception("Unable to send help embed")
 
             if not ctx.channel.private:
-                await reply(ctx, _("I sent you a DM with instructions."))
+                await reply(ctx, _("I've sent you a DM with instructions."))
 
     def _create_help(self, ctx):
 
@@ -1762,7 +1762,7 @@ Retail Jedi"""
                         ),
                     )
                 if not ctx.channel.private:
-                    await reply(ctx, "I sent you a DM.")
+                    await reply(ctx, "I've sent you a DM.")
 
     async def _srgraph(self, ctx, user, name, date: str = None):
         sns.set()
@@ -1852,7 +1852,7 @@ Retail Jedi"""
                 await reply(
                     ctx,
                     _(
-                        "I'm not allowed to upload images in this channel, so I sent you a DM instead."
+                        "I'm not allowed to upload images in this channel, so I've sent you a DM instead."
                     ),
                 )
 

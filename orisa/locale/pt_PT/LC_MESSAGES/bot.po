@@ -391,7 +391,7 @@ msgid "This link will be valid for 30 minutes."
 msgstr "Esta ligação será válida durante 30 minutos."
 
 #: orisa/orisa.py:862 orisa/orisa.py:916
-msgid "I sent you a DM."
+msgid "I've sent you a DM."
 msgstr "Enviei-te uma DM."
 
 #: orisa/orisa.py:867
@@ -511,7 +511,7 @@ msgstr ""
 "outra vez."
 
 #: orisa/orisa.py:980 orisa/orisa.py:1395
-msgid "I sent you a DM with instructions."
+msgid "I've sent you a DM with instructions."
 msgstr "Enviei-te uma DM com instruções."
 
 #: orisa/orisa.py:989
@@ -1206,7 +1206,7 @@ msgstr "Desculpa, não estou autorizada a enviar-te ficheiros…"
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
 msgstr ""
 "Não estou autorizada a enviar imagens neste canal, por tanto enviei-te antes "
 "uma DM."
@@ -1749,7 +1749,7 @@ msgstr "Obrigado! Enviei-te uma DM."
 #~ "Também há {len} jogadores offline dentro desse intervalo. Usa o comando "
 #~ "`findallplayers`para também os mostrar."
 
-#~ msgid "I sent you a DM with the results."
+#~ msgid "I've sent you a DM with the results."
 #~ msgstr "Enviei-te uma DM com os resultados."
 
 #~ msgid "Same as `!ow findplayers`, but also includes offline players."

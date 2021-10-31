@@ -369,7 +369,7 @@ msgid "This link will be valid for 30 minutes."
 msgstr "此链接的有效期为 30 分钟。"
 
 #: orisa/orisa.py:862 orisa/orisa.py:916
-msgid "I sent you a DM."
+msgid "I've sent you a DM."
 msgstr "我给你发送了私信。"
 
 #: orisa/orisa.py:867
@@ -466,7 +466,7 @@ msgid ""
 msgstr "我不允许给你发送私信。请右键单击 Discord 服务器，选择“隐私设置”，然后启用“允许来自服务器成员的直接消息”。然后再试一次。"
 
 #: orisa/orisa.py:980 orisa/orisa.py:1395
-msgid "I sent you a DM with instructions."
+msgid "I've sent you a DM with instructions."
 msgstr "我给你发了一个包含说明的 私信。"
 
 #: orisa/orisa.py:989
@@ -1078,7 +1078,7 @@ msgstr "抱歉，我不允许向您发送文件…"
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
 msgstr "我不允许在这个频道上传图片，所以我给你发送了私信。"
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses

@@ -394,7 +394,7 @@ msgid "This link will be valid for 30 minutes."
 msgstr "Это ссылка будет действительна 30 минут."
 
 #: orisa/orisa.py:862 orisa/orisa.py:916
-msgid "I sent you a DM."
+msgid "I've sent you a DM."
 msgstr "Я отправила вам личное сообщение."
 
 #: orisa/orisa.py:867
@@ -512,7 +512,7 @@ msgstr ""
 "«Разрешить прямые сообщения от участников сервера». Тогда попробуйте еще раз."
 
 #: orisa/orisa.py:980 orisa/orisa.py:1395
-msgid "I sent you a DM with instructions."
+msgid "I've sent you a DM with instructions."
 msgstr "Я отправила вам личное сообщение с инструкциями."
 
 #: orisa/orisa.py:989
@@ -1266,7 +1266,7 @@ msgstr "Извините, мне не разрешено отправлять в
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
 msgstr ""
 "Мне не разрешено отправлять изображения в этот канал, поэтому я отправила "
 "вам их в личные сообщения."

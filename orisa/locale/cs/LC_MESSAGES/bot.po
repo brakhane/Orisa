@@ -375,7 +375,7 @@ msgid "This link will be valid for 30 minutes."
 msgstr "Tento odkaz platí po dobu 30minut."
 
 #: orisa/orisa.py:862 orisa/orisa.py:916
-msgid "I sent you a DM."
+msgid "I've sent you a DM."
 msgstr "Poslala jsem ti DM."
 
 #: orisa/orisa.py:867
@@ -493,7 +493,7 @@ msgid ""
 msgstr ""
 
 #: orisa/orisa.py:980 orisa/orisa.py:1395
-msgid "I sent you a DM with instructions."
+msgid "I've sent you a DM with instructions."
 msgstr ""
 
 #: orisa/orisa.py:989
@@ -1001,7 +1001,7 @@ msgstr ""
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
 msgstr ""
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses

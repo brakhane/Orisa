@@ -388,7 +388,7 @@ msgid "This link will be valid for 30 minutes."
 msgstr "Questo link sarà valido per 30 minuti."
 
 #: orisa/orisa.py:862 orisa/orisa.py:916
-msgid "I sent you a DM."
+msgid "I've sent you a DM."
 msgstr "Ti ho inviato un messaggio privato."
 
 #: orisa/orisa.py:867
@@ -505,7 +505,7 @@ msgstr ""
 "privati dai membri del server.\" Poi riprova."
 
 #: orisa/orisa.py:980 orisa/orisa.py:1395
-msgid "I sent you a DM with instructions."
+msgid "I've sent you a DM with instructions."
 msgstr "Ti ho inviato un messaggio privato con le istruzioni."
 
 #: orisa/orisa.py:989
@@ -1247,7 +1247,7 @@ msgstr "Mi dispiace, non ho il permesso di mandarti file…"
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
 msgstr ""
 "Non posso caricare immagini in questo canale, quindi ti ho mandato un "
 "messaggio privato."
@@ -1720,7 +1720,7 @@ msgstr "Grazie! Ti ho mandato un messaggio privato."
 #~ "Ci sono inoltre {len} giocatori offline in quel raggio. Usa il comando "
 #~ "`findallplayers` per mostrare anche loro."
 
-#~ msgid "I sent you a DM with the results."
+#~ msgid "I've sent you a DM with the results."
 #~ msgstr "Ti ho inviato un DM con i risultati."
 
 #~ msgid ""

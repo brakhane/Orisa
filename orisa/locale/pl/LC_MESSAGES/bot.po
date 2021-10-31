@@ -418,7 +418,7 @@ msgid "This link will be valid for 30 minutes."
 msgstr "Ten link będzie aktywny przez 30 minut."
 
 #: orisa/orisa.py:862 orisa/orisa.py:916
-msgid "I sent you a DM."
+msgid "I've sent you a DM."
 msgstr "Wysłałam ci PW."
 
 #: orisa/orisa.py:867
@@ -536,7 +536,7 @@ msgstr ""
 "Następnie spróbuj jeszcze raz."
 
 #: orisa/orisa.py:980 orisa/orisa.py:1395
-msgid "I sent you a DM with instructions."
+msgid "I've sent you a DM with instructions."
 msgstr "Wysłałam ci PW z instrukcjami."
 
 #: orisa/orisa.py:989
@@ -1287,7 +1287,7 @@ msgstr "Przykro mi, nie wolno mi wysyłać ci plików…"
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
 msgstr "Nie wolno mi wrzucać obrazków na ten kanał, więc wysłałam ci go na PW."
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
@@ -1823,7 +1823,7 @@ msgstr "Dziękuję! Wysłałam ci PW."
 #~ "Znalazłam {len} graczy offline spełniających te kryteria. Użyj komendy "
 #~ "`findallplayers` aby ich uwzględnić."
 
-#~ msgid "I sent you a DM with the results."
+#~ msgid "I've sent you a DM with the results."
 #~ msgstr "Wysłałam Ci PW z rezultatami."
 
 #~ msgid "Same as `!ow findplayers`, but also includes offline players."

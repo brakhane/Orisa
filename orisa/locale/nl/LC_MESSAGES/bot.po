@@ -395,7 +395,7 @@ msgid "This link will be valid for 30 minutes."
 msgstr "Deze link is 30 minuten geldig."
 
 #: orisa/orisa.py:862 orisa/orisa.py:916
-msgid "I sent you a DM."
+msgid "I've sent you a DM."
 msgstr "Ik heb je een privébericht gestuurd."
 
 #: orisa/orisa.py:867
@@ -532,7 +532,7 @@ msgstr ""
 "probeer het opnieuw."
 
 #: orisa/orisa.py:980 orisa/orisa.py:1395
-msgid "I sent you a DM with instructions."
+msgid "I've sent you a DM with instructions."
 msgstr "Ik heb je een privébericht gestuurd met instructies."
 
 #: orisa/orisa.py:989
@@ -1102,7 +1102,7 @@ msgstr "{member_name} is niet geregistreerd!"
 #. Translators: privacy policy is currently only availabe in English
 #: orisa/orisa.py:1690
 #, fuzzy
-#| msgid "I sent you the privacy policy as DM."
+#| msgid "I've sent you the privacy policy as DM."
 msgid "I DM'ed you the privacy policy."
 msgstr "Ik heb je de privacy policy gestuurd via DM."
 
@@ -1174,7 +1174,7 @@ msgstr ""
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
 msgstr ""
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
@@ -1689,7 +1689,7 @@ msgstr "Dank je! Ik heb je een privébericht gestuurd."
 #~ "Er zijn ook {len} offline spelers tussen dat bereik. Gebruik de "
 #~ "`findallplayers` command om hun ook te laten zien."
 
-#~ msgid "I sent you a DM with the results."
+#~ msgid "I've sent you a DM with the results."
 #~ msgstr "Ik heb je een DM gestuurd met de resultaten."
 
 #~ msgid "Same as `!ow findplayers`, but also includes offline players."
