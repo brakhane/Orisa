@@ -3,6 +3,7 @@ config.py
 orisa.log*
 *.sqlite
 logging.yaml
+.weblate.ini
 
 # Development
 *.bat
