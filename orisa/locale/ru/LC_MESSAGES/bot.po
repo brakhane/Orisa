@@ -9,7 +9,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-08 14:57+0200\n"
 "PO-Revision-Date: 2021-10-19 16:32+0000\n"
 "Last-Translator: Artem <Localizer_in_Russian@protonmail.com>\n"
@@ -1262,7 +1262,8 @@ msgstr "Извините, мне не разрешено отправлять в
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM "
+"instead."
 msgstr ""
 "Мне не разрешено отправлять изображения в этот канал, поэтому я отправила "
 "вам их в личные сообщения."

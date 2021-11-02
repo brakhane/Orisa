@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-08 14:57+0200\n"
 "PO-Revision-Date: 2021-06-11 12:37+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
@@ -1219,7 +1219,8 @@ msgstr "Es tut mir leid, ich darf dir keine Dateien senden…"
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM "
+"instead."
 msgstr ""
 "Ich darf in diesen Kanal keine Bilder hochladen, daher habe ich dir eine PN "
 "geschickt."
