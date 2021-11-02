@@ -2620,9 +2620,9 @@ Retail Jedi"""
         if len(new_nn) > 32:
             raise NicknameTooLong(new_nn)
 
-        logger.debug("New nick for %s is %s", nn, new_nn)
 
         if nn != new_nn:
+            logger.debug("New nick for %s is %s", nn, new_nn)
             try:
                 await member.nickname.set(new_nn)
             except (HierarchyError, PermissionsError):
