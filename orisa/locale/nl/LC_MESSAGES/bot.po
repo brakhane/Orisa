@@ -290,12 +290,6 @@ msgstr "Over Mij"
 
 #: orisa/orisa.py:755
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "I am an open source Discord bot to help manage Overwatch Discord "
-#| "communities.\n"
-#| "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord) "
-#| "and licensed under the [GNU Affero General Public License 3.0]"
-#| "({AGPL_LINK}); the [development is done on Github]({GH_LINK})"
 msgid ""
 "I am an open source Discord bot to help manage Overwatch Discord "
 "communities.\n"
@@ -363,9 +357,6 @@ msgstr ""
 
 #: orisa/orisa.py:811
 #, fuzzy
-#| msgid ""
-#| "`!ow config` works in *any* channel (that I'm allowed to read messages "
-#| "in, of course), so you can also use an admin only channel."
 msgid ""
 "`!ow config` works in *any* channel (that I'm allowed to read messages in, "
 "of course), so you can also use an admin-only channel."
@@ -408,9 +399,6 @@ msgstr ""
 
 #: orisa/orisa.py:881
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "{type} looks like a BattleTag and not like pc/xbox, assuming you meant `!"
-#| "ow register pc`…"
 msgid ""
 "{type} looks like a BattleTag and not like PC/Xbox, assuming you meant `!ow "
 "register pc`…"
@@ -450,10 +438,6 @@ msgstr ""
 
 #: orisa/orisa.py:922
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
-#| "pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported "
-#| "yet."
 msgid ""
 "Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
 "pc` for PC; `!ow register xbox` for Xbox, or `!ow register psn My-Online-"
@@ -491,9 +475,6 @@ msgstr ":video_game: Niet op PC?"
 
 #: orisa/orisa.py:956
 #, fuzzy
-#| msgid ""
-#| "If you have an XBL account, use `!ow register xbox`. PSN accounts are "
-#| "currently not supported, but will be in the future."
 msgid ""
 "If you have an XBL account, use `!ow register xbox`. For PSN, use `!ow "
 "register psn Your_Online-ID`"
@@ -512,10 +493,6 @@ msgstr ""
 
 #: orisa/orisa.py:974
 #, fuzzy
-#| msgid ""
-#| "I'm not allowed to send you a DM. Please right click on the Discord "
-#| "server, select Privacy Settings, and enable \"Allow direct messages from "
-#| "server members.\" Then try again."
 msgid ""
 "I'm not allowed to send you a DM. Please right click on the Discord server, "
 "select \"Privacy Settings\", and enable \"Allow direct messages from server "
@@ -617,10 +594,6 @@ msgstr "Ongeldige opmaakreeks: onbekende tijdelijke aanduiding \"{key}\"!"
 
 #: orisa/orisa.py:1126
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "Sorry, using this format would make your nickname be longer than 32 "
-#| "characters ({len} to be exact).\n"
-#| "Please choose a shorter format or shorten your nickname!"
 msgid ""
 "Sorry, using this format would make your nickname `{nickname}` be longer "
 "than 32 characters ({len} to be exact).\n"
@@ -716,10 +689,6 @@ msgstr ""
 
 #: orisa/orisa.py:1302
 #, fuzzy
-#| msgid ""
-#| "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), "
-#| "`o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. "
-#| "`ds` would mean Damage + Support."
 msgid ""
 "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` "
 "(Off Tank), `d` (Damage), `s` (Support). They can be combined, e.g. `ds` "
@@ -731,10 +700,6 @@ msgstr ""
 
 #: orisa/orisa.py:1315
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main "
-#| "Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, "
-#| "eg. `ds` would mean Damage + Support."
 msgid ""
 "Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main "
 "Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, e."
@@ -872,7 +837,6 @@ msgstr ""
 #. Translators: help for !ow dumpsr
 #: orisa/orisa.py:1480
 #, fuzzy
-#| msgid "Download your SR history as an Excel sheet"
 msgid "Download your SR history as an Excel spreadsheet"
 msgstr "Download jouw SR geschiedenis als een Excel bestand"
 
@@ -1049,9 +1013,6 @@ msgstr ""
 
 #: orisa/orisa.py:1621
 #, fuzzy
-#| msgid ""
-#| "*This command can only be used by users with the Orisa Admin role!*\n"
-#| "Like srgraph, but shows the graph for the given user."
 msgid ""
 "*This command can only be used by users with the \"Orisa Admin\" role!*\n"
 "Like srgraph, but shows the graph for the given user."
@@ -1098,7 +1059,6 @@ msgstr "{member_name} is niet geregistreerd!"
 #. Translators: privacy policy is currently only availabe in English
 #: orisa/orisa.py:1690
 #, fuzzy
-#| msgid "I've sent you the privacy policy as DM."
 msgid "I DM'ed you the privacy policy."
 msgstr "Ik heb je de privacy policy gestuurd via DM."
 
@@ -1118,7 +1078,6 @@ msgstr "sr-geschiedenis.xls"
 
 #: orisa/orisa.py:1734
 #, fuzzy
-#| msgid "Here is your SR history of all your accounts as an Excel sheet."
 msgid "Here is your SR history of all your accounts as an Excel spreadsheet."
 msgstr "Hier is jouw SR geschiedenis van al je accounts als een Excel bestand."
 
@@ -1170,7 +1129,8 @@ msgstr ""
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM "
+"instead."
 msgstr ""
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
@@ -1226,11 +1186,6 @@ msgstr "ΔSR"
 
 #: orisa/orisa.py:2851
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello! Here are the current SRs for **{role}** on {platform} . If a "
-#| "member has more than one {handle_type}, only the primary {handle_type} is "
-#| "considered. Players with private profiles, or those that didn't do their "
-#| "placements this season yet are not shown."
 msgid ""
 "Hello! Here are the current SRs for **{role}** on {platform}. If a member "
 "has more than one {handle_type}, only the primary {handle_type} is "
@@ -1288,9 +1243,6 @@ msgstr ""
 
 #: orisa/orisa.py:3132
 #, fuzzy
-#| msgid ""
-#| "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register "
-#| "xbox` to register an XBOX account."
 msgid ""
 "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` "
 "to register an Xbox account."
@@ -1300,10 +1252,6 @@ msgstr ""
 
 #: orisa/orisa.py:3149
 #, fuzzy
-#| msgid ""
-#| "I couldn't find a XBox account linked to your Discord. Please link your "
-#| "XBox account to Discord and try again. Unfortunately, I cannot ask XBL "
-#| "directly for the information."
 msgid ""
 "I couldn't find a Xbox account linked to your Discord. Please link your Xbox "
 "account to Discord and try again. Unfortunately, I cannot ask Xbox Live for "
@@ -1478,8 +1426,6 @@ msgstr ""
 
 #: orisa/orisa.py:3368
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
 msgid ""
 "If you find me useful, consider voting for me [by clicking here]"
 "({VOTE_LINK})!"
@@ -1522,7 +1468,6 @@ msgstr ""
 #. Translators: Discord permission name
 #: orisa/web.py:134
 #, fuzzy
-#| msgid "Links"
 msgid "Embed Links"
 msgstr "Linken"
 

@@ -293,12 +293,6 @@ msgstr "Sobre Mim"
 
 #: orisa/orisa.py:755
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "I am an open source Discord bot to help manage Overwatch Discord "
-#| "communities.\n"
-#| "I'm written and maintained by Dennis Brakhane (Joghurt#2732 on Discord) "
-#| "and licensed under the [GNU Affero General Public License 3.0]"
-#| "({AGPL_LINK}); the [development is done on Github]({GH_LINK})"
 msgid ""
 "I am an open source Discord bot to help manage Overwatch Discord "
 "communities.\n"
@@ -365,9 +359,6 @@ msgstr ""
 
 #: orisa/orisa.py:811
 #, fuzzy
-#| msgid ""
-#| "`!ow config` works in *any* channel (that I'm allowed to read messages "
-#| "in, of course), so you can also use an admin only channel."
 msgid ""
 "`!ow config` works in *any* channel (that I'm allowed to read messages in, "
 "of course), so you can also use an admin-only channel."
@@ -409,9 +400,6 @@ msgstr ""
 
 #: orisa/orisa.py:881
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "{type} looks like a BattleTag and not like pc/xbox, assuming you meant `!"
-#| "ow register pc`…"
 msgid ""
 "{type} looks like a BattleTag and not like PC/Xbox, assuming you meant `!ow "
 "register pc`…"
@@ -452,10 +440,6 @@ msgstr ""
 
 #: orisa/orisa.py:922
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
-#| "pc` for PC; `!ow register xbox` for XBOX. PlayStation is not supported "
-#| "yet."
 msgid ""
 "Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
 "pc` for PC; `!ow register xbox` for Xbox, or `!ow register psn My-Online-"
@@ -508,10 +492,6 @@ msgstr ""
 
 #: orisa/orisa.py:974
 #, fuzzy
-#| msgid ""
-#| "I'm not allowed to send you a DM. Please right click on the Discord "
-#| "server, select Privacy Settings, and enable \"Allow direct messages from "
-#| "server members.\" Then try again."
 msgid ""
 "I'm not allowed to send you a DM. Please right click on the Discord server, "
 "select \"Privacy Settings\", and enable \"Allow direct messages from server "
@@ -621,25 +601,6 @@ msgstr ""
 
 #: orisa/orisa.py:1140
 #, fuzzy
-#| msgid ""
-#| "Smarties Expert\n"
-#| "Bread Scientist\n"
-#| "Eternal Bosom of Hot Love\n"
-#| "Sith Lord of Security\n"
-#| "Namer of Clouds\n"
-#| "Scourge of Beer Cans\n"
-#| "Muse of Jeff Kaplan\n"
-#| "Shredded Cheese Authority\n"
-#| "MILF Commander\n"
-#| "Cunning Linguist\n"
-#| "Pork Rind Expert\n"
-#| "Dinosaur Supervisor\n"
-#| "Galactic Viceroy of C9\n"
-#| "Earl of Bacon\n"
-#| "Dean of Pizza\n"
-#| "Duke of Tacos\n"
-#| "Retail Jedi\n"
-#| "Pornography Historian"
 msgid ""
 "Smarties Expert\n"
 "Bread Scientist\n"
@@ -737,10 +698,6 @@ msgstr "você não está registrado mesmo, então não há nada para eu esquecer
 
 #: orisa/orisa.py:1302
 #, fuzzy
-#| msgid ""
-#| "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), "
-#| "`o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, eg. "
-#| "`ds` would mean Damage + Support."
 msgid ""
 "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` "
 "(Off Tank), `d` (Damage), `s` (Support). They can be combined, e.g. `ds` "
@@ -752,10 +709,6 @@ msgstr ""
 
 #: orisa/orisa.py:1315
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main "
-#| "Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, "
-#| "eg. `ds` would mean Damage + Support."
 msgid ""
 "Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main "
 "Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, e."
@@ -893,7 +846,6 @@ msgstr ""
 #. Translators: help for !ow dumpsr
 #: orisa/orisa.py:1480
 #, fuzzy
-#| msgid "Download your SR history as an Excel sheet"
 msgid "Download your SR history as an Excel spreadsheet"
 msgstr "Faça o download do seu histórico de SR como uma planilha do Excel"
 
@@ -934,31 +886,6 @@ msgstr "★ *ow format espaço reservado*"
 
 #: orisa/orisa.py:1516
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "*The following placeholders are defined:*\n"
-#| "`$sr`\n"
-#| "the first two digits of your SR for all 3 roles in order Tank, Damage, "
-#| "Support; if you have secondary accounts, an asterisk (\\*) is added at "
-#| "the end. A question mark is added if an old SR is shown\n"
-#| "\n"
-#| "`$fullsr`\n"
-#| "Like `$sr` but all 4 digits are shown\n"
-#| "\n"
-#| "`$rank`\n"
-#| "your rank in shortened form for all 3 roles in order Tank, Damage, "
-#| "Support; asterisk and question marks work like in `$sr`\n"
-#| "\n"
-#| "`$tank`, `$damage`, `$support`\n"
-#| "Your full SR for the respective role followed by its symbol. Asterisk and "
-#| "question mark have the same meaning like in `$sr`. For technical reasons "
-#| "the symbols for the respective roles are `{SYMBOL_TANK}`, `{SYMBOL_DPS}`, "
-#| "`{SYMBOL_SUPPORT}`\n"
-#| "\n"
-#| "`$tankrank`, `$damagerank`, `$supportrank`\n"
-#| "like above, but the rank is shown instead.\n"
-#| "\n"
-#| "`$dps`, `$dpsrank`\n"
-#| "Alias for `$damage` and `$damagerank`, respectively."
 msgid ""
 "*The following placeholders are defined:*\n"
 "`$sr`\n"
@@ -1021,12 +948,6 @@ msgstr "★ *ow format exemplos*"
 
 #: orisa/orisa.py:1535
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "`!ow format hello $sr` will result in `[hello 12-34-45]`.\n"
-#| "`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
-#| "`!ow format $damage $support` in `[1234{SYMBOL_DPS} "
-#| "2345{SYMBOL_SUPPORT}]`.\n"
-#| "*By default, the format is `$sr`*"
 msgid ""
 "`!ow format hello $sr` will result in `[hello 12-34-45]`.\n"
 "`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
@@ -1216,7 +1137,6 @@ msgstr "{member_name} não está registrado!"
 #. Translators: privacy policy is currently only availabe in English
 #: orisa/orisa.py:1690
 #, fuzzy
-#| msgid "I've sent you the privacy policy as DM."
 msgid "I DM'ed you the privacy policy."
 msgstr "Enviei a você a política de privacidade por mensagem direta."
 
@@ -1235,7 +1155,6 @@ msgstr "sr-historico.xls"
 
 #: orisa/orisa.py:1734
 #, fuzzy
-#| msgid "Here is your SR history of all your accounts as an Excel sheet."
 msgid "Here is your SR history of all your accounts as an Excel spreadsheet."
 msgstr ""
 "Aqui está o seu histórico de SR de todas as suas contas em uma planilha do "
@@ -1289,7 +1208,8 @@ msgstr "Desculpe, não posso te enviar arquivos…"
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM "
+"instead."
 msgstr "Não posso carregar imagens neste canal, então te enviei um DM."
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
@@ -1400,9 +1320,6 @@ msgstr ""
 
 #: orisa/orisa.py:3132
 #, fuzzy
-#| msgid ""
-#| "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register "
-#| "xbox` to register an XBOX account."
 msgid ""
 "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` "
 "to register an Xbox account."
@@ -1412,10 +1329,6 @@ msgstr ""
 
 #: orisa/orisa.py:3149
 #, fuzzy
-#| msgid ""
-#| "I couldn't find a XBox account linked to your Discord. Please link your "
-#| "XBox account to Discord and try again. Unfortunately, I cannot ask XBL "
-#| "directly for the information."
 msgid ""
 "I couldn't find a Xbox account linked to your Discord. Please link your Xbox "
 "account to Discord and try again. Unfortunately, I cannot ask Xbox Live for "
@@ -1577,11 +1490,6 @@ msgstr ":warning: Apelido muito longo!"
 
 #: orisa/orisa.py:3335
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "Adding your SR to your nickname would result in '{nickname}' and with "
-#| "{len} characters, be longer than Discord's maximum of 32. Please shorten "
-#| "your nick to be no longer than 28 characters. I will regularly try to "
-#| "update it."
 msgid ""
 "Adding your SR to your nickname as '{nickname}', would make it {len} "
 "characters, which is longer than Discord's maximum of 32.Please shorten it "
@@ -1597,11 +1505,6 @@ msgstr ":warning: Não é possível atualizar o apelido"
 
 #: orisa/orisa.py:3344
 #, fuzzy
-#| msgid ""
-#| "I do not have enough permissions to update your nickname. The owner needs "
-#| "to move the \"Orisa\" role higher so that is higher than your highest "
-#| "role. If you are the owner of this server, there is no way for me to "
-#| "update your nickname, sorry!"
 msgid ""
 "I do not have sufficient permissions to update your nickname. The owner "
 "needs to move the \"Orisa\" role higher, so that is higher than your highest "

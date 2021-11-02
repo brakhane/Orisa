@@ -348,9 +348,6 @@ msgstr ""
 
 #: orisa/orisa.py:811
 #, fuzzy
-#| msgid ""
-#| "`!ow config` works in *any* channel (that I'm allowed to read messages "
-#| "in, of course), so you can also use an admin only channel."
 msgid ""
 "`!ow config` works in *any* channel (that I'm allowed to read messages in, "
 "of course), so you can also use an admin-only channel."
@@ -391,9 +388,6 @@ msgstr ""
 
 #: orisa/orisa.py:881
 #, fuzzy, python-brace-format
-#| msgid ""
-#| "{type} looks like a BattleTag and not like pc/xbox, assuming you meant `!"
-#| "ow register pc`…"
 msgid ""
 "{type} looks like a BattleTag and not like PC/Xbox, assuming you meant `!ow "
 "register pc`…"
@@ -596,25 +590,6 @@ msgstr ""
 
 #: orisa/orisa.py:1140
 #, fuzzy
-#| msgid ""
-#| "Smarties Expert\n"
-#| "Bread Scientist\n"
-#| "Eternal Bosom of Hot Love\n"
-#| "Sith Lord of Security\n"
-#| "Namer of Clouds\n"
-#| "Scourge of Beer Cans\n"
-#| "Muse of Jeff Kaplan\n"
-#| "Shredded Cheese Authority\n"
-#| "MILF Commander\n"
-#| "Cunning Linguist\n"
-#| "Pork Rind Expert\n"
-#| "Dinosaur Supervisor\n"
-#| "Galactic Viceroy of C9\n"
-#| "Earl of Bacon\n"
-#| "Dean of Pizza\n"
-#| "Duke of Tacos\n"
-#| "Retail Jedi\n"
-#| "Pornography Historian"
 msgid ""
 "Smarties Expert\n"
 "Bread Scientist\n"
@@ -815,7 +790,6 @@ msgstr ""
 #. Translators: help for !ow dumpsr
 #: orisa/orisa.py:1480
 #, fuzzy
-#| msgid "Download your SR history as an Excel sheet"
 msgid "Download your SR history as an Excel spreadsheet"
 msgstr "Last ned din SR-historikk som regneark"
 
@@ -965,9 +939,6 @@ msgstr ""
 
 #: orisa/orisa.py:1621
 #, fuzzy
-#| msgid ""
-#| "*This command can only be used by users with the Orisa Admin role!*\n"
-#| "Like srgraph, but shows the graph for the given user."
 msgid ""
 "*This command can only be used by users with the \"Orisa Admin\" role!*\n"
 "Like srgraph, but shows the graph for the given user."
@@ -1010,7 +981,6 @@ msgstr "{member_name} er ikke registrert."
 #. Translators: privacy policy is currently only availabe in English
 #: orisa/orisa.py:1690
 #, fuzzy
-#| msgid "I've sent you the privacy policy as DM."
 msgid "I DM'ed you the privacy policy."
 msgstr "Jeg har sendt deg personvernspraksisen i privat melding."
 
@@ -1029,7 +999,6 @@ msgstr "sr-historikk.xls"
 
 #: orisa/orisa.py:1734
 #, fuzzy
-#| msgid "Here is your SR history of all your accounts as an Excel sheet."
 msgid "Here is your SR history of all your accounts as an Excel spreadsheet."
 msgstr "Her har du din SR-historikk for alle dine kontoer som regneark."
 
@@ -1076,7 +1045,8 @@ msgstr ""
 
 #: orisa/orisa.py:1836
 msgid ""
-"I'm not allowed to upload images in this channel, so I've sent you a DM instead."
+"I'm not allowed to upload images in this channel, so I've sent you a DM "
+"instead."
 msgstr ""
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
@@ -1180,9 +1150,6 @@ msgstr ""
 
 #: orisa/orisa.py:3132
 #, fuzzy
-#| msgid ""
-#| "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register "
-#| "xbox` to register an XBOX account."
 msgid ""
 "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` "
 "to register an Xbox account."
