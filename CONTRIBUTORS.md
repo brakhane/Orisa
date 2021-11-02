@@ -5,6 +5,9 @@ Orisa wouldn't be possible without the help of contributors. If you believe you 
 * Main programmer and Maintainer
   * Dennis Brakhane
 
+* Chinese translation
+  * Xinghao Wang
+  
 * Czech translation
   * Lukas Notnword
 
