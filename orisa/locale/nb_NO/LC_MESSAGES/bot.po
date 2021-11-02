@@ -339,10 +339,6 @@ msgstr ""
 "Hvis du synes jeg er nyttig, kan du [spandere kaffe på utvikleren min]"
 "({DONATE_LINK})."
 
-#: orisa/orisa.py:796
-msgid "I've sent you a DM."
-msgstr "Jeg har sendt deg en privat melding."
-
 #: orisa/orisa.py:804
 msgid ""
 "The config command must be issued from a channel of the server you want to "
