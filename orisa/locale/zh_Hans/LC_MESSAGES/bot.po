@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: Orisa 1.0\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-06-08 14:57+0200\n"
-"PO-Revision-Date: 2021-10-10 20:01+0000\n"
+"PO-Revision-Date: 2021-11-02 16:04+0000\n"
 "Last-Translator: Xinghao Wang <wangxinghaohans@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "orisa/bot/zh_Hans/>\n"
@@ -215,7 +215,7 @@ msgstr "链接"
 
 #: orisa/orisa.py:683
 msgid "Overwatch profile"
-msgstr "守望先锋个人资料"
+msgstr "守望先锋个人生涯"
 
 #: orisa/orisa.py:686
 msgid "Upvote Orisa"
@@ -1163,7 +1163,7 @@ msgstr "#"
 #. Translators: header for highscore table: previous position (keep it short)
 #: orisa/orisa.py:2800
 msgid "prev"
-msgstr "上一页"
+msgstr "前排名"
 
 #. Translators: header for highscore table: member name
 #: orisa/orisa.py:2802
@@ -1430,7 +1430,7 @@ msgstr ":thumbsup: 在 Discord Bot List 上为我投票"
 msgid ""
 "If you find me useful, consider voting for me [by clicking here]"
 "({VOTE_LINK})!"
-msgstr "如果您觉得我有用，请考虑为我投票 [点击此处]({VOTE_LINK}）！"
+msgstr "如果您觉得我有用，请考虑为我投票 [点击此处]({VOTE_LINK})！"
 
 #: orisa/orisa.py:3374
 msgid ":heart: Say thanks by buying a coffee"
@@ -1441,7 +1441,7 @@ msgstr ":heart: 买杯咖啡表示感谢"
 msgid ""
 "Want to say thanks to the guy who wrote and maintains me? Why not [buy him a "
 "coffee?]({DONATE_LINK})"
-msgstr "想感谢写信和维护我的人吗？为什么不(给他买杯咖啡?)呢({DONATE_LINK})"
+msgstr "想感谢编写和维护我的人吗？为什么不(给他买杯咖啡?)呢({DONATE_LINK})"
 
 #: orisa/orisa.py:3406
 msgid ""
