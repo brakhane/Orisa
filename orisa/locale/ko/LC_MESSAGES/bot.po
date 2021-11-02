@@ -317,10 +317,6 @@ msgid ""
 "If you find me useful, [buy my maintainer a cup of coffee]({DONATE_LINK})."
 msgstr ""
 
-#: orisa/orisa.py:796
-msgid "I've sent you a DM."
-msgstr ""
-
 #: orisa/orisa.py:804
 msgid ""
 "The config command must be issued from a channel of the server you want to "
