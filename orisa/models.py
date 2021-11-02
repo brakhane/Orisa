@@ -96,7 +96,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     discord_id = Column(BigInteger, unique=True, nullable=False, index=True)
     format = Column(String, nullable=False)
-    locale = Column(String(5))
+    locale = Column(String(7))
 
     handles = relationship(
         "Handle",

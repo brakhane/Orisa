@@ -708,8 +708,11 @@ class Orisa(Plugin):
                 )
 
                 if primary.last_update:
+                    locale = CurrentLocale.get()
+                    if locale == "zh_Hans":
+                        locale = "zh_CN"
                     when = arrow.get(primary.last_update).humanize(
-                        locale=CurrentLocale.get()
+                        locale=locale
                     )
                     if multiple_handles:
                         footer_text = _(
