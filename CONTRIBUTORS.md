@@ -6,7 +6,8 @@ Orisa wouldn't be possible without the help of contributors. If you believe you 
   * Dennis Brakhane
 
 * Chinese translation
-  * Xinghao Wang
+  * "Hans"
+  * "shi fan"
   
 * Czech translation
   * Lukas Notnword
