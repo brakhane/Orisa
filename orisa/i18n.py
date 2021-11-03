@@ -5,6 +5,7 @@ import re
 
 from contextvars import ContextVar
 
+import trio
 from curious.commands.context import Context
 from curious.commands.manager import CommandsManager
 from curious.core.event import EventContext
@@ -42,7 +43,8 @@ FLAG_TO_LOCALE = {
     "".join(
         chr(ord(ch) - ord("A") + _REGIONAL_A_ORD) for ch in locale[-2:].upper()
     ): locale
-    for locale in LOCALES if locale != "zh_Hans"
+    for locale in LOCALES
+    if locale != "zh_Hans"
 }
 FLAG_TO_LOCALE["🇨🇳"] = "zh_Hans"
 FLAG_TO_LOCALE["🇬🇧"] = "en"
@@ -94,6 +96,16 @@ class MultiString(str):
 
 
 class I18NCommandsManager(CommandsManager):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.orisa_loaded = trio.Event()
+
+    async def load_plugin(self, klass, *args, module: str = None):
+        res = await super().load_plugin(klass, *args, module=module)
+        if "Orisa" in self.plugins:
+            self.orisa_loaded.set()
+        return res
+
     async def handle_commands(self, ctx: EventContext, message: Message):
 
         # copy pasted from super class, we do not want to access the database every time somebody posts something
@@ -130,8 +142,14 @@ class I18NCommandsManager(CommandsManager):
         try:
             orisa = self.plugins["Orisa"]
         except KeyError:
-            logger.debug("Not initialized yet, ignoring command [%s]", message)
-            return
+            logger.debug(
+                "Not initialized yet, waiting to executing potential command [%s]",
+                message,
+            )
+            await self.orisa_loaded.wait()
+            orisa = self.plugins["Orisa"]
+            logger.debug("Initialization finished, continuing")
+
         # guild_config is a defaultdict, so we can just lookup, even if guild_id is None
         locale = orisa.guild_config[guild_id].locale
 
