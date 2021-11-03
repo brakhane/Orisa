@@ -21,7 +21,7 @@ msgstr ""
 "Project-Id-Version: Orisa 1.0\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-06-08 14:57+0200\n"
-"PO-Revision-Date: 2021-11-02 16:04+0000\n"
+"PO-Revision-Date: 2021-11-04 16:36+0000\n"
 "Last-Translator: Xinghao Wang <wangxinghaohans@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "orisa/bot/zh_Hans/>\n"
@@ -485,7 +485,7 @@ msgstr ""
 
 #: orisa/orisa.py:980 orisa/orisa.py:1395
 msgid "I've sent you a DM with instructions."
-msgstr "我给你发了一个包含说明的 私信。"
+msgstr "我给你发了一个包含说明的私信。"
 
 #: orisa/orisa.py:989
 msgid "You are not registered, there's nothing for me to do."
