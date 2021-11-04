@@ -2,6 +2,11 @@
 %
 % last updated 2019-12-18
 
+**The following privacy policy applies to users that have registered
+their account to Orisa via `!ow register`. Orisa generally does not store data
+of unregistered users, except some data that might be written to log files
+for debugging purposes, see the second paragraph for details.**
+
 # What personal data does Orisa collect, and how is it used?
 
 * **Your Discord ID and your BattleTags that you register with Orisa**
@@ -14,7 +19,7 @@
   The history of this data is needed to be able to show the SR history, and detect inactive accounts.
   When you set your profile to private, no new information will be stored; but the old data will still be stored.
 
-Furthermore, the following personal data may be written into a log file to help with debugging, the data is not written into a database, and all log files are automatically deleted after 7 days:
+Furthermore, the following personal data **may be written into a log file to help with debugging**, the data is not written into a database, and all log files are automatically deleted after 7 days:
 
 * **Your Discord presence status**
 
