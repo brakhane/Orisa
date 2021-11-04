@@ -2,6 +2,11 @@
 %
 % last updated 2019-12-18
 
+---
+mainfont: Lato
+---
+
+
 **The following privacy policy applies to users that have registered
 their account with Orisa via `!ow register`. Orisa generally does not store data
 of unregistered users, except some data that might be written to log files
