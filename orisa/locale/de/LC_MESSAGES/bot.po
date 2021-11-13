@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-11-13 18:34+0100\n"
-"PO-Revision-Date: 2021-11-13 17:36+0000\n"
+"PO-Revision-Date: 2021-11-13 17:39+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -1616,7 +1616,7 @@ msgstr "Kanäle verwalten"
 #. Translators: Discord permission name
 #: orisa/web.py:142
 msgid "Connect"
-msgstr ""
+msgstr "Verbinden"
 
 #: orisa/web.py:153
 #, python-brace-format
