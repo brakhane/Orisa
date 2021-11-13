@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 18:17+0100\n"
+"POT-Creation-Date: 2021-11-13 18:34+0100\n"
 "PO-Revision-Date: 2021-04-17 16:13+0000\n"
 "Last-Translator: Matteo Schettini <matthewschettini@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/orisa/bot/it/>\n"
@@ -1576,45 +1576,50 @@ msgstr "Gestire Nickname"
 msgid "Manage Channels"
 msgstr "Gestire Canali"
 
-#: orisa/web.py:151
+#. Translators: Discord permission name
+#: orisa/web.py:142
+msgid "Connect"
+msgstr ""
+
+#: orisa/web.py:153
 #, python-brace-format
 msgid "Orisa is missing the following permission: {missing}"
 msgid_plural "Orisa is missing the following permissions: {missing}"
 msgstr[0] "Ad Orisa manca il seguente permesso: {missing}"
 msgstr[1] "Ad Orisa mancano i seguenti permessi: {missing}"
 
-#: orisa/web.py:164
+#: orisa/web.py:166
 msgid "Invalid time"
 msgstr "Ora non valida"
 
-#: orisa/web.py:168 orisa/web.py:179
+#: orisa/web.py:170 orisa/web.py:181
 msgid "Please select a valid text channel"
 msgstr "Per favore seleziona un canale di testo valido"
 
-#: orisa/web.py:196
+#: orisa/web.py:198
 msgid "Please select a valid category"
 msgstr "Per favore seleziona una categoria valida"
 
-#: orisa/web.py:207 orisa/web.py:233
+#: orisa/web.py:209 orisa/web.py:235
 #, python-brace-format
 msgid "Limit must be between {min} and {max}"
 msgstr "Il limite deve essere compreso tra {min} e {max}"
 
 #. Translators: config screen validation error
-#: orisa/web.py:217
+#: orisa/web.py:219
 msgid "A name is required"
 msgstr "Un nome è necessario"
 
 #. Translators: config screen validation error
-#: orisa/web.py:221
+#: orisa/web.py:223
 msgid "The channel name must not contain a #"
 msgstr "Il nome del canale non deve contenere #"
 
-#: orisa/web.py:225
+#: orisa/web.py:227
 msgid "This name is already used in this category"
 msgstr "Questo nome è già usato in questa categoria"
 
-#: orisa/web.py:352
+#: orisa/web.py:354
 msgid ""
 "I got an incomplete answer from the server. This sometimes happens (for "
 "unknown reasons) when registering from a mobile phone. Try again with a PC "
@@ -1624,14 +1629,14 @@ msgstr ""
 "sconosciute) quando ci si registra da un cellulare. Riprova da un PC o "
 "laptop. Mi spiace per l'inconveniente"
 
-#: orisa/web.py:361
+#: orisa/web.py:363
 #, python-brace-format
 msgid "The link has expired. Please request a new link with {register}."
 msgstr ""
 "Il collegamento è scaduto. Per favore richiedi un nuovo collegamento con "
 "{register}."
 
-#: orisa/web.py:368
+#: orisa/web.py:370
 #, python-brace-format
 msgid ""
 "The data I got back is invalid. Please request a new URL with {register}."
@@ -1639,11 +1644,11 @@ msgstr ""
 "Il dato che ho ricevuto non è valido. Per favore richiedi un nuovo URL con "
 "{register}."
 
-#: orisa/web.py:387
+#: orisa/web.py:389
 msgid "I got invalid data. Please try registering again."
 msgstr "Ho ricevuto dati non validi. Per favore prova a registrarti di nuovo."
 
-#: orisa/web.py:400
+#: orisa/web.py:402
 msgid ""
 "You didn't give me permission to access your BattleTag; registration "
 "cancelled."
@@ -1651,12 +1656,12 @@ msgstr ""
 "Non mi hai dato il permesso per accedere al tuo BattleTag; registrazione "
 "annullata."
 
-#: orisa/web.py:438
+#: orisa/web.py:440
 #, python-brace-format
 msgid "I'm sorry. Something went wrong on my side. Try to reissue {register}."
 msgstr "Mi dispiace. Qualcosa è andato storto. Riprova {register}."
 
-#: orisa/web.py:446
+#: orisa/web.py:448
 msgid "Thank you! I have sent you a DM."
 msgstr "Grazie! Ti ho mandato un messaggio privato."
 
