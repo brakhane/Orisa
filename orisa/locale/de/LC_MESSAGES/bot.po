@@ -8,9 +8,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-11-13 18:17+0100\n"
-"PO-Revision-Date: 2021-06-11 12:37+0000\n"
+"PO-Revision-Date: 2021-11-13 17:36+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.9.1-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:59 orisa/orisa.py:187 orisa/orisa.py:1735
@@ -1590,10 +1590,8 @@ msgstr "Nachrichten senden"
 
 #. Translators: Discord permission name
 #: orisa/web.py:132
-#, fuzzy
-#| msgid "Manage Channels"
 msgid "View Channels"
-msgstr "Kanäle verwalten"
+msgstr "Kanäle ansehen"
 
 #. Translators: Discord permission name
 #: orisa/web.py:134
