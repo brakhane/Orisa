@@ -2404,7 +2404,11 @@ Retail Jedi"""
                 pos = start_pos + i
                 if chan.position != pos:
                     try:
-                        await chan.edit(position=pos)
+                        try:
+                            await chan.edit(position=pos)
+                        except:
+                            logger.error("cannot edit channel %s, effective permissions %s", chan, chan.effective_permissions(guild.me))
+                            raise
                         await trio.sleep(0.5)  #  FIXME: temporary hack
                     except NotFound:
                         logger.warn(

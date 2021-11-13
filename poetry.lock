@@ -193,7 +193,7 @@ dev = ["pytest", "ipython", "mypy (>=0.710)", "hypothesis", "portray"]
 
 [[package]]
 name = "discord-curious"
-version = "0.7.8.dev117"
+version = "0.7.8.dev120"
 description = "An async library for the Discord API"
 category = "main"
 optional = false
@@ -220,7 +220,7 @@ voice = ["opuslib (==1.1.0)", "PyNaCL (==1.0.1)"]
 type = "git"
 url = "https://github.com/brakhane/curious.git"
 reference = "orisa-triows"
-resolved_reference = "5ab8730cbcb9c2b2a6602c01573e8e87b6fce588"
+resolved_reference = "dba8d88f396d372e9aa7a260c0f476bc8bcaba10"
 
 [[package]]
 name = "dodgy"
