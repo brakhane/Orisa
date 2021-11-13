@@ -56,9 +56,13 @@ class Role(Flag):
 
     def format(self, ctx):
         names = {
+            # Translators: Role
             Role.DPS: _("Damage"),
+            # Translators: Role
             Role.MAIN_TANK: _("Main Tank"),
+            # Translators: Role
             Role.OFF_TANK: _("Off Tank"),
+            # Translators: Role
             Role.SUPPORT: _("Support"),
         }
 
