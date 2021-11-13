@@ -129,7 +129,7 @@ def validate_config(guild, guild_config):
             # Translators: Discord permission name
             "send_messages": _("Send Messages"),
             # Translators: Discord permission name
-            "read_messages": _("Read Messages"),
+            "read_messages": _("View Channels"),
             # Translators: Discord permission name
             "embed_links": _("Embed Links"),
             # Translators: Discord permission name
