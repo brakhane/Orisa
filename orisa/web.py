@@ -138,6 +138,8 @@ def validate_config(guild, guild_config):
             "manage_nicknames": _("Manage Nicknames"),
             # Translators: Discord permission name
             "manage_channels": _("Manage Channels"),
+            # Translators: Discord permission name
+            "voice_connect": _("Connect"),
         }
 
         missing = [
@@ -196,7 +198,7 @@ def validate_config(guild, guild_config):
             vc_errors["category_id"] = _("Please select a valid category")
         else:
             missing = missing_perms(
-                chan.effective_permissions(guild.me), ["manage_channels"]
+                chan.effective_permissions(guild.me), ["manage_channels", "voice_connect", "read_messages"]
             )
             if missing:
                 vc_errors["category_id"] = missing
