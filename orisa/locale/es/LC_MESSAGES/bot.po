@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-13 18:34+0100\n"
+"POT-Creation-Date: 2021-11-13 18:42+0100\n"
 "PO-Revision-Date: 2020-05-17 19:02+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/orisa/bot/es/>\n"
@@ -23,41 +23,43 @@ msgstr ""
 "X-Generator: Weblate 4.1-dev\n"
 
 #. Translators: Role
-#: orisa/models.py:59 orisa/orisa.py:187 orisa/orisa.py:1735
+#: orisa/models.py:60 orisa/orisa.py:187 orisa/orisa.py:1735
 #: orisa/orisa.py:1787 orisa/orisa.py:1791
 msgid "Damage"
 msgstr "Daño"
 
-#: orisa/models.py:60
+#. Translators: Role
+#: orisa/models.py:62
 msgid "Main Tank"
 msgstr "Main Tank"
 
-#: orisa/models.py:61
+#. Translators: Role
+#: orisa/models.py:64
 msgid "Off Tank"
 msgstr "Off Tank"
 
 #. Translators: Role
-#: orisa/models.py:62 orisa/orisa.py:189 orisa/orisa.py:1736
+#: orisa/models.py:66 orisa/orisa.py:189 orisa/orisa.py:1736
 #: orisa/orisa.py:1787 orisa/orisa.py:1791
 msgid "Support"
 msgstr "Apoyo"
 
 #. Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
-#: orisa/models.py:204
+#: orisa/models.py:208
 msgid "BattleTag"
 msgid_plural "BattleTags"
 msgstr[0] "BattleTag"
 msgstr[1] "BattleTags"
 
 #. Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
-#: orisa/models.py:237
+#: orisa/models.py:241
 msgid "Gamertag"
 msgid_plural "Gamertags"
 msgstr[0] "Gamertag"
 msgstr[1] "Gamertags"
 
 #. Translators: many languages don't need to translate this. If your language has different declinations, you can define them here
-#: orisa/models.py:271
+#: orisa/models.py:275
 msgid "Online ID"
 msgid_plural "Online IDs"
 msgstr[0] "ID Online"
