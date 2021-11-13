@@ -1768,7 +1768,7 @@ Retail Jedi"""
                     await reply(ctx, "I've sent you a DM.")
 
     async def _srgraph(self, ctx, user, name, date: str = None):
-        sns.set()
+        sns.set_theme(font="Lato")
 
         handle = user.handles[0]
 
