@@ -1820,6 +1820,7 @@ Retail Jedi"""
         sns.lineplot(data=data, ax=ax, drawstyle="steps-post", dashes=True)
 
         ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%Y-%m-%d"))
+        ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins="auto", steps=[1, 1.25, 2.5, 5], integer=True))
         fig.autofmt_xdate()
 
         plt.xlabel("Date")
