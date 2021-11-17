@@ -2073,7 +2073,7 @@ Retail Jedi"""
 
     async def _handle_new_guild(self, guild):
         logger.info(
-            r"We have a new guild %s, I'm now on %d guilds \o/",
+            r"We have a new guild %s, I'm now in %d guilds \o/",
             guild,
             len(self.client.guilds),
         )
