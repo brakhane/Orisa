@@ -11,17 +11,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-11-13 18:42+0100\n"
-"PO-Revision-Date: 2021-04-17 16:13+0000\n"
-"Last-Translator: Matteo Schettini <matthewschettini@gmail.com>\n"
+"PO-Revision-Date: 2021-11-21 04:51+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/orisa/bot/it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #. Translators: Role
 #: orisa/models.py:60 orisa/orisa.py:187 orisa/orisa.py:1735
@@ -309,7 +309,7 @@ msgstr ""
 "Overwatch.\n"
 "Sono scritto e gestito da Dennis Brakhane (Joghurt#2732 su Discord) e sotto "
 "licenza in base alla [GNU Affero General Public License 3.0]({AGPL_LINK}); "
-"lo [sviluppo è fatto su Github]({GH_LINK})"
+"lo [sviluppo è fatto su GitHub]({GH_LINK})"
 
 #: orisa/orisa.py:784
 msgid "Invite me to your own Discord"
@@ -598,7 +598,6 @@ msgstr ""
 "Prova a ridurre i caratteri del tuo nome!"
 
 #: orisa/orisa.py:1158
-#, fuzzy
 msgid ""
 "Smarties Expert\n"
 "Bread Scientist\n"
@@ -624,8 +623,6 @@ msgstr ""
 "Frustatore di Lattine di Birra\n"
 "Musa di Jeff Kaplan\n"
 "Autorità del Formaggio Grattugiato\n"
-"Comandante di MILF\n"
-"Storico della Pornografia\n"
 "Duca dei Tacos\n"
 "Regina delle Barbie\n"
 "Supervisore dei Dinosauri\n"
