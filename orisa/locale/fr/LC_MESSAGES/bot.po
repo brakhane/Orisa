@@ -6,13 +6,13 @@
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
 # Titouan F. <titouan.forgeard@gmail.com>, 2019.
 # J. Lavoie <j.lavoie@net-c.ca>, 2020.
-# Dennis Brakhane <brakhane@gmail.com>, 2020.
+# Dennis Brakhane <brakhane@gmail.com>, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-11-13 18:42+0100\n"
-"PO-Revision-Date: 2020-08-06 12:32+0000\n"
+"PO-Revision-Date: 2021-11-21 04:51+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #. Translators: Role
 #: orisa/models.py:60 orisa/orisa.py:187 orisa/orisa.py:1735
@@ -299,7 +299,7 @@ msgid "About Me"
 msgstr "À propos de moi"
 
 #: orisa/orisa.py:773
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "I am an open source Discord bot to help manage Overwatch Discord "
 "communities.\n"
@@ -309,11 +309,11 @@ msgid ""
 msgstr ""
 "Je suis un bot Discord open source créé pour gérer des communautés Discord "
 "centrées sur Overwatch.\n"
-"Mon programme a été écrit et est mis à jour par Dennis Brakhane "
-"(Joghurt#2732 sur Discord) et je suis patenté par [GNU Affero General Public "
-"License 3.0]({AGPL_LINK}). La traduction en français a été effectuée par Léo "
-"Clauzure (Dao#7652 sur Discord) ; le [développement est effectué sur Github]"
-"({GH_LINK})"
+"Mon programme a été écrit et est mis à jour par Dennis Brakhane (Joghurt#"
+"2732 sur Discord) et je suis patenté par [GNU Affero General Public License 3"
+".0]({AGPL_LINK}). La traduction en français a été effectuée par Léo Clauzure "
+"(Dao#7652 sur Discord) ; le [développement est effectué sur "
+"GitHub]({GH_LINK})"
 
 #: orisa/orisa.py:784
 msgid "Invite me to your own Discord"
