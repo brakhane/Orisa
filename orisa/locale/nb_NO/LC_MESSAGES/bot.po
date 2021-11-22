@@ -5,9 +5,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-11-13 18:42+0100\n"
-"PO-Revision-Date: 2021-06-04 00:37+0000\n"
+"PO-Revision-Date: 2021-11-21 04:51+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
 "bot/nb_NO/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #. Translators: Role
 #: orisa/models.py:60 orisa/orisa.py:187 orisa/orisa.py:1735
@@ -303,6 +303,9 @@ msgid ""
 "licensed under the [GNU Affero General Public License 3.0+]({AGPL_LINK}); "
 "[development happens on GitHub]({GH_LINK})"
 msgstr ""
+"En fri Discord-bott for håndtering av Overwatch-gemenskaper.\n"
+"Skrevet og vedlikeholdt av Dennis Brakhane (Joghurt#2732 på Discord) "
+"lisensiert [AGPLv3+]({AGPL_LINK}); [utviklet på GitHub]({GH_LINK})."
 
 #: orisa/orisa.py:784
 msgid "Invite me to your own Discord"
@@ -328,6 +331,9 @@ msgid ""
 "the official Orisa Discord]({SUPPORT_DISCORD}). Updates and new features "
 "will be discussed and announced there."
 msgstr ""
+"[Ta del i offisiell Orisa-Discord]({SUPPORT_DISCORD}) der nyheter diskuteres "
+"og annonseres hvis du bruker meg på din Discord-tjener, eller hvis du har "
+"forslag."
 
 #: orisa/orisa.py:804
 msgid "Show your love :heart:"
@@ -351,6 +357,9 @@ msgid ""
 "configure. Don't worry, I will send you the config instructions as a DM, so "
 "others can't configure me just by watching you sending this command."
 msgstr ""
+"Oppsettskommandoen må utstedes fra en kanal på tjeneren du ønsker å sette "
+"opp. Instruks vil bli sendt som privat melding slik at andre ikke kan utføre "
+"oppsett når de ser at du sender denne kommandoen."
 
 #: orisa/orisa.py:829
 #, fuzzy
@@ -425,6 +434,8 @@ msgid ""
 "When registering a PSN account, you need to give your Online ID, like `!ow "
 "register psn My-Cool-ID_12345`."
 msgstr ""
+"Når du registrerer en PSN-konto, må du angi din Online-ID, som `!ow register "
+"psn Min-kule-ID_12345`."
 
 #: orisa/orisa.py:940
 #, fuzzy, python-brace-format
@@ -537,6 +548,8 @@ msgid ""
 "`setprimary` requires the first few letters of the handle you want to make "
 "your primary as a parameter, e.g. `!ow setprimary foo`"
 msgstr ""
+"`setprimary` lrever de første bokstavene i kallenavnet du ønsker å gjøre til "
+"hovedkarakter som parameter. F.eks. `!ow setprimary foo`"
 
 #: orisa/orisa.py:1070
 msgid "You are not registered. Use `!ow register` first."
@@ -666,6 +679,8 @@ msgid ""
 "Blizzard says your {type} {handle} does not exist. Did you change it? Use `!"
 "ow register` to update it."
 msgstr ""
+"Blizzard sier at din {type} {handle} ikke finnes. Vil du endre? Bruk `!ow "
+"register` for å oppdatere."
 
 #: orisa/orisa.py:1255
 msgid "There were some problems updating your SR! Try again later."
@@ -726,6 +741,9 @@ msgid ""
 "members. I can't post it here, because it's rather long. Please allow DMs "
 "and try again."
 msgstr ""
+"Prøvde å sende deg en privat melding med hjelp, men du tillater ikke det fra "
+"tjenermedlemmer. Kan ikke postes her fordi det er for langt. Tillat private "
+"meldinger og prøv igjen."
 
 #: orisa/orisa.py:1437
 msgid "Orisa's purpose"
@@ -782,12 +800,19 @@ msgid ""
 "*Example:*\n"
 "`!ow alwaysshowsr on`"
 msgstr ""
+"På noen tjenere vil Orisa kun vise din SR eller rang i kallenavnet når du er "
+"i OW-stemmekanalen. Slå dette på hvis du ønsker at kallenavnet ditt alltid "
+"skal vise SR eller rang.\n"
+"*Eksempel:*\n"
+"`!ow alwaysshowsr on`"
 
 #: orisa/orisa.py:1495
 msgid ""
 "This command can only be used by members with the \"Orisa Admin\" role and "
 "allows them to configure Orisa for the specific Discord server."
 msgstr ""
+"Denne kommandoen kan kun brukes av medlemmer med «Orisa-admin»-rolle, og lar "
+"deg sette opp Orisa for den respektive Discord-tjeneren."
 
 #. Translators: help for !ow dumpsr
 #: orisa/orisa.py:1502
@@ -818,8 +843,9 @@ msgid ""
 msgstr ""
 
 #: orisa/orisa.py:1535
+#, fuzzy
 msgid "★ *ow format placeholders*"
-msgstr ""
+msgstr "★ *ow format $plassholdere*"
 
 #: orisa/orisa.py:1538
 #, python-brace-format
@@ -1025,6 +1051,7 @@ msgid ""
 "I don't know what date {date} is supposed to mean. Please use the format DD."
 "MM.YY or YYYY-MM-DD!"
 msgstr ""
+"{date} er ikke en gyldig dato. Bruk formatet DD.MM.ÅÅ, eller ÅÅÅÅ-MM-DD."
 
 #: orisa/orisa.py:1833
 #, fuzzy, python-brace-format
@@ -1043,13 +1070,15 @@ msgstr "når du registrerte deg"
 
 #: orisa/orisa.py:1850
 msgid "Sorry, I'm not allowed to send you files…"
-msgstr ""
+msgstr "Kan ikke sende deg filer …"
 
 #: orisa/orisa.py:1859
 msgid ""
 "I'm not allowed to upload images in this channel, so I've sent you a DM "
 "instead."
 msgstr ""
+"Kan ikke laste opp bilder til denne kanalen, så du får en privat melding "
+"istedenfor."
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
 #: orisa/orisa.py:2683
@@ -1125,6 +1154,8 @@ msgid ""
 "Hi! I just tried to update your nickname, but the result '{nick}' would be "
 "longer than 32 characters."
 msgstr ""
+"Prøvde å oppdatere kallenavnet ditt, men det resulterende «{nick}» er mer "
+"enn 32 tegn langt."
 
 #: orisa/orisa.py:2969
 msgid ""
@@ -1140,6 +1171,9 @@ msgid ""
 "Try to use the $sr format (you can type `!ow format $sr` into this DM "
 "channel), or shorten your nickname."
 msgstr ""
+"\n"
+"Prøv å bruke «$sr»-formatet (du kan skrive `!ow format $sr` her), eller "
+"forkorte kallenavnet ditt."
 
 #: orisa/orisa.py:2975
 msgid ""
@@ -1165,6 +1199,8 @@ msgid ""
 "account to Discord and try again. Unfortunately, I cannot ask Xbox Live for "
 "the info."
 msgstr ""
+"Fant ingen Xbox-konto lenket til din Discord. Gjør dette og prøv igjen. Kan "
+"ikke spørre Xbox Live om mer info."
 
 #: orisa/orisa.py:3214
 #, python-brace-format
@@ -1172,6 +1208,8 @@ msgid ""
 "OK. People can now ask me for your {type}s **{handles}**, and I will keep "
 "track of your SR."
 msgstr ""
+"OK. Folk kan nå spørre meg om din {type} **{handles}**, og din SR vil bli "
+"holdt øye med."
 
 #: orisa/orisa.py:3220
 #, python-brace-format
@@ -1261,6 +1299,9 @@ msgid ""
 "primary {primary_type} remains {primary_handle}**. To change your primary "
 "tag, use `!ow setprimary`, see help for more details."
 msgstr ""
+"OK. {new_handle} har blitt lagt til i din {new_type}. **Din "
+"hoved-{primary_type} er fremdeles {primary_handle}**. For å endre din "
+"primærtagg kan du bruke `!ow setprimary`. Sjekk hjelp for flere detaljer."
 
 #: orisa/orisa.py:3320
 #, python-brace-format
@@ -1275,6 +1316,8 @@ msgid ""
 "OW account. Play a QP or arcade game, close OW and try again, sometimes this "
 "helps."
 msgstr ""
+"Ugyldig {type}: {message}… Blizzard hevder at {type} {handle} ikke her en OW-"
+"konto. Spill et QP eller arkadespill, lukk OW og prøv igjen."
 
 #: orisa/orisa.py:3342
 #, python-brace-format
@@ -1413,7 +1456,7 @@ msgstr "Håndter kanaler"
 #. Translators: Discord permission name
 #: orisa/web.py:142
 msgid "Connect"
-msgstr ""
+msgstr "Koble til"
 
 #: orisa/web.py:153
 #, python-brace-format

@@ -9,9 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-11-13 18:42+0100\n"
-"PO-Revision-Date: 2021-09-09 15:35+0000\n"
+"PO-Revision-Date: 2021-11-21 04:51+0000\n"
 "Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_PT/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8.1-dev\n"
+"X-Generator: Weblate 4.9.1\n"
 
 #. Translators: Role
 #: orisa/models.py:60 orisa/orisa.py:187 orisa/orisa.py:1735
@@ -1571,10 +1571,8 @@ msgstr "Enviar Mensagens"
 
 #. Translators: Discord permission name
 #: orisa/web.py:132
-#, fuzzy
-#| msgid "Manage Channels"
 msgid "View Channels"
-msgstr "Gerir Canais"
+msgstr "Ver Canais"
 
 #. Translators: Discord permission name
 #: orisa/web.py:134
@@ -1599,7 +1597,7 @@ msgstr "Gerir Canais"
 #. Translators: Discord permission name
 #: orisa/web.py:142
 msgid "Connect"
-msgstr ""
+msgstr "Conectar"
 
 #: orisa/web.py:153
 #, python-brace-format
