@@ -32,7 +32,7 @@ LOCALES = [
     "pt_BR",
     "pt_PT",
     "ru",
-    "zh_Hans",
+    "zh_CN",
 ]
 
 CurrentLocale: ContextVar[str] = ContextVar("CurrentLocale", default=DEFAULT_LOCALE)
@@ -44,9 +44,7 @@ FLAG_TO_LOCALE = {
         chr(ord(ch) - ord("A") + _REGIONAL_A_ORD) for ch in locale[-2:].upper()
     ): locale
     for locale in LOCALES
-    if locale != "zh_Hans"
 }
-FLAG_TO_LOCALE["🇨🇳"] = "zh_Hans"
 FLAG_TO_LOCALE["🇬🇧"] = "en"
 
 TRANSLATIONS = {
