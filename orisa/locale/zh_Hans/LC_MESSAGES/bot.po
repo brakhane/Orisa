@@ -19,9 +19,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Orisa 1.0\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-11-13 18:42+0100\n"
-"PO-Revision-Date: 2021-11-04 16:36+0000\n"
+"PO-Revision-Date: 2021-12-20 14:48+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "orisa/bot/zh_Hans/>\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.10\n"
 
 #. Translators: Role
 #: orisa/models.py:60 orisa/orisa.py:187 orisa/orisa.py:1735
@@ -1430,7 +1430,7 @@ msgstr ":heart: 买杯咖啡表示感谢"
 msgid ""
 "Want to say thanks to the guy who wrote and maintains me? Why not [buy him a "
 "coffee?]({DONATE_LINK})"
-msgstr "想感谢编写和维护我的人吗？为什么不(给他买杯咖啡?)呢({DONATE_LINK})"
+msgstr "想感谢编写和维护我的人吗？为什么不[给他买杯咖啡?]({DONATE_LINK})"
 
 #: orisa/orisa.py:3445
 msgid ""
