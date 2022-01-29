@@ -4,7 +4,7 @@
 # Valerio D'Onghia <venom1@live.de>, 2019.
 # Weblate Admin <brakhane+weblate@gmail.com>, 2019.
 # Daniele Giulietti <lordnocht@gmail.com>, 2019.
-# Dennis Brakhane <brakhane@gmail.com>, 2020, 2021.
+# Dennis Brakhane <brakhane@gmail.com>, 2020, 2021, 2022.
 # Luca De Filippo <luca.defilippo@translationcommons.org>, 2020.
 # Alessandro Mandelli <mandelli.alessandro@ngi.it>, 2021.
 # Matteo Schettini <matthewschettini@gmail.com>, 2021.
@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2021-11-13 18:42+0100\n"
-"PO-Revision-Date: 2021-11-21 04:51+0000\n"
+"PO-Revision-Date: 2022-01-30 01:56+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/orisa/bot/it/>\n"
 "Language: it\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9.1\n"
+"X-Generator: Weblate 4.11-dev\n"
 
 #. Translators: Role
 #: orisa/models.py:60 orisa/orisa.py:187 orisa/orisa.py:1735
@@ -159,7 +159,7 @@ msgstr ""
 "e tutti quelli che dovrebbero essere autorizzati a configurarmi.\n"
 "Poi, scrivi `!ow config` in questo canale e ti invierò un link per "
 "configuraremi tramite messaggio privato.\n"
-"*Ignorerò tutti i comandi eccetto '!ow help' e ' !ow config' finché non sarò "
+"*Ignorerò tutti i comandi eccetto `!ow help` e `!ow config` finché non sarò "
 "configurata per questo Discord!*"
 
 #. Translators: :thinking: must remain as is, it's an emoji
