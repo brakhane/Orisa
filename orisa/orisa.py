@@ -322,7 +322,7 @@ class Orisa(Plugin):
             if 3 < len(bots) > len(humans):
                 farm.append((guild, len(bots), len(humans)))
         await reply(ctx, "done")
-        farm.sort(key=lambda x:x[1], reverse=True)
+        farm.sort(key=lambda x:x[1])
         await send_long(
             ctx.channel.messages.send,
             "\n".join(f"{guild.name} ({guild.id}) with {nb} bots and {nh} humans" for guild, nb, nh in farm)
