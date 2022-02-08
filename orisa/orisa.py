@@ -308,7 +308,27 @@ class Orisa(Plugin):
 
         await self.spawn(self._oauth_result_listener)
 
-    # admin commandsa
+    # admin commands
+
+    @command()
+    @condition(only_owner)
+    async def farmcheck(self, ctx):
+        await reply(ctx, "checking")
+        farm = []
+        for guild in self.client.guilds.values():
+            humans, bots = [], []
+            for member in guild.members.values():
+                (bots if member.user.bot else humans).append(member)
+            if 3 < len(bots) > len(humans):
+                farm.append((guild, len(bots), len(humans)))
+        await reply(ctx, "done")
+        farm.sort(key=lambda x:x[1], reverse=True)
+        await send_long(
+            ctx.channel.messages.send,
+            "\n".join(f"{guild.name} ({guild.id}) with {nb} bots and {nh} humans" for guild, nb, nh in farm)
+        )
+            
+        
 
     @command()
     @condition(only_owner, bypass_owner=False)
