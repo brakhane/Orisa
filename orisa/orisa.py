@@ -2161,53 +2161,55 @@ Retail Jedi"""
 
                         break
         else:
+#            logger.debug(
+#                'no valid "hello" channel found. Falling back to DM to owner for %s',
+#                guild,
+#            )
             logger.debug(
-                'no valid "hello" channel found. Falling back to DM to owner for %s',
-                guild,
-            )
-            async with self.database.session() as session:
-                try:
-                    message = await guild.owner.send(
-                        self._welcome_text
-                        + self._welcome_private_message_info.format(
-                            guild_name=guild.name
-                        )
-                    )
-                except Exception:
-                    logger.exception("Unable to send e-mail to owner, oh well…")
-                else:
-                    wm_info = WelcomeMessage(
-                        id=message.id, is_private_message=True, guild_name=guild.name
-                    )
-                    session.add(wm_info)
-                    try:
-                        embed = await guild.owner.send(
-                            content=None,
-                            embed=Embed(
-                                title=self._welcome_embed_title,
-                                description=self._welcome_embed_desc.format(
-                                    SUPPORT_DISCORD=SUPPORT_DISCORD
-                                ),
-                            ),
-                        )
-                    except Exception:
-                        logger.exception("Unable to send support embed")
-                    else:
-                        wm_info.need_help_embed_id = embed.id
-
-                    for flag, locale in i18n.FLAG_TO_LOCALE.items():
-                        if (
-                            locale == "en"
-                            or i18n.get_translation(locale, self._welcome_text)
-                            != self._welcome_text
-                        ):
-                            try:
-                                await message.react(flag)
-                            except Exception:
-                                logger.debug("Cannot react to message", exc_info=True)
-                                break
-
-                    await run_sync(session.commit)
+                'no valid "hello" channel found. NOT sending DM to owner of %s', guild)
+#            async with self.database.session() as session:
+#                try:
+#                    message = await guild.owner.send(
+#                        self._welcome_text
+#                        + self._welcome_private_message_info.format(
+#                            guild_name=guild.name
+#                        )
+#                    )
+#                except Exception:
+#                    logger.exception("Unable to send e-mail to owner, oh well…")
+#                else:
+#                    wm_info = WelcomeMessage(
+#                        id=message.id, is_private_message=True, guild_name=guild.name
+#                    )
+#                    session.add(wm_info)
+#                    try:
+#                        embed = await guild.owner.send(
+#                            content=None,
+#                            embed=Embed(
+#                                title=self._welcome_embed_title,
+#                                description=self._welcome_embed_desc.format(
+#                                    SUPPORT_DISCORD=SUPPORT_DISCORD
+#                                ),
+#                            ),
+#                        )
+#                    except Exception:
+#                        logger.exception("Unable to send support embed")
+#                    else:
+#                        wm_info.need_help_embed_id = embed.id
+#
+#                    for flag, locale in i18n.FLAG_TO_LOCALE.items():
+#                        if (
+#                            locale == "en"
+#                            or i18n.get_translation(locale, self._welcome_text)
+#                            != self._welcome_text
+#                        ):
+#                            try:
+#                                await message.react(flag)
+#                            except Exception:
+#                                logger.debug("Cannot react to message", exc_info=True)
+#                                break
+#
+#                    await run_sync(session.commit)
 
     # Util
 
