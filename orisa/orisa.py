@@ -2411,11 +2411,14 @@ Retail Jedi"""
 
                 final_list.extend(chans)
 
+
+            unmanaged_set = frozenset()
             if cat.managed_position == "top":
                 start_pos = 0
                 final_list.extend(
                     sorted(unmanaged_channels, key=attrgetter("position"))
                 )
+                unmanaged_set = frozenset(unmanaged_channels)
             else:
                 start_pos = (
                     max(chan.position for chan in unmanaged_channels) + 1
@@ -2425,6 +2428,8 @@ Retail Jedi"""
 
             for i, chan in enumerate(final_list):
                 pos = start_pos + i
+                if chan in unmanaged_set:
+                    pos += 100
                 if chan.position != pos:
                     try:
                         try:
@@ -2851,7 +2856,7 @@ Retail Jedi"""
                         _("Member"),
                         # Translators: header for highscore table: member discord id
                         _("Member ID"),
-                        # Translators: header fdor highscore table: SR
+                        # Translators: header for highscore table: SR
                         _("{role} SR").format(role=_(role.capitalize())),
                         # Translators: header for highscore table: SR difference
                         _("ΔSR"),
