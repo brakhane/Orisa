@@ -2426,10 +2426,11 @@ Retail Jedi"""
                     else 1
                 )
 
-            for i, chan in enumerate(final_list):
-                pos = start_pos + i
-                if chan in unmanaged_set:
-                    pos += 100
+            pos = start_pos - 1
+            for chan in final_list:
+                pos += 1
+                if pos < 100 and chan in unmanaged_set:
+                    pos = 100
                 if chan.position != pos:
                     try:
                         try:
