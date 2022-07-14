@@ -22,7 +22,8 @@ Orisa wouldn't be possible without the help of contributors. If you believe you 
 * French translation
   * "Diable Dk"
   * Léo Clauzure
-
+  * Logan R. "Teal"
+ 
 * German translation
   * "AIERKUCHEN"
   * Dennis Brakhane
