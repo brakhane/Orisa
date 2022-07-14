@@ -25,6 +25,7 @@ from typing import List
 
 import asks
 import trio
+from curious.exc import HTTPException, ErrorCode
 
 from cachetools.func import TTLCache
 from fuzzywuzzy import process
@@ -187,9 +188,16 @@ async def reply(ctx, msg):
         and ctx.guild.me
         and ctx.channel.effective_permissions(ctx.guild.me).read_message_history
     ):
-        return await ctx.channel.messages.send(msg, in_reply_to=ctx.message.id)
-    else:
-        return await ctx.channel.messages.send(f"<@!{ctx.author.id}> {msg}")
+        try:
+            res = await ctx.channel.messages.send(msg, in_reply_to=ctx.message.id)
+        except HTTPException as e:
+            if e.error_code == ErrorCode.INVALID_FORM_BODY:
+                logger.warn("Got invalid form body when replying, trying to send a reply without message reference")
+            # fallthrough
+        else:
+            return res 
+                
+    return await ctx.channel.messages.send(f"<@!{ctx.author.id}> {msg}")
 
 
 def resolve_handle_or_index(user, handle_or_index):
