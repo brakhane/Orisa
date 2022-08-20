@@ -1,14 +1,14 @@
 # Translation files for Orisa
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
-# Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>, 2019, 2020.
+# Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>, 2019, 2020, 2022.
 # Kacper Klimas <kanyqan@gmail.com>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2022-08-20 16:33+0200\n"
-"PO-Revision-Date: 2020-09-06 18:36+0000\n"
+"PO-Revision-Date: 2022-08-21 10:59+0000\n"
 "Last-Translator: Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/orisa/bot/pl/>\n"
 "Language: pl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.3-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: orisa/i18n.py:188
 #, python-brace-format
@@ -27,6 +27,11 @@ msgid ""
 "without mentioning me. Efi is working hard on making me understand slash "
 "commands as well."
 msgstr ""
+"Po 31 sierpnia nie będę mogła zobaczyć komend, dopóki mnie nie oznaczycie. "
+"Proszę, używaj w przyszłości skłądni typu \"{new_cmd}\". Możesz jednakże "
+"wciąż używać \"{cmd}\" w wiadomościach prywatnych. Efi ciężko pracuje, bym w "
+"niedalekiej przyszłości umiała rozpoznawać również komendy zaczynające się "
+"od ukośnika."
 
 #. Translators: Role
 #: orisa/models.py:60 orisa/orisa.py:187 orisa/orisa.py:1755
@@ -640,7 +645,6 @@ msgstr ""
 "Proszę wybierz krótszy format lub skróć swój nick!"
 
 #: orisa/orisa.py:1178
-#, fuzzy
 msgid ""
 "Smarties Expert\n"
 "Bread Scientist\n"
@@ -667,7 +671,6 @@ msgstr ""
 "Mokry sen Gordona Freemana\n"
 "Kolekcjoner owoców Wumpa\n"
 "Magister Złota Rączka\n"
-"Historyk Pornografii\n"
 "Menadżer Powierzchni Płaskich\n"
 "Jedi sprzedawany detalicznie\n"
 "Specjalista ds. kurczaka w panierce\n"
@@ -711,6 +714,8 @@ msgid ""
 "Blizzard says your {type} {handle} does not exist. Did you change it? Use `!"
 "ow register` to update it."
 msgstr ""
+"Według Blizzarda Twoje {type}{handle} nie istnieje. Zmieniłeś je? Użyj `!ow "
+"register`, by je zaktualizować."
 
 #: orisa/orisa.py:1275
 msgid "There were some problems updating your SR! Try again later."
@@ -924,7 +929,7 @@ msgid "★ *ow format placeholders*"
 msgstr "★ *znaki globalne w formacie ow*"
 
 #: orisa/orisa.py:1558
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "*The following placeholders are defined:*\n"
 "`$sr`\n"
@@ -966,7 +971,7 @@ msgstr ""
 "\n"
 "`$rank`\n"
 "Twoja ranga w skróconej formie dla wszystkich trzech ról w kolejności Tank, "
-"Natarcie, Wsparcie; gwiazdki i znaki zapytania działają jak w  `$sr`\n"
+"Natarcie, Wsparcie; gwiazdki i znaki zapytania działają jak w `$sr`\n"
 "\n"
 "`$tank`, `$damage`, `$support`\n"
 "Twoja pełna RU dla konkretnej roli będzie pokazana za jej symbolem. Gwiazdka "
@@ -977,6 +982,9 @@ msgstr ""
 "`$tankrank`, `$damagerank`, `$supportrank`\n"
 "Jak wyżej, lecz pokazywana jest ranga.\n"
 "\n"
+"`$shorttank`, `$shorttankrank` itp.\n"
+"pokaż tylko dwa znaki odpowiedniego poziomu RU/rangi.\n"
+"\n"
 "`$dps`, `$dpsrank`\n"
 "Mogą być stosowane zamiennie z kolejno `$damage` i `$damagerank`."
 
@@ -985,7 +993,7 @@ msgid "★ *ow format examples*"
 msgstr "★ *przykłady formatu ow*"
 
 #: orisa/orisa.py:1577
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "`!ow format hello $sr` will result in `[hello 12-34-45]`.\n"
 "`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
@@ -996,8 +1004,9 @@ msgstr ""
 "`!ow format hello $sr` będzie wyglądało jak `[hello 12-34-45]`.\n"
 "`!ow format Potato/$fullrank` będzie wyglądało jak `[Potato/Bronze-Gold-"
 "Diamond]`.\n"
-"`!ow format $damage $support` będzie wyglądało jak `[1234{SYMBOL_DPS} "
-"2345{SYMBOL_SUPPORT}]`.\n"
+"`!ow format $damage $support` będzie wyglądało jak "
+"`[{SYMBOL_DPS}1234{SYMBOL_SUPPORT}2345]`.\n"
+"`!ow format $shortdamage` będzie wyglądało jak `[{SYMBOL_DPS}12]`.\n"
 "*Standardowy format to `$sr`*"
 
 #. Translators: headline of second help page
@@ -1593,6 +1602,9 @@ msgid ""
 "you give a name as argument, so I know where to look. Omit the name argument "
 "if you mean \"myself\"; that works even in DMs."
 msgstr ""
+"Ta komenda musi zostać wykonana z kanału Orisu na Discordzie wraz z podaniem "
+"nazwy jako argumentu, bym wiedziała gdzie szukać. Pomiń nazwę jeżeli chodzi "
+"Ci o Ciebie. Zadziała to nawet w wiadomości prywatnej."
 
 #: orisa/web.py:67
 msgid "You can close this window."
@@ -1605,10 +1617,8 @@ msgstr "Wysyłanie wiadomości"
 
 #. Translators: Discord permission name
 #: orisa/web.py:132
-#, fuzzy
-#| msgid "Manage Channels"
 msgid "View Channels"
-msgstr "Zarządzanie kanałami"
+msgstr "Zobacz kanały"
 
 #. Translators: Discord permission name
 #: orisa/web.py:134
@@ -1633,7 +1643,7 @@ msgstr "Zarządzanie kanałami"
 #. Translators: Discord permission name
 #: orisa/web.py:142
 msgid "Connect"
-msgstr ""
+msgstr "Połącz"
 
 #: orisa/web.py:153
 #, python-brace-format
