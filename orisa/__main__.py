@@ -72,13 +72,12 @@ class FakeMessage:
     content: str
 
 async def my_message_check(bot, message):
-    msg = message.content.strip()
-    logger.info(msg)
+    orig_msg = msg = message.content.strip()
     mention = f"<@{bot.application_info.client_id}>"
     if msg.startswith(mention):
         msg = msg.replace(mention, "").replace(f"{command_prefix}ow", "").strip()
         msg = f"{command_prefix}ow {msg}"
-        logger.info(msg)
+        logger.debug(f"Converted [{orig_msg}] to [{msg}]")
     return await curious_message_check(bot, FakeMessage(msg))
     
 
@@ -101,7 +100,7 @@ async def ready(ctx):
 
     logger.debug(f"I'm in {len(ctx.bot.guilds)} guilds, shard id is {ctx.shard_id}")
 
-    msg = "!ow help" if not DEVELOPMENT else ",ow help"
+    msg = "@Orisa help" if not DEVELOPMENT else "@Orisa Test help"
     await ctx.bot.change_status(game=Game(name=msg, type=GameType.LISTENING_TO))
 
     class Logger:
