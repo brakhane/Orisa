@@ -187,7 +187,7 @@ class I18NCommandsManager(CommandsManager):
             await reply(ctx, _(
                 'After August 31th, I will not be able to see commands unless you mention me, please use "{new_cmd}" in the future. '
                 'You can still use "{cmd}" in DMs without mentioning me. Efi is working hard on making me understand slash commands as well.'
-            ).format(new_cmd=message.content.replace(",ow", mention), cmd=message.content))
+            ).format(new_cmd=message.content.replace("!ow", mention), cmd=message.content))
 
 
 
