@@ -20,10 +20,12 @@ import yaml
 
 import multio
 import trio
+from dataclasses import dataclass
 
 import raven
 from curious.dataclasses.presence import Game, GameType, Status
 from curious.commands.exc import ConversionFailedError
+from curious.commands.utils import prefix_check_factory
 
 from . import web
 from .config import SENTRY_DSN, BOT_TOKEN, GLADOS_TOKEN, MASHERY_API_KEY, DEVELOPMENT
@@ -62,8 +64,26 @@ client = OrisaClient(BOT_TOKEN)
 
 database = Database()
 
+command_prefix="!" if not DEVELOPMENT else ","
+curious_message_check = prefix_check_factory(command_prefix)
+
+@dataclass
+class FakeMessage:
+    content: str
+
+async def my_message_check(bot, message):
+    msg = message.content.strip()
+    logger.info(msg)
+    mention = f"<@{bot.application_info.client_id}>"
+    if msg.startswith(mention):
+        msg = msg.replace(mention, "").replace(f"{command_prefix}ow", "").strip()
+        msg = f"{command_prefix}ow {msg}"
+        logger.info(msg)
+    return await curious_message_check(bot, FakeMessage(msg))
+    
+
 manager = I18NCommandsManager.with_client(
-    client, command_prefix="!" if not DEVELOPMENT else ","
+    client, message_check=my_message_check
 )
 
 already_loaded = False

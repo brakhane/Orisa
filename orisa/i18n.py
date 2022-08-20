@@ -11,7 +11,7 @@ from curious.commands.manager import CommandsManager
 from curious.core.event import EventContext
 from curious.dataclasses.message import Message
 
-from .utils import run_sync
+from .utils import run_sync, reply
 
 logger = logging.getLogger(__name__)
 
@@ -178,6 +178,18 @@ class I18NCommandsManager(CommandsManager):
         ctx.command_name = command_word
         ctx.tokens = tokens
         ctx.manager = self
+
+        mention = f"<@{self.client.application_info.client_id}>"
+
+        mentions_us = mention in message.content
+
+        if not mentions_us and message.guild_id is not None:
+            await reply(ctx, _(
+                'After August 31th, I will not be able to see commands unless you mention me, please use "{new_cmd}" in the future. '
+                'You can still use "{cmd}" in DMs without mentioning me. Efi is working hard on making me understand slash commands as well.'
+            ).format(new_cmd=message.content.replace(",ow", mention), cmd=message.content))
+
+
 
         # step 3, invoke the context to try and match the command and run it
         await ctx.try_invoke()
