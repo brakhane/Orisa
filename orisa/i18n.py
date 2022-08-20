@@ -183,7 +183,7 @@ class I18NCommandsManager(CommandsManager):
 
         mentions_us = mention in message.content
 
-        if not mentions_us and message.guild_id is not None:
+        if not mentions_us and message.guild_id is not None and message.content.startswith("!ow"):
             await reply(ctx, _(
                 'After August 31th, I will not be able to see commands unless you mention me, please use "{new_cmd}" in the future. '
                 'You can still use "{cmd}" in DMs without mentioning me. Efi is working hard on making me understand slash commands as well.'
