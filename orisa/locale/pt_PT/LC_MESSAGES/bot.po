@@ -1,7 +1,7 @@
 # Translation files for Orisa
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
-# Daniel Martins <dafm200936@gmail.com>, 2019, 2020, 2021.
+# Daniel Martins <dafm200936@gmail.com>, 2019, 2020, 2021, 2022.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
 # Dennis Brakhane <brakhane@gmail.com>, 2020.
 # ssantos <ssantos@web.de>, 2020.
@@ -9,9 +9,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2022-08-20 16:33+0200\n"
-"PO-Revision-Date: 2021-11-21 04:51+0000\n"
+"PO-Revision-Date: 2022-08-21 10:59+0000\n"
 "Last-Translator: Daniel Martins <dafm200936@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "orisa/bot/pt_PT/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.9.1\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: orisa/i18n.py:188
 #, python-brace-format
@@ -30,6 +30,10 @@ msgid ""
 "without mentioning me. Efi is working hard on making me understand slash "
 "commands as well."
 msgstr ""
+"Depois de 31 de agosto não conseguirei ler comandos a não ser que me "
+"menciones. Daqui em diante por favor usa \"{new_cmd}\". Nas DMs \" {cmd}\" "
+"continua a funcionar. A Efi está a trabalhar arduamente para me fazer também "
+"perceber slash commands."
 
 #. Translators: Role
 #: orisa/models.py:60 orisa/orisa.py:187 orisa/orisa.py:1755
