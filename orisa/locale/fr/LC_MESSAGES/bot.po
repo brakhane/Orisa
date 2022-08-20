@@ -11,9 +11,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2022-08-20 16:33+0200\n"
-"PO-Revision-Date: 2022-06-01 16:04+0000\n"
+"PO-Revision-Date: 2022-08-21 10:59+0000\n"
 "Last-Translator: Logan Rybski <mailcompteps@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: orisa/i18n.py:188
 #, python-brace-format
@@ -31,6 +31,10 @@ msgid ""
 "without mentioning me. Efi is working hard on making me understand slash "
 "commands as well."
 msgstr ""
+"Après le 31 Août, je ne pourrais plus voir vos message sauf si vous me "
+"mentionnez, s'il vous plait utilisez \"{new_cmd}\" à l'avenir. vous pouvez "
+"toujours utiliser \"{cmd}\" dans les messages privé sans me mentionner. Efi "
+"travaille dur pour me faire comprendre les commandes slash en ce moment."
 
 #. Translators: Role
 #: orisa/models.py:60 orisa/orisa.py:187 orisa/orisa.py:1755
