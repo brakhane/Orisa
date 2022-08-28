@@ -1818,18 +1818,21 @@ Retail Jedi"""
 
         if date:
             try:
-                date = date_parser.parse(
-                    date, parserinfo=date_parser.parserinfo(dayfirst=True)
-                )
+                date = date_parser.isoparse(date)
             except ValueError:
-                await reply(
-                    ctx,
-                    _(
-                        "I don't know what date {date} is supposed to mean. Please use "
-                        "the format DD.MM.YY or YYYY-MM-DD!"
-                    ).format(date=date),
-                )
-                return
+                try:
+                    date = date_parser.parse(
+                        date, parserinfo=date_parser.parserinfo(dayfirst=True)
+                    )
+                except ValueError:
+                    await reply(
+                        ctx,
+                        _(
+                            "I don't know what date {date} is supposed to mean. Please use "
+                            "the format DD.MM.YY or YYYY-MM-DD!"
+                        ).format(date=date),
+                    )
+                    return
 
             data = data[data.index >= date]
 
