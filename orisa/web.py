@@ -343,7 +343,7 @@ async def save(guild_id):
 @app.route(OAUTH_REDIRECT_PATH)
 async def handle_oauth():
 
-    register_msg = '<p class="text-monospace">!ow register</p>'
+    register_msg = '<p class="text-monospace">@Orisa register</p>'
     try:
         logger.debug(f"handle_oauth with request args {request.args}")
         try:

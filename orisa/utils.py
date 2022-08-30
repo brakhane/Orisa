@@ -213,7 +213,7 @@ def resolve_handle_or_index(user, handle_or_index):
         except (ValueError, TypeError):
             raise ValueError(
                 f'The handle "{handle_or_index}" is not registered for your account '
-                "(I even did a fuzzy search), use `!ow register` first."
+                "(I even did a fuzzy search), use `@Orisa register` first."
             )
     else:
         if index >= len(user.handles):

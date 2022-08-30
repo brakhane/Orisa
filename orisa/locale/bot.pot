@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Orisa 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-20 16:33+0200\n"
+"POT-Creation-Date: 2022-08-20 18:35+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -162,10 +162,10 @@ msgid ""
 "To get started, create a new role named `Orisa Admin` (only the name is "
 "important, it doesn't need any special permissions) and add yourself and "
 "everybody that should be allowed to configure me.\n"
-"Then, write `!ow config` in this channel and I will send you a link to "
+"Then, write `@Orisa config` in this channel and I will send you a link to "
 "configure me via DM.\n"
-"*I will ignore all commands except `!ow help` and `!ow config` until I'm "
-"configured for this Discord!*"
+"*I will ignore all commands except `@Orisa help` and `@Orisa config` until "
+"I'm configured for this Discord!*"
 msgstr ""
 
 #. Translators: :thinking: must remain as is, it's an emoji
@@ -265,7 +265,7 @@ msgstr ""
 msgid ""
 "\n"
 "BTW, you do not need to specify your nickname if you want your own "
-"BattleTag; just !ow is enough."
+"BattleTag; just @Orisa is enough."
 msgstr ""
 
 #: orisa/orisa.py:767
@@ -280,7 +280,7 @@ msgid "Tip"
 msgstr ""
 
 #: orisa/orisa.py:774
-msgid "Use `!ow register` to register, or `!ow help` for more info."
+msgid "Use `@Orisa register` to register, or `@Orisa help` for more info."
 msgstr ""
 
 #: orisa/orisa.py:789
@@ -343,8 +343,8 @@ msgstr ""
 
 #: orisa/orisa.py:849
 msgid ""
-"`!ow config` works in *any* channel (that I'm allowed to read messages in, "
-"of course), so you can also use an admin-only channel."
+"`@Orisa config` works in *any* channel (that I'm allowed to read messages "
+"in, of course), so you can also use an admin-only channel."
 msgstr ""
 
 #: orisa/orisa.py:869
@@ -371,8 +371,8 @@ msgstr ""
 #: orisa/orisa.py:919
 #, python-brace-format
 msgid ""
-"{type} looks like a BattleTag and not like PC/Xbox, assuming you meant `!ow "
-"register pc`…"
+"{type} looks like a BattleTag and not like PC/Xbox, assuming you meant "
+"`@Orisa register pc`…"
 msgstr ""
 
 #: orisa/orisa.py:931
@@ -392,16 +392,16 @@ msgstr ""
 
 #: orisa/orisa.py:948
 msgid ""
-"When registering a PSN account, you need to give your Online ID, like `!ow "
-"register psn My-Cool-ID_12345`."
+"When registering a PSN account, you need to give your Online ID, like "
+"`@Orisa register psn My-Cool-ID_12345`."
 msgstr ""
 
 #: orisa/orisa.py:960
 #, python-brace-format
 msgid ""
-"Invalid registration type \"{type}\". Use `!ow register` or `!ow register "
-"pc` for PC; `!ow register xbox` for Xbox, or `!ow register psn My-Online-"
-"Id_1234` for PlayStation."
+"Invalid registration type \"{type}\". Use `@Orisa register` or `@Orisa "
+"register pc` for PC; `@Orisa register xbox` for Xbox, or `@Orisa register "
+"psn My-Online-Id_1234` for PlayStation."
 msgstr ""
 
 #. Translators: type will be PC, XBOX or PSN
@@ -429,14 +429,14 @@ msgstr ""
 
 #: orisa/orisa.py:994
 msgid ""
-"If you have an XBL account, use `!ow register xbox`. For PSN, use `!ow "
+"If you have an XBL account, use `@Orisa register xbox`. For PSN, use `@Orisa "
 "register psn Your_Online-ID`"
 msgstr ""
 
 #: orisa/orisa.py:1001
 msgid ""
 "By registering, you agree to Orisa's Privacy Policy; you can read it by "
-"entering !ow privacy."
+"entering @Orisa privacy."
 msgstr ""
 
 #: orisa/orisa.py:1012
@@ -456,8 +456,8 @@ msgstr ""
 
 #: orisa/orisa.py:1040
 msgid ""
-"You cannot unregister your primary handle. Use `!ow setprimary` to set a "
-"different primary first, or use `!ow forgetme` to delete all your data."
+"You cannot unregister your primary handle. Use `@Orisa setprimary` to set a "
+"different primary first, or use `@Orisa forgetme` to delete all your data."
 msgstr ""
 
 #: orisa/orisa.py:1050
@@ -470,7 +470,7 @@ msgstr ""
 msgid ""
 "However, your new nickname \"{nickname}\" is now longer than 32 characters, "
 "which Discord doesn't allow. Please choose a different format, or shorten "
-"your nickname and do a `!ow forceupdate` afterwards."
+"your nickname and do a `@Orisa forceupdate` afterwards."
 msgstr ""
 
 #: orisa/orisa.py:1070
@@ -482,11 +482,11 @@ msgstr ""
 #: orisa/orisa.py:1083
 msgid ""
 "`setprimary` requires the first few letters of the handle you want to make "
-"your primary as a parameter, e.g. `!ow setprimary foo`"
+"your primary as a parameter, e.g. `@Orisa setprimary foo`"
 msgstr ""
 
 #: orisa/orisa.py:1090
-msgid "You are not registered. Use `!ow register` first."
+msgid "You are not registered. Use `@Orisa register` first."
 msgstr ""
 
 #: orisa/orisa.py:1102
@@ -561,24 +561,24 @@ msgstr ""
 #: orisa/orisa.py:1224
 msgid ""
 "Your nick will be updated even when you are not in an OW voice channel. Use "
-"`!ow alwaysshowsr off` to turn it off again."
+"`@Orisa alwaysshowsr off` to turn it off again."
 msgstr ""
 
 #: orisa/orisa.py:1228
 msgid ""
-"Your nick will only be updated when you are in an OW voice channel. Use `!ow "
-"alwaysshowsr on` to always update your nick."
+"Your nick will only be updated when you are in an OW voice channel. Use "
+"`@Orisa alwaysshowsr on` to always update your nick."
 msgstr ""
 
 #: orisa/orisa.py:1248 orisa/orisa.py:1367
-msgid "You are not registered! Do `!ow register` first."
+msgid "You are not registered! Do `@Orisa register` first."
 msgstr ""
 
 #: orisa/orisa.py:1259
 #, python-brace-format
 msgid ""
-"Blizzard says your {type} {handle} does not exist. Did you change it? Use `!"
-"ow register` to update it."
+"Blizzard says your {type} {handle} does not exist. Did you change it? Use "
+"`@Orisa register` to update it."
 msgstr ""
 
 #: orisa/orisa.py:1275
@@ -625,7 +625,7 @@ msgstr ""
 #: orisa/orisa.py:1389
 msgid ""
 "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue "
-"`!ow config` to configure me first!"
+"`@Orisa config` to configure me first!"
 msgstr ""
 
 #: orisa/orisa.py:1418
@@ -656,10 +656,10 @@ msgid ""
 "\n"
 "**The commands only work in the <#{channel_id}> channel or by sending me a "
 "DM**\n"
-"If you are new to Orisa, you are probably looking for `!ow register` or `!ow "
-"register xbox`\n"
-"If you want to use Orisa on your own server or help developing it, enter `!"
-"ow about`\n"
+"If you are new to Orisa, you are probably looking for `@Orisa register` or "
+"`@Orisa register xbox`\n"
+"If you want to use Orisa on your own server or help developing it, enter "
+"`@Orisa about`\n"
 "Parameters in [square brackets] are optional."
 msgstr ""
 
@@ -669,11 +669,12 @@ msgid ""
 "is given. `nick` can contain spaces. A fuzzy search for the nickname is "
 "performed.\n"
 "*Examples:*\n"
-"`!ow` will show your BattleTag\n"
-"`!ow the chosen one` will show the BattleTag of \"tHE ChOSeN ONe\"\n"
-"`!ow orisa` will show the BattleTag of \"SG | Orisa\", \"Orisa\", or \"Orisad"
-"\"\n"
-"`!ow oirsa` and `!ow ori` will probably also show the BattleTag of \"Orisa\""
+"`@Orisa` will show your BattleTag\n"
+"`@Orisa the chosen one` will show the BattleTag of \"tHE ChOSeN ONe\"\n"
+"`@Orisa orisa` will show the BattleTag of \"SG | Orisa\", \"Orisa\", or "
+"\"Orisad\"\n"
+"`@Orisa oirsa` and `@Orisa ori` will probably also show the BattleTag of "
+"\"Orisa\""
 msgstr ""
 
 #: orisa/orisa.py:1497
@@ -688,7 +689,7 @@ msgid ""
 "are in an OW voice channel. If you want your nick to always show your SR or "
 "rank, set this to on.\n"
 "*Example:*\n"
-"`!ow alwaysshowsr on`"
+"`@Orisa alwaysshowsr on`"
 msgstr ""
 
 #: orisa/orisa.py:1515
@@ -697,7 +698,7 @@ msgid ""
 "allows them to configure Orisa for the specific Discord server."
 msgstr ""
 
-#. Translators: help for !ow dumpsr
+#. Translators: help for @Orisa dumpsr
 #: orisa/orisa.py:1522
 msgid "Download your SR history as an Excel spreadsheet"
 msgstr ""
@@ -720,8 +721,8 @@ msgstr ""
 msgid ""
 "Lets you specify how your SR or rank is displayed. It will always be shown "
 "in [square\\u00a0brackets] appended to your name.\n"
-"In the *format*, you can specify placeholders with `$placeholder` or `"
-"${placeholder}`."
+"In the *format*, you can specify placeholders with `$placeholder` or "
+"`${placeholder}`."
 msgstr ""
 
 #: orisa/orisa.py:1555
@@ -767,10 +768,11 @@ msgstr ""
 #: orisa/orisa.py:1577
 #, python-brace-format
 msgid ""
-"`!ow format hello $sr` will result in `[hello 12-34-45]`.\n"
-"`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
-"`!ow format $damage $support` in `[{SYMBOL_DPS}1234 {SYMBOL_SUPPORT}2345]`.\n"
-"`!ow format $shortdamage` in `[{SYMBOL_DPS}12]`.\n"
+"`@Orisa format hello $sr` will result in `[hello 12-34-45]`.\n"
+"`@Orisa format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
+"`@Orisa format $damage $support` in `[{SYMBOL_DPS}1234 {SYMBOL_SUPPORT}"
+"2345]`.\n"
+"`@Orisa format $shortdamage` in `[{SYMBOL_DPS}12]`.\n"
 "*By default, the format is `$sr`*"
 msgstr ""
 
@@ -781,9 +783,10 @@ msgstr ""
 
 #: orisa/orisa.py:1595
 msgid ""
-"Same as `!ow [nick]`, (only) useful when the nick is the same as a command.\n"
+"Same as `@Orisa [nick]`, (only) useful when the nick is the same as a "
+"command.\n"
 "*Example:*\n"
-"`!ow get register` will search for the nick \"register\"."
+"`@Orisa get register` will search for the nick \"register\"."
 msgstr ""
 
 #: orisa/orisa.py:1605
@@ -791,11 +794,11 @@ msgid ""
 "Create a link to your BattleNet or Gamertag account, or adds a secondary "
 "BattleTag to your account. Your OW account will be checked periodically and "
 "your nick will be automatically updated to show your SR or rank (see the "
-"*format* command for more info). `!ow register` and `!ow register pc` will "
-"register a PC account, `!ow register xbox` will register an XBL account. If "
-"you register an XBL account, you have to link it to your Discord beforehand. "
-"For PSN accounts, you have to give your Online ID as part of the command, "
-"like `!ow register psn Your_Online-ID`."
+"*format* command for more info). `@Orisa register` and `@Orisa register pc` "
+"will register a PC account, `@Orisa register xbox` will register an XBL "
+"account. If you register an XBL account, you have to link it to your Discord "
+"beforehand. For PSN accounts, you have to give your Online ID as part of the "
+"command, like `@Orisa register psn Your_Online-ID`."
 msgstr ""
 
 #: orisa/orisa.py:1614
@@ -810,31 +813,32 @@ msgid ""
 "to give the first (few) letters.\n"
 "The given BattleTag must already be registered as one of your BattleTags.\n"
 "*Example:*\n"
-"`!ow setprimary jjonak`"
+"`@Orisa setprimary jjonak`"
 msgstr ""
 
 #: orisa/orisa.py:1629
 msgid ""
-"Like `!ow setprimary battletag`, but uses numbers, 1 is your first "
-"secondary, 2 your seconds etc. The order is shown by `!ow` (alphabetical)\n"
+"Like `@Orisa setprimary battletag`, but uses numbers, 1 is your first "
+"secondary, 2 your seconds etc. The order is shown by `@Orisa` "
+"(alphabetical)\n"
 "Normally, you should not need to use this alternate form, it's available in "
 "case Orisa gets confused on what BattleTag you mean (which shouldn't "
 "happen).\n"
 "*Example:*\n"
-"`!ow setprimary 1`"
+"`@Orisa setprimary 1`"
 msgstr ""
 
 #: orisa/orisa.py:1640
 msgid ""
-"Sets the role you can/want to play. It will be shown in `!ow` and will also "
-"be used to update the number of roles in voice channels you join.\n"
+"Sets the role you can/want to play. It will be shown in `@Orisa` and will "
+"also be used to update the number of roles in voice channels you join.\n"
 "*roles* is a single \"word\" consisting of one or more of the following "
 "identifiers (both upper and lower case work):\n"
 "`d` for DPS, `m` for Main Tank, `o` for Off Tank, `s` for Support\n"
 "*Examples:*\n"
-"`!ow setroles d`: you only play DPS.\n"
-"`!ow setroles so`: you play Support and Off Tanks.\n"
-"`!ow setroles dmos`: you are a true Flex and play everything."
+"`@Orisa setroles d`: you only play DPS.\n"
+"`@Orisa setroles so`: you play Support and Off Tanks.\n"
+"`@Orisa setroles dmos`: you are a true Flex and play everything."
 msgstr ""
 
 #: orisa/orisa.py:1654
@@ -860,23 +864,23 @@ msgid ""
 "You cannot remove your primary BattleTag, you have to choose a different "
 "primary BattleTag first.\n"
 "*Example:*\n"
-"`!ow unregister foo`"
+"`@Orisa unregister foo`"
 msgstr ""
 
 #: orisa/orisa.py:1682
 msgid ""
 "Like `unregister battletag`, but removes the battletag by number. Your first "
 "secondary is 1, your second 2, etc.\n"
-"The order is shown by the `!ow` command (it's alphabetical).\n"
+"The order is shown by the `@Orisa` command (it's alphabetical).\n"
 "Normally, you should not need to use this alternate form, it's available in "
 "case Orisa gets confused on what BattleTag you mean (which shouldn't "
 "happen)\n"
 "*Example:*\n"
-"`!ow unregister 1`"
+"`@Orisa unregister 1`"
 msgstr ""
 
 #: orisa/orisa.py:1701
-msgid "You are not registered. Do `!ow register` first!"
+msgid "You are not registered. Do `@Orisa register` first!"
 msgstr ""
 
 #: orisa/orisa.py:1716
@@ -1011,94 +1015,94 @@ msgid ""
 "placements this season yet are not shown."
 msgstr ""
 
-#: orisa/orisa.py:2991
+#: orisa/orisa.py:2981
 msgid ""
 "*To avoid spamming you, I will only send out this warning once per week*\n"
 msgstr ""
 
-#: orisa/orisa.py:2994
+#: orisa/orisa.py:2984
 #, python-brace-format
 msgid ""
 "Hi! I just tried to update your nickname, but the result '{nick}' would be "
 "longer than 32 characters."
 msgstr ""
 
-#: orisa/orisa.py:2997
+#: orisa/orisa.py:2987
 msgid ""
 "\n"
 "Please shorten your nickname."
 msgstr ""
 
-#: orisa/orisa.py:3000
+#: orisa/orisa.py:2990
 msgid ""
 "\n"
-"Try to use the $sr format (you can type `!ow format $sr` into this DM "
+"Try to use the $sr format (you can type `@Orisa format $sr` into this DM "
 "channel), or shorten your nickname."
 msgstr ""
 
-#: orisa/orisa.py:3003
+#: orisa/orisa.py:2993
 msgid ""
 "\n"
 "Your nickname cannot be updated until this is done. I'm sorry for the "
 "inconvenience."
 msgstr ""
 
-#: orisa/orisa.py:3199
+#: orisa/orisa.py:3189
 msgid ""
-"I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` "
-"to register an Xbox account."
+"I'm sorry, it seems like you don't have a BattleTag. Use `@Orisa register "
+"xbox` to register an Xbox account."
 msgstr ""
 
-#: orisa/orisa.py:3216
+#: orisa/orisa.py:3206
 msgid ""
 "I couldn't find a Xbox account linked to your Discord. Please link your Xbox "
 "account to Discord and try again. Unfortunately, I cannot ask Xbox Live for "
 "the info."
 msgstr ""
 
-#: orisa/orisa.py:3242
+#: orisa/orisa.py:3232
 #, python-brace-format
 msgid ""
 "OK. People can now ask me for your {type}s **{handles}**, and I will keep "
 "track of your SR."
 msgstr ""
 
-#: orisa/orisa.py:3248
+#: orisa/orisa.py:3238
 #, python-brace-format
 msgid ""
 "OK. People can now ask me for your {type} **{handle}**, and I will keep "
 "track of your SR."
 msgstr ""
 
-#: orisa/orisa.py:3251
+#: orisa/orisa.py:3241
 msgid "Registration successful"
 msgstr ""
 
-#: orisa/orisa.py:3254
+#: orisa/orisa.py:3244
 msgid ":information_source: Pro Tips"
 msgstr ""
 
-#: orisa/orisa.py:3256
+#: orisa/orisa.py:3246
 msgid ""
 "On some servers, I will only update your nick if you join a OW voice "
-"channel. If you want your nick to always show your SR, use the `!ow "
+"channel. If you want your nick to always show your SR, use the `@Orisa "
 "alwaysshowsr` command. If you want me to show your rank instead of your SR, "
-"use `!ow format $rank`.\n"
-"If you have more than one account, simply issue `!ow register` again.\n"
+"use `@Orisa format $rank`.\n"
+"If you have more than one account, simply issue `@Orisa register` again.\n"
 msgstr ""
 
-#: orisa/orisa.py:3265
+#: orisa/orisa.py:3255
 #, python-brace-format
 msgid ":envelope: A message from the *{guild_name}* staff"
 msgstr ""
 
 #. Translators: type is battletag or gamertag
-#: orisa/orisa.py:3285
+#: orisa/orisa.py:3275
 #, python-brace-format
 msgid "{type} updated"
 msgstr ""
 
-#: orisa/orisa.py:3289
+#: orisa/orisa.py:3279
 #, python-brace-format
 msgid ""
 "It seems like your {type} changed from *{old_handle}* to *{new_handle}*. I "
@@ -1106,49 +1110,49 @@ msgid ""
 msgstr ""
 
 #. Translators: type is translated GamerTag or BattleTag
-#: orisa/orisa.py:3304
+#: orisa/orisa.py:3294
 #, python-brace-format
 msgid "{type} already registered"
 msgstr ""
 
-#: orisa/orisa.py:3309
+#: orisa/orisa.py:3299
 #, python-brace-format
 msgid ""
 "You already registered the {type} *{handle}*, so there's nothing for me to "
 "do. *Sleep mode reactivated.*\n"
 msgstr ""
 
-#: orisa/orisa.py:3317
+#: orisa/orisa.py:3307
 msgid ":information_source: Tip"
 msgstr ""
 
-#: orisa/orisa.py:3319
+#: orisa/orisa.py:3309
 msgid ""
 "Open the URL in a private/incognito tab next time, so you can enter the "
 "credentials of the account you want."
 msgstr ""
 
 #. Translators: type is GamerTag/BattleTag
-#: orisa/orisa.py:3331
+#: orisa/orisa.py:3321
 #, python-brace-format
 msgid "{type} added"
 msgstr ""
 
-#: orisa/orisa.py:3334
+#: orisa/orisa.py:3324
 #, python-brace-format
 msgid ""
 "OK. I've added **{new_handle}** to the list of your {new_type}s. **Your "
 "primary {primary_type} remains {primary_handle}**. To change your primary "
-"tag, use `!ow setprimary`, see help for more details."
+"tag, use `@Orisa setprimary`, see help for more details."
 msgstr ""
 
-#: orisa/orisa.py:3348
+#: orisa/orisa.py:3338
 #, python-brace-format
 msgid "Checking your {type} {tag}…"
 msgstr ""
 
 #. Translators: {type} is "BattleTag", {handle} is the tag (Foo#2345), {message} is some untranslated English error message
-#: orisa/orisa.py:3359
+#: orisa/orisa.py:3349
 #, python-brace-format
 msgid ""
 "Invalid {type}: {message}… Blizzard claims that the {type} {handle} has no "
@@ -1156,7 +1160,7 @@ msgid ""
 "helps."
 msgstr ""
 
-#: orisa/orisa.py:3370
+#: orisa/orisa.py:3360
 #, python-brace-format
 msgid ""
 "Sorry, but it seems like Blizzard's site has some problems currently ({e}), "
@@ -1164,11 +1168,11 @@ msgid ""
 msgstr ""
 
 #. Translators: :warning: is an emoji code
-#: orisa/orisa.py:3377
+#: orisa/orisa.py:3367
 msgid ":warning: No SR"
 msgstr ""
 
-#: orisa/orisa.py:3379
+#: orisa/orisa.py:3369
 #, python-brace-format
 msgid ""
 "You don't have an SR though, your profile needs to be public for SR tracking "
@@ -1176,11 +1180,11 @@ msgid ""
 msgstr ""
 
 #. Translators: :warning: is emoji code
-#: orisa/orisa.py:3400
+#: orisa/orisa.py:3390
 msgid ":warning: Nickname too long!"
 msgstr ""
 
-#: orisa/orisa.py:3402
+#: orisa/orisa.py:3392
 #, python-brace-format
 msgid ""
 "Adding your SR to your nickname as '{nickname}', would make it {len} "
@@ -1188,11 +1192,11 @@ msgid ""
 "to 28 characters or less. I will regularly try to update it."
 msgstr ""
 
-#: orisa/orisa.py:3409 orisa/orisa.py:3419
+#: orisa/orisa.py:3399 orisa/orisa.py:3409
 msgid ":warning: Cannot update nickname"
 msgstr ""
 
-#: orisa/orisa.py:3411
+#: orisa/orisa.py:3401
 msgid ""
 "I do not have sufficient permissions to update your nickname. The owner "
 "needs to move the \"Orisa\" role higher, so that is higher than your highest "
@@ -1200,36 +1204,36 @@ msgid ""
 "your nickname, sorry!"
 msgstr ""
 
-#: orisa/orisa.py:3422
+#: orisa/orisa.py:3412
 #, python-brace-format
 msgid ""
 "Right now I couldn't update your nickname, I will try that again later. "
 "People will still be able to ask for your {type}, though."
 msgstr ""
 
-#: orisa/orisa.py:3433
+#: orisa/orisa.py:3423
 msgid ":thumbsup: Vote for me on Discord Bot List"
 msgstr ""
 
-#: orisa/orisa.py:3435
+#: orisa/orisa.py:3425
 #, python-brace-format
 msgid ""
 "If you find me useful, consider voting for me [by clicking here]"
 "({VOTE_LINK})!"
 msgstr ""
 
-#: orisa/orisa.py:3441
+#: orisa/orisa.py:3431
 msgid ":heart: Say thanks by buying a coffee"
 msgstr ""
 
-#: orisa/orisa.py:3443
+#: orisa/orisa.py:3433
 #, python-brace-format
 msgid ""
 "Want to say thanks to the guy who wrote and maintains me? Why not [buy him a "
 "coffee?]({DONATE_LINK})"
 msgstr ""
 
-#: orisa/orisa.py:3473
+#: orisa/orisa.py:3463
 msgid ""
 "This command must be issued from the Orisa channel in the Discord server if "
 "you give a name as argument, so I know where to look. Omit the name argument "

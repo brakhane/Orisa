@@ -273,8 +273,8 @@ class Orisa(Plugin):
             "*Greetings*! I am excited to be here :smiley:\n"
             "To get started, create a new role named `Orisa Admin` (only the name is important, it doesn't need any special permissions) and add yourself "
             "and everybody that should be allowed to configure me.\n"
-            "Then, write `!ow config` in this channel and I will send you a link to configure me via DM.\n"
-            "*I will ignore all commands except `!ow help` and `!ow config` until I'm configured for this Discord!*"
+            "Then, write `@Orisa config` in this channel and I will send you a link to configure me via DM.\n"
+            "*I will ignore all commands except `@Orisa help` and `@Orisa config` until I'm configured for this Discord!*"
         )
 
         self._welcome_embed_title = N_(":thinking: Need help?")
@@ -758,7 +758,7 @@ class Orisa(Plugin):
 
                 if member == ctx.author and member_given:
                     footer_text += _(
-                        "\nBTW, you do not need to specify your nickname if you want your own BattleTag; just !ow is enough."
+                        "\nBTW, you do not need to specify your nickname if you want your own BattleTag; just @Orisa is enough."
                     )
                 embed.set_footer(text=footer_text)
             else:
@@ -771,7 +771,7 @@ class Orisa(Plugin):
                         # Translators: A headline for a tip for the user
                         title=_("Tip"),
                         description=_(
-                            "Use `!ow register` to register, or `!ow help` for more info."
+                            "Use `@Orisa register` to register, or `@Orisa help` for more info."
                         ),
                     )
         await ctx.channel.messages.send(content=content, embed=embed)
@@ -846,7 +846,7 @@ class Orisa(Plugin):
                     # Translators: A tip/information for a user
                     title=_("Tip"),
                     description=_(
-                        "`!ow config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin-only channel."
+                        "`@Orisa config` works in *any* channel (that I'm allowed to read messages in, of course), so you can also use an admin-only channel."
                     ),
                 ),
             )
@@ -916,7 +916,7 @@ class Orisa(Plugin):
             await reply(
                 ctx,
                 _(
-                    "{type} looks like a BattleTag and not like PC/Xbox, assuming you meant `!ow register pc`…"
+                    "{type} looks like a BattleTag and not like PC/Xbox, assuming you meant `@Orisa register pc`…"
                 ).format(type=type),
             )
             type = "pc"
@@ -945,7 +945,7 @@ class Orisa(Plugin):
                 await reply(
                     ctx,
                     _(
-                        "When registering a PSN account, you need to give your Online ID, like `!ow register psn My-Cool-ID_12345`."
+                        "When registering a PSN account, you need to give your Online ID, like `@Orisa register psn My-Cool-ID_12345`."
                     ),
                 )
                 return
@@ -957,7 +957,7 @@ class Orisa(Plugin):
             await reply(
                 ctx,
                 _(
-                    'Invalid registration type "{type}". Use `!ow register` or `!ow register pc` for PC; `!ow register xbox` for Xbox, or `!ow register psn My-Online-Id_1234` for PlayStation.'
+                    'Invalid registration type "{type}". Use `@Orisa register` or `@Orisa register pc` for PC; `@Orisa register xbox` for Xbox, or `@Orisa register psn My-Online-Id_1234` for PlayStation.'
                 ).format(type=_(type)),
             )
             return
@@ -991,14 +991,14 @@ class Orisa(Plugin):
                 # Translators: :video_game: is an emoji
                 name=_(":video_game: Not on PC?"),
                 value=_(
-                    "If you have an XBL account, use `!ow register xbox`. For PSN, use `!ow register psn Your_Online-ID`"
+                    "If you have an XBL account, use `@Orisa register xbox`. For PSN, use `@Orisa register psn Your_Online-ID`"
                 ),
                 inline=False,
             )
         embed.set_footer(
             # Translators: The translation should mention that the privacy policy is currently only available in English
             text=_(
-                "By registering, you agree to Orisa's Privacy Policy; you can read it by entering !ow privacy."
+                "By registering, you agree to Orisa's Privacy Policy; you can read it by entering @Orisa privacy."
             )
         )
 
@@ -1037,8 +1037,8 @@ class Orisa(Plugin):
                 await reply(
                     ctx,
                     _(
-                        "You cannot unregister your primary handle. Use `!ow setprimary` to set a different primary first, or "
-                        "use `!ow forgetme` to delete all your data."
+                        "You cannot unregister your primary handle. Use `@Orisa setprimary` to set a different primary first, or "
+                        "use `@Orisa forgetme` to delete all your data."
                     ),
                 )
                 return
@@ -1060,7 +1060,7 @@ class Orisa(Plugin):
                 ctx,
                 _(
                     'However, your new nickname "{nickname}" is now longer than 32 characters, which Discord doesn\'t allow. '
-                    "Please choose a different format, or shorten your nickname and do a `!ow forceupdate` afterwards."
+                    "Please choose a different format, or shorten your nickname and do a `@Orisa forceupdate` afterwards."
                 ).format(nickname=e.nickname),
             )
         except Exception:
@@ -1080,14 +1080,14 @@ class Orisa(Plugin):
             await reply(
                 ctx,
                 _(
-                    "`setprimary` requires the first few letters of the handle you want to make your primary as a parameter, e.g. `!ow setprimary foo`"
+                    "`setprimary` requires the first few letters of the handle you want to make your primary as a parameter, e.g. `@Orisa setprimary foo`"
                 ),
             )
             return
         async with self.database.session() as session:
             user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, _("You are not registered. Use `!ow register` first."))
+                await reply(ctx, _("You are not registered. Use `@Orisa register` first."))
                 return
             try:
                 index = resolve_handle_or_index(user, handle_or_index)
@@ -1221,11 +1221,11 @@ Retail Jedi"""
         msg = "Done. "
         if new_setting:
             msg += _(
-                "Your nick will be updated even when you are not in an OW voice channel. Use `!ow alwaysshowsr off` to turn it off again."
+                "Your nick will be updated even when you are not in an OW voice channel. Use `@Orisa alwaysshowsr off` to turn it off again."
             )
         else:
             msg += _(
-                "Your nick will only be updated when you are in an OW voice channel. Use `!ow alwaysshowsr on` to always update your nick."
+                "Your nick will only be updated when you are in an OW voice channel. Use `@Orisa alwaysshowsr on` to always update your nick."
             )
         await reply(ctx, msg)
 
@@ -1245,7 +1245,7 @@ Retail Jedi"""
                 )
             user = await self.database.user_by_discord_id(session, discord_id)
             if not user:
-                await reply(ctx, _("You are not registered! Do `!ow register` first."))
+                await reply(ctx, _("You are not registered! Do `@Orisa register` first."))
             else:
                 fault = False
                 async with ctx.channel.typing:
@@ -1256,7 +1256,7 @@ Retail Jedi"""
                             await reply(
                                 ctx,
                                 _(
-                                    "Blizzard says your {type} {handle} does not exist. Did you change it? Use `!ow register` to update it.".format(
+                                    "Blizzard says your {type} {handle} does not exist. Did you change it? Use `@Orisa register` to update it.".format(
                                         type=handle.desc, handle=handle.handle
                                     )
                                 ),
@@ -1364,7 +1364,7 @@ Retail Jedi"""
         async with self.database.session() as session:
             user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, _("You are not registered! Do `!ow register` first."))
+                await reply(ctx, _("You are not registered! Do `@Orisa register` first."))
                 return
             user.roles = roles
             await run_sync(session.commit)
@@ -1386,7 +1386,7 @@ Retail Jedi"""
                     ctx,
                     # Translators: Orisa Admin must not be translated
                     _(
-                        "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `!ow config` to configure me first!"
+                        "I'm not configured yet! Somebody with the role `Orisa Admin` needs to issue `@Orisa config` to configure me first!"
                     ),
                 )
                 try:
@@ -1467,8 +1467,8 @@ Retail Jedi"""
                     "It will also send a short message to the chat when you ranked up.\n"
                     "*Like Overwatch's Orisa, this bot is quite young and still new at this. Report issues to <@!{OWNER}>*\n"
                     "\n**The commands only work in the <#{channel_id}> channel or by sending me a DM**\n"
-                    "If you are new to Orisa, you are probably looking for `!ow register` or `!ow register xbox`\n"
-                    "If you want to use Orisa on your own server or help developing it, enter `!ow about`\n"
+                    "If you are new to Orisa, you are probably looking for `@Orisa register` or `@Orisa register xbox`\n"
+                    "If you want to use Orisa on your own server or help developing it, enter `@Orisa about`\n"
                     "Parameters in [square brackets] are optional."
                 ).format(
                     OWNER=self.client.application_info.owner.id, channel_id=channel_id
@@ -1476,40 +1476,40 @@ Retail Jedi"""
             ),
         )
         embed.add_field(
-            name="!ow [nick]",
-            # Translators: help text for !ow <some nickname>
+            name="@Orisa [nick]",
+            # Translators: help text for @Orisa <some nickname>
             value=(
                 _(
                     "Shows the BattleTag for the given nickname, or your BattleTag "
                     "if no nickname is given. `nick` can contain spaces. A fuzzy search for the nickname is performed.\n"
                     "*Examples:*\n"
-                    "`!ow` will show your BattleTag\n"
-                    '`!ow the chosen one` will show the BattleTag of "tHE ChOSeN ONe"\n'
-                    '`!ow orisa` will show the BattleTag of "SG | Orisa", "Orisa", or "Orisad"\n'
-                    '`!ow oirsa` and `!ow ori` will probably also show the BattleTag of "Orisa"'
+                    "`@Orisa` will show your BattleTag\n"
+                    '`@Orisa the chosen one` will show the BattleTag of "tHE ChOSeN ONe"\n'
+                    '`@Orisa orisa` will show the BattleTag of "SG | Orisa", "Orisa", or "Orisad"\n'
+                    '`@Orisa oirsa` and `@Orisa ori` will probably also show the BattleTag of "Orisa"'
                 )
             ),
             inline=False,
         )
         embed.add_field(
-            name="!ow about",
+            name="@Orisa about",
             value=_(
                 "Shows information about Orisa, and how you can add her to your own Discord server, or help supporting her."
             ),
             inline=False,
         )
         embed.add_field(
-            name="!ow alwaysshowsr [on/off]",
+            name="@Orisa alwaysshowsr [on/off]",
             value=_(
                 "On some servers, Orisa will only show your SR or rank in your nick when you are in an OW voice channel. If you want your nick to always show your SR or rank, "
                 "set this to on.\n"
                 "*Example:*\n"
-                "`!ow alwaysshowsr on`"
+                "`@Orisa alwaysshowsr on`"
             ),
             inline=False,
         )
         embed.add_field(
-            name="!ow config",
+            name="@Orisa config",
             # Translators: don't translate "Orisa Admin"
             value=_(
                 'This command can only be used by members with the "Orisa Admin" role and allows them to configure Orisa for the specific Discord server.'
@@ -1517,14 +1517,14 @@ Retail Jedi"""
             inline=False,
         )
         embed.add_field(
-            name="!ow dumpsr",
-            # Translators: help for !ow dumpsr
+            name="@Orisa dumpsr",
+            # Translators: help for @Orisa dumpsr
             value=_("Download your SR history as an Excel spreadsheet"),
             inline=False,
         )
         embed.add_field(
-            name="!ow forceupdate",
-            # Translators: help !ow forceupdate
+            name="@Orisa forceupdate",
+            # Translators: help @Orisa forceupdate
             value=_(
                 "Immediately checks your account data and updates your nick accordingly.\n"
                 "*Checks and updates are done automatically, use this command only if "
@@ -1533,8 +1533,8 @@ Retail Jedi"""
             inline=False,
         )
         embed.add_field(
-            name="!ow forgetme",
-            # Translators: help !ow forgetme
+            name="@Orisa forgetme",
+            # Translators: help @Orisa forgetme
             value=_(
                 "All your BattleTags will be removed from the database and your nick "
                 "will not be updated anymore. You can re-register at any time."
@@ -1543,8 +1543,8 @@ Retail Jedi"""
         )
 
         embed.add_field(
-            name="!ow format *format*",
-            # Translators: help !ow format. $placeholder can be translated, as can ${placeholder}
+            name="@Orisa format *format*",
+            # Translators: help @Orisa format. $placeholder can be translated, as can ${placeholder}
             value=_(
                 "Lets you specify how your SR or rank is displayed. It will always be shown in [square\u00a0brackets] appended to your name.\n"
                 "In the *format*, you can specify placeholders with `$placeholder` or `${placeholder}`."
@@ -1574,10 +1574,10 @@ Retail Jedi"""
         embed.add_field(
             name=_("★ *ow format examples*"),
             value=_(
-                "`!ow format hello $sr` will result in `[hello 12-34-45]`.\n"
-                "`!ow format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
-                "`!ow format $damage $support` in `[{SYMBOL_DPS}1234 {SYMBOL_SUPPORT}2345]`.\n"
-                "`!ow format $shortdamage` in `[{SYMBOL_DPS}12]`.\n"
+                "`@Orisa format hello $sr` will result in `[hello 12-34-45]`.\n"
+                "`@Orisa format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
+                "`@Orisa format $damage $support` in `[{SYMBOL_DPS}1234 {SYMBOL_SUPPORT}2345]`.\n"
+                "`@Orisa format $shortdamage` in `[{SYMBOL_DPS}12]`.\n"
                 "*By default, the format is `$sr`*"
             ).format(SYMBOL_DPS=self.SYMBOL_DPS, SYMBOL_SUPPORT=self.SYMBOL_SUPPORT),
             inline=False,
@@ -1589,67 +1589,67 @@ Retail Jedi"""
         embeds.append(embed)
 
         embed.add_field(
-            name="!ow get nick",
+            name="@Orisa get nick",
             value=(
                 _(
-                    "Same as `!ow [nick]`, (only) useful when the nick is the same as a command.\n"
+                    "Same as `@Orisa [nick]`, (only) useful when the nick is the same as a command.\n"
                     "*Example:*\n"
-                    '`!ow get register` will search for the nick "register".'
+                    '`@Orisa get register` will search for the nick "register".'
                 )
             ),
             inline=False,
         )
         embed.add_field(
-            name="!ow register [pc/xbox/psn]",
+            name="@Orisa register [pc/xbox/psn]",
             value=_(
                 "Create a link to your BattleNet or Gamertag account, or adds a secondary BattleTag to your account. "
                 "Your OW account will be checked periodically and your nick will be "
                 "automatically updated to show your SR or rank (see the *format* command for more info). "
-                "`!ow register` and `!ow register pc` will register a PC account, `!ow register xbox` will register an XBL account. "
+                "`@Orisa register` and `@Orisa register pc` will register a PC account, `@Orisa register xbox` will register an XBL account. "
                 "If you register an XBL account, you have to link it to your Discord beforehand. "
-                "For PSN accounts, you have to give your Online ID as part of the command, like `!ow register psn Your_Online-ID`."
+                "For PSN accounts, you have to give your Online ID as part of the command, like `@Orisa register psn Your_Online-ID`."
             ),
             inline=False,
         )
-        embed.add_field(name="!ow privacy", value=_("Show Orisa's Privacy Policy"))
+        embed.add_field(name="@Orisa privacy", value=_("Show Orisa's Privacy Policy"))
         embed.add_field(
-            name="!ow setprimary *battletag*",
+            name="@Orisa setprimary *battletag*",
             value=_(
                 "Makes the given secondary BattleTag your primary BattleTag. Your primary BattleTag is the one you are currently using: its SR is shown in your nick\n"
                 "The search is performed fuzzy and case-insensitve, so you normally only need to give the first (few) letters.\n"
                 "The given BattleTag must already be registered as one of your BattleTags.\n"
                 "*Example:*\n"
-                "`!ow setprimary jjonak`"
+                "`@Orisa setprimary jjonak`"
             ),
             inline=False,
         )
         embed.add_field(
-            name="!ow setprimary *index*",
+            name="@Orisa setprimary *index*",
             value=_(
-                "Like `!ow setprimary battletag`, but uses numbers, 1 is your first secondary, 2 your seconds etc. The order is shown by `!ow` (alphabetical)\n"
+                "Like `@Orisa setprimary battletag`, but uses numbers, 1 is your first secondary, 2 your seconds etc. The order is shown by `@Orisa` (alphabetical)\n"
                 "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen).\n"
                 "*Example:*\n"
-                "`!ow setprimary 1`"
+                "`@Orisa setprimary 1`"
             ),
             inline=False,
         )
         embed.add_field(
-            name="!ow setroles *roles*",
+            name="@Orisa setroles *roles*",
             # Translators: the role codes d, m, o, s cannot be translated
             value=_(
-                "Sets the role you can/want to play. It will be shown in `!ow` and will also be used to update the number of roles "
+                "Sets the role you can/want to play. It will be shown in `@Orisa` and will also be used to update the number of roles "
                 "in voice channels you join.\n"
                 '*roles* is a single "word" consisting of one or more of the following identifiers (both upper and lower case work):\n'
                 "`d` for DPS, `m` for Main Tank, `o` for Off Tank, `s` for Support\n"
                 "*Examples:*\n"
-                "`!ow setroles d`: you only play DPS.\n"
-                "`!ow setroles so`: you play Support and Off Tanks.\n"
-                "`!ow setroles dmos`: you are a true Flex and play everything."
+                "`@Orisa setroles d`: you only play DPS.\n"
+                "`@Orisa setroles so`: you play Support and Off Tanks.\n"
+                "`@Orisa setroles dmos`: you are a true Flex and play everything."
             ),
             inline=False,
         )
         embed.add_field(
-            name="!ow srgraph [from_date]",
+            name="@Orisa srgraph [from_date]",
             value=_(
                 "*This command is in beta and can change at any time; it might also have bugs, report them please*\n"
                 "Shows a graph of your SR. If from_date (as DD.MM.YY or YYYY-MM-DD) is given, the graph starts at that date, otherwise it starts "
@@ -1658,7 +1658,7 @@ Retail Jedi"""
             inline=False,
         )
         embed.add_field(
-            name="!ow usersrgraph *username* [from_date]",
+            name="@Orisa usersrgraph *username* [from_date]",
             value=_(
                 '*This command can only be used by users with the "Orisa Admin" role!*\n'
                 "Like srgraph, but shows the graph for the given user."
@@ -1666,24 +1666,24 @@ Retail Jedi"""
             inline=False,
         )
         embed.add_field(
-            name="!ow unregister *battletag*",
+            name="@Orisa unregister *battletag*",
             value=_(
                 "If you have secondary BattleTags, you can remove the given BattleTag from the list. The search is performed fuzzy, so "
                 "you normally only have to specify the first few letters of the BattleTag to remove.\n"
                 "You cannot remove your primary BattleTag, you have to choose a different primary BattleTag first.\n"
                 "*Example:*\n"
-                "`!ow unregister foo`"
+                "`@Orisa unregister foo`"
             ),
             inline=False,
         )
         embed.add_field(
-            name="!ow unregister *index*",
+            name="@Orisa unregister *index*",
             value=_(
                 "Like `unregister battletag`, but removes the battletag by number. Your first secondary is 1, your second 2, etc.\n"
-                "The order is shown by the `!ow` command (it's alphabetical).\n"
+                "The order is shown by the `@Orisa` command (it's alphabetical).\n"
                 "Normally, you should not need to use this alternate form, it's available in case Orisa gets confused on what BattleTag you mean (which shouldn't happen)\n"
                 "*Example:*\n"
-                "`!ow unregister 1`"
+                "`@Orisa unregister 1`"
             ),
             inline=False,
         )
@@ -1698,7 +1698,7 @@ Retail Jedi"""
                 user = await self.database.user_by_discord_id(session, ctx.author.id)
                 if not user:
                     await reply(
-                        ctx, _("You are not registered. Do `!ow register` first!")
+                        ctx, _("You are not registered. Do `@Orisa register` first!")
                     )
                     return
                 else:
@@ -2990,7 +2990,7 @@ Retail Jedi"""
                     msg += _("\nPlease shorten your nickname.")
                 else:
                     msg += _(
-                        "\nTry to use the $sr format (you can type `!ow format $sr` into this DM channel), or shorten your nickname."
+                        "\nTry to use the $sr format (you can type `@Orisa format $sr` into this DM channel), or shorten your nickname."
                     )
                 msg += _(
                     "\nYour nickname cannot be updated until this is done. I'm sorry for the inconvenience."
@@ -3189,7 +3189,7 @@ Retail Jedi"""
                 if battle_tag is None:
                     await user_channel.messages.send(
                         _(
-                            "I'm sorry, it seems like you don't have a BattleTag. Use `!ow register xbox` to register an Xbox account."
+                            "I'm sorry, it seems like you don't have a BattleTag. Use `@Orisa register xbox` to register an Xbox account."
                         )
                     )
                     return
@@ -3247,8 +3247,8 @@ Retail Jedi"""
                     name=_(":information_source: Pro Tips"),
                     value=_(
                         "On some servers, I will only update your nick if you join a OW voice channel. If you want your nick to always show your SR, "
-                        "use the `!ow alwaysshowsr` command. If you want me to show your rank instead of your SR, use `!ow format $rank`.\n"
-                        "If you have more than one account, simply issue `!ow register` again.\n"
+                        "use the `@Orisa alwaysshowsr` command. If you want me to show your rank instead of your SR, use `@Orisa format $rank`.\n"
+                        "If you have more than one account, simply issue `@Orisa register` again.\n"
                     ),
                     inline=False,
                 )
@@ -3325,7 +3325,7 @@ Retail Jedi"""
                             # Translators: {new_type}s is plural. type is BattleTag/GamerTag
                             description=_(
                                 "OK. I've added **{new_handle}** to the list of your {new_type}s. **Your primary {primary_type} remains {primary_handle}**. "
-                                "To change your primary tag, use `!ow setprimary`, see help for more details."
+                                "To change your primary tag, use `@Orisa setprimary`, see help for more details."
                             ).format(
                                 new_handle=new_handle.handle,
                                 new_type=_(new_handle.desc),
