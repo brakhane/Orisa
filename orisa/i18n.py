@@ -179,18 +179,6 @@ class I18NCommandsManager(CommandsManager):
         ctx.tokens = tokens
         ctx.manager = self
 
-        mention = f"<@{self.client.application_info.client_id}>"
-
-        mentions_us = mention in message.content
-
-        if not mentions_us and message.guild_id is not None and message.content.startswith("!ow"):
-            await reply(ctx, _(
-                'After August 31th, I will not be able to see commands unless you mention me, please use "{new_cmd}" in the future. '
-                'You can still use "{cmd}" in DMs without mentioning me. Efi is working hard on making me understand slash commands as well.'
-            ).format(new_cmd=message.content.replace("!ow", mention), cmd=message.content))
-
-
-
         # step 3, invoke the context to try and match the command and run it
         await ctx.try_invoke()
 

@@ -42,6 +42,6 @@ At the moment, you'll need to contact Orisa's owner OWNER_ID; although "!ow dump
 
 __**How can I delete my data?**__
 
-Sending the `!ow forgetme` command will delete all personal data from the database.
+Sending the `@Orisa forgetme` command will delete all personal data from the database.
 
 Some information might still exist in log files for up to 7 days. If you wish that data to be deleted sooner, contact Orisa's owner OWNER_ID.
