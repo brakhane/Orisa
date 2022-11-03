@@ -34,6 +34,7 @@ prospector = "^1.1"
 h2 = ">=3.1.0"
 arrow = "*"
 #unicodedata2 = "^13.0"
+unicodedata2 = "^14.0.0"
 
 [tool.poetry.dev-dependencies]
 "black" = { version = "*", allow-prereleases = true }
