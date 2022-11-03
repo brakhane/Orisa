@@ -79,6 +79,7 @@ _SESSION = asks.Session(
 
 
 async def get_sr(handle):
+    raise BlizzardError("no profiles for OW2 yet")
     try:
         lock = SR_LOCKS[handle.handle]
     except KeyError:

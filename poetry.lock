@@ -1052,11 +1052,14 @@ mypy-extensions = ">=0.3.0"
 
 [[package]]
 name = "unicodedata2"
-version = "13.0.0.post2"
-description = "Unicodedata backport for Python 2/3 updated to the latest Unicode version."
+version = "14.0.0"
+description = "Unicodedata backport updated to the latest Unicode version."
 category = "main"
 optional = false
 python-versions = "*"
+
+[package.extras]
+testing = ["pytest", "coverage", "pytest-xdist", "pytest-randomly"]
 
 [[package]]
 name = "wcwidth"
@@ -1115,8 +1118,8 @@ multidict = ">=4.0"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.7"
-content-hash = "70ae7a4d249cc879b610a1780d37af1762d525e4b08761f199a42ab70f1a37f2"
+python-versions = ">=3.7.1,<3.10"
+content-hash = "da33343c93f54ff77c7ae214917c6b759f4f5351d3c5de2791a4b8969e76eea4"
 
 [metadata.files]
 aiofiles = [
@@ -1818,35 +1821,7 @@ typing-inspect = [
     {file = "typing_inspect-0.4.0-py3-none-any.whl", hash = "sha256:a7cb36c4a47d034766a67ea6467b39bd995cd00db8d4db1aa40001bf2d674a9b"},
     {file = "typing_inspect-0.4.0.tar.gz", hash = "sha256:cf41eb276cc8955a45e03c15cd1efa6c181a8775a38ff0bfda99d28af97bcda3"},
 ]
-unicodedata2 = [
-    {file = "unicodedata2-13.0.0.post2-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:95173328ee8010f30bcfad6e69f47bc22256049e276bff29d28d8a52e65e0e70"},
-    {file = "unicodedata2-13.0.0.post2-cp27-cp27m-manylinux1_i686.whl", hash = "sha256:f60ab375275073a8328f21e1bac0bf3b17956aff910c1f868befbbf78c3cd02f"},
-    {file = "unicodedata2-13.0.0.post2-cp27-cp27m-manylinux1_x86_64.whl", hash = "sha256:741919f9f1794bb89934598167b85934bccb50900e246b3af8805570e816215d"},
-    {file = "unicodedata2-13.0.0.post2-cp27-cp27m-win32.whl", hash = "sha256:6fd926c8a3d0ab4b8f36c94df9a8540cb8a77221c8936a2f546483fbdf38b3e5"},
-    {file = "unicodedata2-13.0.0.post2-cp27-cp27m-win_amd64.whl", hash = "sha256:ba94e331ad771093bedd8341186d2f909dd7c8328dd99c15dc8f6d5730b38ab3"},
-    {file = "unicodedata2-13.0.0.post2-cp27-cp27mu-manylinux1_i686.whl", hash = "sha256:084186dfe2b7284d3e78d7120efde6df995f0ec9dea225bc70dafe103601a931"},
-    {file = "unicodedata2-13.0.0.post2-cp27-cp27mu-manylinux1_x86_64.whl", hash = "sha256:14ce249af737e35bd7973d178b69a8ff4794841beca1b620dae1b6c22dd2f9d2"},
-    {file = "unicodedata2-13.0.0.post2-cp35-cp35m-macosx_10_6_intel.whl", hash = "sha256:e5b992e4db51488a9756718f29cdad025cd2b7f6694d49524eca9723b21d000a"},
-    {file = "unicodedata2-13.0.0.post2-cp35-cp35m-manylinux1_i686.whl", hash = "sha256:abecf04a0cc2c72d48173ddfc3dadf9397d64ce9724a08b0f052920707a5a9ec"},
-    {file = "unicodedata2-13.0.0.post2-cp35-cp35m-manylinux1_x86_64.whl", hash = "sha256:e3561d2a1ab55882723b78d9f91b7f98e708bfe3587982e67813947051db3502"},
-    {file = "unicodedata2-13.0.0.post2-cp35-cp35m-win32.whl", hash = "sha256:102a9610e0947e125772ab228059c7e919b35237d6888a5fcdfbbb732a8e6a58"},
-    {file = "unicodedata2-13.0.0.post2-cp35-cp35m-win_amd64.whl", hash = "sha256:a5e1ad768e8366b882b0bc3c7b06f48c14df6d3e75c25baccf7af11655e4d742"},
-    {file = "unicodedata2-13.0.0.post2-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:3600d241a189e543be50412ce53e02db3120d8cae4c3add38a6cc443e853903a"},
-    {file = "unicodedata2-13.0.0.post2-cp36-cp36m-manylinux1_i686.whl", hash = "sha256:147e9b3f9363d774e79ec11c5cb8d1bc4bc6043b7c98ed82656fcd6c95e26a7f"},
-    {file = "unicodedata2-13.0.0.post2-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:26ad36d7a1c6ab652d66e29e844b4d2afd71c718d37a85140bba64b228eb3adc"},
-    {file = "unicodedata2-13.0.0.post2-cp36-cp36m-win32.whl", hash = "sha256:08bed68570fe665f3627056cd7efc8d45f682d1ad442361f5e6caf2ed1c177ba"},
-    {file = "unicodedata2-13.0.0.post2-cp36-cp36m-win_amd64.whl", hash = "sha256:db2c63a214720caead3a8eba87b593558e0cb7dddbafaaa0a5d91f98553e8aad"},
-    {file = "unicodedata2-13.0.0.post2-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:cca8965804c9765a22f2bc7241a944cd58539c0b8d92f7933ec1cfc44804067a"},
-    {file = "unicodedata2-13.0.0.post2-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:97aaa94497a6fcdc75f7afcc35eccd5061467298b600f473304582f32e27e30f"},
-    {file = "unicodedata2-13.0.0.post2-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:4d2aed77b06c1b6e74a15c0d56c3af7d16072e4abf4dbe55635e7a7ceb123e88"},
-    {file = "unicodedata2-13.0.0.post2-cp37-cp37m-win32.whl", hash = "sha256:da52826de69076a277d5460ee36d95db7cc1a12d4f2ffb45807dcaf0488094d9"},
-    {file = "unicodedata2-13.0.0.post2-cp37-cp37m-win_amd64.whl", hash = "sha256:92b5cc2ed195f03cf2fac1226cbc825f2df9f0cf2fc8b6f13d1292251bf6f6d6"},
-    {file = "unicodedata2-13.0.0.post2-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:35c1eb9de478b72164e062c7cb67e7594e829fc7ff718cb5b125e6240257291a"},
-    {file = "unicodedata2-13.0.0.post2-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:d4e3312b6c7b98516a52243023d6c74c986cd6ce2bcad65bfa895a2b0c905426"},
-    {file = "unicodedata2-13.0.0.post2-cp38-cp38-win32.whl", hash = "sha256:7ff3da0536bc9e447abbe702b8032b4469f6e9726ed66527eb9656b9a90f376c"},
-    {file = "unicodedata2-13.0.0.post2-cp38-cp38-win_amd64.whl", hash = "sha256:8c9a60d73d7baea980dc45d23e8a33d7734e94e2c8712ed68b46849e88683726"},
-    {file = "unicodedata2-13.0.0.post2.tar.gz", hash = "sha256:a83e504fb0e8ed4757194e61c3f7b69fb3c914856057bea968d0950f80f947fa"},
-]
+unicodedata2 = []
 wcwidth = [
     {file = "wcwidth-0.1.7-py2.py3-none-any.whl", hash = "sha256:f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c"},
     {file = "wcwidth-0.1.7.tar.gz", hash = "sha256:3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e"},

@@ -301,8 +301,8 @@ class Orisa(Plugin):
 
         await self.spawn(self._sync_all_handles_task)
 
-        logger.info("spawning cron")
-        await self.spawn(self._cron_task)
+        #logger.info("spawning cron")
+        #await self.spawn(self._cron_task)
 
         await self.spawn(self._web_server)
 
@@ -3080,6 +3080,8 @@ Retail Jedi"""
                             logger.exception("cannot sync session")
 
     async def _sync_check(self):
+        logger.debug("sync handles disabled")
+        return
         async with self.database.session() as session:
             ids_to_sync = await self.database.get_handles_to_be_synced(session)
         if ids_to_sync:
