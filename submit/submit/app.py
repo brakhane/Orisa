@@ -26,7 +26,7 @@ from starlite import (
 )
 from starlite.types import ASGIApp, Receive, Scope, Send
 
-from submit.process import process_image
+from submit.process import button_clicked, process_image
 
 from .shared import *
 
@@ -177,6 +177,14 @@ async def discord(
             processtest(data)
         else:
             NURSERY.start_soon(process, data)
+        return {
+            "type": 5,
+            "data": {
+                "flags": 64,
+            },
+        }
+    elif isinstance(data, MessageComponentInteraction):
+        button_clicked.send(data.json())
         return {
             "type": 5,
             "data": {

@@ -6,15 +6,14 @@ from enum import Flag, auto
 import sqlalchemy.types as types
 from sqlalchemy import (
     BigInteger,
-    Boolean,
     Column,
     DateTime,
     ForeignKey,
     Integer,
+    LargeBinary,
     SmallInteger,
     String,
     create_engine,
-    func,
 )
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -28,6 +27,16 @@ Base = declarative_base()
 _ = NP_ = lambda x, y=None: x
 
 DATABASE_URI = "sqlite:///database-test.sqlite"
+
+
+class ProfileUpload(Base):
+    __tablename__ = "profile_uploads"
+    id = Column(Integer, primary_key=True, index=True)
+    timestamp = Column(DateTime, nullable=False)
+    interaction_token = Column(String, nullable=False)
+    user_id = Column(Integer, nullable=False)
+    image = Column(LargeBinary, nullable=False)
+    image_filename = Column(String, nullable=False)
 
 
 class User(Base):
@@ -253,6 +262,7 @@ class SR(Base):
     tank = Column(SmallInteger)
     damage = Column(SmallInteger)
     support = Column(SmallInteger)
+    hours_played = Column(Integer, nullable=True)
 
     @property
     def values(self):

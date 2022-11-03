@@ -1,7 +1,13 @@
-from io import BytesIO
+import base64
+import dataclasses
+import datetime as dt
+import json
+import logging
 import math
 import os
+import random
 import re
+import time
 from bisect import bisect
 from collections import namedtuple
 from contextlib import ExitStack
@@ -9,27 +15,29 @@ from dataclasses import dataclass
 from difflib import get_close_matches
 from functools import total_ordering
 from pathlib import Path
-from tempfile import TemporaryFile
 from typing import Optional
 
 import cv2 as cv
-import json
 import dramatiq
 import httpx
-import matplotlib.pyplot as plt
+import msgpack
 import numpy as np
 import numpy.typing as npt
 import pytesseract
 from dramatiq.brokers.redis import RedisBroker
 from dramatiq.rate_limits import ConcurrentRateLimiter
 from dramatiq.rate_limits.backends import RedisBackend
+from redis import Redis
 
-from .models import SR, Database, Handle, User
-from .shared import APPID, CommandInteraction
+from .models import Database, Handle, ProfileUpload
+from .shared import APPID, CommandInteraction, MessageComponentInteraction
+
+LOGGER = logging.getLogger(__name__)
 
 # pytesseract.pytesseract.tesseract_cmd = R"d:\tesseract-ocr\tesseract.exe"
 
 backend = RedisBackend()
+redis = Redis()
 broker = RedisBroker(host="localhost")
 dramatiq.set_broker(broker)
 PROCESS_RATELIMIT = ConcurrentRateLimiter(
@@ -37,6 +45,8 @@ PROCESS_RATELIMIT = ConcurrentRateLimiter(
 )
 
 TOKEN = os.environ["BOT_TOKEN"]
+
+HEADERS = {"Authorization": f"Bot {TOKEN}"}
 
 Coords = namedtuple("Coords", "x y")
 
@@ -86,6 +96,12 @@ class Ranks:
     tank: Optional[Rank] = None
     damage: Optional[Rank] = None
     support: Optional[Rank] = None
+
+    def export(self):
+        return [
+            r.sr // 100 if r else None
+            for r in (self.combined, self.tank, self.damage, self.support)
+        ]
 
 
 @dataclass
@@ -150,18 +166,6 @@ class ScreenshotReader:
 
         bg_alpha = bg[:, :, 3] / 255
         symbol_alpha = symbol[:, :, 3] / 255
-
-        # FIXME: don't iterate in Python
-        # for i in range(3):
-        #     bg[:, :, i] = (
-        #         (1 - symbol_alpha) * (
-        #             bg_alpha * bg[:, :, i] + (1-bg_alpha)*background_color[i]
-        #         ) + (
-        #             symbol_alpha * symbol[:, :, i]
-        #         )
-        #     )
-
-        # res = bg[:, :, :3]
 
         bg_alpha = np.repeat(bg_alpha[:, :, np.newaxis], 3, axis=2)
         symbol_alpha = np.repeat(symbol_alpha[:, :, np.newaxis], 3, axis=2)
@@ -320,9 +324,19 @@ class ScreenshotReader:
 def _reply(client, interaction, content, **more):
     client.patch(
         f"https://discord.com/api/v10/webhooks/{APPID}/{interaction.token}/messages/@original",
-        headers={"Authorization": f"Bot {TOKEN}"},
+        headers=HEADERS,
         json={"content": content, "flags": 64, **more},
     )
+
+
+@dataclass
+class SubmitData:
+    profile_upload_id: int
+    handle_id: Optional[int] = None
+    nickname_correct: Optional[bool] = None
+    hours: Optional[int] = None
+    current_sr: Optional[list[Optional[int]]] = None
+    season_high_sr: Optional[list[Optional[int]]] = None
 
 
 @dramatiq.actor(min_backoff=2500, max_backoff=60000, max_retries=10, time_limit=30000)
@@ -338,7 +352,6 @@ def process_image(interaction_json: str):
         attachment = interaction.data.resolved.attachments[
             int(interaction.data.options[0].value)
         ]
-        print(attachment)
 
         if attachment.size > 8 * 1024 * 1024:
             _reply(client, interaction, f"file too large ({attachment.size})")
@@ -353,11 +366,15 @@ def process_image(interaction_json: str):
             _reply(
                 client,
                 interaction,
-                "Image has incorrect dimensions. It must be in 16:9 or 16:10.",
+                "Image has incorrect dimensions. It must be a screenshot of the career profile page in 16:9 or 16:10.",
             )
             return
 
-        user = db.user_by_discord_id(session, interaction.member.user.id)
+        user_id = (
+            interaction.member.user.id if interaction.member else interaction.user.id
+        )
+
+        user = db.user_by_discord_id(session, user_id)
 
         if user is None:
             _reply(
@@ -367,17 +384,29 @@ def process_image(interaction_json: str):
             )
             return
 
-        print(">>>> USER IS ", user.handles)
-
         # _reply(client, interaction, f"downloading {attachment.url} ({attachment.size} bytes)")
 
         resp: httpx.Response = httpx.get(attachment.url)
         resp.raise_for_status()
-        raw = np.fromstring(resp.read(), np.uint8)
+
+        img_bytes = resp.read()
+
+        raw = np.fromstring(img_bytes, np.uint8)
         img = cv.imdecode(raw, cv.IMREAD_COLOR)
         if img is None:
             _reply(client, interaction, "Can't decode image!")
             return
+
+        profile_upload_obj = ProfileUpload(
+            interaction_token=interaction.token,
+            image=img_bytes,
+            image_filename=attachment.filename,
+            user_id=user_id,
+            timestamp=dt.datetime.now(),
+        )
+
+        session.add(profile_upload_obj)
+        session.flush()
 
         data = ScreenshotReader(img).parse_screenshot(debug=True)
 
@@ -405,6 +434,23 @@ def process_image(interaction_json: str):
         else:
             nickname_str = f"{data.nick} :x:\n*(not found in database)*"
 
+        hours_str: str
+
+        if data.hours:
+            if matching_handle:
+                current_sr = matching_handle.current_sr
+                played = current_sr.hours_played if current_sr else None
+                if played and played >= data.hours:
+                    hours_str = (
+                        f"{data.hours} :x:\n*(database shows {played} hours played)*"
+                    )
+                else:
+                    hours_str = f"{data.hours} :white_check_mark:"
+            else:
+                hours_str = str(data.hours)
+        else:
+            hours_str = "??? :x:\n*(can't read hours in image)*"
+
         rank_field_list = [
             {
                 "name": role.capitalize(),
@@ -416,37 +462,63 @@ def process_image(interaction_json: str):
 
         submit_button = {
             "type": 2,
-            "style": 1,
-            "custom_id": "ok",
+            "style": 3,
             "emoji": {"name": "👍"},
             "label": "Everything is correct. Update the database.",
         }
 
-        no_submit_button = {
+        ignore_button = {
             "type": 2,
             "style": 2,
-            "custom_id": "ok",
+            "custom_id": "ignore",
             "emoji": {"name": "👍"},
-            "label": "You've read everything correctly. I will fix the errors and try again.",
+            "label": "You've recognized everything correctly. I will fix the issues and try again.",
         }
 
         review_button = {
             "type": 2,
             "style": 2,
-            "custom_id": "shit",
             "emoji": {"name": "👎"},
             "label": "You've made a mistake. Let Efi have a look!",
         }
 
-        if matching_btag:
-            txt = (
-                'Please make sure that **all** information, including your season high and "hours played" '
-                "is correct. "
-                "I've attached an image of where I think the rank icons are. Make sure I detected "
-                "all of them, and identified them correctly. If not, please request a review so Efi can take a "
-                "look."
+        button_data = dataclasses.astuple(
+            SubmitData(
+                profile_upload_id=profile_upload_obj.id,
+                handle_id=matching_handle.id if matching_handle else None,
+                nickname_correct=matching_btag == data.nick if matching_btag else None,
+                hours=data.hours,
+                current_sr=data.current.export() if data.current else None,
+                season_high_sr=data.season_high.export() if data.season_high else None,
             )
-            buttons = [submit_button, review_button]
+        )
+
+        button_data_str = base64.a85encode(msgpack.packb(button_data)).decode()
+
+        submit_button["custom_id"] = f"submit_{button_data_str}"
+        review_button["custom_id"] = f"review_{button_data_str}"
+        ignore_button["custom_id"] = f"ignore_{button_data_str}"
+
+        if matching_btag:
+            if ":x:" in hours_str or not data.hours:
+                txt = (
+                    "\n"
+                    "It looks like the screenshot you've uploaded is older (or the same) than your last one, so I can't "
+                    "update your rank. Please request a review if I misread."
+                )
+
+                buttons = [ignore_button, review_button]
+
+            else:
+                txt = (
+                    'Please make sure that **all** information, including your season high and "hours played", '
+                    'as well as the text for "current competitive season", is correct. '
+                    "I've also attached an image of where I think the rank icons are. Please make sure I detected "
+                    "all of them, and identified them correctly. If not, please request a review so Efi can take a "
+                    "look."
+                )
+
+                buttons = [submit_button, review_button]
         else:
             txt = (
                 f"None of your registered accounts is named *{data.nick}*, I even checked for "
@@ -457,15 +529,15 @@ def process_image(interaction_json: str):
                 "Sombra!) – in that case please submit the image for review "
                 "so Efi can adjust my reading glasses."
             )
-            buttons = [no_submit_button, review_button]
+
+            buttons = [ignore_button, review_button]
 
         res = client.patch(
             f"https://discord.com/api/v10/webhooks/{APPID}/{interaction.token}/messages/@original",
-            headers={"Authorization": f"Bot {TOKEN}"},
+            headers=HEADERS,
             data={
                 "payload_json": json.dumps(
                     {
-                        "content": str(data),
                         "components": [
                             {
                                 "type": 1,
@@ -482,17 +554,17 @@ def process_image(interaction_json: str):
                                     "text": (
                                         "Order of icons is (from top to bottom): Combined, Tank, "
                                         'Damage, Support. The "Combined" row is missing when there are only 3 rows. '
-                                        "Left side is current, right side is season high. (If you're "
-                                        "curious: the numbers after the division indicate how sure Orisa "
-                                        "is, 0.000 means a perfect match. They are purely informational.)"
+                                        "Left side is current, right side is season high. (The numbers after the "
+                                        "division are purely informational; they indicate how confident Orisa is, "
+                                        "0.000 means a perfect match.)"
                                     )
                                 },
                                 "fields": [
                                     {
-                                        "name": R":warning: Early Alpha Warning:warning:",
+                                        "name": R":warning: Early Alpha Warning :warning:",
                                         "value": (
                                             "This feature is in early alpha, expect a lot of rough edges! "
-                                            ":robot::screwdriver::girl:\n"
+                                            ":robot::screwdriver::girl_tone5:\n"
                                             "Please [join the support server](https://discord.gg/ZKzBEDF) if you use this feature."
                                         ),
                                         "inline": False,
@@ -509,11 +581,11 @@ def process_image(interaction_json: str):
                                     },
                                     {
                                         "name": "Hours played",
-                                        "value": str(data.hours),
+                                        "value": hours_str,
                                         "inline": True,
                                     },
                                     {
-                                        "name": "Season",
+                                        "name": 'Season (text from dropdown after "competitive", it should be in your OW language)',
                                         "value": data.season,
                                         "inline": False,
                                     },
@@ -536,7 +608,168 @@ def process_image(interaction_json: str):
             ],
         )
         if res.is_error:
-            print(res, res.read())
+            LOGGER.error(
+                "can't send message. Code: %d, data: %s", res.status_code, res.read()
+            )
+            session.rollback()
+        else:
+            session.commit()
+
+
+REVIEW_CHANNEL_ID = 1037798076770951168
+WRONG_NICKNAME_CHANNEL_ID = 1037798137777102898
+SUBMITTED_CHANNEL_ID = 1028413925307465748
+
+REDIS_SET_IF_LOWER = redis.register_script(
+    """
+local val = tonumber(redis.call("GET", KEYS[1]))
+if val == nil or val >= tonumber(ARGV[1]) then
+  redis.call("SET", KEYS[1], ARGV[1], "GET", "EXAT", ARGV[2])
+end
+"""
+)
+
+
+def ratelimit_set(chan_id: int, remaining: int, expire_ts: int) -> Optional[int]:
+    old_val = REDIS_SET_IF_LOWER(
+        args=[remaining, expire_ts], keys=[f"ratelimit-{chan_id}"]
+    )
+    return None if old_val is None else int(old_val)
+
+
+def ratelimit_available(chan_id: int):
+    res = redis.get(f"ratelimit-{chan_id}")
+    return res is None or int(res) > 0
+
+
+@dramatiq.actor(min_backoff=2500, max_backoff=10000, max_retries=5, time_limit=30000)
+def button_clicked(interaction_json: str):
+    interaction = MessageComponentInteraction.parse_raw(interaction_json)
+    cid = interaction.data.custom_id
+    db = Database()
+
+    user_id = interaction.member.user.id if interaction.member else interaction.user.id
+
+    data = SubmitData(*msgpack.unpackb(base64.a85decode(cid.split("_", 1)[1])))
+
+    with ExitStack() as stack:
+        client = stack.enter_context(httpx.Client())
+        session = stack.enter_context(db.Session())
+
+        profile_upload_obj = (
+            session.query(ProfileUpload).filter_by(id=data.profile_upload_id).one()
+        )
+
+        def delete_original():
+            resp = client.delete(
+                f"https://discord.com/api/v10/webhooks/{APPID}/{profile_upload_obj.interaction_token}/messages/@original",
+                headers=HEADERS,
+            )
+
+        def send(channel_id: int, message: str):
+            while not ratelimit_available(channel_id):
+                wait = 1 + random.random() * 2
+                LOGGER.info("reached ratelimit, waiting for %fs", wait)
+                time.sleep(wait)
+
+            resp = client.post(
+                f"https://discord.com/api/v10/channels/{channel_id}/messages",
+                headers=HEADERS,
+                data={
+                    "payload_json": json.dumps(
+                        {
+                            "embeds": [
+                                {
+                                    "description": message,
+                                    "image": {
+                                        "url": f"attachment://{profile_upload_obj.image_filename}"
+                                    },
+                                    "fields": [
+                                        {
+                                            "name": "Hours",
+                                            "value": data.hours,
+                                        },
+                                        {
+                                            "name": "Current",
+                                            "value": str(data.current_sr),
+                                        },
+                                        {
+                                            "name": "Season High",
+                                            "value": str(data.season_high_sr),
+                                        },
+                                        {
+                                            "name": "Nickname correct",
+                                            "value": str(data.nickname_correct),
+                                        },
+                                        {
+                                            "name": "Handle ID",
+                                            "value": str(data.handle_id),
+                                        },
+                                    ],
+                                }
+                            ]
+                        }
+                    )
+                },
+                files={
+                    "files[0]": (
+                        profile_upload_obj.image_filename,
+                        profile_upload_obj.image,
+                    )
+                },
+            )
+
+            rl_remaining = resp.headers.get("X-RateLimit-Remaining")
+            rl_reset = resp.headers.get("X-RateLimit-Reset")
+
+            LOGGER.info("Rate limit info %s %s", rl_remaining, rl_reset)
+            if rl_remaining is not None:
+                ratelimit_set(channel_id, int(rl_remaining), int(float(rl_reset)+1))
+
+            resp.raise_for_status()
+
+        if cid.startswith("submit"):
+            pass
+        elif cid.startswith("review"):
+            send(REVIEW_CHANNEL_ID, f"User {user_id} requested a review.")
+            for _ in range(10):
+                send(REVIEW_CHANNEL_ID, "SPAM")
+            delete_original()
+            _reply(
+                client,
+                interaction,
+                "",
+                embeds=[
+                    {
+                        "description": (
+                            "OK, I told Efi to have a look. She'll update your SR history and "
+                            "train me to get better at recognising images like yours. "
+                            "She said if I'm a good learned, she'll get me another puppy for christmas!"
+                        ),
+                        "image": {
+                            "url": "https://media.tenor.com/GLrlpA34ol8AAAAd/overwatch-gameplay.gif"
+                        },
+                    }
+                ],
+            )
+            session.delete(profile_upload_obj)
+        elif cid.startswith("ignore"):
+            delete_original()
+            _reply(
+                client,
+                interaction,
+                "",
+                embeds=[
+                    {
+                        "description": "Oh, hi! I'm at work, but thanks for confirming I've read the image correctly. You can upload a new image anytime. See you then!",
+                        "image": {
+                            "url": "https://media.tenor.com/x0imz2gxU-EAAAAC/orisa-overwatch.gif"
+                        },
+                    }
+                ],
+            )
+            session.delete(profile_upload_obj)
+        session.commit()
 
 
 if __name__ == "__main__":
