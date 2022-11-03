@@ -15,10 +15,18 @@ starlite = "^1.25.0"
 PyNaCl = "^1.5.0"
 rich = "^12.6.0"
 httpx = "^0.23.0"
+opencv-python = "^4.6.0.66"
+pytesseract = "^0.3.10"
+matplotlib = "^3.6.1"
+dramatiq = {extras = ["redis", "watch"], version = "^1.13.0"}
+SQLAlchemy = {extras = ["postgresql"], version = "^1.4.42"}
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.10.0"
 isort = "^5.10.1"
+
+[tool.isort]
+profile = "black"
 
 [build-system]
 requires = ["poetry-core"]
