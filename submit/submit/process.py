@@ -270,7 +270,7 @@ class ScreenshotReader:
             gray = 255 - gray
         # plt.imshow(gray, cmap="gray");plt.show()
         return pytesseract.image_to_string(
-            gray, config=f"--psm {region.psm} -l eng+jpn+rus"
+            gray, config=f"--psm {region.psm} -l eng+jpn+rus "#--tessdata-dir {os.environ['TESSDATA_DIR']}"
         )
 
     def parse_screenshot(self, debug=False):
