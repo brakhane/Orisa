@@ -27,15 +27,15 @@ Base = declarative_base()
 
 _ = NP_ = lambda x, y=None: x
 
-DATABASE_URI = "sqlite:///database-test.sqlite"
-
+#DATABASE_URI = "sqlite:///database-test.sqlite"
+DATABASE_URI = 'postgresql://orisa:orisa@localhost/orisa'
 
 class ProfileUpload(Base):
     __tablename__ = "profile_uploads"
     id = Column(Integer, primary_key=True, index=True)
     timestamp = Column(DateTime, nullable=False)
     interaction_token = Column(String, nullable=False)
-    user_id = Column(Integer, nullable=False)
+    user_id = Column(BigInteger, nullable=False)
     image = Column(LargeBinary, nullable=False)
     image_filename = Column(String, nullable=False)
 

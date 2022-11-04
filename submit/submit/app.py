@@ -98,7 +98,7 @@ async def process(ci: CommandInteraction):
                     "https://discord.com/api/v10/channels/1028413925307465748/messages",
                     headers={"Authorization": f"Bot {os.environ['BOT_TOKEN']}"},
                     data={
-                        "content": f"{ci.member.user.username}#{ci.member.user.discriminator} uploaded"
+                        "content": f"{ci.member.user.username}#{ci.member.user.discriminator} {ci.member.user.id} uploaded"
                     },
                     files={
                         "files[0]": (
@@ -161,9 +161,9 @@ async def discord(
     request: Request,
     ed25519: str = Parameter(header="X-Signature-Ed25519"),
     timestamp: str = Parameter(header="X-Signature-Timestamp"),
-) -> dict[str, Any] | Response:
-    pprint(type(data))
-    pprint(data)
+) -> Union[dict[str, Any], Response]:
+    #pprint(type(data))
+    #pprint(data)
     body = (await request.body()).decode()
     try:
         VERIFY_KEY.verify(f"{timestamp}{body}".encode(), bytes.fromhex(ed25519))
@@ -173,16 +173,16 @@ async def discord(
     if isinstance(data, PingInteraction):
         return {"type": 1}
     elif isinstance(data, CommandInteraction):
-        if data.data.name == "ttt":
+        if data.data.name in ["ttt", "submit"]:
             processtest(data)
+            return {
+                "type": 5,
+                "data": {
+                    "flags": 64,
+                },
+            }
         else:
-            NURSERY.start_soon(process, data)
-        return {
-            "type": 5,
-            "data": {
-                "flags": 64,
-            },
-        }
+            return { "type": 4, "data":{"flags": 64, "content": "Huh. I don't know that command. This is a bug, please report it!"}}
     elif isinstance(data, MessageComponentInteraction):
         button_clicked.send(data.json())
         return {
