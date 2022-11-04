@@ -361,7 +361,7 @@ def process_image(interaction_json: str):
             _reply(client, interaction, "That's not an image")
             return
         elif not any(
-            math.isclose(attachment.width / attachment.height, x)
+            math.isclose(attachment.width / attachment.height, x, rel_tol=0.005)
             for x in (16 / 9, 16 / 10)
         ):
             _reply(
