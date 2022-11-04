@@ -12,42 +12,40 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import logging
-import logging.config
-
 import csv
 import functools
+import logging
+import logging.config
 import math
-import re
-import random
 import os
+import random
+import re
 import tempfile
 import time
 import traceback
-import unicodedata2 as unicodedata
 import urllib.parse
 import warnings
-
+from collections import defaultdict
 from contextlib import contextmanager, nullcontext, suppress
 from contextvars import ContextVar
-from collections import defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from itertools import groupby, count
 from io import BytesIO, StringIO
+from itertools import count, groupby
 from operator import attrgetter, itemgetter
 from string import Template
 from typing import Optional
-from typing_extensions import Literal
 
-import asks
 import arrow
+import asks
 import cachetools
 import dateutil.parser as date_parser
+import html5lib
 import hypercorn.config
 import hypercorn.trio
-import html5lib
 import matplotlib
+import unicodedata2 as unicodedata
+from typing_extensions import Literal
 
 matplotlib.use("Agg")  # noqa
 import matplotlib.pyplot as plt
@@ -59,43 +57,38 @@ import seaborn as sns
 import tabulate
 import trio
 import yaml
-
 from curious import event
-from curious.commands.context import Context
 from curious.commands.conditions import author_has_roles
+from curious.commands.context import Context
 from curious.commands.decorators import command, condition
 from curious.commands.exc import ConversionFailedError
 from curious.commands.plugin import Plugin
-from curious.core.event import EventContext
 from curious.core.client import Client
+from curious.core.event import EventContext
 from curious.core.httpclient import HTTPClient
-from curious.exc import Forbidden, HierarchyError, PermissionsError, NotFound
 from curious.dataclasses.channel import ChannelType
 from curious.dataclasses.embed import Embed
 from curious.dataclasses.guild import Guild
 from curious.dataclasses.member import Member
 from curious.dataclasses.presence import Game, Status
-from fuzzywuzzy import process, fuzz
+from curious.exc import Forbidden, HierarchyError, NotFound, PermissionsError
+from fuzzywuzzy import fuzz, process
+from itsdangerous.exc import BadSignature
+from itsdangerous.url_safe import URLSafeTimedSerializer
 from lxml import html
 from oauthlib.oauth2 import WebApplicationClient
 from pandas.plotting import register_matplotlib_converters
 from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.sql import func, desc, and_
+from sqlalchemy.sql import and_, desc, func
 from trio.to_thread import run_sync
-from itsdangerous.url_safe import URLSafeTimedSerializer
-from itsdangerous.exc import BadSignature
 from wcwidth import wcswidth
 
-from . import i18n
-
+from . import i18n, web
 from .config import (
-    GuildConfig,
     CHANNEL_NAMES,
     GLADOS_TOKEN,
     MASHERY_API_KEY,
-    SENTRY_DSN,
-    SIGNING_SECRET,
     OAUTH_BLIZZARD_CLIENT_ID,
     OAUTH_DISCORD_CLIENT_ID,
     OAUTH_REDIRECT_HOST,
@@ -103,39 +96,41 @@ from .config import (
     PRIVACY_POLICY_PATH,
     RANK_EMOJIS,
     ROLE_EMOJIS,
+    SENTRY_DSN,
+    SIGNING_SECRET,
     WEB_APP_PATH,
-)
-from .models import (
-    HighscoreCron,
-    User,
-    BattleTag,
-    Gamertag,
-    Handle,
-    SR,
-    OnlineID,
-    Role,
-    GuildConfigJson,
-    WelcomeMessage,
+    GuildConfig,
 )
 from .exceptions import (
     BlizzardError,
     InvalidBattleTag,
-    UnableToFindSR,
-    NicknameTooLong,
     InvalidFormat,
+    NicknameTooLong,
+    UnableToFindSR,
 )
-from .i18n import _, N_, ngettext, CurrentLocale, locale_by_flag
+from .i18n import N_, CurrentLocale, _, locale_by_flag, ngettext
+from .models import (
+    SR,
+    BattleTag,
+    Gamertag,
+    GuildConfigJson,
+    Handle,
+    HighscoreCron,
+    OnlineID,
+    Role,
+    User,
+    WelcomeMessage,
+)
 from .utils import (
+    TDS,
     get_sr,
-    sort_secondaries,
-    send_long,
     reply,
-    sr_to_rank,
     resolve_handle_or_index,
     run_sync,
-    TDS,
+    send_long,
+    sort_secondaries,
+    sr_to_rank,
 )
-from . import web
 
 logger = logging.getLogger("orisa")
 
@@ -301,8 +296,8 @@ class Orisa(Plugin):
 
         await self.spawn(self._sync_all_handles_task)
 
-        #logger.info("spawning cron")
-        #await self.spawn(self._cron_task)
+        # logger.info("spawning cron")
+        # await self.spawn(self._cron_task)
 
         await self.spawn(self._web_server)
 
@@ -322,13 +317,14 @@ class Orisa(Plugin):
             if 3 < len(bots) > len(humans):
                 farm.append((guild, len(bots), len(humans)))
         await reply(ctx, "done")
-        farm.sort(key=lambda x:x[1])
+        farm.sort(key=lambda x: x[1])
         await send_long(
             ctx.channel.messages.send,
-            "\n".join(f"{guild.name} ({guild.id}) with {nb} bots and {nh} humans" for guild, nb, nh in farm)
+            "\n".join(
+                f"{guild.name} ({guild.id}) with {nb} bots and {nh} humans"
+                for guild, nb, nh in farm
+            ),
         )
-            
-        
 
     @command()
     @condition(only_owner, bypass_owner=False)
@@ -575,21 +571,21 @@ class Orisa(Plugin):
             elif stale_ids:
                 await ctx.channel.messages.send("issue `!cleanup confirm` to delete.")
 
-
     @command()
     @condition(only_owner, bypass_owner=False)
-    async def fixdiscordbug(self, ctx, guild_id:int, category_id: int, prefix: str):
+    async def fixdiscordbug(self, ctx, guild_id: int, category_id: int, prefix: str):
         logger.info(f"fixdiscordbug {guild_id} {category_id} {prefix}")
         guild = self.client.guilds[guild_id]
         for chan in list(guild.channels.values()):
-            if not chan.parent or chan.type != ChannelType.VOICE or chan.parent.id != category_id:
+            if (
+                not chan.parent
+                or chan.type != ChannelType.VOICE
+                or chan.parent.id != category_id
+            ):
                 continue
             if chan.name.startswith(prefix):
                 logger.info(f"deleting channel {chan}")
                 await chan.delete()
-
-
-
 
     @command()
     @condition(correct_channel)
@@ -731,9 +727,7 @@ class Orisa(Plugin):
                     locale = CurrentLocale.get()
                     if locale == "zh_Hans":
                         locale = "zh_CN"
-                    when = arrow.get(primary.last_update).humanize(
-                        locale=locale
-                    )
+                    when = arrow.get(primary.last_update).humanize(locale=locale)
                     if multiple_handles:
                         footer_text = _(
                             "The SR of the primary {type} was last updated {when}."
@@ -1087,7 +1081,9 @@ class Orisa(Plugin):
         async with self.database.session() as session:
             user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, _("You are not registered. Use `@Orisa register` first."))
+                await reply(
+                    ctx, _("You are not registered. Use `@Orisa register` first.")
+                )
                 return
             try:
                 index = resolve_handle_or_index(user, handle_or_index)
@@ -1245,7 +1241,9 @@ Retail Jedi"""
                 )
             user = await self.database.user_by_discord_id(session, discord_id)
             if not user:
-                await reply(ctx, _("You are not registered! Do `@Orisa register` first."))
+                await reply(
+                    ctx, _("You are not registered! Do `@Orisa register` first.")
+                )
             else:
                 fault = False
                 async with ctx.channel.typing:
@@ -1364,7 +1362,9 @@ Retail Jedi"""
         async with self.database.session() as session:
             user = await self.database.user_by_discord_id(session, ctx.author.id)
             if not user:
-                await reply(ctx, _("You are not registered! Do `@Orisa register` first."))
+                await reply(
+                    ctx, _("You are not registered! Do `@Orisa register` first.")
+                )
                 return
             user.roles = roles
             await run_sync(session.commit)
@@ -1843,7 +1843,11 @@ Retail Jedi"""
         sns.lineplot(data=data, ax=ax, drawstyle="steps-post", dashes=True)
 
         ax.xaxis.set_major_formatter(matplotlib.dates.DateFormatter("%Y-%m-%d"))
-        ax.yaxis.set_major_locator(matplotlib.ticker.MaxNLocator(nbins="auto", steps=[1, 1.25, 2.5, 5], integer=True))
+        ax.yaxis.set_major_locator(
+            matplotlib.ticker.MaxNLocator(
+                nbins="auto", steps=[1, 1.25, 2.5, 5], integer=True
+            )
+        )
         fig.autofmt_xdate()
 
         plt.xlabel("Date")
@@ -2164,55 +2168,57 @@ Retail Jedi"""
 
                         break
         else:
-#            logger.debug(
-#                'no valid "hello" channel found. Falling back to DM to owner for %s',
-#                guild,
-#            )
+            #            logger.debug(
+            #                'no valid "hello" channel found. Falling back to DM to owner for %s',
+            #                guild,
+            #            )
             logger.debug(
-                'no valid "hello" channel found. NOT sending DM to owner of %s', guild)
-#            async with self.database.session() as session:
-#                try:
-#                    message = await guild.owner.send(
-#                        self._welcome_text
-#                        + self._welcome_private_message_info.format(
-#                            guild_name=guild.name
-#                        )
-#                    )
-#                except Exception:
-#                    logger.exception("Unable to send e-mail to owner, oh well…")
-#                else:
-#                    wm_info = WelcomeMessage(
-#                        id=message.id, is_private_message=True, guild_name=guild.name
-#                    )
-#                    session.add(wm_info)
-#                    try:
-#                        embed = await guild.owner.send(
-#                            content=None,
-#                            embed=Embed(
-#                                title=self._welcome_embed_title,
-#                                description=self._welcome_embed_desc.format(
-#                                    SUPPORT_DISCORD=SUPPORT_DISCORD
-#                                ),
-#                            ),
-#                        )
-#                    except Exception:
-#                        logger.exception("Unable to send support embed")
-#                    else:
-#                        wm_info.need_help_embed_id = embed.id
-#
-#                    for flag, locale in i18n.FLAG_TO_LOCALE.items():
-#                        if (
-#                            locale == "en"
-#                            or i18n.get_translation(locale, self._welcome_text)
-#                            != self._welcome_text
-#                        ):
-#                            try:
-#                                await message.react(flag)
-#                            except Exception:
-#                                logger.debug("Cannot react to message", exc_info=True)
-#                                break
-#
-#                    await run_sync(session.commit)
+                'no valid "hello" channel found. NOT sending DM to owner of %s', guild
+            )
+
+    #            async with self.database.session() as session:
+    #                try:
+    #                    message = await guild.owner.send(
+    #                        self._welcome_text
+    #                        + self._welcome_private_message_info.format(
+    #                            guild_name=guild.name
+    #                        )
+    #                    )
+    #                except Exception:
+    #                    logger.exception("Unable to send e-mail to owner, oh well…")
+    #                else:
+    #                    wm_info = WelcomeMessage(
+    #                        id=message.id, is_private_message=True, guild_name=guild.name
+    #                    )
+    #                    session.add(wm_info)
+    #                    try:
+    #                        embed = await guild.owner.send(
+    #                            content=None,
+    #                            embed=Embed(
+    #                                title=self._welcome_embed_title,
+    #                                description=self._welcome_embed_desc.format(
+    #                                    SUPPORT_DISCORD=SUPPORT_DISCORD
+    #                                ),
+    #                            ),
+    #                        )
+    #                    except Exception:
+    #                        logger.exception("Unable to send support embed")
+    #                    else:
+    #                        wm_info.need_help_embed_id = embed.id
+    #
+    #                    for flag, locale in i18n.FLAG_TO_LOCALE.items():
+    #                        if (
+    #                            locale == "en"
+    #                            or i18n.get_translation(locale, self._welcome_text)
+    #                            != self._welcome_text
+    #                        ):
+    #                            try:
+    #                                await message.react(flag)
+    #                            except Exception:
+    #                                logger.debug("Cannot react to message", exc_info=True)
+    #                                break
+    #
+    #                    await run_sync(session.commit)
 
     # Util
 
@@ -2414,7 +2420,6 @@ Retail Jedi"""
 
                 final_list.extend(chans)
 
-
             unmanaged_set = frozenset()
             if cat.managed_position == "top":
                 start_pos = 0
@@ -2439,7 +2444,11 @@ Retail Jedi"""
                         try:
                             await chan.edit(position=pos)
                         except:
-                            logger.error("cannot edit channel %s, effective permissions %s", chan, chan.effective_permissions(guild.me))
+                            logger.error(
+                                "cannot edit channel %s, effective permissions %s",
+                                chan,
+                                chan.effective_permissions(guild.me),
+                            )
                             raise
                         await trio.sleep(0.5)  #  FIXME: temporary hack
                     except NotFound:
@@ -2513,15 +2522,18 @@ Retail Jedi"""
                     damage=self.SYMBOL_DPS + val_str(all_sr.damage),
                     shortdamage=self.SYMBOL_DPS + val_str(all_sr.damage, short=True),
                     damagerank=self.SYMBOL_DPS + val_rank(all_sr.damage),
-                    shortdamagerank=self.SYMBOL_DPS + val_rank(all_sr.damage, short=True),
+                    shortdamagerank=self.SYMBOL_DPS
+                    + val_rank(all_sr.damage, short=True),
                     tank=self.SYMBOL_TANK + val_str(all_sr.tank),
                     shorttank=self.SYMBOL_TANK + val_str(all_sr.tank, short=True),
                     tankrank=self.SYMBOL_TANK + val_rank(all_sr.tank),
                     shorttankrank=self.SYMBOL_TANK + val_rank(all_sr.tank, short=True),
                     support=self.SYMBOL_SUPPORT + val_str(all_sr.support),
-                    shortsupport=self.SYMBOL_SUPPORT + val_str(all_sr.support, short=True),
+                    shortsupport=self.SYMBOL_SUPPORT
+                    + val_str(all_sr.support, short=True),
                     supportrank=self.SYMBOL_SUPPORT + val_rank(all_sr.support),
-                    shortsupportrank=self.SYMBOL_SUPPORT + val_rank(all_sr.support, short=True),
+                    shortsupportrank=self.SYMBOL_SUPPORT
+                    + val_rank(all_sr.support, short=True),
                 )
                 + sec_mark
             )
@@ -2655,7 +2667,6 @@ Retail Jedi"""
 
         if len(new_nn) > 32:
             raise NicknameTooLong(new_nn)
-
 
         if nn != new_nn:
             logger.debug("New nick for %s is %s", nn, new_nn)
@@ -3179,7 +3190,9 @@ Retail Jedi"""
                         exc_info=True,
                     )
 
-    async def _handle_registration(self, user_id, type: Literal["pc", "xbox", "psn"], data):
+    async def _handle_registration(
+        self, user_id, type: Literal["pc", "xbox", "psn"], data
+    ):
         handles_to_check = []
         async with self.database.session() as session:
             user_obj = await self.client.get_user(user_id)
