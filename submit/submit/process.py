@@ -29,12 +29,13 @@ from dramatiq.rate_limits import ConcurrentRateLimiter
 from dramatiq.rate_limits.backends import RedisBackend
 from redis import Redis
 
-from .models import Database, Handle, ProfileUpload
+from .models import TDS, Database, Handle, ProfileUpload
 from .shared import APPID, CommandInteraction, MessageComponentInteraction
 
 LOGGER = logging.getLogger(__name__)
 
-# pytesseract.pytesseract.tesseract_cmd = R"d:\tesseract-ocr\tesseract.exe"
+if "TESSERACT_BIN" in os.environ:
+    pytesseract.pytesseract.tesseract_cmd = os.environ["TESSERACT_BIN"]
 
 backend = RedisBackend()
 redis = Redis()
@@ -132,8 +133,8 @@ class ScreenshotReader:
         self.image = image
         h, w, depth = image.shape
         self.fx = w / 5120
-        self.fy = w * 9 / 16 / 2880
-
+        self.fy = w * 9 / 16 / 2880 
+        
     def determine_background_color(self, clip):
         row_avg = np.average(clip, axis=0)
         avg = np.average(row_avg, axis=0)
@@ -724,16 +725,50 @@ def button_clicked(interaction_json: str):
 
             LOGGER.info("Rate limit info %s %s", rl_remaining, rl_reset)
             if rl_remaining is not None:
-                ratelimit_set(channel_id, int(rl_remaining), int(float(rl_reset)+1))
+                ratelimit_set(channel_id, int(rl_remaining), int(float(rl_reset) + 1))
 
             resp.raise_for_status()
 
         if cid.startswith("submit"):
-            pass
+            handle = session.query(Handle).filter_by(id=data.handle_id).one()
+            if data.current_sr is None:
+                sr = None
+            else:
+                sr = TDS(*[x*100 if x else None for x in data.current_sr[1:]])
+            
+            handle.update_sr(sr, processed=False, hours_played=data.hours)
+
+            if not data.nickname_correct:
+                send(
+                    WRONG_NICKNAME_CHANNEL_ID,
+                    f"User {user_id} submitted, but nickname is read incorrectly",
+                )
+            else:
+                send(
+                    SUBMITTED_CHANNEL_ID,
+                    f"User {user_id} submitted an image"
+                )
+            delete_original()
+            session.delete(profile_upload_obj)
+            _reply(
+                client,
+                interaction,
+                "",
+                embeds=[
+                    {
+                        "description": (
+                            "Oh, hi! Thank you for submitting your career profile. I will update your SR shortly. "
+                            "It can take a few minutes, I'm a bit busy at the moment, there's a Genji "
+                            "that needs to be taught a lesson. See you on the battlefield!"
+                        ),
+                        "image": {
+                            "url": "https://media.tenor.com/x0imz2gxU-EAAAAC/orisa-overwatch.gif"
+                        },
+                    }
+                ],
+            )
         elif cid.startswith("review"):
             send(REVIEW_CHANNEL_ID, f"User {user_id} requested a review.")
-            for _ in range(10):
-                send(REVIEW_CHANNEL_ID, "SPAM")
             delete_original()
             _reply(
                 client,
@@ -744,7 +779,7 @@ def button_clicked(interaction_json: str):
                         "description": (
                             "OK, I told Efi to have a look. She'll update your SR history and "
                             "train me to get better at recognising images like yours. "
-                            "She said if I'm a good learned, she'll get me another puppy for christmas!"
+                            "She said if I'm a good learner, she'll get me another puppy for christmas!"
                         ),
                         "image": {
                             "url": "https://media.tenor.com/GLrlpA34ol8AAAAd/overwatch-gameplay.gif"
@@ -755,20 +790,23 @@ def button_clicked(interaction_json: str):
             session.delete(profile_upload_obj)
         elif cid.startswith("ignore"):
             delete_original()
+            session.delete(profile_upload_obj)
             _reply(
                 client,
                 interaction,
                 "",
                 embeds=[
                     {
-                        "description": "Oh, hi! I'm at work, but thanks for confirming I've read the image correctly. You can upload a new image anytime. See you then!",
+                        "description": (
+                            "Oh, hi! I'm at work, but thanks for confirming I've read the image "
+                            "correctly. You can upload a new image anytime. See you then!"
+                        ),
                         "image": {
                             "url": "https://media.tenor.com/x0imz2gxU-EAAAAC/orisa-overwatch.gif"
                         },
                     }
                 ],
             )
-            session.delete(profile_upload_obj)
         session.commit()
 
 
@@ -776,6 +814,6 @@ if __name__ == "__main__":
     for path in Path("ow screenshots").glob("*.jpg"):
         print(path, flush=True)
         try:
-            print(parse_screenshot(cv.imread(str(path)), False))
+            print(ScreenshotReader(cv.imread(str(path))).parse_screenshot(False))
         except Exception as e:
             __import__("traceback").print_exception(e)

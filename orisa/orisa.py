@@ -296,8 +296,8 @@ class Orisa(Plugin):
 
         await self.spawn(self._sync_all_handles_task)
 
-        # logger.info("spawning cron")
-        # await self.spawn(self._cron_task)
+        logger.info("spawning cron")
+        await self.spawn(self._cron_task)
 
         await self.spawn(self._web_server)
 
@@ -1228,6 +1228,8 @@ Retail Jedi"""
     @ow.subcommand()
     @condition(correct_channel, bypass_owner=False)
     async def forceupdate(self, ctx, discord_id=None):
+        await reply(ctx, _("forceupdate is disabled. Use /ow submit instead."))
+        return
         async with self.database.session() as session:
             if (
                 discord_id is None
@@ -2960,6 +2962,8 @@ Retail Jedi"""
                 await self._handle_new_guild(guild)
 
     async def _sync_handle(self, session, handle):
+        # DISABLED
+        return
         try:
             srs, images = await get_sr(handle)
         except UnableToFindSR:
@@ -3102,6 +3106,8 @@ Retail Jedi"""
             logger.debug("No tags need to be synced")
 
     async def _sync_handles(self, ids_to_sync):
+        logger.debug("sync handles disabled")
+        return
         send_ch, receive_ch = trio.open_memory_channel(len(ids_to_sync))
 
         async with send_ch:
@@ -3133,11 +3139,51 @@ Retail Jedi"""
             try:
                 logger.debug("checking Cron…")
                 async with self.database.session() as s:
+                    to_process = await run_sync(
+                        s.query(SR)
+                        .filter(SR.processed == False)
+                        .order_by(SR.timestamp.desc())
+                        .all
+                    )
+
+                    logger.debug("to_process %s", to_process)
+
+                    seen_handle_ids = set()
+
+                    for sr in to_process:
+                        logger.debug("working on %s", sr)
+                        if sr.handle_id not in seen_handle_ids:
+                            handle = sr.handle
+                            logger.debug("new %s", handle)
+
+                            ranks = "Bronze Silver Gold Platinum Diamond Master GM".split()
+                            logger.debug("%d", sr_to_rank(sr.values.support))
+                            images = [
+                                f"https://orisa.rocks/web/standalone-{ranks[sr_to_rank(x)]}.png" if x else None
+                                for x in sr.values
+                            ]
+
+                            await self._handle_new_sr(
+                                s,
+                                handle,
+                                sr.values,
+                                images
+                            )
+                            seen_handle_ids.add(sr.handle_id)
+                        else:
+                            logger.debug("already processed handle for %s", sr)
+                        sr.processed = True
+                    s.commit()
+
+                async with self.database.session() as s:
+
                     now = datetime.utcnow()
                     to_run = await run_sync(
                         s.query(HighscoreCron).filter(HighscoreCron.next_run <= now).all
                     )
+
                     logger.debug("to_run %s", to_run)
+
                     for hc in to_run:
                         hc.last_run = now
                         n = hc.next_run
@@ -3149,7 +3195,8 @@ Retail Jedi"""
 
                     guild_ids = [h.id for h in to_run]
 
-                if guild_ids:
+                # FIXME: Temporarily disabled
+                if False and guild_ids:
                     logger.debug("running highscores…")
                     await self._top_players(guild_ids)
                     logger.debug("done running highscores")
@@ -3160,6 +3207,7 @@ Retail Jedi"""
     async def _web_server(self):
         config = hypercorn.config.Config()
         config.access_logger = config.error_logger = logger
+        config.bind = "127.0.0.1:9999"
 
         web.send_ch = self.web_send_ch
         web.client = self.client

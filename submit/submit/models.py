@@ -6,6 +6,7 @@ from enum import Flag, auto
 import sqlalchemy.types as types
 from sqlalchemy import (
     BigInteger,
+    Boolean,
     Column,
     DateTime,
     ForeignKey,
@@ -110,7 +111,7 @@ class Handle(Base):
     def last_update(self):
         return self.current_sr.timestamp if self.current_sr else None
 
-    def update_sr(self, new_srs, *, timestamp=None):
+    def update_sr(self, new_srs, *, hours_played=None, processed=None, timestamp=None):
         if timestamp is None:
             timestamp = datetime.utcnow()
 
@@ -130,6 +131,8 @@ class Handle(Base):
                 tank=new_srs.tank,
                 damage=new_srs.damage,
                 support=new_srs.support,
+                hours_played=hours_played,
+                processed=processed
             )
             self.sr_history.append(
                 sr_obj
@@ -263,7 +266,8 @@ class SR(Base):
     damage = Column(SmallInteger)
     support = Column(SmallInteger)
     hours_played = Column(Integer, nullable=True)
-
+    processed = Column(Boolean, nullable=True, index=True)
+    
     @property
     def values(self):
         return TDS(tank=self.tank, damage=self.damage, support=self.support)
