@@ -111,7 +111,7 @@ class CommandDataOption(BaseModel):
     name: str
     type: int
     value: Optional[Union[str, int, float]]
-    # options
+    options: Optional[list["CommandDataOption"]]
     focused: Optional[bool]
 
 
