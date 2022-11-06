@@ -58,6 +58,7 @@ class Region:
     bottom_right: Coords
     psm: Optional[int] = None
     invert: bool = False
+    big_noodle_font: bool = False
 
 
 @total_ordering
@@ -119,7 +120,9 @@ class ParsedScreenshot:
 
 
 regions = {
-    "nick": Region(Coords(550, 350), Coords(2500, 590), invert=True, psm=7),
+    "nick": Region(
+        Coords(550, 350), Coords(2500, 590), invert=True, psm=7, big_noodle_font=True
+    ),
     "competitive season": Region(Coords(2110, 810), Coords(2800, 870), psm=7),
     "first row background": Region(Coords(2180, 1950), Coords(2360, 2050)),
     "hours": Region(Coords(400, 1360), Coords(870, 1460), invert=True, psm=7),
@@ -133,8 +136,8 @@ class ScreenshotReader:
         self.image = image
         h, w, depth = image.shape
         self.fx = w / 5120
-        self.fy = w * 9 / 16 / 2880 
-        
+        self.fy = w * 9 / 16 / 2880
+
     def determine_background_color(self, clip):
         row_avg = np.average(clip, axis=0)
         avg = np.average(row_avg, axis=0)
@@ -268,9 +271,13 @@ class ScreenshotReader:
         gray = cv.cvtColor(clip, cv.COLOR_BGR2GRAY)
         if region.invert:
             gray = 255 - gray
-        # plt.imshow(gray, cmap="gray");plt.show()
+        # import matplotlib.pyplot as plt; plt.imshow(gray, cmap="gray");plt.show()
+        # cv.imwrite(f"dump-{region.top_left.x}.png", gray)
+        lang = "eng+jpn+rus"
+        if region.big_noodle_font:
+            lang = f"Bxden"
         return pytesseract.image_to_string(
-            gray, config=f"--psm {region.psm} -l Bnto+eng+jpn+rus "#--tessdata-dir {os.environ['TESSDATA_DIR']}"
+            gray, lang=lang, config=f"--psm {region.psm}"
         )
 
     def parse_screenshot(self, debug=False):
@@ -735,8 +742,8 @@ def button_clicked(interaction_json: str):
             if data.current_sr is None:
                 sr = None
             else:
-                sr = TDS(*[x*100 if x else None for x in data.current_sr[1:]])
-            
+                sr = TDS(*[x * 100 if x else None for x in data.current_sr[1:]])
+
             handle.update_sr(sr, processed=False, hours_played=data.hours)
 
             if not data.nickname_correct:
@@ -745,10 +752,7 @@ def button_clicked(interaction_json: str):
                     f"User {user_id} submitted, but nickname is read incorrectly",
                 )
             else:
-                send(
-                    SUBMITTED_CHANNEL_ID,
-                    f"User {user_id} submitted an image"
-                )
+                send(SUBMITTED_CHANNEL_ID, f"User {user_id} submitted an image")
             delete_original()
             session.delete(profile_upload_obj)
             _reply(
@@ -812,9 +816,13 @@ def button_clicked(interaction_json: str):
 
 
 if __name__ == "__main__":
-    for path in Path("ow screenshots").glob("*.jpg"):
+    import sys
+
+    for path in Path("ow screenshots").glob(sys.argv[1]):
         print(path, flush=True)
         try:
-            print(ScreenshotReader(cv.imread(str(path))).parse_screenshot(False))
+            print(
+                ScreenshotReader(cv.imread(str(path))).parse_screenshot(False).nick_raw
+            )
         except Exception as e:
             __import__("traceback").print_exception(e)
