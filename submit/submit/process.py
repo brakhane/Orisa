@@ -119,7 +119,7 @@ class ParsedScreenshot:
 
 
 regions = {
-    "nick": Region(Coords(550, 370), Coords(2500, 590), invert=True, psm=7),
+    "nick": Region(Coords(550, 350), Coords(2500, 590), invert=True, psm=7),
     "competitive season": Region(Coords(2110, 810), Coords(2800, 870), psm=7),
     "first row background": Region(Coords(2180, 1950), Coords(2360, 2050)),
     "hours": Region(Coords(400, 1360), Coords(870, 1460), invert=True, psm=7),
@@ -270,7 +270,7 @@ class ScreenshotReader:
             gray = 255 - gray
         # plt.imshow(gray, cmap="gray");plt.show()
         return pytesseract.image_to_string(
-            gray, config=f"--psm {region.psm} -l eng+jpn+rus "#--tessdata-dir {os.environ['TESSDATA_DIR']}"
+            gray, config=f"--psm {region.psm} -l Bnto+eng+jpn+rus "#--tessdata-dir {os.environ['TESSDATA_DIR']}"
         )
 
     def parse_screenshot(self, debug=False):
@@ -411,11 +411,11 @@ def process_image(interaction_json: str):
 
         data = ScreenshotReader(img).parse_screenshot(debug=True)
 
-        def convert_btag(handle):
-            return handle.battle_tag.upper().split("#", 1)[0]
+        def convert_handle(handle):
+            return handle.handle.upper().split("#", 1)[0]
 
         matches = get_close_matches(
-            data.nick, [convert_btag(h) for h in user.handles], n=1
+            data.nick, [convert_handle(h) for h in user.handles], n=1
         )
         try:
             matching_btag = matches[0]
@@ -426,8 +426,9 @@ def process_image(interaction_json: str):
 
         if matching_btag:
             for handle in user.handles:
-                if matching_btag == convert_btag(handle):
+                if matching_btag == convert_handle(handle):
                     matching_handle = handle
+                    break
 
             nickname_str = f"{matching_btag} :white_check_mark:"
             if matching_btag != data.nick:
