@@ -121,7 +121,7 @@ class ParsedScreenshot:
 
 regions = {
     "nick": Region(
-        Coords(550, 350), Coords(2500, 590), invert=True, psm=7, big_noodle_font=True
+        Coords(550, 345), Coords(2500, 590), invert=True, psm=7, big_noodle_font=True
     ),
     "competitive season": Region(Coords(2110, 810), Coords(2800, 870), psm=7),
     "first row background": Region(Coords(2180, 1950), Coords(2360, 2050)),
