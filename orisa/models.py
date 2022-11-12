@@ -314,7 +314,9 @@ class SR(Base):
     tank = Column(SmallInteger)
     damage = Column(SmallInteger)
     support = Column(SmallInteger)
-
+    hours_played = Column(Integer, nullable=True)
+    processed = Column(Boolean, nullable=True, index=True)
+    
     @property
     def values(self):
         return TDS(tank=self.tank, damage=self.damage, support=self.support)
