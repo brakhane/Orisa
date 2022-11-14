@@ -178,6 +178,8 @@ class ScreenshotReader:
             bg_alpha * bg[:, :, :3] + (1 - bg_alpha) * background_color
         ) + (symbol_alpha * symbol[:, :, :3])
 
+        res = res.astype(np.uint8)
+
         if fx != 1 or fy != 1:
             res = cv.resize(
                 res,
@@ -187,10 +189,10 @@ class ScreenshotReader:
                 interpolation=cv.INTER_AREA if fx < 1 else cv.INTER_CUBIC,
             )
 
-        # cv.imshow(f"{rank}{division}", res.astype(np.uint8))
-        # cv.waitKey()
+        #cv.imshow(f"{rank}{division}", res.astype(np.uint8))
+        #cv.waitKey()
 
-        return res.astype(np.uint8)
+        return res
 
     def find_icons(self, clip, background_color, *, debug=False):
         matches = {}
@@ -251,6 +253,9 @@ class ScreenshotReader:
                     (0, 0, 255),
                     1,
                 )
+                
+                # clip[xy[1]:xy[1]+template.shape[0], xy[0]:xy[0]+template.shape[1]] = template
+                
                 cv.putText(
                     clip,
                     f"{rank[0].upper()}{div} {error:.3f}",
@@ -260,6 +265,7 @@ class ScreenshotReader:
                     (255, 255, 255),
                 )
 
+            # import matplotlib.pyplot as plt
             # plt.imshow(clip[:, :, ::-1])
             # plt.show()
             debug_img = clip
