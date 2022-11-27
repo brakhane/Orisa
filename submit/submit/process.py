@@ -211,7 +211,7 @@ class ScreenshotReader:
                 # thres = 3*0.25
                 # res = res_r * res_g * res_b
                 # thres = 0.21**3
-                thres = 0.1
+                thres = 0.12
                 # print(f"{rank} {div} {res.min()}")
                 min_distance_sq = min(template.shape[:2]) ** 2
                 if np.any(res <= thres):
