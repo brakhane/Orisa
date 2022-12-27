@@ -712,7 +712,7 @@ class Orisa(Plugin):
                             for text, link in [
                                 (
                                     _("Overwatch profile"),
-                                    f'https://playoverwatch.com/en-us/career/{primary.blizzard_url_type}/{urllib.parse.quote(primary.handle.replace("#", "-"))}',
+                                    f'https://playoverwatch.com/en-us/career/{urllib.parse.quote(primary.handle.replace("#", "-"))}',
                                 ),
                                 (_("Upvote Orisa"), VOTE_LINK),
                                 (_("Orisa Support Server"), SUPPORT_DISCORD),
@@ -3432,7 +3432,7 @@ Retail Jedi"""
                         # Translators: :warning: is an emoji code
                         name=_(":warning: No SR"),
                         value=_(
-                            "You don't have an SR though, your profile needs to be public for SR tracking to work… I still saved your {type}."
+                            "Currently I cannot get your SR automatically, you'll have to send me screenshots of your career profile using the /submit slash command (*not* @Orisa /submit). I still saved your {type}."
                         ).format(type=_(handle.desc)),
                     )
                     srs = TDS(None, None, None)
