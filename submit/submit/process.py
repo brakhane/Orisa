@@ -281,7 +281,7 @@ class ScreenshotReader:
         # cv.imwrite(f"dump-{region.top_left.x}.png", gray)
         lang = "eng+jpn+rus"
         if region.big_noodle_font:
-            lang = f"Bxden"
+            lang = f"Bxdefns"
         return pytesseract.image_to_string(
             gray, lang=lang, config=f"--psm {region.psm}"
         )
@@ -455,7 +455,7 @@ def process_image(interaction_json: str):
             if matching_handle:
                 current_sr = matching_handle.current_sr
                 played = current_sr.hours_played if current_sr else None
-                if played and played >= data.hours:
+                if played and played > data.hours:
                     hours_str = (
                         f"{data.hours} :x:\n*(database shows {played} hours played)*"
                     )
@@ -702,7 +702,7 @@ def button_clicked(interaction_json: str):
                                     "fields": [
                                         {
                                             "name": "Hours",
-                                            "value": data.hours,
+                                            "value": data.hours or "(none)",
                                         },
                                         {
                                             "name": "Current",
@@ -741,7 +741,11 @@ def button_clicked(interaction_json: str):
             if rl_remaining is not None:
                 ratelimit_set(channel_id, int(rl_remaining), int(float(rl_reset) + 1))
 
-            resp.raise_for_status()
+            try:
+                resp.raise_for_status()
+            except Exception:
+                LOGGER.exception(f"Got error response {resp.text}")
+                raise
 
         if cid.startswith("submit"):
             handle = session.query(Handle).filter_by(id=data.handle_id).one()
