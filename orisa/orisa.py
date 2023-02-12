@@ -2477,6 +2477,8 @@ Retail Jedi"""
             # to be sure, check the first 10...
             # negative value means it's an old one
             for old_sr in primary.sr_history[:10]:
+                if old_sr.timestamp < datetime(2023, 1, 1):
+                    break
                 if old_sr.values:
                     all_sr = TDS(
                         *[av or (ov and -ov) for av, ov in zip(all_sr, old_sr.values)]
