@@ -53,7 +53,10 @@ PRIVACY_POLICY_PATH = None
 DEVELOPMENT = False
 
 # A list of emojis for the various ranks in Discord's <:name:id> format, or None
-RANK_EMOJI = None
+RANK_EMOJIS = None
+
+# All emojis for rank from Bronze 5 up to GM 1
+RANK_AND_DIV_EMOJIS = None
 
 # Same but for roles, these must be defined (Tank, Damage, Support)
 ROLE_EMOJIS = ['T ', 'D' , 'S ']
