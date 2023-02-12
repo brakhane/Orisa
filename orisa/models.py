@@ -185,6 +185,7 @@ class Handle(Base):
                 tank=new_srs.tank,
                 damage=new_srs.damage,
                 support=new_srs.support,
+                processed=True,
             )
             self.sr_history.append(
                 sr_obj

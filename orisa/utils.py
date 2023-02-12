@@ -17,28 +17,28 @@ import logging
 import logging.config
 import logging.handlers
 import queue
-
+import re
 from bisect import bisect
 from collections import namedtuple
 from operator import attrgetter
-from typing import List
+from typing import List, Optional
 
 import asks
 import trio
-from curious.exc import HTTPException, ErrorCode
-
 from cachetools.func import TTLCache
 from fuzzywuzzy import process
 from lxml import html
 
+from curious.exc import ErrorCode, HTTPException
+
+from .config import DATABASE_URI
 from .exceptions import (
     BlizzardError,
     InvalidBattleTag,
-    UnableToFindSR,
-    NicknameTooLong,
     InvalidFormat,
+    NicknameTooLong,
+    UnableToFindSR,
 )
-from .config import DATABASE_URI
 
 logger = logging.getLogger(__name__)
 
@@ -79,12 +79,14 @@ _SESSION = asks.Session(
 
 
 async def get_sr(handle):
-    raise UnableToFindSR() #"no profiles for OW2 yet"
     try:
         lock = SR_LOCKS[handle.handle]
     except KeyError:
         lock = trio.Lock()
         SR_LOCKS[handle.handle] = lock
+
+    if not handle.blizzard_url_type == "pc":
+        raise UnableToFindSR()
 
     await lock.acquire()
     try:
@@ -95,7 +97,9 @@ async def get_sr(handle):
         except KeyError:
             pass
 
-        url = f'https://playoverwatch.com/en-us/career/{handle.blizzard_url_type}/{handle.handle.replace("#", "-")}'
+        url = (
+            f'https://playoverwatch.com/en-us/career/{handle.handle.replace("#", "-")}'
+        )
 
         logger.debug("requesting %s", url)
         try:
@@ -104,53 +108,80 @@ async def get_sr(handle):
             raise BlizzardError("Timeout")
         except Exception as e:
             raise BlizzardError("Something went wrong", e)
+
         if result.status_code != 200:
-            raise BlizzardError(f"got status code {result.status_code} from Blizz")
+            if result.status_code == 404:
+                raise InvalidBattleTag(f"No profile for {handle.handle} found")
+            else:
+                raise BlizzardError(f"got status code {result.status_code} from Blizz")
 
         document = html.fromstring(result.content)
         await trio.sleep(0)
 
-        role_divs = document.xpath(
-            '(//div[@class="competitive-rank"])[1]/div[@class="competitive-rank-role"]'
+        def has_class(class_: str) -> str:
+            return f'contains(concat(" ", @class, " "), " {class_} ")'
+
+        def extract_sr(
+            role_imgs: list[html.HtmlElement], rank_imgs: list[html.HtmlElement]
+        ) -> tuple[TDS, TDS]:
+            srs = [None] * 3
+            imgs = [None] * 3
+
+            values = {
+                "Bronze": 1000,
+                "Silver": 1500,
+                "Gold": 2000,
+                "Platinum": 2500,
+                "Diamond": 3000,
+                "Master": 3500,
+                "Grandmaster": 4000,
+            }
+
+            for role, rank in zip(role_imgs, rank_imgs):
+                if "tank" in role:
+                    idx = 0
+                elif "offense" in role:
+                    idx = 1
+                elif "support" in role:
+                    idx = 2
+                else:
+                    raise ValueError(f"unknown role {role} in role image URL")
+
+                m = re.search(r"/(\w+)Tier-(\d)-", rank)
+                if not m:
+                    raise ValueError("cannot parse rank image {rank}")
+                rankname = m.group(1)
+                division = int(m.group(2))
+
+                srs[idx] = values[rankname] + (5 - division) * 100
+                imgs[idx] = rank
+
+            return (TDS(*srs), TDS(*imgs))
+
+        rank_wrappers = document.xpath(
+            f'//div[{has_class("Profile-playerSummary--rankWrapper")}]'
         )
 
-        rank_images = [
-            r.xpath('descendant::img[@class="competitive-rank-tier-icon"]/@src')
-            for r in role_divs
-        ]
-        role_descs = [
-            r.xpath(
-                'descendant::div[contains(@class, "competitive-rank-tier-tooltip")]/@data-ow-tooltip-text'
+        srs_per_class = [
+            extract_sr(
+                role_imgs=rw.xpath(
+                    f'//div[{has_class("Profile-playerSummary--role")}]/img/@src'
+                ),
+                rank_imgs=rw.xpath(
+                    f'//img[{has_class("Profile-playerSummary--rank")}]/@src'
+                ),
             )
-            for r in role_divs
-        ]
-        srs = [
-            r.xpath('descendant::div[@class="competitive-rank-level"]/text()')
-            for r in role_divs
+            for rw in rank_wrappers
         ]
 
-        if not any(srs):
-            if "Profile Not Found" in result.text:
-                raise InvalidBattleTag(
-                    f"No profile with {handle.desc} {handle.handle} found"
-                )
+        # if not any(any(srs) for srs in srs_per_class):
+        #     raise UnableToFindSR()
+
+        srs_img = srs_per_class[0]
+        if not any(srs_img[0]):
             raise UnableToFindSR()
 
-        combined = {
-            desc[0].split()[0]: (sr[0], rank_image[0])
-            for desc, sr, rank_image in zip(role_descs, srs, rank_images)
-        }
-
-        sr_list = [
-            int(combined[n][0]) if n in combined else None
-            for n in "Tank Damage Support".split()
-        ]
-        img_list = [
-            combined[n][1] if n in combined else None
-            for n in "Tank Damage Support".split()
-        ]
-
-        res = SR_CACHE[handle.handle] = (TDS(*sr_list), TDS(*img_list))
+        res = SR_CACHE[handle.handle] = srs_img
 
         return res
     finally:
@@ -193,11 +224,13 @@ async def reply(ctx, msg):
             res = await ctx.channel.messages.send(msg, in_reply_to=ctx.message.id)
         except HTTPException as e:
             if e.error_code == ErrorCode.INVALID_FORM_BODY:
-                logger.warn("Got invalid form body when replying, trying to send a reply without message reference")
+                logger.warn(
+                    "Got invalid form body when replying, trying to send a reply without message reference"
+                )
             # fallthrough
         else:
-            return res 
-                
+            return res
+
     return await ctx.channel.messages.send(f"<@!{ctx.author.id}> {msg}")
 
 
@@ -230,6 +263,7 @@ def sr_to_rank(sr):
     return sr and bisect(RANK_CUTOFF, sr)
 
 
+
 class QueueHandler(logging.handlers.QueueHandler):
     def __init__(self, handlers):
         q = queue.Queue(-1)
@@ -237,7 +271,7 @@ class QueueHandler(logging.handlers.QueueHandler):
         handlers = [handlers[i] for i in range(len(handlers))]
 
         super().__init__(q)
-        
+
         listener = logging.handlers.QueueListener(
             q, *handlers, respect_handler_level=True
         )

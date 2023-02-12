@@ -229,6 +229,11 @@ def only_owner_all_channels(ctx):
         return False
 
 
+def rank_fmt(sr, short=False):
+    rank = sr_to_rank(sr)
+    div = 5 - (sr // 100 % 5)
+    return f"{_(RANKS[rank])}{div}" if short else f"{_(FULL_RANKS[rank])} {div}"
+
 @dataclass
 class ChannelRenameLimit:
     lock: trio.Lock
@@ -501,7 +506,7 @@ class Orisa(Plugin):
     @condition(only_owner)
     async def hs(self, ctx, guild_id: int, style: str = "fancy_grid"):
 
-        logger.info("Triggered top_players %s on %d", style, guild_id)
+        logger.info("Triggered top_players %s on %d", style, guild_id)  
 
         await self._top_players([guild_id], style, update_cron=False)
 
@@ -611,7 +616,7 @@ class Orisa(Plugin):
             def single_sr(symbol, sr):
                 if sr:
                     return (
-                        symbol + str(sr) + RANK_EMOJIS[sr_to_rank(sr)]
+                        symbol + RANK_EMOJIS[sr_to_rank(sr)] + str(5-(sr//100 % 5))
                         if RANK_EMOJIS
                         else symbol + str(sr)
                     )
@@ -1228,8 +1233,6 @@ Retail Jedi"""
     @ow.subcommand()
     @condition(correct_channel, bypass_owner=False)
     async def forceupdate(self, ctx, discord_id=None):
-        await reply(ctx, _("forceupdate is disabled. Use /ow submit instead."))
-        return
         async with self.database.session() as session:
             if (
                 discord_id is None
@@ -1279,10 +1282,10 @@ Retail Jedi"""
                     await reply(
                         ctx,
                         _(
-                            "OK, I have updated your data. Your (primary) SR is now {sr}. "
+                            "OK, I have updated your data. Your ranks are now {sr}. "
                             "If that is not correct, you need to log out of Overwatch once and try again; your "
-                            "profile also needs to be public for me to track your SR."
-                        ).format(sr=user.handles[0].sr),
+                            "profile also needs to be public for me to track your ranks."
+                        ).format(sr=TDS(*[rank_fmt(s) if s else None for s in user.handles[0].sr])),
                     )
             await run_sync(session.commit)
 
@@ -2487,9 +2490,9 @@ Retail Jedi"""
             if val is None:
                 return "⊘"
             elif val < 0:
-                return f"{int(-val//100):02}?" if short else f"{-val:4}?"
+                return f"{rank_fmt(-val, short=short)}?"
             else:
-                return f"{int(val//100,):02}" if short else f"{val:4}"
+                return rank_fmt(val, short=short)
 
         def val_rank(val, short=False):
             if val is None:
@@ -2769,17 +2772,20 @@ Retail Jedi"""
                     .order_by(desc(role))
                     .filter(role != None)
                     .filter(type_class.position == 0)
+                    .filter(type_class.current_sr.has(SR.timestamp >= datetime(2023, 1, 1)))
                     .all
                 )
                 for role in [SR.tank, SR.damage, SR.support]
-                for type_class in [BattleTag, Gamertag, OnlineID]
+                #for type_class in [BattleTag, Gamertag, OnlineID]
+                for type_class in [BattleTag]
             }
 
             def create_h_a_p():
 
                 return [
                     (c, t, handle, prev_sr(handle))
-                    for c in [BattleTag, Gamertag, OnlineID]
+                    # for c in [BattleTag, Gamertag, OnlineID]
+                    for c in [BattleTag]
                     for t in [SR.tank, SR.damage, SR.support]
                     for handle in handles[c, t]
                 ]
@@ -2844,7 +2850,8 @@ Retail Jedi"""
                         if not curr or not prev or curr == prev:
                             return ""
                         else:
-                            return f"{curr-prev:+4}"
+                            return f"{(curr-prev)//100:+2}"
+
 
                     table_prev_sr = None
                     data = []
@@ -2859,7 +2866,7 @@ Retail Jedi"""
                                 prev_str(ix + 1, handle, prev_sr),
                                 member_name(member),
                                 member.id,
-                                sr,
+                                rank_fmt(sr),
                                 delta_fmt(sr, prev_sr),
                             )
                         )
@@ -2873,10 +2880,10 @@ Retail Jedi"""
                         _("Member"),
                         # Translators: header for highscore table: member discord id
                         _("Member ID"),
-                        # Translators: header for highscore table: SR
-                        _("{role} SR").format(role=_(role.capitalize())),
-                        # Translators: header for highscore table: SR difference
-                        _("ΔSR"),
+                        # Translators: header for highscore table: Rank
+                        _("{role} Rank").format(role=_(role.capitalize())),
+                        # Translators: header for highscore table: Division difference
+                        _("ΔDiv"),
                     ]
                     csv_file = StringIO()
                     csv_writer = csv.writer(csv_file)
@@ -2962,8 +2969,6 @@ Retail Jedi"""
                 await self._handle_new_guild(guild)
 
     async def _sync_handle(self, session, handle):
-        # DISABLED
-        return
         try:
             srs, images = await get_sr(handle)
         except UnableToFindSR:
@@ -3095,8 +3100,6 @@ Retail Jedi"""
                             logger.exception("cannot sync session")
 
     async def _sync_check(self):
-        logger.debug("sync handles disabled")
-        return
         async with self.database.session() as session:
             ids_to_sync = await self.database.get_handles_to_be_synced(session)
         if ids_to_sync:
@@ -3106,8 +3109,6 @@ Retail Jedi"""
             logger.debug("No tags need to be synced")
 
     async def _sync_handles(self, ids_to_sync):
-        logger.debug("sync handles disabled")
-        return
         send_ch, receive_ch = trio.open_memory_channel(len(ids_to_sync))
 
         async with send_ch:
@@ -3179,7 +3180,7 @@ Retail Jedi"""
 
                     now = datetime.utcnow()
                     to_run = await run_sync(
-                        s.query(HighscoreCron).filter(HighscoreCron.next_run <= now).all
+                        s.query(HighscoreCron).filter(HighscoreCron.next_run <= now).limit(10).all
                     )
 
                     logger.debug("to_run %s", to_run)
@@ -3195,8 +3196,7 @@ Retail Jedi"""
 
                     guild_ids = [h.id for h in to_run]
 
-                # FIXME: Temporarily disabled
-                if False and guild_ids:
+                if guild_ids:
                     logger.debug("running highscores…")
                     await self._top_players(guild_ids)
                     logger.debug("done running highscores")
