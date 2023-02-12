@@ -2807,7 +2807,7 @@ Retail Jedi"""
                         try:
                             member = await self.client.download_guild_member(guild.id, handle.user.discord_id)
                         except Exception:
-                            logger.exception("unable to download member, ignoring")
+                            logger.warn(f"unable to download member {handle.user.discord_id}, ignoring")
                             continue
                         if member:
                             guild._members[handle.user.discord_id] = member
