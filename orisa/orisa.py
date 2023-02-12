@@ -610,7 +610,7 @@ class Orisa(Plugin):
     async def ow(self, ctx, *, member: Member = None):
         def format_sr(handle):
             sr = handle.sr
-            if not sr or not any(sr):
+            if not sr or not any(sr) or handle.last_update < datetime(2023, 2, 1):
                 return "—"
 
             def single_sr(symbol, sr):
