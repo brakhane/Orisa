@@ -2803,7 +2803,12 @@ Retail Jedi"""
                     try:
                         member = guild.members[handle.user.discord_id]
                     except KeyError:
-                        continue
+                        logger.debug(f"member {handle.user.discord_id} not found for highscore, downloading")
+                        member = await self.client.download_guild_member(guild.id, handle.user.discord_id)
+                        if member:
+                            guild._members[handle.user.discord_id] = member
+                        else:
+                            continue
 
                     top_per_guild.setdefault(guild.id, {}).setdefault(
                         (type_class, type.key), []
