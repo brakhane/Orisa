@@ -2804,7 +2804,11 @@ Retail Jedi"""
                         member = guild.members[handle.user.discord_id]
                     except KeyError:
                         logger.debug(f"member {handle.user.discord_id} not found for highscore, downloading")
-                        member = await self.client.download_guild_member(guild.id, handle.user.discord_id)
+                        try:
+                            member = await self.client.download_guild_member(guild.id, handle.user.discord_id)
+                        except Exception:
+                            logger.exception("unable to download member, ignoring")
+                            continue
                         if member:
                             guild._members[handle.user.discord_id] = member
                         else:
