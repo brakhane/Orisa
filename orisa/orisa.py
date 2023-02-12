@@ -617,8 +617,8 @@ class Orisa(Plugin):
             def single_sr(symbol, sr):
                 if sr:
                     return (
-                        symbol + RANK_EMOJIS[sr_to_rank(sr)] + str(5-(sr//100 % 5))
-                        if RANK_EMOJIS
+                        symbol + RANK_AND_DIV_EMOJIS[max(0, sr // 100 - 10)] + str(5-(sr//100 % 5))
+                        if RANK_AND_DIV_EMOJIS
                         else symbol + str(sr)
                     )
                 else:
