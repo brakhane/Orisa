@@ -4,13 +4,13 @@
 # Weblate Admin <brakhane+weblateadmin@gmail.com>, 2019.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
 # Cynthia <cynti-ebert@web.de>, 2019.
-# Dennis Brakhane <brakhane@gmail.com>, 2020, 2021, 2022.
+# Dennis Brakhane <brakhane@gmail.com>, 2020, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2023-02-13 15:08+0100\n"
-"PO-Revision-Date: 2022-08-20 14:44+0000\n"
+"PO-Revision-Date: 2023-02-13 14:15+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/orisa/bot/de/>\n"
 "Language: de\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:149
@@ -641,10 +641,7 @@ msgid "You are not registered! Do `@Orisa register` first."
 msgstr "Du bist nicht registriert! Nutze zuerst `@Orisa register`."
 
 #: orisa/orisa.py:1264
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Blizzard says your {type} {handle} does not exist. Did you change it? Use "
-#| "`!ow register` to update it."
+#, python-brace-format
 msgid ""
 "Blizzard says your {type} {handle} does not exist. Did you change it? Use "
 "`@Orisa register` to update it."
@@ -659,20 +656,16 @@ msgstr ""
 "später noch einmal."
 
 #: orisa/orisa.py:1287
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "OK, I have updated your data. Your (primary) SR is now {sr}. If that is "
-#| "not correct, you need to log out of Overwatch once and try again; your "
-#| "profile also needs to be public for me to track your SR."
+#, python-brace-format
 msgid ""
 "OK, I have updated your data. Your ranks are now {sr}. If that is not "
 "correct, you need to log out of Overwatch once and try again; your profile "
 "also needs to be public for me to track your ranks."
 msgstr ""
-"OK, ich habe Deine Daten aktualisiert. Dein (primärer) SR ist jetzt {sr}. "
-"Wenn dies nicht korrekt ist, musst Du dich einmal von Overwatch abmelden und "
-"es erneut versuchen. Dein Profil muss auch öffentlich sein, damit ich deine "
-"SR nachverfolgen kann."
+"OK, ich habe Deine Daten aktualisiert. Deine Ränge sind jetzt {sr}. Wenn "
+"dies nicht korrekt ist, musst Du dich einmal von Overwatch abmelden und es "
+"erneut versuchen. Dein Profil muss auch öffentlich sein, damit ich deine "
+"Ränge nachverfolgen kann."
 
 #: orisa/orisa.py:1317
 #, python-brace-format
@@ -732,27 +725,7 @@ msgid "Orisa's purpose"
 msgstr "Orisa's Zweck"
 
 #: orisa/orisa.py:1468
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "When joining a QP or Comp channel, you need to know the BattleTag of a "
-#| "channel member, or they need yours to add you. In competitive channels it "
-#| "also helps to know which SR the channel members have. To avoid having to "
-#| "ask for this information again and again when joining a channel, this bot "
-#| "was created. When you register with your BattleTag, your nick will "
-#| "automatically be updated to show your current SR and it will be kept up "
-#| "to date. You can also ask for other member's BattleTag, or request your "
-#| "own so others can easily add you in OW.\n"
-#| "It will also send a short message to the chat when you ranked up.\n"
-#| "*Like Overwatch's Orisa, this bot is quite young and still new at this. "
-#| "Report issues to <@!{OWNER}>*\n"
-#| "\n"
-#| "**The commands only work in the <#{channel_id}> channel or by sending me "
-#| "a DM**\n"
-#| "If you are new to Orisa, you are probably looking for `@Orisa register` "
-#| "or `@Orisa register xbox`\n"
-#| "If you want to use Orisa on your own server or help developing it, enter "
-#| "`!ow about`\n"
-#| "Parameters in [square brackets] are optional."
+#, python-brace-format
 msgid ""
 "When joining a QP or Comp channel, you need to know the BattleTag of a "
 "channel member, or they need yours to add you. In competitive channels it "
@@ -1271,15 +1244,14 @@ msgstr "Mitglieds-ID"
 
 #. Translators: header for highscore table: Rank
 #: orisa/orisa.py:2898
-#, fuzzy, python-brace-format
-#| msgid "{role} SR"
+#, python-brace-format
 msgid "{role} Rank"
-msgstr "{role} SR"
+msgstr "{role} Rang"
 
 #. Translators: header for highscore table: Division difference
 #: orisa/orisa.py:2900
 msgid "ΔDiv"
-msgstr ""
+msgstr "ΔDiv"
 
 #: orisa/orisa.py:2943
 #, python-brace-format
