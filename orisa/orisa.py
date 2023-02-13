@@ -3445,7 +3445,7 @@ Retail Jedi"""
                         # Translators: :warning: is an emoji code
                         name=_(":warning: No SR"),
                         value=_(
-                            "Currently I cannot get your SR automatically, you'll have to send me screenshots of your career profile using the /submit slash command (*not* @Orisa /submit). I still saved your {type}."
+                            "You don't have an SR though, your profile needs to be public for SR tracking to work… I still saved your {type}."
                         ).format(type=_(handle.desc)),
                     )
                     srs = TDS(None, None, None)
