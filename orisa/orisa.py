@@ -2730,7 +2730,7 @@ Retail Jedi"""
                 CurrentLocale.set(self.guild_config[guild.id].locale)
                 embed = Embed(
                     # Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
-                    title=_("For your own safety, get behind the barrier!"),
+                    title=_("Supercharged and on fire!"),
                     description=_(
                         "**{name}** just reached **{sr} SR** as **{role}** and advanced to **{rank}**. Congratulations!"
                     ).format(
