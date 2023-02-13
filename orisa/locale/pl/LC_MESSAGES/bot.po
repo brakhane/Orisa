@@ -2,14 +2,14 @@
 # Copyright (C) 2019 Dennis Brakhane and contributors
 # This file is distributed under the same license as Orisa, the AGPLv3
 # Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>, 2019, 2020, 2022.
-# Kacper Klimas <kanyqan@gmail.com>, 2019.
+# Kacper Klimas <kanyqan@gmail.com>, 2019, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2023-02-13 15:15+0100\n"
-"PO-Revision-Date: 2022-08-21 10:59+0000\n"
-"Last-Translator: Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>\n"
+"PO-Revision-Date: 2023-02-14 14:36+0000\n"
+"Last-Translator: Kacper Klimas <kanyqan@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/orisa/bot/pl/>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:149
@@ -655,16 +655,13 @@ msgid "You are not registered! Do `@Orisa register` first."
 msgstr "Nie jesteś zarejestrowany! Użyj pierw `@Orisa register`."
 
 #: orisa/orisa.py:1264
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Blizzard says your {type} {handle} does not exist. Did you change it? Use "
-#| "`!ow register` to update it."
+#, python-brace-format
 msgid ""
 "Blizzard says your {type} {handle} does not exist. Did you change it? Use "
 "`@Orisa register` to update it."
 msgstr ""
-"Według Blizzarda Twoje {type}{handle} nie istnieje. Zmieniłeś je? Użyj `!ow "
-"register`, by je zaktualizować."
+"Według Blizzarda Twoje {type}{handle} nie istnieje. Zmieniłeś je? Użyj `@"
+"Orisa register`, by je zaktualizować."
 
 #: orisa/orisa.py:1280
 msgid "There were some problems updating your SR! Try again later."
