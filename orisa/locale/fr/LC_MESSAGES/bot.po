@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 15:08+0100\n"
+"POT-Creation-Date: 2023-02-13 15:15+0100\n"
 "PO-Revision-Date: 2022-08-21 10:59+0000\n"
 "Last-Translator: Logan Rybski <mailcompteps@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/orisa/bot/fr/>\n"
@@ -1510,10 +1510,11 @@ msgstr ":warning: Pas de côte"
 #: orisa/orisa.py:3449
 #, python-brace-format
 msgid ""
-"Currently I cannot get your SR automatically, you'll have to send me "
-"screenshots of your career profile using the /submit slash command (*not* "
-"@Orisa /submit). I still saved your {type}."
+"You don't have an SR though, your profile needs to be public for SR tracking "
+"to work… I still saved your {type}."
 msgstr ""
+"Tu n'as pas de côte, ton profil doit être public pour que le suivi des côtes "
+"fonctionne… J’ai quand même sauvegardé ton {type}."
 
 #. Translators: :warning: is emoji code
 #: orisa/orisa.py:3470
@@ -1745,14 +1746,6 @@ msgstr "Merci ! Je t'ai envoyé un message privé."
 
 #~ msgid "ΔSR"
 #~ msgstr "±SR"
-
-#, python-brace-format
-#~ msgid ""
-#~ "You don't have an SR though, your profile needs to be public for SR "
-#~ "tracking to work… I still saved your {type}."
-#~ msgstr ""
-#~ "Tu n'as pas de côte, ton profil doit être public pour que le suivi des "
-#~ "côtes fonctionne… J’ai quand même sauvegardé ton {type}."
 
 #, python-brace-format
 #~ msgid ""

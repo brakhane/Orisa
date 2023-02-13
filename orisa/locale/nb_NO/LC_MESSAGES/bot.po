@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 15:08+0100\n"
+"POT-Creation-Date: 2023-02-13 15:15+0100\n"
 "PO-Revision-Date: 2022-09-06 09:15+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/orisa/"
@@ -1314,10 +1314,11 @@ msgstr ":warning: Ingen SR"
 #: orisa/orisa.py:3449
 #, python-brace-format
 msgid ""
-"Currently I cannot get your SR automatically, you'll have to send me "
-"screenshots of your career profile using the /submit slash command (*not* "
-"@Orisa /submit). I still saved your {type}."
+"You don't have an SR though, your profile needs to be public for SR tracking "
+"to work… I still saved your {type}."
 msgstr ""
+"Har ikke dog ikke nok SR, din profil må være offentlig for at SR-sporing "
+"skal virke… Jeg lagret likevel din {type}."
 
 #. Translators: :warning: is emoji code
 #: orisa/orisa.py:3470
@@ -1545,14 +1546,6 @@ msgstr "Takk. Du har blitt tilsendt en privat melding."
 
 #~ msgid "ΔSR"
 #~ msgstr "ΔSR"
-
-#, python-brace-format
-#~ msgid ""
-#~ "You don't have an SR though, your profile needs to be public for SR "
-#~ "tracking to work… I still saved your {type}."
-#~ msgstr ""
-#~ "Har ikke dog ikke nok SR, din profil må være offentlig for at SR-sporing "
-#~ "skal virke… Jeg lagret likevel din {type}."
 
 #, fuzzy, python-brace-format
 #~ msgid ""

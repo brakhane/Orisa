@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 15:08+0100\n"
+"POT-Creation-Date: 2023-02-13 15:15+0100\n"
 "PO-Revision-Date: 2022-08-21 10:59+0000\n"
 "Last-Translator: Dominik Ciesiołkiewicz <dominikciesiolkiewicz@o2.pl>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/orisa/bot/pl/>\n"
@@ -1499,10 +1499,11 @@ msgstr ":warning: Brak RU"
 #: orisa/orisa.py:3449
 #, python-brace-format
 msgid ""
-"Currently I cannot get your SR automatically, you'll have to send me "
-"screenshots of your career profile using the /submit slash command (*not* "
-"@Orisa /submit). I still saved your {type}."
+"You don't have an SR though, your profile needs to be public for SR tracking "
+"to work… I still saved your {type}."
 msgstr ""
+"Nie masz natomiast RU. Twój profil musi być publiczny by śledzenie RU było "
+"możliwe... Mimo to zapisałam twój {type}."
 
 #. Translators: :warning: is emoji code
 #: orisa/orisa.py:3470
@@ -1742,14 +1743,6 @@ msgstr "Dziękuję! Wysłałam ci PW."
 
 #~ msgid "ΔSR"
 #~ msgstr "ΔRU"
-
-#, python-brace-format
-#~ msgid ""
-#~ "You don't have an SR though, your profile needs to be public for SR "
-#~ "tracking to work… I still saved your {type}."
-#~ msgstr ""
-#~ "Nie masz natomiast RU. Twój profil musi być publiczny by śledzenie RU "
-#~ "było możliwe... Mimo to zapisałam twój {type}."
 
 #, python-brace-format
 #~ msgid ""

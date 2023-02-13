@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
-"POT-Creation-Date: 2023-02-13 15:08+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-02-13 15:15+0100\n"
 "PO-Revision-Date: 2023-02-13 14:15+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/orisa/bot/de/>\n"
@@ -1470,10 +1470,11 @@ msgstr ":warning: Kein SR"
 #: orisa/orisa.py:3449
 #, python-brace-format
 msgid ""
-"Currently I cannot get your SR automatically, you'll have to send me "
-"screenshots of your career profile using the /submit slash command (*not* "
-"@Orisa /submit). I still saved your {type}."
+"You don't have an SR though, your profile needs to be public for SR tracking "
+"to work… I still saved your {type}."
 msgstr ""
+"Du scheinst allerdings keinen SR zu haben; dein Profil muss öffentlich sein, "
+"damit ich deinen SR ermitteln kann… Deinen {type} habe ich aber gespeichert."
 
 #. Translators: :warning: is emoji code
 #: orisa/orisa.py:3470
@@ -1706,15 +1707,6 @@ msgstr "Ich habe dir eine PN geschickt."
 
 #~ msgid "ΔSR"
 #~ msgstr "ΔSR"
-
-#, python-brace-format
-#~ msgid ""
-#~ "You don't have an SR though, your profile needs to be public for SR "
-#~ "tracking to work… I still saved your {type}."
-#~ msgstr ""
-#~ "Du scheinst allerdings keinen SR zu haben; dein Profil muss öffentlich "
-#~ "sein, damit ich deinen SR ermitteln kann… Deinen {type} habe ich aber "
-#~ "gespeichert."
 
 #, python-brace-format
 #~ msgid ""

@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 15:08+0100\n"
+"POT-Creation-Date: 2023-02-13 15:15+0100\n"
 "PO-Revision-Date: 2021-11-21 04:51+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/orisa/bot/es/>\n"
@@ -1470,10 +1470,11 @@ msgstr ":warning: Sin SR"
 #: orisa/orisa.py:3449
 #, python-brace-format
 msgid ""
-"Currently I cannot get your SR automatically, you'll have to send me "
-"screenshots of your career profile using the /submit slash command (*not* "
-"@Orisa /submit). I still saved your {type}."
+"You don't have an SR though, your profile needs to be public for SR tracking "
+"to work… I still saved your {type}."
 msgstr ""
+"Aún no tienes SR, tu perfil necesita ser público para que el tracking de SR "
+"funcione...Aún así he guardado tu {type}."
 
 #. Translators: :warning: is emoji code
 #: orisa/orisa.py:3470
@@ -1699,14 +1700,6 @@ msgstr "Gracias! Te he enviado un mensaje privado."
 
 #~ msgid "ΔSR"
 #~ msgstr "ΔSR"
-
-#, python-brace-format
-#~ msgid ""
-#~ "You don't have an SR though, your profile needs to be public for SR "
-#~ "tracking to work… I still saved your {type}."
-#~ msgstr ""
-#~ "Aún no tienes SR, tu perfil necesita ser público para que el tracking de "
-#~ "SR funcione...Aún así he guardado tu {type}."
 
 #~ msgid "Read Messages"
 #~ msgstr "Leer el historial de mensajes"

@@ -20,7 +20,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Orisa 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 15:08+0100\n"
+"POT-Creation-Date: 2023-02-13 15:15+0100\n"
 "PO-Revision-Date: 2021-12-20 14:52+0000\n"
 "Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -1378,10 +1378,10 @@ msgstr ":warning:没有SR"
 #: orisa/orisa.py:3449
 #, python-brace-format
 msgid ""
-"Currently I cannot get your SR automatically, you'll have to send me "
-"screenshots of your career profile using the /submit slash command (*not* "
-"@Orisa /submit). I still saved your {type}."
+"You don't have an SR though, your profile needs to be public for SR tracking "
+"to work… I still saved your {type}."
 msgstr ""
+"您还没有 SR，您的个人生涯需要公开才能使 SR 追踪工作……我仍然保存了您的{type}。"
 
 #. Translators: :warning: is emoji code
 #: orisa/orisa.py:3470
@@ -1591,14 +1591,6 @@ msgstr "谢谢！我已经给你发了一个私信。"
 
 #~ msgid "ΔSR"
 #~ msgstr "ΔSR"
-
-#, python-brace-format
-#~ msgid ""
-#~ "You don't have an SR though, your profile needs to be public for SR "
-#~ "tracking to work… I still saved your {type}."
-#~ msgstr ""
-#~ "您还没有 SR，您的个人生涯需要公开才能使 SR 追踪工作……我仍然保存了您的"
-#~ "{type}。"
 
 #~ msgid "Read Messages"
 #~ msgstr "阅读消息"
