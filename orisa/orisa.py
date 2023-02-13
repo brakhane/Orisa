@@ -2231,10 +2231,9 @@ Retail Jedi"""
     async def _adjust_voice_channels(
         self, parent, *, create_all_channels=False, adjust_user_limits=False
     ):
-        logger.debug("adjusting parent %s", parent)
         guild = parent.guild
         if not guild:
-            logger.debug("channel doesn't belong to a guild")
+            logger.debug(f"channel {parent} doesn't belong to a guild")
             return
 
         for cat in self.guild_config[guild.id].managed_voice_categories:
@@ -2242,8 +2241,10 @@ Retail Jedi"""
                 prefix_map = {prefix.name.strip(): prefix for prefix in cat.prefixes}
                 break
         else:
-            logger.debug("channel is not managed")
+            # logger.debug("channel is not managed")
             return
+
+        logger.debug("adjusting parent %s", parent)
 
         def chan_name_no_sr(chan):
             return re.sub(r" \[.*?\]$", "", chan.name)
