@@ -1903,7 +1903,7 @@ Retail Jedi"""
     async def _member_update(self, ctx, old_member: Member, new_member: Member):
         def plays_overwatch(m):
             try:
-                return m.game.name == "Overwatch"
+                return m.game.name == "Overwatch 2"
             except AttributeError:
                 return False
 
