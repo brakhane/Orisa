@@ -7,13 +7,13 @@
 # Titouan F. <titouan.forgeard@gmail.com>, 2019.
 # J. Lavoie <j.lavoie@net-c.ca>, 2020.
 # Dennis Brakhane <brakhane@gmail.com>, 2020, 2021.
-# Logan Rybski <mailcompteps@gmail.com>, 2022.
+# Logan Rybski <mailcompteps@gmail.com>, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2023-02-13 15:15+0100\n"
-"PO-Revision-Date: 2022-08-21 10:59+0000\n"
+"PO-Revision-Date: 2023-02-19 11:40+0000\n"
 "Last-Translator: Logan Rybski <mailcompteps@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/orisa/bot/fr/>\n"
 "Language: fr\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:149
@@ -122,14 +122,14 @@ msgid ""
 "*I will ignore all commands except `@Orisa help` and `@Orisa config` until "
 "I'm configured for this Discord!*"
 msgstr ""
-"*Salutations* ! Je suis heureuse d’être ici :smiley:\n"
+"*Salutations*  ! Je suis heureuse d’être ici  :smiley :\n"
 "Pour commencer, crée un nouveau rôle nommé `Orisa Admin` (seul le nom est "
 "important, il n’a pas besoin de permissions spéciales) et ajoute-le à toi-"
 "même et à tous ceux qui devrait être autorisé à me configurer.\n"
 "Ensuite, écris `@Orisa config` dans ce salon et je t'enverrai un lien pour "
 "me configurer via MP.\n"
 "*Je ne tiendrai compte d'aucune commande autre que `@Orisa help` et `@Orisa "
-"config` jusqu'à ce que je sois configuré pour ce Discord !*"
+"config` jusqu'à ce que je sois configuré pour ce Discord  !*"
 
 #. Translators: :thinking: must remain as is, it's an emoji
 #. Translators: :thinking: is an emoji code
@@ -648,15 +648,12 @@ msgid "You are not registered! Do `@Orisa register` first."
 msgstr "Tu n'es pas inscrit ! Utilise d'abord la commande `@Orisa register`."
 
 #: orisa/orisa.py:1264
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Blizzard says your {type} {handle} does not exist. Did you change it? Use "
-#| "`!ow register` to update it."
+#, python-brace-format
 msgid ""
 "Blizzard says your {type} {handle} does not exist. Did you change it? Use "
 "`@Orisa register` to update it."
 msgstr ""
-"Blizzard me dit que ton {type} {handle} n'existe pas. L'a tu changé ? "
+"Blizzard me dit que ton {type} {handle} n'existe pas. L'as-tu changé  ? "
 "Utilise `@Orisa register` pour le mettre a jour."
 
 #: orisa/orisa.py:1280
@@ -666,19 +663,15 @@ msgstr ""
 "tard."
 
 #: orisa/orisa.py:1287
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "OK, I have updated your data. Your (primary) SR is now {sr}. If that is "
-#| "not correct, you need to log out of Overwatch once and try again; your "
-#| "profile also needs to be public for me to track your SR."
+#, python-brace-format
 msgid ""
 "OK, I have updated your data. Your ranks are now {sr}. If that is not "
 "correct, you need to log out of Overwatch once and try again; your profile "
 "also needs to be public for me to track your ranks."
 msgstr ""
-"J’ai mis à jour tes données. Ta côte (principale) est maintenant {sr}. Si ce "
-"n’est pas exact, tu dois te déconnecter d'Overwatch puis réessayer ; ton "
-"profil doit également être public pour que je puisse voir ta côte."
+"J’ai mis à jour tes données. Tes rangs est maintenant {sr}. Si ce n’est pas "
+"exact, tu dois te déconnecter d'Overwatch puis réessayer ; ton profil doit "
+"également être public pour que je puisse voir tes rangs."
 
 #: orisa/orisa.py:1317
 #, python-brace-format
@@ -740,27 +733,7 @@ msgid "Orisa's purpose"
 msgstr "Le but d’Orisa"
 
 #: orisa/orisa.py:1468
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "When joining a QP or Comp channel, you need to know the BattleTag of a "
-#| "channel member, or they need yours to add you. In competitive channels it "
-#| "also helps to know which SR the channel members have. To avoid having to "
-#| "ask for this information again and again when joining a channel, this bot "
-#| "was created. When you register with your BattleTag, your nick will "
-#| "automatically be updated to show your current SR and it will be kept up "
-#| "to date. You can also ask for other member's BattleTag, or request your "
-#| "own so others can easily add you in OW.\n"
-#| "It will also send a short message to the chat when you ranked up.\n"
-#| "*Like Overwatch's Orisa, this bot is quite young and still new at this. "
-#| "Report issues to <@!{OWNER}>*\n"
-#| "\n"
-#| "**The commands only work in the <#{channel_id}> channel or by sending me "
-#| "a DM**\n"
-#| "If you are new to Orisa, you are probably looking for `@Orisa register` "
-#| "or `@Orisa register xbox`\n"
-#| "If you want to use Orisa on your own server or help developing it, enter "
-#| "`!ow about`\n"
-#| "Parameters in [square brackets] are optional."
+#, python-brace-format
 msgid ""
 "When joining a QP or Comp channel, you need to know the BattleTag of a "
 "channel member, or they need yours to add you. In competitive channels it "
@@ -782,28 +755,26 @@ msgid ""
 "`@Orisa about`\n"
 "Parameters in [square brackets] are optional."
 msgstr ""
-"Lorsque tu rejoins un salon de partie rapide ou un salon compétitif, tu dois "
-"connaître le Battletag d’un membre du salon ou alors les members du salon "
-"ont besoin du tien pour t'ajouter. Dans les salons compétitifs, il est "
-"également utile de savoir quelle côte les membres du salon ont. Ce bot a été "
-"créé pour éviter d’avoir à demander cette information encore et encore "
-"lorsque quelqu'un rejoint un salon. Lorsque tu t'inscris avec ton Battletag, "
-"ton pseudo sera automatiquement mis à jour pour afficher ta côte actuelle et "
-"elle sera tenue à jour constamment. Tu peux également demander le Battletag "
-"d’un autre membre, ou faire afficher le tien afin que d’autres puissent "
-"facilement t'ajouter dans Overwatch/BattleNet.\n"
-"Le bot enverra également un court message dans le chat lorsque tu monteras "
-"d'un rang.\n"
-"*Comme Orisa dans Overwatch, ce robot est très jeune. Tu peux signaler "
-"n'importe quel problème à <@!{OWNER}>*\n"
+"Quand tu veux rejoindre un salon vocal, il faut que tu connaisse le "
+"BattleTag d'un membre, ou qu'ils connaissent le tien pour qu'ils t'ajoutent. "
+"Dans les salons compétitifs c'est d'autant plus utile puisque ça permet de "
+"vérifier le rang des personne dans le salon. j'ai été créé pour éviter "
+"d'avoir a faire tout ça encore et encore, quand j'enregistre ton BattleTag, "
+"je modifie ton pseudo pour afficher tes rangs actuels et mis a jour "
+"régulièrement. tu peut aussi me demander d'afficher ton BattleTag ou celui "
+"d'un autre membre pour rendre les demandes d'amis plus simple.\n"
+"j'enverrais aussi un message de félicitations lorsque tu monte de rang.\n"
+"*un peu comme Orisa dans Overwatch, ce bot est très jeune et apprend encore "
+"comment faire et s'améliorer. il ne faut pas hésiter a envoyer des message a "
+"<@!{OWNER}> si il y a des erreurs*\n"
 "\n"
-"**Les commandes ne fonctionnent que dans le canal <#{channel_id}> ou par "
-"MP**\n"
+"**Les commandes ne fonctionnent que dans le canal <#{channel_id}> ou par MP**"
+"\n"
 "Si tu es nouveau au sujet d'Orisa, tu es probablement à la recherche des "
 "commandes '`@Orisa register'` ou '`@Orisa register xbox'`\n"
 "Si tu veux utiliser Orisa sur ton propre serveur ou aider à le développer, "
 "utilise la commande '`@Orisa about'`\n"
-"Les paramètres de [crochets] sont optionnels."
+"Les paramètres entre [crochets] sont optionnels."
 
 #: orisa/orisa.py:1490
 msgid ""
@@ -1245,7 +1216,7 @@ msgstr ""
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
 #: orisa/orisa.py:2734
 msgid "Supercharged and on fire!"
-msgstr ""
+msgstr "Batteries surchargées, il est au top  !"
 
 #: orisa/orisa.py:2736
 #, python-brace-format
@@ -1284,15 +1255,14 @@ msgstr "ID du Membre"
 
 #. Translators: header for highscore table: Rank
 #: orisa/orisa.py:2898
-#, fuzzy, python-brace-format
-#| msgid "{role} SR"
+#, python-brace-format
 msgid "{role} Rank"
-msgstr "Côte de {role}"
+msgstr "Rang pour {role}"
 
 #. Translators: header for highscore table: Division difference
 #: orisa/orisa.py:2900
 msgid "ΔDiv"
-msgstr ""
+msgstr "ΔDiv"
 
 #: orisa/orisa.py:2943
 #, python-brace-format
@@ -1404,11 +1374,11 @@ msgid ""
 "If you have more than one account, simply issue `@Orisa register` again.\n"
 msgstr ""
 "Sur certains serveurs, je ne mettrai à jour ton pseudo que si tu rejoins un "
-"salon Overwatch. Si tu veux que pseudo pseudo affiche toujours ta côte, "
-"utilise la commande '@Orisa alwaysshows’. Si tu veux que je montre ton rang "
-"plutôt que ta côte, utilise le format $rank.\n"
-"Si tu as plus d’un compte, tu n'as qu’à utiliser `@Orisa register` à "
-"nouveau.\n"
+"salon Overwatch. Si tu veux que ton pseudo affiche toujours ta cote, utilise "
+"la commande '@Orisa alwaysshows’. Si tu veux que je montre ton rang plutôt "
+"que ta côte, utilise le format $rank.\n"
+"Si tu as plus d’un compte, tu n'as qu’à utiliser `@Orisa register` à nouveau."
+"\n"
 
 #: orisa/orisa.py:3335
 #, python-brace-format
