@@ -8,20 +8,21 @@
 # Adrián Hernández González <adrianhernandezgonzalez24@gmail.com>, 2019.
 # Dennis Brakhane <brakhane@gmail.com>, 2020.
 # Allan Nordhøy <epost@anotheragency.no>, 2021.
+# gallegonovato <fran-carro@hotmail.es>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2023-02-13 15:15+0100\n"
-"PO-Revision-Date: 2021-11-21 04:51+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2023-02-23 16:36+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/orisa/bot/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9.1\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #. Translators: 2 letter code for "Bronze" rank
 #: orisa/orisa.py:149
@@ -523,6 +524,8 @@ msgid ""
 "`setprimary` requires the first few letters of the handle you want to make "
 "your primary as a parameter, e.g. `@Orisa setprimary foo`"
 msgstr ""
+"`setprimary` requiere como parámetro las primeras letras del mango que "
+"quieras convertir en primario, por ejemplo `@Orisa setprimary foo`"
 
 #: orisa/orisa.py:1092
 msgid "You are not registered. Use `@Orisa register` first."
@@ -573,7 +576,6 @@ msgstr ""
 "Por favor, selecciona un formato más corto o acorta tu apodo!"
 
 #: orisa/orisa.py:1181
-#, fuzzy
 msgid ""
 "Smarties Expert\n"
 "Bread Scientist\n"
@@ -591,23 +593,21 @@ msgid ""
 "Duke of Tacos\n"
 "Retail Jedi"
 msgstr ""
-"Experto de Smarties\n"
+"Experto en Smarties\n"
 "Científico del Pan\n"
-"Seno Eterno de la Pasión\n"
+"Seno Eterno del Amor Caliente\n"
 "Lord Sith de la Seguridad\n"
 "Nombrador de Nubes\n"
-"Azote de las Latas de Cerveza\n"
+"Azote de las latas de cerveza\n"
 "Musa de Jeff Kaplan\n"
-"Autoridad del Queso Parmesano\n"
-"Comandante de las MILF\n"
-"Experto del Chicharrón\n"
-"Supervisor de Dinosaurios\n"
-"Virrey Galáctico del C9\n"
+"Autoridad del queso rallado\n"
+"Experto en cortezas de cerdo\n"
+"Supervisor de dinosaurios\n"
+"Virrey galáctico del C9\n"
 "Conde del Bacon\n"
 "Decano de la Pizza\n"
 "Duque de los Tacos\n"
-"Jedi al Por Menor\n"
-"Historiador de la Pornografía"
+"Jedi Minorista"
 
 #: orisa/orisa.py:1206
 #, python-brace-format
@@ -646,25 +646,24 @@ msgid ""
 "Blizzard says your {type} {handle} does not exist. Did you change it? Use "
 "`@Orisa register` to update it."
 msgstr ""
+"Blizzard dice que tu {type} {handle} no existe. ¿Lo has cambiado? Usa `@"
+"Orisa register` para actualizarlo."
 
 #: orisa/orisa.py:1280
 msgid "There were some problems updating your SR! Try again later."
 msgstr "Ha habido problemas actualizando tu SR! Inténtalo de nuevo más tarde."
 
 #: orisa/orisa.py:1287
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "OK, I have updated your data. Your (primary) SR is now {sr}. If that is "
-#| "not correct, you need to log out of Overwatch once and try again; your "
-#| "profile also needs to be public for me to track your SR."
+#, python-brace-format
 msgid ""
 "OK, I have updated your data. Your ranks are now {sr}. If that is not "
 "correct, you need to log out of Overwatch once and try again; your profile "
 "also needs to be public for me to track your ranks."
 msgstr ""
-"De acuerdo, he actualizado tus datos. Tu SR (primario) es ahora {sr}. Si no "
-"es el correcto, tienes que salir de Overwatch una vez y volver a intentarlo; "
-"tu perfil necesita ser público para que yo pueda ver tu SR."
+"Vale, he actualizado tus datos. Tus rangos son ahora {sr}. Si no es "
+"correcto, tienes que cerrar sesión en Overwatch una vez y volver a "
+"intentarlo; tu perfil también tiene que ser público para que pueda hacer un "
+"seguimiento de tus rangos."
 
 #: orisa/orisa.py:1317
 #, python-brace-format
@@ -724,27 +723,7 @@ msgid "Orisa's purpose"
 msgstr "El propósito de Orisa"
 
 #: orisa/orisa.py:1468
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "When joining a QP or Comp channel, you need to know the BattleTag of a "
-#| "channel member, or they need yours to add you. In competitive channels it "
-#| "also helps to know which SR the channel members have. To avoid having to "
-#| "ask for this information again and again when joining a channel, this bot "
-#| "was created. When you register with your BattleTag, your nick will "
-#| "automatically be updated to show your current SR and it will be kept up "
-#| "to date. You can also ask for other member's BattleTag, or request your "
-#| "own so others can easily add you in OW.\n"
-#| "It will also send a short message to the chat when you ranked up.\n"
-#| "*Like Overwatch's Orisa, this bot is quite young and still new at this. "
-#| "Report issues to <@!{OWNER}>*\n"
-#| "\n"
-#| "**The commands only work in the <#{channel_id}> channel or by sending me "
-#| "a DM**\n"
-#| "If you are new to Orisa, you are probably looking for `@Orisa register` "
-#| "or `@Orisa register xbox`\n"
-#| "If you want to use Orisa on your own server or help developing it, enter "
-#| "`!ow about`\n"
-#| "Parameters in [square brackets] are optional."
+#, python-brace-format
 msgid ""
 "When joining a QP or Comp channel, you need to know the BattleTag of a "
 "channel member, or they need yours to add you. In competitive channels it "
@@ -766,25 +745,25 @@ msgid ""
 "`@Orisa about`\n"
 "Parameters in [square brackets] are optional."
 msgstr ""
-"Al unirte a un canal de Comp o QP, necesitas saber el BattleTag de un "
-"miembro del canal, o ellos saber el tuyo para añadirte. En canales de "
-"competitivo también ayuda saber el SR que tienen los miembros del canal. "
-"Para evitar tener que pedir esta información una y otra vez al unirse a un "
-"canal, se creó este bot. Cuando te registras con tu BattleTag, tu apodo se "
+"Cuando te unes a un canal QP o Comp, necesitas saber el BattleTag de un "
+"miembro del canal, o ellos necesitan el tuyo para añadirte. En los canales "
+"competitivos también ayuda saber qué SR tienen los miembros del canal. Para "
+"evitar tener que pedir esta información una y otra vez al unirte a un canal, "
+"se creó este bot. Cuando te registres con tu BattleTag, tu nick se "
 "actualizará automáticamente para mostrar tu SR actual y se mantendrá "
-"actualizado. También puedes preguntarle a otro miembro por su BattleTag, o "
-"pedir el tuyo para que otros puedan añadirte fácilmente en OW.\n"
-"También mandará un pequeño mensaje al chat cuando subas de categoría.\n"
-"*Al igual que la Orisa de Overwatch, este bot es aún muy joven y novato. "
-"Puedes reportar cualquier problema al <@!{OWNER}>*\n"
+"actualizado. También puedes pedir el BattleTag de otros miembros, o "
+"solicitar el tuyo propio para que otros puedan añadirte fácilmente en OW.\n"
+"También enviará un mensaje corto al chat cuando subas de rango.\n"
+"*Al igual que Orisa de Overwatch, este bot es bastante joven y todavía es "
+"nuevo en esto. Informa de cualquier problema a <@!{OWNER}>*.\n"
 "\n"
-"**Los comandos solo funcionan en el canal <#{channel_id}> o enviándome un "
-"MD**\n"
-"Si eres nuevo en Orisa, probablemente estés buscando `@Orisa register` o "
-"`@Orisa register xbox`\n"
-"Si quieres usar a Orisa en tu propio servidor o ayudar a desarrollarlo, "
-"escribe `@Orisa about`\n"
-"Los parámetros entre [brackets] son opcionales."
+"**Los comandos sólo funcionan en el canal <#{channel_id}> o enviándome un "
+"DM**.\n"
+"Si eres nuevo en Orisa, probablemente estás buscando `@Orisa register` o `@"
+"Orisa register xbox`.\n"
+"Si quieres usar Orisa en tu propio servidor o ayudar a desarrollarlo, "
+"introduce `@Orisa about`.\n"
+"Los parámetros entre [corchetes] son opcionales."
 
 #: orisa/orisa.py:1490
 msgid ""
@@ -882,7 +861,7 @@ msgid "★ *ow format placeholders*"
 msgstr "★ *ow placeholders para el formato*"
 
 #: orisa/orisa.py:1565
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "*The following placeholders are defined:*\n"
 "`$sr`\n"
@@ -912,37 +891,40 @@ msgid ""
 "`$dps`, `$dpsrank`, `$shortdps`, `$shortdpsrank` \n"
 "Alias for `$damage`, `$damagerank` etc."
 msgstr ""
-"*Los siguientes placeholder están definidos:*\n"
+"*Se definen los siguientes marcadores de posición:*\n"
 "`$sr`\n"
-"los primeros dos dígitos de tu SR para los 3 roles en orden Tanque, Daño, "
-"Apoyo; si tienes una cuenta secundaria, un asterisco (\\*) se añade al "
-"final. Se añadirá un símbolo de interrogación si el SR mostrado es antiguo\n"
+"los dos primeros dígitos del SR para los 3 roles en orden Tanque, Daño, "
+"Soporte; si tienes cuentas secundarias, se añade un asterisco (\\*) al "
+"final. Se añade un signo de interrogación si se muestra un SR antiguo\n"
 "\n"
 "`$fullsr`\n"
-"Igual que `$sr` pero se mostrarán los 4 dígitos\n"
+"Como `$sr` se muestran los 4 dígitos\n"
 "\n"
-"`$rank`\n"
-"tu rango de manera acortada para los 3 roles en orden Tanque, Daño, Apoyo; "
-"el asterisco y símbolo de interrogación funcionan igual que en `$sr`\n"
+"rango\n"
+"en forma abreviada para los 3 roles en orden Tanque, Daño, Apoyo; el "
+"asterisco y los signos de interrogación funcionan como en `$sr`.\n"
 "\n"
-"`$tank`,  `$damage`, `$support`\n"
-"Tu SR al completo para el rol respectivo seguido de su símbolo. El asterisco "
-"y el símbolo de interrogación tienen el mismo significado que en `$sr`. Por "
-"motivos técnicos, los símbolos para los respectivos roles son `{SYMBOL_TANK}"
-"`, `{SYMBOL_DPS}`, `{SYMBOL_SUPPORT}`\n"
+"`$tanque`, `$daño`, `$soporte`\n"
+"Tu SR completo para el rol respectivo seguido de su símbolo. El asterisco y "
+"el signo de interrogación tienen el mismo significado que en `$sr`. Los "
+"símbolos para los respectivos roles son `{SYMBOL_TANK}`, `{SYMBOL_DPS}`, "
+"`{SYMBOL_SUPPORT}`.\n"
 "\n"
-"`$tankrank`, `$damagerank`, `$supportrank`\n"
-"igual que el caso anterior, pero mostrando el rango.\n"
+"`$tankrank`, `$damagerank`, `$supporttrank``.\n"
+"como arriba, pero se muestra el rango en su lugar.\n"
 "\n"
-"`$dps`, `$dpsrank`\n"
-"Alias para `$damage`y `$damagerank` respectivamente."
+"`$shorttank`, `$shorttankrank` etc.\n"
+"muestran sólo 2 dígitos/letras del SR/rango respectivo.\n"
+"\n"
+"`$dps`, `$dpsrank`, `$shortdps`, `$shortdpsrank` \n"
+"Alias para `$damagerank`, etc."
 
 #: orisa/orisa.py:1582
 msgid "★ *ow format examples*"
 msgstr "★ *ejemplos de ow format*"
 
 #: orisa/orisa.py:1584
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "`@Orisa format hello $sr` will result in `[hello 12-34-45]`.\n"
 "`@Orisa format Potato/$fullrank` in `[Potato/Bronze-Gold-Diamond]`.\n"
@@ -951,10 +933,11 @@ msgid ""
 "`@Orisa format $shortdamage` in `[{SYMBOL_DPS}12]`.\n"
 "*By default, the format is `$sr`*"
 msgstr ""
-"`@Orisa format hello $sr` dará como resultado `[hello 12-34-45]`.\n"
-"`@Orisa format Potato/$fullrank` dará `[Potato/Bronze-Gold-Diamond]`.\n"
-"`@Orisa format $damage $support` dará `[1234{SYMBOL_DPS} "
-"2345{SYMBOL_SUPPORT}]`.\n"
+"`@Orisa format hello $sr` resultará en `[hello 12-34-45]`.\n"
+"`@Orisa format Potato/$fullrank` in `[Patata/Bronce-Oro-Diamante]`.\n"
+"`@Orisa format $damage $support` in `[{SYMBOL_DPS}1234 "
+"{SYMBOL_SUPPORT}2345]`.\n"
+"`@Orisa format $shortdamage` in `[{SYMBOL_DPS}12]`.\n"
 "*Por defecto, el formato es `$sr`*"
 
 #. Translators: headline of second help page
@@ -1198,18 +1181,20 @@ msgstr "fecha de registro"
 
 #: orisa/orisa.py:1884
 msgid "Sorry, I'm not allowed to send you files…"
-msgstr ""
+msgstr "Lo siento, no tengo permiso para enviarte archivos…"
 
 #: orisa/orisa.py:1893
 msgid ""
 "I'm not allowed to upload images in this channel, so I've sent you a DM "
 "instead."
 msgstr ""
+"No tengo permitido subir imágenes en este canal, así que te envié un DM en "
+"su lugar."
 
 #. Translators: Used when somebody reached a new rank. Replace with the localized voiceline that Orisa uses
 #: orisa/orisa.py:2734
 msgid "Supercharged and on fire!"
-msgstr ""
+msgstr "¡Supercargado y en llamas!"
 
 #: orisa/orisa.py:2736
 #, python-brace-format
@@ -1248,15 +1233,14 @@ msgstr "ID de Miembro"
 
 #. Translators: header for highscore table: Rank
 #: orisa/orisa.py:2898
-#, fuzzy, python-brace-format
-#| msgid "{role} SR"
+#, python-brace-format
 msgid "{role} Rank"
-msgstr "{role} SR"
+msgstr "{role} Rango"
 
 #. Translators: header for highscore table: Division difference
 #: orisa/orisa.py:2900
 msgid "ΔDiv"
-msgstr ""
+msgstr "ΔDiv"
 
 #: orisa/orisa.py:2943
 #, python-brace-format
@@ -1549,6 +1533,10 @@ msgid ""
 "you give a name as argument, so I know where to look. Omit the name argument "
 "if you mean \"myself\"; that works even in DMs."
 msgstr ""
+"Este comando debe emitirse desde el canal de Orisa en el servidor Discord si "
+"das un nombre como argumento, para que yo sepa dónde buscar. Omite el "
+"argumento del nombre si quieres decir \"yo mismo\"; eso funciona incluso en "
+"DMs."
 
 #: orisa/web.py:67
 msgid "You can close this window."
@@ -1561,10 +1549,8 @@ msgstr "Enviar mensajes"
 
 #. Translators: Discord permission name
 #: orisa/web.py:132
-#, fuzzy
-#| msgid "Manage Channels"
 msgid "View Channels"
-msgstr "Gestionar canales"
+msgstr "Ver canales"
 
 #. Translators: Discord permission name
 #: orisa/web.py:134
@@ -1589,7 +1575,7 @@ msgstr "Gestionar canales"
 #. Translators: Discord permission name
 #: orisa/web.py:142
 msgid "Connect"
-msgstr ""
+msgstr "Conectar"
 
 #: orisa/web.py:153
 #, python-brace-format
