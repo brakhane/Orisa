@@ -718,7 +718,7 @@ class Orisa(Plugin):
                             for text, link in [
                                 (
                                     _("Overwatch profile"),
-                                    f'https://playoverwatch.com/en-us/career/{urllib.parse.quote(primary.handle.replace("#", "-"))}',
+                                    f'https://overwatch.blizzard.com/en-us/career/{urllib.parse.quote(primary.handle.replace("#", "-"))}',
                                 ),
                                 (_("Upvote Orisa"), VOTE_LINK),
                                 (_("Orisa Support Server"), SUPPORT_DISCORD),

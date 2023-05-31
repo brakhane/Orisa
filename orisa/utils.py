@@ -98,7 +98,7 @@ async def get_sr(handle):
             pass
 
         url = (
-            f'https://playoverwatch.com/en-us/career/{handle.handle.replace("#", "-")}'
+            f'https://overwatch.blizzard.com/en-us/career/{handle.handle.replace("#", "-")}'
         )
 
         logger.debug("requesting %s", url)
