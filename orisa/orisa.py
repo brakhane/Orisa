@@ -12,51 +12,27 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import csv
-import functools
-import logging
-import logging.config
-import math
-import os
-import random
-import re
-import tempfile
-import time
-import traceback
-import urllib.parse
-import warnings
 from collections import defaultdict
 from contextlib import contextmanager, nullcontext, suppress
 from contextvars import ContextVar
-from dataclasses import dataclass, field
+import csv
+from dataclasses import dataclass
 from datetime import datetime, timedelta
 from io import BytesIO, StringIO
-from itertools import count, groupby
-from operator import attrgetter, itemgetter
+from itertools import groupby
+import logging
+import logging.config
+from operator import attrgetter
+import random
+import re
 from string import Template
-from typing import Optional
+import tempfile
+import time
+import urllib.parse
+import warnings
 
 import arrow
-import asks
 import cachetools
-import dateutil.parser as date_parser
-import html5lib
-import hypercorn.config
-import hypercorn.trio
-import matplotlib
-import unicodedata2 as unicodedata
-from typing_extensions import Literal
-
-matplotlib.use("Agg")  # noqa
-import matplotlib.pyplot as plt
-import multio
-import numpy as np
-import pandas as pd
-import raven
-import seaborn as sns
-import tabulate
-import trio
-import yaml
 from curious import event
 from curious.commands.conditions import author_has_roles
 from curious.commands.context import Context
@@ -72,35 +48,45 @@ from curious.dataclasses.guild import Guild
 from curious.dataclasses.member import Member
 from curious.dataclasses.presence import Game, Status
 from curious.exc import Forbidden, HierarchyError, NotFound, PermissionsError
+import dateutil.parser as date_parser
 from fuzzywuzzy import fuzz, process
-from itsdangerous.exc import BadSignature
+import hypercorn.config
+import hypercorn.trio
 from itsdangerous.url_safe import URLSafeTimedSerializer
-from lxml import html
+import matplotlib
+import matplotlib.pyplot as plt
+import multio
+import numpy as np
 from oauthlib.oauth2 import WebApplicationClient
+import pandas as pd
 from pandas.plotting import register_matplotlib_converters
-from sqlalchemy.orm import joinedload, selectinload
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.sql import and_, desc, func
+import raven
+import seaborn as sns
+from sqlalchemy.orm import joinedload
+from sqlalchemy.sql import desc, func
+import tabulate
+import trio
 from trio.to_thread import run_sync
-from wcwidth import wcswidth
+from typing_extensions import Literal
+import unicodedata2 as unicodedata
 
 from . import i18n, web
 from .config import (
     CHANNEL_NAMES,
     GLADOS_TOKEN,
+    GuildConfig,
     MASHERY_API_KEY,
     OAUTH_BLIZZARD_CLIENT_ID,
     OAUTH_DISCORD_CLIENT_ID,
     OAUTH_REDIRECT_HOST,
     OAUTH_REDIRECT_PATH,
     PRIVACY_POLICY_PATH,
-    RANK_EMOJIS,
     RANK_AND_DIV_EMOJIS,
+    RANK_EMOJIS,
     ROLE_EMOJIS,
     SENTRY_DSN,
     SIGNING_SECRET,
     WEB_APP_PATH,
-    GuildConfig,
 )
 from .exceptions import (
     BlizzardError,
@@ -109,9 +95,8 @@ from .exceptions import (
     NicknameTooLong,
     UnableToFindSR,
 )
-from .i18n import N_, CurrentLocale, _, locale_by_flag, ngettext
+from .i18n import CurrentLocale, N_, _, locale_by_flag, ngettext
 from .models import (
-    SR,
     BattleTag,
     Gamertag,
     GuildConfigJson,
@@ -119,6 +104,7 @@ from .models import (
     HighscoreCron,
     OnlineID,
     Role,
+    SR,
     User,
     WelcomeMessage,
 )
@@ -132,6 +118,9 @@ from .utils import (
     sort_secondaries,
     sr_to_rank,
 )
+
+matplotlib.use("Agg")  # noqa
+
 
 logger = logging.getLogger("orisa")
 
