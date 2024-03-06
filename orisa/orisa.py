@@ -111,6 +111,7 @@ from .models import (
 from .utils import (
     TDS,
     get_sr,
+    get_web_profile_uuid,
     reply,
     resolve_handle_or_index,
     run_sync,
@@ -147,6 +148,9 @@ RANKS = (
     N_("Ma"),
     # Translators: 2 letter code for "Grandmaster" rank
     N_("GM"),
+    # Translators: 2 letter code for "Champion" rank
+    N_("CH"),
+    
 )
 FULL_RANKS = (
     # Translators: SR rank
@@ -163,6 +167,8 @@ FULL_RANKS = (
     N_("Master"),
     # Translators: SR rank
     N_("Grandmaster"),
+    # Translators: SR rank
+    N_("Champion"),
 )
 
 ROLE_NAMES = [
@@ -182,6 +188,7 @@ COLORS = (
     0xA2BFD3,  # Diamond
     0xF9CA61,  # Master
     0xF1D592,  # Grand Master
+    0x9F41E2,  # Champion
 )
 
 
@@ -299,6 +306,11 @@ class Orisa(Plugin):
         await self.spawn(self._oauth_result_listener)
 
     # admin commands
+
+    @command()
+    @condition(only_owner, bypass_owner=False)
+    async def qqqq(self, ctx):
+            await reply(ctx, str(await get_sr(BattleTag())))
 
     @command()
     @condition(only_owner)
@@ -697,6 +709,20 @@ class Orisa(Plugin):
                         name=_("Roles"), inline=False, value=user.roles.format(ctx)
                     )
 
+                text_links = []
+                # FIXME: temporary hack until all web_profile_uuids are known
+                if primary.web_profile_uuid:
+                    text_links.append((
+                        _("Overwatch profile"),
+                        f'https://overwatch.blizzard.com/en-us/career/{primary.web_profile_uuid}/',
+                    ))
+                text_links.extend([
+                    (_("Upvote Orisa"), VOTE_LINK),
+                    (_("Orisa Support Server"), SUPPORT_DISCORD),
+                    (_("Help Translate Orisa"), TRANSLATE_LINK),
+                    (_("Donate `{HEART}`").format(HEART="❤️"), DONATE_LINK),
+                ])
+
                 embed.add_field(
                     # Translators: Weblinks
                     name=_("Links"),
@@ -704,16 +730,7 @@ class Orisa(Plugin):
                     value=(
                         " | ".join(
                             f"[{text}]({link})"
-                            for text, link in [
-                                (
-                                    _("Overwatch profile"),
-                                    f'https://overwatch.blizzard.com/en-us/career/{urllib.parse.quote(primary.handle.replace("#", "-"))}',
-                                ),
-                                (_("Upvote Orisa"), VOTE_LINK),
-                                (_("Orisa Support Server"), SUPPORT_DISCORD),
-                                (_("Help Translate Orisa"), TRANSLATE_LINK),
-                                (_("Donate `{HEART}`").format(HEART="❤️"), DONATE_LINK),
-                            ]
+                            for text, link in text_links
                         )
                     ),
                 )
@@ -3260,7 +3277,21 @@ Retail Jedi"""
                     )
                     return
 
-                handles = [BattleTag(blizzard_id=blizzard_id, battle_tag=battle_tag)]
+                # Try to find web profile UUID
+                uuid = await get_web_profile_uuid(battle_tag)
+
+                if not uuid:
+                    await user_channel.messages.send(
+                        _(
+                            "I'm sorry, but I can't find the Overwatch profile for your BattleTag **{btag}**. Please "
+                            'make sure that your Overwatch "Career Profile Visibility" is set to "Public", close OW '
+                            "and try again. Note that it can take a while before your profile becomes visible on Blizzard's "
+                            "website."
+                        ).format(btag=battle_tag)
+                    )
+                    return
+
+                handles = [BattleTag(blizzard_id=blizzard_id, battle_tag=battle_tag, web_profile_uuid=uuid)]
 
             elif type == "xbox":
                 handles = [

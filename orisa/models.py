@@ -148,6 +148,8 @@ class Handle(Base):
         post_update=True,
         lazy="joined",
     )
+    web_profile_uuid = Column(String, nullable=True)
+
 
     error_count = Column(Integer, nullable=False, default=0)
 

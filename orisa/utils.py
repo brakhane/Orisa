@@ -18,10 +18,12 @@ import logging.config
 import logging.handlers
 import queue
 import re
+import urllib.parse
+
 from bisect import bisect
 from collections import namedtuple
 from operator import attrgetter
-from typing import List, Optional
+from typing import TYPE_CHECKING, Optional
 
 import asks
 import trio
@@ -39,6 +41,10 @@ from .exceptions import (
     NicknameTooLong,
     UnableToFindSR,
 )
+
+if TYPE_CHECKING:
+    from .models import Handle
+
 
 logger = logging.getLogger(__name__)
 
@@ -77,8 +83,26 @@ _SESSION = asks.Session(
     connections=10,
 )
 
+async def get_web_profile_uuid(btag: str) -> Optional[str]:
+    return "c251a785fe23c8ffba|4ed031481f8ec8b79a9ed70f6ff8f08c"
+    name, num = btag.split("#")
+    try:
+        logger.debug(f"Searching for {name}")
+        resp = await _SESSION.get(f"https://overwatch.blizzard.com/en-us/search/account-by-name/{urllib.parse.quote(name)}/")
+        logger.debug(f"result is {resp}")
+        entries = resp.json()
+        logger.debug("Got results %s", entries)
+        for entry in entries:
+            if entry["battleTag"] == btag:
+                return entry["url"]
+        return None
+    except asks.errors.RequestTimeout:
+        raise BlizzardError("Timeout")
+    except Exception as e:
+        raise BlizzardError("Something went wrong", e)
 
-async def get_sr(handle):
+
+async def get_sr(handle: "Handle"):
     try:
         lock = SR_LOCKS[handle.handle]
     except KeyError:
@@ -98,7 +122,7 @@ async def get_sr(handle):
             pass
 
         url = (
-            f'https://overwatch.blizzard.com/en-us/career/{handle.handle.replace("#", "-")}'
+            f'https://overwatch.blizzard.com/en-us/career/{handle.web_profile_uuid}/'
         )
 
         logger.debug("requesting %s", url)
@@ -122,7 +146,7 @@ async def get_sr(handle):
             return f'contains(concat(" ", @class, " "), " {class_} ")'
 
         def extract_sr(
-            role_imgs: list[html.HtmlElement], rank_imgs: list[html.HtmlElement]
+            role_imgs: list[html.HtmlElement], rank_imgs: list[html.HtmlElement], tier_imgs: list[html.HtmlElement]
         ) -> tuple[TDS, TDS]:
             srs = [None] * 3
             imgs = [None] * 3
@@ -135,9 +159,10 @@ async def get_sr(handle):
                 "Diamond": 3000,
                 "Master": 3500,
                 "Grandmaster": 4000,
+                "Ultimate": 4500,
             }
 
-            for role, rank in zip(role_imgs, rank_imgs):
+            for role, rank, tier in zip(role_imgs, rank_imgs, tier_imgs):
                 if "tank" in role:
                     idx = 0
                 elif "offense" in role:
@@ -147,19 +172,25 @@ async def get_sr(handle):
                 else:
                     raise ValueError(f"unknown role {role} in role image URL")
 
-                m = re.search(r"/(\w+)Tier-(\d)-", rank)
-                if not m:
-                    raise ValueError("cannot parse rank image {rank}")
-                rankname = m.group(1)
-                division = int(m.group(2))
+                rm = re.search(r"/Rank_(\w+)Tier-", rank)
+                if not rm:
+                    raise ValueError(f"cannot parse rank image {rank}")
+                tm = re.search(r"/TierDivision_(\d)", tier)
+                if not tm:
+                    raise ValueError(f"cannot parse tier image {tier}")
+
+                rankname = rm.group(1)
+                division = int(tm.group(1))
 
                 srs[idx] = values[rankname] + (5 - division) * 100
                 imgs[idx] = rank
 
+                logger.debug(f"rank {rankname} div {division} idx {idx} sr {srs[idx]} {imgs[idx]}")
+
             return (TDS(*srs), TDS(*imgs))
 
         rank_wrappers = document.xpath(
-            f'//div[{has_class("Profile-playerSummary--rankWrapper")}]'
+            f'//div[{has_class("Profile-playerSummary--rankImageWrapper")}]'
         )
 
         srs_per_class = [
@@ -168,14 +199,17 @@ async def get_sr(handle):
                     f'//div[{has_class("Profile-playerSummary--role")}]/img/@src'
                 ),
                 rank_imgs=rw.xpath(
-                    f'//img[{has_class("Profile-playerSummary--rank")}]/@src'
+                    f'//img[{has_class("Profile-playerSummary--rank")}][1]/@src'
                 ),
+                tier_imgs=rw.xpath(
+                    f'//img[{has_class("Profile-playerSummary--rank")}][2]/@src'
+                )
             )
             for rw in rank_wrappers
         ]
 
-        # if not any(any(srs) for srs in srs_per_class):
-        #     raise UnableToFindSR()
+        if not any(any(srs) for srs in srs_per_class):
+            raise UnableToFindSR()
 
         srs_img = srs_per_class[0]
         if not any(srs_img[0]):
@@ -255,7 +289,7 @@ def resolve_handle_or_index(user, handle_or_index):
     return index
 
 
-RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000)
+RANK_CUTOFF = (1500, 2000, 2500, 3000, 3500, 4000, 4500)
 
 
 def sr_to_rank(sr):
