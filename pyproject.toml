@@ -7,46 +7,38 @@ authors = ["Dennis Brakhane <brakhane@gmail.com>"]
 [tool.poetry.dependencies]
 python = ">=3.7.1,<3.10"
 "html5lib" = "^1.0.1"
-lxml = "^4.6.3"
+lxml = "*"
 sqlalchemy = ">=1.3.0"
-sqlalchemy_aio = "^0.14.1"
+sqlalchemy_aio = "*"
 trio = "^0.12.1"
-fuzzywuzzy = {version = "^0.18.0", extras = ["speedup"]}
-pyyaml = "^5.1.2"
+fuzzywuzzy = {version = "*", extras = ["speedup"]}
+pyyaml = "*"
 discord-curious = {git = "https://github.com/brakhane/curious.git", rev = "orisa-triows"}
 # discord-curious = {path="../curious"}
-cachetools = "^3.1.1"
-wcwidth = "^0.1.7"
-tabulate = "^0.8.3"
-pandas = "^1.1.5"
-seaborn = "^0.11.2"
-raven = "^6.10.0"
-quart = "^0.10.0"
-quart-trio = "^0.4.0"
+cachetools = "*"
+wcwidth = "*"
+tabulate = "*"
+pandas = "*"
+seaborn = "*"
+raven = "*"
+quart = "*"
+quart-trio = "*"
 hypercorn = "^0.7.2"
-oauthlib = "^2.0.7"
-itsdangerous = "^1.1.0"
-"dataclasses-json" = "^0.3.1"
-"asks" = "^2.3.5"
+oauthlib = "*"
+itsdangerous = "*"
+"dataclasses-json" = "*"
+"asks" = "*"
 "wsproto" = ">=0.14.0"
 prospector = "^1.1"
-"openpyxl" = "^2.6.3"
+"openpyxl" = "*"
 h2 = ">=3.1.0"
-arrow = "^1.2.1"
+arrow = "*"
 #unicodedata2 = "^13.0"
 unicodedata2 = "^14.0.0"
-
-aiofiles="^0.4.0"
-anyio = "^1.3.1"
-jinja2 = "^2.10.1"
-markupsafe = "^1.1.1"
 
 [tool.poetry.dev-dependencies]
 "black" = { version = "*", allow-prereleases = true }
 "Babel" = "*"
-
-[tool.poetry.group.dev.dependencies]
-rich = "^13.7.1"
 
 [build-system]
 requires = ["poetry>=0.12"]
