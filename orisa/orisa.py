@@ -75,16 +75,13 @@ from .config import (
     CHANNEL_NAMES,
     GLADOS_TOKEN,
     GuildConfig,
-    MASHERY_API_KEY,
     OAUTH_BLIZZARD_CLIENT_ID,
     OAUTH_DISCORD_CLIENT_ID,
     OAUTH_REDIRECT_HOST,
     OAUTH_REDIRECT_PATH,
     PRIVACY_POLICY_PATH,
-    RANK_AND_DIV_EMOJIS,
     RANK_EMOJIS,
     ROLE_EMOJIS,
-    SENTRY_DSN,
     SIGNING_SECRET,
     WEB_APP_PATH,
 )
@@ -111,7 +108,6 @@ from .models import (
 from .utils import (
     TDS,
     get_sr,
-    get_web_profile_uuid,
     reply,
     resolve_handle_or_index,
     run_sync,
@@ -710,7 +706,6 @@ class Orisa(Plugin):
                     )
 
                 text_links = []
-                # FIXME: temporary hack until all web_profile_uuids are known
                 if primary.web_profile_uuid:
                     text_links.append((
                         _("Overwatch profile"),
@@ -3277,21 +3272,7 @@ Retail Jedi"""
                     )
                     return
 
-                # Try to find web profile UUID
-                uuid = await get_web_profile_uuid(battle_tag)
-
-                if not uuid:
-                    await user_channel.messages.send(
-                        _(
-                            "I'm sorry, but I can't find the Overwatch profile for your BattleTag **{btag}**. Please "
-                            'make sure that your Overwatch "Career Profile Visibility" is set to "Public", close OW '
-                            "and try again. Note that it can take a while before your profile becomes visible on Blizzard's "
-                            "website."
-                        ).format(btag=battle_tag)
-                    )
-                    return
-
-                handles = [BattleTag(blizzard_id=blizzard_id, battle_tag=battle_tag, web_profile_uuid=uuid)]
+                handles = [BattleTag(blizzard_id=blizzard_id, battle_tag=battle_tag, web_profile_uuid=None)]
 
             elif type == "xbox":
                 handles = [

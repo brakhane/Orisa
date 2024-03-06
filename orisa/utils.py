@@ -83,11 +83,11 @@ _SESSION = asks.Session(
     connections=10,
 )
 
-async def get_web_profile_uuid(btag: str) -> Optional[str]:
-    return "c251a785fe23c8ffba|4ed031481f8ec8b79a9ed70f6ff8f08c"
+async def get_web_profile_uuid(btag: str) -> Optional[str]:    
+    # return "c251a785fe23c8ffba|4ed031481f8ec8b79a9ed70f6ff8f08c"
     name, num = btag.split("#")
     try:
-        logger.debug(f"Searching for {name}")
+        logger.debug(f"Searching for UUID of {name}")
         resp = await _SESSION.get(f"https://overwatch.blizzard.com/en-us/search/account-by-name/{urllib.parse.quote(name)}/")
         logger.debug(f"result is {resp}")
         entries = resp.json()
@@ -120,6 +120,16 @@ async def get_sr(handle: "Handle"):
             return res
         except KeyError:
             pass
+
+        if not handle.web_profile_uuid:
+            logger.debug("No UUID for %s yet, searching", handle.handle)
+            uuid = await get_web_profile_uuid(handle.handle)
+            if not uuid:
+                logger.debug("No UUID for %s found", handle.handle)
+                raise UnableToFindSR()
+            else:
+                logger.debug("UUID for %s is %s.", handle.handle, uuid)
+                handle.web_profile_uuid = uuid
 
         url = (
             f'https://overwatch.blizzard.com/en-us/career/{handle.web_profile_uuid}/'
