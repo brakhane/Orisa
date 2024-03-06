@@ -179,6 +179,8 @@ async def get_sr(handle: "Handle"):
                     idx = 1
                 elif "support" in role:
                     idx = 2
+                elif "open" in role:
+                    continue # FIXME
                 else:
                     raise ValueError(f"unknown role {role} in role image URL")
 
