@@ -3365,6 +3365,7 @@ Retail Jedi"""
                             ),
                         )
                         existing_handle.handle = new_handle.handle
+                        existing_handle.web_profile_uuid = None
                         handles_to_check.append(existing_handle)
                         logger.debug(
                             f"handle name changed. handles_to_check is now {handles_to_check}"
