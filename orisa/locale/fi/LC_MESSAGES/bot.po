@@ -5,13 +5,14 @@
 # Mette <mette.rahunen@gmail.com>, 2019.
 # Dennis Brakhane <brakhane@googlemail.com>, 2019.
 # Ricky Tigg <ricky.tigg@gmail.com>, 2025.
+# Dennis Brakhane <brakhane@gmail.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2023-02-13 15:15+0100\n"
-"PO-Revision-Date: 2025-01-15 15:00+0000\n"
-"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
+"PO-Revision-Date: 2025-01-16 12:53+0000\n"
+"Last-Translator: Dennis Brakhane <brakhane@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/orisa/bot/fi/>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
@@ -545,9 +546,9 @@ msgid ""
 "than 32 characters ({len} to be exact).\n"
 "Please choose a shorter format or shorten your nickname!"
 msgstr ""
-"Valitettavasti tämän muodon käyttäminen tekisi lempinimestäsi `{nickname}` "
-"pidempi kuin 32 merkkiä (tarkasti {len}).\n"
-"Valitse lyhyempi muoto tai lyhennä lempinimeäsi!"
+"Uusi nimimerkkisi \"{nickname}\" on pidempi kuin 32 merkkiä, mitä Discord ei "
+"salli. Valitse eri formaatti tai lyhennä nimimerkkiäsi ja tee `@Orisa "
+"forceupdate` sen jälkeen."
 
 #: orisa/orisa.py:1181
 #, fuzzy
