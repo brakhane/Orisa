@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: brakhane@gmail.com\n"
 "POT-Creation-Date: 2023-02-13 15:15+0100\n"
-"PO-Revision-Date: 2025-01-17 12:28+0000\n"
+"PO-Revision-Date: 2025-01-30 12:02+0000\n"
 "Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/orisa/bot/fi/>\n"
 "Language: fi\n"
@@ -120,6 +120,14 @@ msgid ""
 "*I will ignore all commands except `@Orisa help` and `@Orisa config` until "
 "I'm configured for this Discord!*"
 msgstr ""
+"*Terveisiä*! Olen innoissani täällä :smiley:\n"
+"Aloita luomalla uusi rooli nimeltä `Orisa Admin` (vain nimi on tärkeä, se ei "
+"vaadi erityisiä lupia) ja lisää itsesi ja kaikki, joiden pitäisi olla "
+"sallittuja määrittää minut.\n"
+"Kirjoita sitten tähän kanavaan `@Orisa config`, niin lähetän sinulle linkin "
+"konfigurointiin DM:n kautta.\n"
+"*Ohitan kaikki komennot paitsi `@Orisa help` ja `@Orisa config`, kunnes olen "
+"määritetty tähän Discordiin!*"
 
 #. Translators: :thinking: must remain as is, it's an emoji
 #. Translators: :thinking: is an emoji code
@@ -143,6 +151,11 @@ msgid ""
 "couldn't find a text channel I am allowed to send messages to, so I have to "
 "message you directly*"
 msgstr ""
+"\n"
+"\n"
+"*Joku (toivottavasti sinä) kutsui minut palvelimellesi {guild_name}, mutta "
+"en löytänyt tekstikanavaa, johon voin lähettää viestejä, joten minun on "
+"lähetettävä sinulle viesti suoraan*"
 
 #. Translators: Short for Discord Nickname
 #: orisa/orisa.py:646
@@ -183,7 +196,7 @@ msgstr "Orisa tuki palvelin"
 
 #: orisa/orisa.py:726
 msgid "Help Translate Orisa"
-msgstr ""
+msgstr "Auta kääntämään Orisa"
 
 #: orisa/orisa.py:727
 #, python-brace-format
@@ -206,6 +219,9 @@ msgid ""
 "Orisa can neither confirm nor refute that the PSN Online ID actually belongs "
 "to this account."
 msgstr ""
+"\n"
+"Orisa ei voi vahvistaa eikä kiistää, että PSN Online -tunnus todella kuuluu "
+"tälle tilille."
 
 #: orisa/orisa.py:757
 msgid ""
@@ -213,6 +229,9 @@ msgid ""
 "Orisa can neither confirm nor refute that the PSN Online IDs actually belong "
 "to this account."
 msgstr ""
+"\n"
+"Orisa ei voi vahvistaa tai kiistää, että PSN Online -tunnukset todella "
+"kuuluvat tälle tilille."
 
 #: orisa/orisa.py:762
 msgid ""
@@ -246,7 +265,7 @@ msgid "About Me"
 msgstr "Tietoja minusta"
 
 #: orisa/orisa.py:794
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "I am an open source Discord bot to help manage Overwatch Discord "
 "communities.\n"
@@ -316,14 +335,13 @@ msgstr ""
 "lähettämäsi komennon."
 
 #: orisa/orisa.py:850
-#, fuzzy
 msgid ""
 "`@Orisa config` works in *any* channel (that I'm allowed to read messages "
 "in, of course), so you can also use an admin-only channel."
 msgstr ""
-"`@Orisa config` toimii *millä tahansa* kanavalla (joilta saan lukea "
-"viestejä, tietenkin), joten voit käyttää minua myös järjestelmänvalvojille "
-"rajatulla kanavalla."
+"`@Orisa config` toimii *millä tahansa* kanavalla (jossa saan tietysti lukea "
+"viestejä), joten voit käyttää myös vain järjestelmänvalvojalle tarkoitettua "
+"kanavaa."
 
 #: orisa/orisa.py:870
 msgid ""
@@ -343,25 +361,24 @@ msgid "This link will be valid for 30 minutes."
 msgstr "Tämä linkki on voimassa 30 minuuttia."
 
 #: orisa/orisa.py:906
-#, fuzzy
 msgid ""
 "I tried to send you a DM with the link, but you disallow DM from server "
 "members. Please allow that and retry. I can't post the link here because "
 "everybody who knows that link will be able to configure me."
 msgstr ""
-"Yritin lähettää sinulle linkin yksityisviestillä, mutta olet rajoittanut "
-"yksityisviestejä serverin käyttäjiltä. Muuta rajoituksia ja yritä uudelleen. "
-"En voi lisätä linkkiä tähän, silloin kuka tahansa voisi linkin avulla "
-"konfiguroida minut seuraavan 30 minuutin ajan."
+"Yritin lähettää sinulle linkin sisältävän DM-viestin, mutta et salli DM:n "
+"lähettämistä palvelimen jäseniltä. Salli se ja yritä uudelleen. En voi "
+"lähettää linkkiä tänne, koska kaikki, jotka tietävät linkin, voivat "
+"määrittää minut."
 
 #: orisa/orisa.py:920
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "{type} looks like a BattleTag and not like PC/Xbox, assuming you meant "
 "`@Orisa register pc`…"
 msgstr ""
-"{type} näyttää BattleTagilta, mutta ilman pc/xbox valintaa, tarkoititko "
-"`@Orisa register pc`…"
+"{type} näyttää BattleTagilta, ei PC:ltä/Xboxilta, olettaen, että tarkoitit `@"
+"Orisa register pc`…"
 
 #: orisa/orisa.py:932
 msgid ""
@@ -390,17 +407,19 @@ msgid ""
 "When registering a PSN account, you need to give your Online ID, like "
 "`@Orisa register psn My-Cool-ID_12345`."
 msgstr ""
+"Kun rekisteröit PSN-tilin, sinun on ilmoitettava verkkotunnuksesi, kuten `@"
+"Orisa register psn minun-siisti-ID_12345`."
 
 #: orisa/orisa.py:961
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Invalid registration type \"{type}\". Use `@Orisa register` or `@Orisa "
 "register pc` for PC; `@Orisa register xbox` for Xbox, or `@Orisa register "
 "psn My-Online-Id_1234` for PlayStation."
 msgstr ""
-"Invalidi rekisteröitymisen tyyppi \"{type}\". Käytä `@Orisa register` tai "
-"`@Orisa register pc` PClle / `@Orisa register xbox` XBOXille. PlayStation ei "
-"ole vielä tuettu."
+"Virheellinen rekisteröintityyppi \"{type}\". Käytä `@Orisa register` tai `@"
+"Orisa register pc` PC:lle; `@Orisa register xbox` Xboxille tai `@Orisa "
+"register psn minun-verkko-Id_1234` PlayStationille."
 
 #. Translators: type will be PC, XBOX or PSN
 #: orisa/orisa.py:976
@@ -429,13 +448,12 @@ msgid ":video_game: Not on PC?"
 msgstr ":video_game: Ei PC?"
 
 #: orisa/orisa.py:995
-#, fuzzy
 msgid ""
 "If you have an XBL account, use `@Orisa register xbox`. For PSN, use `@Orisa "
 "register psn Your_Online-ID`"
 msgstr ""
-"Jos sinulla on XBL tili, käytä `@Orisa register xbox`. PSN tilejä ei ole "
-"vielä tuettu, mutta tuki on tulossa."
+"Jos sinulla on XBL-tili, käytä `@Orisa register xbox`. PSN:ssa käytä `@Orisa "
+"register psn sinun_verkko-ID`"
 
 #: orisa/orisa.py:1002
 msgid ""
@@ -446,16 +464,14 @@ msgstr ""
 "(saatavilla vain Englanniksi) komennolla @Orisa privacy."
 
 #: orisa/orisa.py:1013
-#, fuzzy
 msgid ""
 "I'm not allowed to send you a DM. Please right click on the Discord server, "
 "select \"Privacy Settings\", and enable \"Allow direct messages from server "
 "members.\" Then try again."
 msgstr ""
-"En voi lähettää sinulle yksityisviestiä. Klikkaa hiiren oikealla "
-"painikkeella Discord palvelinta, valitse yksityisyysasetukset ja laita "
-"päälle valinta \"Salli yksityisviestit palvelimen jäseniltä.\" Yritä sitten "
-"uudelleen."
+"En saa lähettää sinulle DM:a. Napsauta hiiren kakkospainikkeella Discord-"
+"palvelinta, valitse \"Privacy Settings\" ja ota käyttöön "
+"\"Salli suorat viestit palvelimen jäseniltä\". Yritä sitten uudelleen."
 
 #: orisa/orisa.py:1019 orisa/orisa.py:1444
 msgid "I've sent you a DM with instructions."
@@ -501,6 +517,8 @@ msgid ""
 "`setprimary` requires the first few letters of the handle you want to make "
 "your primary as a parameter, e.g. `@Orisa setprimary foo`"
 msgstr ""
+"`setprimary` vaatii muutaman ensimmäisen kirjaimen kahvasta, josta haluat "
+"tehdä ensisijaiseksi parametriksi, esim. `@Orisa setprimary foo`"
 
 #: orisa/orisa.py:1092
 msgid "You are not registered. Use `@Orisa register` first."
@@ -519,16 +537,16 @@ msgstr "Valmis. Ensisijainen {type} on nyt **{handle}**."
 
 #: orisa/orisa.py:1135
 msgid "format string may not contain square brackets!"
-msgstr ""
+msgstr "muotomerkkijono ei saa sisältää hakasulkeita!"
 
 #. Translators: keep the $ to remind the user that placeholders start with a $ sign
 #: orisa/orisa.py:1139
 msgid "format string must contain at least one $placeholder!"
-msgstr ""
+msgstr "muotomerkkijonon tulee sisältää vähintään yksi $placeholder!"
 
 #: orisa/orisa.py:1142
 msgid "format string missing!"
-msgstr ""
+msgstr "muotomerkkijono puuttuu!"
 
 #: orisa/orisa.py:1148
 msgid "you must register first!"
@@ -537,7 +555,7 @@ msgstr "sinun pitää rekisteröityä ensin!"
 #: orisa/orisa.py:1157
 #, python-brace-format
 msgid "Invalid format string: unknown placeholder \"{key}\"!"
-msgstr ""
+msgstr "Virheellinen muotomerkkijono: tuntematon paikkamerkki \"{key}\"!"
 
 #: orisa/orisa.py:1167
 #, python-brace-format
@@ -551,7 +569,6 @@ msgstr ""
 "Valitse lyhyempi muoto tai lyhennä lempinimeäsi!"
 
 #: orisa/orisa.py:1181
-#, fuzzy
 msgid ""
 "Smarties Expert\n"
 "Bread Scientist\n"
@@ -624,25 +641,23 @@ msgid ""
 "Blizzard says your {type} {handle} does not exist. Did you change it? Use "
 "`@Orisa register` to update it."
 msgstr ""
+"Blizzard sanoo, että sinun {type} {handle} ei ole olemassa. Vaihdoitko sen? "
+"Käytä `@Orisa register` päivittääksesi sen."
 
 #: orisa/orisa.py:1280
 msgid "There were some problems updating your SR! Try again later."
 msgstr "SR päivityksessä oli ongelmia! Yritä myöhemmin uudelleen."
 
 #: orisa/orisa.py:1287
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "OK, I have updated your data. Your (primary) SR is now {sr}. If that is "
-#| "not correct, you need to log out of Overwatch once and try again; your "
-#| "profile also needs to be public for me to track your SR."
+#, python-brace-format
 msgid ""
 "OK, I have updated your data. Your ranks are now {sr}. If that is not "
 "correct, you need to log out of Overwatch once and try again; your profile "
 "also needs to be public for me to track your ranks."
 msgstr ""
-"OK, olen päivittänyt tietosi. Sinun (ensisijainen) SR on nyt {sr}. Jos se ei "
-"ole oikein, kirjaudu ulos Overwatchista kerran ja yritä uudelleen - "
-"profiilisi pitää olla myös avoin, jotta voin tarkistaa SR tiedot."
+"OK, olen päivittänyt tietosi. Arvosi ovat nyt {sr}. Jos tämä ei ole oikein, "
+"sinun on kirjauduttava ulos Overwatchista kerran ja yritettävä uudelleen; "
+"profiilisi on myös oltava julkinen, jotta voin seurata riveitasi."
 
 #: orisa/orisa.py:1317
 #, python-brace-format
@@ -654,7 +669,6 @@ msgid "you are not registered anyway, so there's nothing for me to forget…"
 msgstr "et ole rekisteröitynyt, joten minulla ei ole mitään unohdettavaa…"
 
 #: orisa/orisa.py:1350
-#, fuzzy
 msgid ""
 "Missing roles identifier. Valid role identifiers are: `m` (Main Tank), `o` "
 "(Off Tank), `d` (Damage), `s` (Support). They can be combined, e.g. `ds` "
@@ -665,14 +679,14 @@ msgstr ""
 "tarkoittaisi Damage + Support."
 
 #: orisa/orisa.py:1363
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Unknown role identifier '{role}'. Valid role identifiers are: `m` (Main "
 "Tank), `o` (Off Tank), `d` (Damage), `s` (Support). They can be combined, e."
 "g. `ds` would mean Damage + Support."
 msgstr ""
-"Tuntematon roolin tunniste '{role}'. Roolin tunnisteiksi kelpaavat: `m` "
-"(Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). Niitä voi "
+"Tuntematon roolin tunniste '{role}'. Roolin tunnisteiksi kelpaavat: `m` ("
+"Main Tank), `o` (Off Tank), `d` (Damage), `s` (Support). Niitä voi "
 "yhdistellä, esim. `ds` tarkoittaisi Damage + Support."
 
 #: orisa/orisa.py:1380
@@ -725,6 +739,26 @@ msgid ""
 "`@Orisa about`\n"
 "Parameters in [square brackets] are optional."
 msgstr ""
+"Kun liityt QP- tai Comp-kanavalle, sinun on tiedettävä kanavan jäsenen "
+"BattleTag tai he tarvitsevat sinun lisäämään sinut. Kilpailukanavissa auttaa "
+"myös tietämään, mikä SR kanavan jäsenillä on. Tämä botti luotiin, jotta "
+"näitä tietoja ei tarvitsisi kysyä uudelleen ja uudelleen liittyessäsi "
+"kanavaan. Kun rekisteröidyt BattleTagillesi, nimimerkkisi päivitetään "
+"automaattisesti näyttämään nykyinen SR ja se pidetään ajan tasalla. Voit "
+"myös pyytää toisen jäsenen BattleTagia tai pyytää omaa, jotta muut voivat "
+"helposti lisätä sinut OW:hen.\n"
+"Se lähettää myös lyhyen viestin chatiin, kun saavutat paremmuusjärjestyksen."
+"\n"
+"* Kuten Overwatchin Orisa, tämä botti on melko nuori ja vielä uusi tässä. "
+"Ilmoita ongelmista <@!{OWNER}>*\n"
+"\n"
+"**Komennot toimivat vain <#{channel_id}>-kanavalla tai lähettämällä minulle "
+"DM**\n"
+"Jos olet uusi Orisa, etsit todennäköisesti `@Orisa register` tai `@Orisa "
+"register xbox`\n"
+"Jos haluat käyttää Orisaa omalla palvelimellasi tai auttaa sen "
+"kehittämisessä, kirjoita `@Orisa about`\n"
+"Parametrit [square brackets]:ssa ovat valinnaisia."
 
 #: orisa/orisa.py:1490
 msgid ""
@@ -739,12 +773,23 @@ msgid ""
 "`@Orisa oirsa` and `@Orisa ori` will probably also show the BattleTag of "
 "\"Orisa\""
 msgstr ""
+"Näyttää BattleTagin annetulle lempinimelle tai BattleTagin, jos lempinimeä "
+"ei ole annettu. `nick` voi sisältää välilyöntejä. Lempinimelle suoritetaan "
+"sumea haku.\n"
+"*Esimerkit:*\n"
+"`@Orisa` näyttää BattleTagisi\n"
+"`@Orisa valittu` näyttää \"VALITTUJEN\" BattleTagin\n"
+"`@Orisa orisa` näyttää BattleTagin \"SG | Orisa\", \"Orisa\" tai \"Orisad\"\n"
+"`@Orisa oirsa` ja `@Orisa ori` näyttävät todennäköisesti myös \"Orisan\" "
+"BattleTagin"
 
 #: orisa/orisa.py:1504
 msgid ""
 "Shows information about Orisa, and how you can add her to your own Discord "
 "server, or help supporting her."
 msgstr ""
+"Näyttää tietoa Orisasta ja kuinka voit lisätä hänet omalle Discord-"
+"palvelimellesi tai auttaa häntä tukemaan."
 
 #: orisa/orisa.py:1511
 msgid ""
@@ -754,6 +799,11 @@ msgid ""
 "*Example:*\n"
 "`@Orisa alwaysshowsr on`"
 msgstr ""
+"Joillakin palvelimilla Orisa näyttää vain SR:si tai sijoituksesi "
+"nimimerkissäsi, kun olet OW-äänikanavalla. Jos haluat, että nimimerkkisi "
+"näyttää aina SR:si tai sijoituksesi, aseta tämä päälle.\n"
+"*Esimerkki:*\n"
+"`@Orisa ainashowsr päällä`"
 
 #: orisa/orisa.py:1522
 msgid ""
@@ -766,7 +816,7 @@ msgstr ""
 #. Translators: help for @Orisa dumpsr
 #: orisa/orisa.py:1529
 msgid "Download your SR history as an Excel spreadsheet"
-msgstr ""
+msgstr "Lataa SR-historiasi Excel-laskentataulukkona"
 
 #: orisa/orisa.py:1536
 msgid ""
@@ -774,12 +824,17 @@ msgid ""
 "*Checks and updates are done automatically, use this command only if you "
 "want your nick to be up to date immediately!*"
 msgstr ""
+"Tarkistaa välittömästi tilitietosi ja päivittää nimimerkkisi vastaavasti.\n"
+"*Tarkistukset ja päivitykset tehdään automaattisesti, käytä tätä komentoa "
+"vain, jos haluat nimesi olevan ajan tasalla välittömästi!*"
 
 #: orisa/orisa.py:1546
 msgid ""
 "All your BattleTags will be removed from the database and your nick will not "
 "be updated anymore. You can re-register at any time."
 msgstr ""
+"Kaikki BattleTagisi poistetaan tietokannasta, eikä nimimerkkiäsi enää "
+"päivitetä. Voit rekisteröityä uudelleen milloin tahansa."
 
 #: orisa/orisa.py:1556
 #, python-brace-format
@@ -789,10 +844,13 @@ msgid ""
 "In the *format*, you can specify placeholders with `$placeholder` or `"
 "${placeholder}`."
 msgstr ""
+"Voit määrittää, miten sinun SRisi tai sijoituksesi näytetään. Se näytetään "
+"aina [hakasulkeissa] nimesi liitteenä.\n"
+"*muodossa* voit määrittää paikkamerkit `$placeholder` tai `${placeholder}`."
 
 #: orisa/orisa.py:1562
 msgid "★ *ow format placeholders*"
-msgstr ""
+msgstr "★ *ow-muotoiset paikkamerkit*"
 
 #: orisa/orisa.py:1565
 #, python-brace-format
@@ -825,10 +883,37 @@ msgid ""
 "`$dps`, `$dpsrank`, `$shortdps`, `$shortdpsrank` \n"
 "Alias for `$damage`, `$damagerank` etc."
 msgstr ""
+"*Seuraavat paikkamerkit on määritelty:*\n"
+"`$sr`\n"
+"SR:n kaksi ensimmäistä numeroa kaikille kolmelle roolille järjestyksessä "
+"Tank, Damage, Support; jos sinulla on toissijaisia tilejä, tähti (\\*) "
+"lisätään loppuun. Kysymysmerkki lisätään, jos näytetään vanha SR\n"
+"\n"
+"`$fullsr`\n"
+"Kuten \"$sr\", mutta kaikki 4 numeroa näytetään\n"
+"\n"
+"`$rank`\n"
+"arvosi lyhennetyssä muodossa kaikissa kolmessa roolissa järjestyksessä Tank, "
+"Damage, Support; tähti ja kysymysmerkit toimivat kuten \"$sr\".\n"
+"\n"
+"`$tank`, `$damage`, `$support`\n"
+"Täydellinen SR vastaavalle roolille ja sen symboli. Tähdellä ja "
+"kysymysmerkillä on sama merkitys kuin lausekkeessa \"$sr\". Teknisistä "
+"syistä vastaavien roolien symbolit ovat `{SYMBOL_TANK}`, `{SYMBOL_DPS}`, "
+"`{SYMBOL_SUPPORT}`\n"
+"\n"
+"`$tankrank`, `$damagerank`, `$supportrank`\n"
+"kuten yllä, mutta sen sijaan näytetään sijoitus.\n"
+"\n"
+"`$shorttank`, `$shorttankrank` jne.\n"
+"näyttää vain 2 numeroa/kirjainta vastaavasta SR:sta/luokasta.\n"
+"\n"
+"`$dps`, `$dpsrank`, `$shortdps`, `$shortdpsrank`\n"
+"Alias `$damage`, `$damagerank` jne."
 
 #: orisa/orisa.py:1582
 msgid "★ *ow format examples*"
-msgstr ""
+msgstr "★ *ow-muotoiset esimerkit*"
 
 #: orisa/orisa.py:1584
 #, python-brace-format
@@ -840,6 +925,12 @@ msgid ""
 "`@Orisa format $shortdamage` in `[{SYMBOL_DPS}12]`.\n"
 "*By default, the format is `$sr`*"
 msgstr ""
+"`@Orisa-muoto hei $sr` johtaa `[hei 12-34-45]`.\n"
+"`@Orisa-muoto Peruna/$fullrank` muodossa `[Peruna/pronssi-kulta-timantti].\n"
+"`@Orisa-muoto $damage $support` muodossa `"
+"[{SYMBOL_DPS}1234 {SYMBOL_SUPPORT}2345]`.\n"
+"`@Orisa-muoto $shortdamage` muodossa `[{SYMBOL_DPS}12]`.\n"
+"*Oletuksena muoto on `$sr`*"
 
 #. Translators: headline of second help page
 #: orisa/orisa.py:1595
@@ -853,6 +944,10 @@ msgid ""
 "*Example:*\n"
 "`@Orisa get register` will search for the nick \"register\"."
 msgstr ""
+"Sama kuin `@Orisa [nick]`, (vain) hyödyllinen, kun nimimerkki on sama kuin "
+"komento.\n"
+"*Esimerkki:*\n"
+"`@Orisa get register` etsii nimimerkkiä \"rekisteröidy\"."
 
 #: orisa/orisa.py:1612
 msgid ""
@@ -865,10 +960,18 @@ msgid ""
 "beforehand. For PSN accounts, you have to give your Online ID as part of the "
 "command, like `@Orisa register psn Your_Online-ID`."
 msgstr ""
+"Luo linkki BattleNet- tai Gamertag-tiliisi tai lisää tiliisi toissijainen "
+"BattleTag. OW-tilisi tarkistetaan ajoittain ja nimimerkkisi päivitetään "
+"automaattisesti näyttämään SR tai sijoitus (katso *format*-komento "
+"saadaksesi lisätietoja). `@Orisa register` ja `@Orisa register pc` "
+"rekisteröi PC-tilin, `@Orisa register xbox` XBL-tilin. Jos rekisteröit XBL-"
+"tilin, sinun on linkitettävä se Discord-tiliisi etukäteen. PSN-tileissä "
+"sinun on annettava online-tunnuksesi osana komentoa, kuten `@Orisa register "
+"psn sinun_verkko-ID`."
 
 #: orisa/orisa.py:1621
 msgid "Show Orisa's Privacy Policy"
-msgstr ""
+msgstr "Näytä Orisan tietosuojakäytäntö"
 
 #: orisa/orisa.py:1625
 msgid ""
@@ -880,6 +983,14 @@ msgid ""
 "*Example:*\n"
 "`@Orisa setprimary jjonak`"
 msgstr ""
+"Tekee annetusta toissijaisesta BattleTagista ensisijaisen BattleTagin. "
+"Ensisijainen BattleTagisi on se, jota käytät tällä hetkellä: sen SR näkyy "
+"nimimerkissäsi\n"
+"Haku suoritetaan sumeasti ja isot ja pienet kirjaimet huomioimatta, joten "
+"sinun tarvitsee yleensä antaa vain ensimmäiset (muutama) kirjain.\n"
+"Annetun BattleTagin on oltava jo rekisteröity yhdeksi BattleTagistasi.\n"
+"*Esimerkki:*\n"
+"`@Orisa setprimary jjonak`"
 
 #: orisa/orisa.py:1636
 msgid ""
@@ -892,6 +1003,14 @@ msgid ""
 "*Example:*\n"
 "`@Orisa setprimary 1`"
 msgstr ""
+"Kuten `@Orisa setprimary battletag`, mutta käyttää numeroita, 1 on "
+"ensimmäinen toissijainen, 2 sekuntisi jne. Järjestys näkyy `@Orisa` "
+"(aakkosjärjestyksessä)\n"
+"Normaalisti sinun ei tarvitse käyttää tätä vaihtoehtoista lomaketta, se on "
+"käytettävissä siltä varalta, että Orisa hämmentää, mitä BattleTagia "
+"tarkoitat (mitä ei pitäisi tapahtua).\n"
+"*Esimerkki:*\n"
+"`@Orisa setprimary 1`"
 
 #: orisa/orisa.py:1647
 msgid ""
@@ -905,6 +1024,15 @@ msgid ""
 "`@Orisa setroles so`: you play Support and Off Tanks.\n"
 "`@Orisa setroles dmos`: you are a true Flex and play everything."
 msgstr ""
+"Asettaa roolin, jonka voit/haluat pelata. Se näkyy @Orisassa ja sitä "
+"käytetään myös päivittämään roolien määrää äänikanavilla, joihin liityit.\n"
+"*roolit* on yksittäinen \"sana\", joka koostuu yhdestä tai useammasta "
+"seuraavista tunnisteista (sekä isot että pienet kirjaimet):\n"
+"\"d\" DPS:lle, \"m\" PääTankille, \"o\" Pois Tankille, \"s\" Tukeelle\n"
+"*Esimerkit:*\n"
+"`@Orisa setroles d`: pelaat vain DPS:aa.\n"
+"`@Orisa setroles niin`: pelaat Support- ja Pois Tank -pelejä.\n"
+"`@Orisa setroles dmos`: olet todellinen Flex ja pelaat kaikkea."
 
 #: orisa/orisa.py:1661
 msgid ""
@@ -914,15 +1042,20 @@ msgid ""
 "the graph starts at that date, otherwise it starts as early as Orisa has "
 "data."
 msgstr ""
+"*Tämä komento on beta-vaiheessa ja voi muuttua milloin tahansa; siinä "
+"saattaa myös olla virheitä, ilmoita niistä*\n"
+"Näyttää kaavion SR:stäsi. Jos on annettu from_date (kuten PP.KK.VV tai VVVV-"
+"KK-PP), kaavio alkaa kyseisestä päivämäärästä, muuten se alkaa heti kun "
+"Orisalla on tietoja."
 
 #: orisa/orisa.py:1670
-#, fuzzy
 msgid ""
 "*This command can only be used by users with the \"Orisa Admin\" role!*\n"
 "Like srgraph, but shows the graph for the given user."
 msgstr ""
-"*Tätä komentoa voi käyttää vain käyttäjät, joilla on Orisa Admin rooli!*\n"
-"Kuin srgraph, mutta näyttää kaavion määritellylle käyttäjälle."
+"*Tätä komentoa voivat käyttää vain käyttäjät, joilla on rooli \"Orisa Admin\""
+"!*\n"
+"Kuten srgraph, mutta näyttää kaavion tietylle käyttäjälle."
 
 #: orisa/orisa.py:1678
 msgid ""
