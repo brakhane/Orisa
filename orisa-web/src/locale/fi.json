@@ -1,1 +1,5 @@
-{}
+{
+    "cfg": {
+        "lang-incomplete-engage": "{{ lang }}:ta ei ole vielä täysin käännetty! Kääntämättömät merkkijonot näkyvät englanniksi. [Klikkaa tästä, jos haluat auttaa kääntämisessä!]({{ link }})"
+    }
+}
